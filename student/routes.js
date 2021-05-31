@@ -7,6 +7,7 @@ const {
 const router = express.Router();
 
 router.post("/add", (req, res) => {
+  // TODO: add validation and better error handling.
   const { name, email, modality, timezone } = req.body;
   addStudent(name, email, modality, timezone)
     .then(() =>
@@ -41,7 +42,7 @@ router.delete("/delete/:email", (req, res) => {
 
 router.post("/update", (req, res) => {
   const { email, modality, timezone } = req.body;
-
+  // TODO: add better validation for emails, modality, timezone.
   updateStudentInformation(email, modality, timezone)
     .then(() =>
       res.status(200).json({
