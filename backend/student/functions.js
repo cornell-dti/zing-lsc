@@ -1,6 +1,7 @@
 const { db } = require("../config");
 const { assertIsNewStudent, assertIsExistingStudent } = require("./helpers");
 const studentRef = db.collection("students");
+const coursesRef = db.collection("courses");
 
 async function addStudent(name, email, modality, timezone) {
   await assertIsNewStudent(email);

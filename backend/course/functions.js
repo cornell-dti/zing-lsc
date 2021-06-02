@@ -18,6 +18,7 @@ async function addCourse(courseId, name, availableModalities) {
 
 async function addStudentsToCourse(courseId, emails) {
   await assertIsExistingCourse(courseId);
+  emails.foreach((email) => {});
 }
 
 module.exports = { addCourse };
