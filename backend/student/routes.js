@@ -1,3 +1,6 @@
+// NOTE: THIS FILE IS NOT TO BE USED UNTIL FURTHER CONFIRMATION BY LSC FOR FUTURE
+// DASHBOARD STATUS
+
 const express = require("express");
 const {
   addStudent,
