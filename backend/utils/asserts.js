@@ -8,15 +8,21 @@ async function assertIsNewCourseHelper(courseId) {
 
 async function assertIsNewCourse(courseId) {
   if (!(await assertIsNewCourseHelper(courseId)))
-    throw new Error("This course already exists");
+    throw new Error(`Course ${courseId} already exists`);
 }
 
 async function assertIsExistingCourse(courseId) {
-  if (!(await assertIsNewCourseHelper(courseId)))
-    throw new Error("This course already exists");
+  if (await assertIsNewCourseHelper(courseId))
+    throw new Error(`Course ${courseId} doesn't exists`);
 }
 
+function assertIsArray(obj) {
+  if (!Array.isArray(obj)) {
+    throw new Error(`Expected an array, got ${typeof obj} instead.`);
+  }
+}
 module.exports = {
   assertIsNewCourse,
   assertIsExistingCourse,
+  assertIsArray,
 };
