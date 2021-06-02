@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@assets/*": ["src/assets/*"],
+      "@core": ["src/modules/Core/"],
+      "@core/*": ["src/modules/Core/*"],
+      "Home": ["src/modules/Home/"],
+      "Home/*": ["src/modules/Home/*"],
+      "CreateZing": ["src/modules/CreateZing/"],
+      "CreateZing/*": ["src/modules/CreateZing/*"],
+      "CreateGroup": ["src/modules/CreateGroup/"],
+      "CreateGroup/*": ["src/modules/CreateGroup/*"],
+      "Login": ["src/modules/Login/"],
+      "Login/*": ["src/modules/Login/*"],
+      "Signup": ["src/modules/Signup/"],
+      "Signup/*": ["src/modules/Signup/*"],
+      "Survey": ["src/modules/Survey/"],
+      "Survey/*": ["src/modules/Survey/*"],
+      "EditZing": ["src/modules/EditZing/"],
+      "EditZing/*": ["src/modules/EditZing/*"]
+    }
+  }
+}

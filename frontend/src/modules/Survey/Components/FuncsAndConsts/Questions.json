@@ -1,0 +1,56 @@
+{
+  "step1": [
+    "What do you identify as?",
+    "American Indian/Alaskan Native",
+    "Asian",
+    "Black or African American",
+    "Hispanic/Latino",
+    "Native Hawaiian/Other Pacific Islander",
+    "White",
+    "Other"
+  ],
+  "step2": [
+    "What are your pronouns?",
+    "She/Her",
+    "He/Him",
+    "They/Them",
+    "I prefer not to say"
+  ],
+  "step4": [
+    "What college are you in?",
+    "Architecture, Art and Planning",
+    "Arts & Sciences",
+    "Agriculture & Life Sciences",
+    "Human Ecology",
+    "SC Johnson College of Business",
+    "Engineering"
+  ],
+  "step5": [
+    "Are you studying remotely this semester?",
+    "No, I'm on campus",
+    "Yes, I’m outside of Ithaca, but still in the US",
+    "Yes, I’m in a country outside the US"
+  ],
+  "step6": [
+    "How do you prefer studying with groups this year?",
+    "Online",
+    "In-person",
+    "Both"
+  ],
+  "step7": [
+    "When do you prefer studying for this course?",
+    "Morning (8am-12pm)",
+    "Early Afternoon (12pm-4pm)",
+    "Late Afternoon (4pm-8pm)",
+    "Evening (8pm-12am)",
+    "Late (12am-4am)"
+  ],
+  "step8": [
+    "You have an assignment. When do you start it?",
+    "Immediately, the day you get it",
+    "Early, but not immediately",
+    "Midway",
+    "Late, the day before",
+    "I don’t / I submit late"
+  ]
+}
