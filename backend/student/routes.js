@@ -25,7 +25,11 @@ router.post("/add", (req, res) => {
 
 router.delete("/delete/:email", (req, res) => {
   const email = req.params.email;
-
+  // comment out the response below when switching to a student-dashboard model.
+  return res.status(410).json({
+    success: false,
+    err: "This route has been deprecated/not meant for use right now.",
+  });
   deleteStudent(email)
     .then(() =>
       res.status(200).json({
@@ -41,6 +45,11 @@ router.delete("/delete/:email", (req, res) => {
 });
 
 router.post("/update", (req, res) => {
+  return res.status(410).json({
+    success: false,
+    err: "This route has been deprecated/not meant for use right now.",
+  });
+
   const { email, modality, timezone } = req.body;
   // TODO: add better validation for emails, modality, timezone.
   updateStudentInformation(email, modality, timezone)
