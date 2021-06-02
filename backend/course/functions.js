@@ -1,5 +1,8 @@
 const { db } = require("../config");
-const { assertIsExistingCourse, assertIsNewCourse } = require("./helpers");
+const {
+  assertIsExistingCourse,
+  assertIsNewCourse,
+} = require("../utils/asserts");
 const courseRef = db.collection("courses");
 
 async function addCourse(courseId, name, availableModalities) {
@@ -12,13 +15,24 @@ async function addCourse(courseId, name, availableModalities) {
   courseRef.doc(courseId).create({
     name,
     availableModalities,
-    students: [],
   });
 }
 
-async function addStudentsToCourse(courseId, emails) {
-  await assertIsExistingCourse(courseId);
-  emails.foreach((email) => {});
+async function addStudentToCourses(courseIds, email, name, timezone, modality) {
+  await courseIds.map((courseId) => assertIsExistingCourse(courseId));
+
+  await Promise.all(
+    courseIds.map((courseId) => {
+      courseRef.doc(courseId).collection("students").doc().set({
+        email,
+        name,
+        timezone,
+        modality,
+      });
+    })
+  );
 }
+
+async function removeStudentFromCourse(courseId, email) {}
 
 module.exports = { addCourse };
