@@ -1,22 +1,18 @@
 import React, { useState } from 'react'
 
-import { colors } from '@core'
+import { colors, EmailField, NameField, PrimaryGradientButton } from '@core'
 import {
   StyledContainer,
   StyledLeftPanel,
   StyledRightPanel,
   StyledFields,
-  StyledLogo,
   StyledWhiteActionText,
   StyledTeamPic,
   StyledTitleWrapper,
   StyledHeaderText,
   StyledWelcomeText,
-  StyledNameField,
-  StyledEmailField,
   StyledTextFieldWrapper,
 } from 'Survey/Styles/Step0.style'
-import { GetConnectedButton } from 'Survey/Components/UIElements/GetConnectedButton'
 import { Step0Props } from 'Survey/Types'
 
 export const Step0 = ({
@@ -35,9 +31,6 @@ export const Step0 = ({
   }
   /** the current error encountered */
   const [error, setError] = useState(errorEnum.NONE)
-  /** color to be passed */
-  const [nameColor, setNameColor] = useState(colors.darkpurple)
-  const [emailColor, setEmailColor] = useState(colors.darkpurple)
 
   const textContainerStyle = {
     margin: '0.75rem 0',
@@ -92,16 +85,15 @@ export const Step0 = ({
   return (
     <StyledContainer>
       <StyledLeftPanel>
-        <StyledLogo />
         <StyledWhiteActionText>
-          Connect with your classmates
+          LSC can help match you with study partners for your classes!
         </StyledWhiteActionText>
         <StyledTeamPic />
       </StyledLeftPanel>
       <StyledRightPanel>
         <StyledTitleWrapper>
           <StyledHeaderText>Hi,</StyledHeaderText>
-          <StyledWelcomeText>Welcome to Zing!</StyledWelcomeText>
+          <StyledWelcomeText>Find study partners!</StyledWelcomeText>
         </StyledTitleWrapper>
         <StyledFields>
           <StyledTextFieldWrapper
@@ -109,9 +101,7 @@ export const Step0 = ({
               marginBottom: calculatePadding(errorEnum.NAME) + 'rem',
             }}
           >
-            <StyledNameField
-              key={'name'}
-              MuiColor={nameColor}
+            <NameField
               containerStyle={textContainerStyle}
               inputStyle={nameTextInputStyle}
               value={name}
@@ -131,9 +121,7 @@ export const Step0 = ({
               marginBottom: calculatePadding(errorEnum.EMAIL) + 'rem',
             }}
           >
-            <StyledEmailField
-              key={'email'}
-              MuiColor={emailColor}
+            <EmailField
               containerStyle={textContainerStyle}
               inputStyle={emailTextInputStyle}
               value={email}
@@ -148,7 +136,7 @@ export const Step0 = ({
             />
           </StyledTextFieldWrapper>
         </StyledFields>
-        <GetConnectedButton onClick={handleNext} />
+        <PrimaryGradientButton label="Get Connected" onClick={handleNext} />
       </StyledRightPanel>
     </StyledContainer>
   )
