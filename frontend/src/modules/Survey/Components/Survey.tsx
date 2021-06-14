@@ -9,6 +9,8 @@ import { StepRadio } from 'Survey/Components/StepRadio'
 import { StepFinal } from 'Survey/Components/StepFinal'
 import {
   getLetter,
+  getOldestGradYear,
+  getYoungestGradYear,
   sendSurveyData,
   surveyData,
 } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
@@ -70,6 +72,17 @@ export const Survey = () => {
     setCurrStep(currStep + 1)
   }
 
+  const isStepValid =
+    currStep === 1 ? courseList.length > 0 :
+    currStep === 2 ? ethnicityAnswer !== '' :
+    currStep === 3 ? pronounAnswer !== '' :
+    currStep === 4 ? Number(gradAnswer) <= getYoungestGradYear()
+                     && Number(gradAnswer) >= getOldestGradYear() :
+    currStep === 5 ? collegeAnswer !== '' :
+    currStep === 6 ? locationAnswer !== '' :
+    currStep === 8 ? studyTimeAnswer !== '' :
+    currStep === 9 ? assignmentAnswer !== '' : true
+
   return currStep === 0 ? (
     <StyledContainer1>
       <Step0
@@ -80,172 +93,6 @@ export const Survey = () => {
         gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
       />
     </StyledContainer1>
-  ) : currStep === 1 ? (
-    <StyledContainer2>
-      <StepTemplate
-        setShowError={(b) => setShowError(b)}
-        currentAnswer={'TODO This needs to be changed... A string here??'}
-        stepNumber={currStep}
-        totalSteps={totalSteps}
-        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
-      >
-        <StepCourse
-          courses={courseList}
-          setCourses={setCourseList}
-        />
-      </StepTemplate>
-    </StyledContainer2>
-  ) : currStep === 2 ? (
-    <StyledContainer2>
-      <StepTemplate
-        setShowError={(b) => setShowError(b)}
-        currentAnswer={ethnicityAnswer}
-        stepNumber={currStep}
-        totalSteps={totalSteps}
-        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
-      >
-        <StepRadio
-          showError={showError}
-          questionList={questions.step1}
-          setAnswer={setEthnicityAnswer}
-          key={String(currStep)}
-          currentAnswer={ethnicityAnswer}
-        />
-      </StepTemplate>
-    </StyledContainer2>
-  ) : currStep === 3 ? (
-    <StyledContainer2>
-      <StepTemplate
-        setShowError={(b) => setShowError(b)}
-        currentAnswer={pronounAnswer}
-        stepNumber={currStep}
-        totalSteps={totalSteps}
-        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
-      >
-        <StepRadio
-          showError={showError}
-          currentAnswer={pronounAnswer}
-          questionList={questions.step2}
-          setAnswer={setPronounAnswer}
-          key={String(currStep)}
-        />
-      </StepTemplate>
-    </StyledContainer2>
-  ) : currStep === 4 ? (
-    <StyledContainer2>
-      <StepTemplate
-        setShowError={(b) => setShowError(b)}
-        currentAnswer={gradAnswer}
-        stepNumber={currStep}
-        totalSteps={totalSteps}
-        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
-      >
-        <Step3
-          showError={showError}
-          currentAnswer={gradAnswer}
-          setAnswer={setGradAnswer}
-        />
-      </StepTemplate>
-    </StyledContainer2>
-  ) : currStep === 5 ? (
-    <StyledContainer2>
-      <StepTemplate
-        setShowError={(b) => setShowError(b)}
-        currentAnswer={collegeAnswer}
-        stepNumber={currStep}
-        totalSteps={totalSteps}
-        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
-      >
-        <StepRadio
-          showError={showError}
-          currentAnswer={collegeAnswer}
-          questionList={questions.step4}
-          setAnswer={setCollegeAnswer}
-          key={String(currStep)}
-        />
-      </StepTemplate>
-    </StyledContainer2>
-  ) : currStep === 6 ? (
-    <StyledContainer2>
-      <StepTemplate
-        setShowError={(b) => setShowError(b)}
-        currentAnswer={locationAnswer}
-        stepNumber={currStep}
-        totalSteps={totalSteps}
-        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
-      >
-        <StepRadio
-          showError={showError}
-          currentAnswer={locationAnswer}
-          questionList={questions.step5}
-          setAnswer={(ans: string) => setLocationAnswer(ans)}
-          key={String(currStep)}
-        />
-      </StepTemplate>
-    </StyledContainer2>
-  ) : currStep === 7 ? (
-    <StyledContainer2>
-      <StepTemplate
-        setShowError={(b) => setShowError(b)}
-        currentAnswer={groupPrefAnswer}
-        stepNumber={currStep}
-        totalSteps={totalSteps}
-        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
-      >
-        <StepRadio
-          showError={showError}
-          currentAnswer={groupPrefAnswer}
-          questionList={questions.step6}
-          setAnswer={(ans: string) => setGroupPrefAnswer(ans)}
-          key={String(currStep)}
-        />
-      </StepTemplate>
-    </StyledContainer2>
-  ) : currStep === 8 ? (
-    <StyledContainer2>
-      <StepTemplate
-        setShowError={(b) => setShowError(b)}
-        currentAnswer={studyTimeAnswer}
-        stepNumber={currStep}
-        totalSteps={totalSteps}
-        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
-      >
-        <StepRadio
-          showError={showError}
-          currentAnswer={studyTimeAnswer}
-          questionList={questions.step7}
-          setAnswer={(ans: string) => setStudyTimeAnswer(ans)}
-          key={String(currStep)}
-        />
-      </StepTemplate>
-    </StyledContainer2>
-  ) : currStep === 9 ? (
-    <StyledContainer2>
-      <StepTemplate
-        setShowError={(b) => setShowError(b)}
-        currentAnswer={assignmentAnswer}
-        stepNumber={currStep}
-        totalSteps={totalSteps}
-        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={finalNext}
-      >
-        <StepRadio
-          showError={showError}
-          currentAnswer={assignmentAnswer}
-          questionList={questions.step8}
-          setAnswer={(ans: string) => setAssignmentAnswer(ans)}
-          key={String(currStep)}
-        />
-      </StepTemplate>
-    </StyledContainer2>
   ) : currStep === 10 ? (
     <StyledContainer2>
       <StepFinal />
@@ -259,5 +106,85 @@ export const Survey = () => {
       <p>{getLetter(studyTimeAnswer, false)}</p>
       <p>{getLetter(assignmentAnswer, false)}</p>
     </StyledContainer2>
-  ) : null
+  ) : (
+    <StyledContainer2>
+      <StepTemplate
+        setShowError={setShowError}
+        isStepValid={isStepValid}
+        stepNumber={currStep}
+        totalSteps={totalSteps}
+        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
+        gotoNextStep={currStep === totalSteps ? finalNext : () => setCurrStep((currStep) => currStep + 1)}
+      >
+        {currStep === 1 ? (
+          <StepCourse
+            courses={courseList}
+            setCourses={setCourseList}
+          />
+        ) : currStep === 2 ? (
+          <StepRadio
+            showError={showError}
+            questionList={questions.step1}
+            setAnswer={setEthnicityAnswer}
+            key={String(currStep)}
+            currentAnswer={ethnicityAnswer}
+          />
+        ) : currStep === 3 ? (
+          <StepRadio
+            showError={showError}
+            currentAnswer={pronounAnswer}
+            questionList={questions.step2}
+            setAnswer={setPronounAnswer}
+            key={String(currStep)}
+          />
+        ) : currStep === 4 ? (
+          <Step3
+            showError={showError}
+            currentAnswer={gradAnswer}
+            setAnswer={setGradAnswer}
+          />
+        ) : currStep === 5 ? (
+          <StepRadio
+            showError={showError}
+            currentAnswer={collegeAnswer}
+            questionList={questions.step4}
+            setAnswer={setCollegeAnswer}
+            key={String(currStep)}
+          />
+        ) : currStep === 6 ? (
+          <StepRadio
+            showError={showError}
+            currentAnswer={locationAnswer}
+            questionList={questions.step5}
+            setAnswer={setLocationAnswer}
+            key={String(currStep)}
+          />
+        ) : currStep === 7 ? (
+          <StepRadio
+            showError={showError}
+            currentAnswer={groupPrefAnswer}
+            questionList={questions.step6}
+            setAnswer={setGroupPrefAnswer}
+            key={String(currStep)}
+          />
+        ) : currStep === 8 ? (
+          <StepRadio
+            showError={showError}
+            currentAnswer={studyTimeAnswer}
+            questionList={questions.step7}
+            setAnswer={setStudyTimeAnswer}
+            key={String(currStep)}
+          />
+        ) : currStep === 9 ? (
+          <StepRadio
+            showError={showError}
+            currentAnswer={assignmentAnswer}
+            questionList={questions.step8}
+            setAnswer={setAssignmentAnswer}
+            key={String(currStep)}
+          />
+        ) : null}
+      </StepTemplate>
+    </StyledContainer2>
+  )
 }

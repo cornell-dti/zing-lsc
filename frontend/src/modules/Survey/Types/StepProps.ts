@@ -3,7 +3,7 @@ export interface StepTemplateProps {
   gotoNextStep: () => void
   stepNumber: number
   totalSteps: number
-  currentAnswer: string
+  isStepValid: boolean
   setShowError: (b: boolean) => void
 }
 
