@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { StyledContainer1, StyledContainer2 } from 'Survey/Styles/Survey.style'
 import { StepTemplate } from 'Survey/Components/StepTemplate'
 import { Step0 } from 'Survey/Components/Step0'
+import { StepCourse } from 'Survey/Components/StepCourse'
 import { Step3 } from 'Survey/Components/Step3'
 import { StepRadio } from 'Survey/Components/StepRadio'
 import { StepFinal } from 'Survey/Components/StepFinal'
@@ -16,7 +17,7 @@ export const Survey = () => {
   const [showError, setShowError] = useState(false)
   const [currStep, setCurrStep] = useState(0)
   const questions = require('./FuncsAndConsts/Questions.json')
-  const totalSteps = 8
+  const totalSteps = 9
 
   // state props
   // step 0
@@ -24,27 +25,30 @@ export const Survey = () => {
   const [emailAnswer, setEmailAnswer] = useState('')
 
   // step 1
-  const [ethnicityAnswer, setEthnicityAnswer] = useState('')
+  const [courseList, setCourseList] = useState<string[]>([])
 
   // step 2
-  const [pronounAnswer, setPronounAnswer] = useState('')
+  const [ethnicityAnswer, setEthnicityAnswer] = useState('')
 
   // step 3
-  const [gradAnswer, setGradAnswer] = useState('')
+  const [pronounAnswer, setPronounAnswer] = useState('')
 
   // step 4
-  const [collegeAnswer, setCollegeAnswer] = useState('')
+  const [gradAnswer, setGradAnswer] = useState('')
 
   // step 5
-  const [locationAnswer, setLocationAnswer] = useState('')
+  const [collegeAnswer, setCollegeAnswer] = useState('')
 
   // step 6
-  const [groupPrefAnswer, setGroupPrefAnswer] = useState('')
+  const [locationAnswer, setLocationAnswer] = useState('')
 
   // step 7
-  const [studyTimeAnswer, setStudyTimeAnswer] = useState('')
+  const [groupPrefAnswer, setGroupPrefAnswer] = useState('')
 
   // step 8
+  const [studyTimeAnswer, setStudyTimeAnswer] = useState('')
+
+  // step 9
   const [assignmentAnswer, setAssignmentAnswer] = useState('')
 
   // last step's Next button handles sending data
@@ -80,6 +84,22 @@ export const Survey = () => {
     <StyledContainer2>
       <StepTemplate
         setShowError={(b) => setShowError(b)}
+        currentAnswer={'TODO This needs to be changed... A string here??'}
+        stepNumber={currStep}
+        totalSteps={totalSteps}
+        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
+        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
+      >
+        <StepCourse
+          courses={courseList}
+          setCourses={setCourseList}
+        />
+      </StepTemplate>
+    </StyledContainer2>
+  ) : currStep === 2 ? (
+    <StyledContainer2>
+      <StepTemplate
+        setShowError={(b) => setShowError(b)}
         currentAnswer={ethnicityAnswer}
         stepNumber={currStep}
         totalSteps={totalSteps}
@@ -95,7 +115,7 @@ export const Survey = () => {
         />
       </StepTemplate>
     </StyledContainer2>
-  ) : currStep === 2 ? (
+  ) : currStep === 3 ? (
     <StyledContainer2>
       <StepTemplate
         setShowError={(b) => setShowError(b)}
@@ -114,7 +134,7 @@ export const Survey = () => {
         />
       </StepTemplate>
     </StyledContainer2>
-  ) : currStep === 3 ? (
+  ) : currStep === 4 ? (
     <StyledContainer2>
       <StepTemplate
         setShowError={(b) => setShowError(b)}
@@ -131,7 +151,7 @@ export const Survey = () => {
         />
       </StepTemplate>
     </StyledContainer2>
-  ) : currStep === 4 ? (
+  ) : currStep === 5 ? (
     <StyledContainer2>
       <StepTemplate
         setShowError={(b) => setShowError(b)}
@@ -150,7 +170,7 @@ export const Survey = () => {
         />
       </StepTemplate>
     </StyledContainer2>
-  ) : currStep === 5 ? (
+  ) : currStep === 6 ? (
     <StyledContainer2>
       <StepTemplate
         setShowError={(b) => setShowError(b)}
@@ -169,7 +189,7 @@ export const Survey = () => {
         />
       </StepTemplate>
     </StyledContainer2>
-  ) : currStep === 6 ? (
+  ) : currStep === 7 ? (
     <StyledContainer2>
       <StepTemplate
         setShowError={(b) => setShowError(b)}
@@ -188,7 +208,7 @@ export const Survey = () => {
         />
       </StepTemplate>
     </StyledContainer2>
-  ) : currStep === 7 ? (
+  ) : currStep === 8 ? (
     <StyledContainer2>
       <StepTemplate
         setShowError={(b) => setShowError(b)}
@@ -207,7 +227,7 @@ export const Survey = () => {
         />
       </StepTemplate>
     </StyledContainer2>
-  ) : currStep === 8 ? (
+  ) : currStep === 9 ? (
     <StyledContainer2>
       <StepTemplate
         setShowError={(b) => setShowError(b)}
@@ -226,7 +246,7 @@ export const Survey = () => {
         />
       </StepTemplate>
     </StyledContainer2>
-  ) : currStep === 9 ? (
+  ) : currStep === 10 ? (
     <StyledContainer2>
       <StepFinal />
       {/* FOR DEBUGGING NETWORKING + ANSWERS */}
