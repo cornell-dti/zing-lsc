@@ -22,3 +22,8 @@ export interface Step0Props {
   email: string
   gotoNextStep: () => void
 }
+
+export interface StepCourseProps {
+  courses: string[]
+  setCourses: (arg: string[]) => void
+}
