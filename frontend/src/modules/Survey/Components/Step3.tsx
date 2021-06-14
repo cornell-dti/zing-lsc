@@ -15,7 +15,11 @@ import {
   getOldestGradYear,
 } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 
-export const Step3 = ({ showError, setAnswer, currentAnswer }: StepProps) => {
+export const Step3 = ({
+  showError,
+  setAnswer,
+  currentAnswer
+}: StepProps) => {
   /** styling container for text in yearfield */
   const textContainerStyle = {
     margin: '0.75rem 0',
