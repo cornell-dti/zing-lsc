@@ -30,6 +30,10 @@ export const StepCourse = ({
     }
   }
 
+  const placeholder = courses.length === 0
+    ? 'ABC 1100'
+    : '+ Add another course...'
+
   return (
     <StyledContainer>
       <StyledQuestionText>
@@ -49,7 +53,7 @@ export const StepCourse = ({
         <InputField
           inputStyle={textInputStyle}
           key={Math.random().toString()}
-          placeholder={'+ Add another course...'}
+          placeholder={placeholder}
           value={''}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             addCourse(e.target.value)
