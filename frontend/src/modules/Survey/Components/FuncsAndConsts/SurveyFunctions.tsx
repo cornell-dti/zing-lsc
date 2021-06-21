@@ -2,7 +2,7 @@ import React from 'react'
 const axios = require('axios')
 
 export type surveyData = {
-  courseId: string
+  courseIds: string[]
   fullName: string
   studentId: string
   graduation: string

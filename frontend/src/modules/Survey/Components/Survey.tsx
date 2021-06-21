@@ -34,9 +34,9 @@ export const Survey = () => {
   // last step's Next button handles sending data
   function finalNext() {
     const surveyDataObj: surveyData = {
-      courseId: 'zf101-2021sp', // hard coded
-      fullName: nameAnswer, // hard coded
-      studentId: 'a1',
+      courseIds: courseList,
+      fullName: nameAnswer,
+      studentId: 'a1', // ??? TODO ???
       graduation: getLetter(gradAnswer, true),
       college: getLetter(collegeAnswer, false),
       remote: getLetter(locationAnswer, false),
