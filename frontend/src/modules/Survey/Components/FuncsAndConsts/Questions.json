@@ -5,6 +5,7 @@
     "Arts & Sciences",
     "Agriculture & Life Sciences",
     "Human Ecology",
+    "Industrial and Labor Relations",
     "SC Johnson College of Business",
     "Engineering"
   ],
@@ -21,11 +22,12 @@
     "Both"
   ],
   "studyTime": [
-    "When do you prefer studying for this course?",
+    "What time (in EST/EDT) do you most prefer to work?",
     "Morning (8am-12pm)",
     "Early Afternoon (12pm-4pm)",
     "Late Afternoon (4pm-8pm)",
     "Evening (8pm-12am)",
-    "Late (12am-4am)"
+    "Late Night (12am-4am)",
+    "Early Morning (4am-8am)"
   ]
 }
