@@ -8,14 +8,14 @@ import {
   StyledErrorText,
   StyledEverythingWrapper,
   StyledYearFieldWrapper,
-} from 'Survey/Styles/Step3.style'
+} from 'Survey/Styles/StepYear.style'
 import { StepProps } from 'Survey/Types/StepProps'
 import {
   getYoungestGradYear,
   getOldestGradYear,
 } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 
-export const Step3 = ({
+export const StepYear = ({
   showError,
   setAnswer,
   currentAnswer
