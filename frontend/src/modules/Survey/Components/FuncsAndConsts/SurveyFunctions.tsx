@@ -1,4 +1,3 @@
-import { domainToASCII } from 'node:url'
 import React from 'react'
 const axios = require('axios')
 
@@ -6,14 +5,11 @@ export type surveyData = {
   courseId: string
   fullName: string
   studentId: string
-  identity: string
-  pronoun: string
   graduation: string
   college: string
   remote: string
   mode: string
   time: string
-  start: string
 }
 
 export function getLetter(ans: string, isDate: boolean) {

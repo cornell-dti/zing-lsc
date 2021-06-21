@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors, h2, h4, StyledComponent } from '@core'
+import { colors, h2, h4 } from '@core'
 
 import { YearField } from '@core'
 import { withStyles } from '@material-ui/core/styles'

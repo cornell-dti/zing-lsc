@@ -12,10 +12,10 @@ import {
   StyledHeaderText,
   StyledWelcomeText,
   StyledTextFieldWrapper,
-} from 'Survey/Styles/Step0.style'
+} from 'Survey/Styles/StepBegin.style'
 import { Step0Props } from 'Survey/Types'
 
-export const Step0 = ({
+export const StepBegin = ({
   name,
   email,
   setName,
