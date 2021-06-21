@@ -1,46 +1,91 @@
-// NOTE: THIS FILE IS NOT TO BE USED UNTIL FURTHER CONFIRMATION BY LSC FOR FUTURE
-// DASHBOARD STATUS
-
 const { db } = require("../config");
-const { assertIsNewStudent, assertIsExistingStudent } = require("./helpers");
-const studentRef = db.collection("students");
-const coursesRef = db.collection("courses");
+const admin = require("firebase-admin");
+const courseR = db.collection("courses");
+const studentR = db.collection("students");
 
-async function addStudent(name, email, modality, timezone) {
-  await assertIsNewStudent(email);
-  studentRef.doc().set({
-    name,
-    email,
-    modality,
-    timezone,
-  });
-}
-
-async function deleteStudent(email) {
-  await assertIsExistingStudent(email);
-  const docsRef = await studentRef.where("email", "==", email).get();
-  const id = docsRef.docs[0].id;
-  await studentRef.doc(id).delete();
-}
-
-async function updateStudentInformation(email, modality, timezone) {
-  await assertIsExistingStudent(email);
-  let docSnapshot = await studentRef.where("email", "==", email).limit(1).get();
-  let docId = docSnapshot.docs[0].id;
-  if (modality !== undefined) {
-    await studentRef.doc(docId).update({
-      modality,
-    });
-  }
-  if (timezone !== undefined) {
-    await studentRef.doc(docId).update({
-      timezone,
-    });
-  }
-}
-
-module.exports = {
-  addStudent,
-  deleteStudent,
-  updateStudentInformation,
+// placeholder methods, change based on roster API.
+const mapCatalogNameToCrseId = (catalogName) => {
+  return catalogName;
 };
+
+const mapCrseIdToNames = (courseId) => {
+  return [courseId];
+};
+
+// Note: the error handling in this file is done the way it is so it is easier
+// to decide response codes based on error type.
+const addStudentSurveyResponse = async (
+  name,
+  email,
+  preferredWorkingTime,
+  college,
+  year,
+  courseCatalogNames,
+  courseRef = courseR,
+  studentRef = studentR
+) => {
+  // First, update the [student] collection to include the data for the new student
+  const studentUpdate = studentRef
+    .doc(email)
+    .set({
+      name,
+      college,
+      year,
+      preferredWorkingTime,
+    })
+    .catch((err) => {
+      console.log(err);
+      const e = new Error(`Error in processing studentUpdate for ${email}`);
+      e.name = "processing_err";
+      throw e;
+    });
+
+  // Next, update each course record to add this student
+  const courseUpdates = courseCatalogNames.map((courseCatalogName) =>
+    courseRef
+      .doc(mapCatalogNameToCrseId(courseCatalogName)) // We want the courseID to allow for crosslisting
+      .get()
+      .then((snapshot) => {
+        // create a record for this course if it doesn't exist already.
+        if (!snapshot.exists) {
+          return snapshot.ref
+            .set({
+              unmatched: [],
+              names: mapCrseIdToNames(
+                mapCatalogNameToCrseId(courseCatalogName)
+              ),
+              groups: [],
+            })
+            .then(() => snapshot.ref)
+            .catch((err) => {
+              console.log(err);
+              const e = new Error(
+                `Error in creating course in courseUpdate for course ${courseCatalogName}`
+              );
+              e.name = "processing_err";
+              throw e;
+            });
+        }
+        return snapshot.ref;
+      })
+      .then((snapshotRef) =>
+        snapshotRef
+          .update({
+            unmatched: admin.firestore.FieldValue.arrayUnion(email),
+          })
+          .catch((err) => {
+            console.log(err);
+            const e = new Error(
+              `Error in updating data for student ${email} in course ${courseCatalogName}`
+            );
+            e.name = "processing_err";
+            throw e;
+          })
+      )
+  );
+
+  const allUpdates = courseUpdates.concat(studentUpdate);
+  await Promise.all(allUpdates);
+};
+
+module.exports = addStudentSurveyResponse;
