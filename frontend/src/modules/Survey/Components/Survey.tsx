@@ -19,8 +19,9 @@ import { Question } from 'Survey/Types/Questions'
 export const Survey = () => {
   const [showError, setShowError] = useState(false)
   const [currStep, setCurrStep] = useState(0)
+  // If there are custom questions the below will be a network call perhaps
   const questions: Question[] = require('./FuncsAndConsts/Questions.json')
-  const totalSteps = 6
+  const totalSteps = questions.length + 1 // One special question
 
   // Form answer props
   const [nameAnswer, setNameAnswer] = useState('')
@@ -96,21 +97,22 @@ export const Survey = () => {
           <StepRadio
             showError={showError}
             currentAnswer={collegeAnswer}
-            questionList={questions.college}
+            question={questions[0]}
             setAnswer={setCollegeAnswer}
             key={String(currStep)}
           />
         ) : currStep === 3 ? (
-          <StepYear
-            showError={showError}
-            currentAnswer={gradAnswer}
-            setAnswer={setGradAnswer}
-          />
+          // <StepYear
+          //   showError={showError}
+          //   currentAnswer={gradAnswer}
+          //   setAnswer={setGradAnswer}
+          // />
+          null
         ) : currStep === 4 ? (
           <StepRadio
             showError={showError}
             currentAnswer={locationAnswer}
-            questionList={questions.location}
+            question={questions[1]}
             setAnswer={setLocationAnswer}
             key={String(currStep)}
           />
@@ -118,7 +120,7 @@ export const Survey = () => {
           <StepRadio
             showError={showError}
             currentAnswer={groupPrefAnswer}
-            questionList={questions.groupPref}
+            question={questions[2]}
             setAnswer={setGroupPrefAnswer}
             key={String(currStep)}
           />
@@ -126,7 +128,7 @@ export const Survey = () => {
           <StepRadio
             showError={showError}
             currentAnswer={studyTimeAnswer}
-            questionList={questions.studyTime}
+            question={questions[3]}
             setAnswer={setStudyTimeAnswer}
             key={String(currStep)}
           />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { RadioButton } from '@core'
 import { RadioButtonsProps } from '@core/Types'
@@ -11,26 +11,19 @@ export const RadioButtons = ({
   key,
   currentAnswer,
 }: RadioButtonsProps) => {
-  const [clickedIndex, setClickedIndex] = useState(-1)
-  let radioButtonList: JSX.Element[] = []
-
-  values.forEach((value: string, index: number) => {
-    // index not zero because we do not want the question
-    if (index !== 0) {
-      radioButtonList.push(
+  return (
+    <StyledContainer>
+      {values.map((value) => (
         <RadioButton
           currentAnswer={currentAnswer}
           onClick={onClick}
-          setClickedIndex={(index: number) => setClickedIndex(index)}
-          index={index}
-          value={String(index)}
+          value={value}
           label={value}
           name="RadioButtons"
           key={key}
-          checked={index === clickedIndex}
+          checked={value === currentAnswer}
         />
-      )
-    }
-  })
-  return <StyledContainer>{radioButtonList}</StyledContainer>
+      ))}
+    </StyledContainer>
+  )
 }

@@ -1,32 +1,26 @@
-import React, { useState, FunctionComponent } from 'react'
+import React from 'react'
+
 import {
   StyledContainer,
   StyledQuestionText,
   StyledRadioButtonsWrapper,
-  StyledRadioButtons,
   StyledErrorWrapper,
   StyledErrorIcon,
   StyledErrorText,
 } from 'Survey/Styles/StepRadio.style'
+import { RadioButton } from '@core'
 import { StepProps } from 'Survey/Types/StepProps'
 
-export const StepRadio: FunctionComponent<StepProps> = ({
+export const StepRadio = ({
   showError,
   currentAnswer,
   setAnswer,
-  questionList,
-  key,
+  question,
 }: StepProps) => {
-  const [hasSelectedAns, setHasSelectedAns] = useState(false)
-  function handleClick(arg: string) {
-    console.warn(arg)
-    setHasSelectedAns(true)
-    setAnswer(arg)
-  }
   return (
     <StyledContainer>
       <StyledQuestionText>
-        {questionList !== undefined ? questionList[0] : 'Error'}
+        {question.question}
       </StyledQuestionText>
       <StyledRadioButtonsWrapper>
         {showError ? (
@@ -35,14 +29,20 @@ export const StepRadio: FunctionComponent<StepProps> = ({
             <StyledErrorText>Please select an item to continue</StyledErrorText>
           </StyledErrorWrapper>
         ) : null}
-        <StyledRadioButtons
-          currentAnswer={currentAnswer}
-          values={questionList}
-          onClick={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleClick(e.target.value)
-          }
-          key={key}
-        />
+        <StyledContainer>
+          {Object.entries(question.answers).map(([value, fullDescription]) => (
+            <RadioButton
+              currentAnswer={currentAnswer}
+              onClick={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setAnswer(e.target.value)
+              }
+              value={value}
+              label={fullDescription}
+              name="RadioButtons"
+              key={value}
+            />
+          ))}
+        </StyledContainer>
       </StyledRadioButtonsWrapper>
     </StyledContainer>
   )
