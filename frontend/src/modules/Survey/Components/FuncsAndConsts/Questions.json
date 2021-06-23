@@ -1,33 +1,44 @@
-{
-  "college": [
-    "What college are you in?",
-    "Architecture, Art and Planning",
-    "Arts & Sciences",
-    "Agriculture & Life Sciences",
-    "Human Ecology",
-    "Industrial and Labor Relations",
-    "SC Johnson College of Business",
-    "Engineering"
-  ],
-  "location": [
-    "Are you studying remotely this semester?",
-    "No, I'm on campus",
-    "Yes, I’m outside of Ithaca, but still in the US",
-    "Yes, I’m in a country outside the US"
-  ],
-  "groupPref": [
-    "How do you prefer studying with groups this year?",
-    "Online",
-    "In-person",
-    "Both"
-  ],
-  "studyTime": [
-    "What time (in EST/EDT) do you most prefer to work?",
-    "Morning (8am-12pm)",
-    "Early Afternoon (12pm-4pm)",
-    "Late Afternoon (4pm-8pm)",
-    "Evening (8pm-12am)",
-    "Late Night (12am-4am)",
-    "Early Morning (4am-8am)"
-  ]
-}
+[
+  {
+    "question": "What college are you in?",
+    "questionId": "college",
+    "answers": {
+      "AAP": "Architecture, Art and Planning",
+      "A&S": "Arts & Sciences",
+      "CALS": "Agriculture & Life Sciences",
+      "HumEc": "Human Ecology",
+      "ILR": "Industrial and Labor Relations",
+      "SC Johnson": "SC Johnson College of Business",
+      "Engineering": "Engineering"
+    }
+  },
+  {
+    "question": "Will you be learning remotely this semester?",
+    "questionId": "remote",
+    "answers": {
+      "No": "No",
+      "Yes": "Yes"
+    }
+  },
+  {
+    "question": "If you are in Ithaca, would you be willing to work with a remote student?",
+    "questionId": "willing",
+    "answers": {
+      "Yes": "Yes",
+      "No": "No",
+      "N/A": "I am not in Ithaca"
+    }
+  },
+  {
+    "question": "What time (in EST/EDT) do you most prefer to work?",
+    "questionId": "time",
+    "answers": {
+      "Morning": "Morning (8am-12pm)",
+      "Early Afternoon": "Early Afternoon (12pm-4pm)",
+      "Late Afternoon": "Late Afternoon (4pm-8pm)",
+      "Evening": "Evening (8pm-12am)",
+      "Late Night": "Late Night (12am-4am)",
+      "Early Morning": "Early Morning (4am-8am)"
+    }
+  }
+]
