@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { makeMatches, getGroups } = require("./functions");
+const {
+  makeMatches,
+  getGroups,
+  addUnmatchedStudentToGroup,
+} = require("./functions");
 
 router.post("/make", (req, res) => {
   const { courseId, groupSize } = req.params.courseId;
@@ -16,6 +20,16 @@ router.get("/:courseId", (req, res) => {
   const courseId = req.params.courseId;
   getGroups(courseId)
     .then((data) => res.status(200).json(data))
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json({ success: false, err: err.message });
+    });
+});
+
+router.post("/transfer-unmatched", (req, res) => {
+  const { courseId, studentEmail, groupNumber } = req.body;
+  addUnmatchedStudentToGroup(courseId, studentEmail, groupNumber)
+    .then(() => res.status(200).json({ success: true }))
     .catch((err) => {
       console.log(err);
       res.status(400).json({ success: false, err: err.message });
