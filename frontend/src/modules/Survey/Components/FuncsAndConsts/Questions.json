@@ -13,6 +13,17 @@
     }
   },
   {
+    "question": "What year are you?",
+    "questionId": "year",
+    "answers": {
+      "Freshman": "Freshman",
+      "Sophomore": "Sophomore",
+      "Junior": "Junior",
+      "Senior": "Senior",
+      "Grad": "Graduate Student"
+    }
+  },
+  {
     "question": "Will you be learning remotely this semester?",
     "questionId": "remote",
     "answers": {
