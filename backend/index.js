@@ -7,8 +7,10 @@ app.use(express.json());
 
 // import routers
 const studentsRouter = require("./student/routes");
-const test = require("./utils/add-test-data");
+const matchingRouter = require("./matching/routes");
+
 app.use("/student", studentsRouter);
+app.use("/matching", matchingRouter);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`App listening in port ${port}`));

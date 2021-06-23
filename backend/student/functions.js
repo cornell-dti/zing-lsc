@@ -54,7 +54,7 @@ const addStudentSurveyResponse = async (
               names: mapCrseIdToNames(
                 mapCatalogNameToCrseId(courseCatalogName)
               ),
-              groups: [],
+              lastGroupNumber: 0,
             })
             .then(() => snapshot.ref)
             .catch((err) => {
