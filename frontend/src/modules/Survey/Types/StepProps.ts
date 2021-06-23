@@ -1,3 +1,5 @@
+import { Question } from "./Questions";
+
 export interface StepTemplateProps {
   gotoPrevStep: () => void
   gotoNextStep: () => void
@@ -8,7 +10,7 @@ export interface StepTemplateProps {
 }
 
 export interface StepProps {
-  questionList?: string[] // for radio button screen
+  question: Question
   setAnswer: (arg: string) => void
   key?: string
   currentAnswer: string

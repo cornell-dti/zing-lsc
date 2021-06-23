@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 import errorIcon from '@assets/img/erroricon.svg'
-import { colors, h2, h4, StyledComponent, RadioButtons } from '@core'
+import { colors, h2, h4, StyledComponent } from '@core'
 
 const ErrorIcon = ({ className }: StyledComponent) => (
   <div className={className}>
@@ -19,8 +19,6 @@ export const StyledRadioButtonsWrapper = styled.div`
   justify-content: center;
   align-items: center;
 `
-
-export const StyledRadioButtons = styled(RadioButtons)``
 
 export const StyledQuestionText = styled.div`
   ${h2};
