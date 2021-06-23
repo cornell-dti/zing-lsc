@@ -1,7 +1,7 @@
 const { db } = require("../config");
 const admin = require("firebase-admin");
-const courseRef = db.collection("courses");
-const studentRef = db.collection("students");
+const courseRef = db.collection("courses_test");
+const studentRef = db.collection("students_test");
 
 // TODO: change to integrate crosslisting.
 async function assertIsExistingCourse(courseId) {
@@ -94,4 +94,13 @@ async function makeMatches(courseId, groupSize = 2) {
   return groups;
 }
 
-module.exports = { makeMatches };
+async function getGroups(courseId) {
+  await assertIsExistingCourse(courseId);
+  const querySnapshotDocs = await courseRef
+    .doc(courseId)
+    .collection("groups")
+    .get();
+  const docData = querySnapshotDocs.docs.map((doc) => doc.data());
+  return docData;
+}
+module.exports = { makeMatches, getGroups };
