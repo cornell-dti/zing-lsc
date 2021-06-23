@@ -8,7 +8,7 @@ app.use(express.json());
 // import routers
 const studentsRouter = require("./student/routes");
 const matchingRouter = require("./matching/routes");
-
+// const { makeMatches } = require("./matching/functions");
 app.use("/student", studentsRouter);
 app.use("/matching", matchingRouter);
 
