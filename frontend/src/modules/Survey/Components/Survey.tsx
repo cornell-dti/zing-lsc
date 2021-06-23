@@ -14,11 +14,12 @@ import {
   sendSurveyData,
   surveyData,
 } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
+import { Question } from 'Survey/Types/Questions'
 
 export const Survey = () => {
   const [showError, setShowError] = useState(false)
   const [currStep, setCurrStep] = useState(0)
-  const questions = require('./FuncsAndConsts/Questions.json')
+  const questions: Question[] = require('./FuncsAndConsts/Questions.json')
   const totalSteps = 6
 
   // Form answer props
