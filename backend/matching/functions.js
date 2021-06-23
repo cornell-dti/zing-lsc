@@ -5,7 +5,7 @@ const studentRef = db.collection("students_test");
 
 // TODO: change to integrate crosslisting.
 async function assertIsExistingCourse(courseId) {
-  courseRef
+  await courseRef
     .doc(courseId)
     .get()
     .then((snapshot) => {
@@ -103,4 +103,38 @@ async function getGroups(courseId) {
   const docData = querySnapshotDocs.docs.map((doc) => doc.data());
   return docData;
 }
-module.exports = { makeMatches, getGroups };
+
+async function addUnmatchedStudentToGroup(courseId, studentEmail, groupNumber) {
+  await assertIsExistingCourse(courseId);
+
+  const courseData = (await courseRef.doc(courseId).get()).data();
+  let unmatched = courseData.unmatched;
+
+  if (!unmatched.includes(studentEmail))
+    throw new Error("This student is not currently unmatched");
+
+  const groupSnapshot = await courseRef
+    .doc(courseId)
+    .collection("groups")
+    .doc(groupNumber.toString())
+    .get();
+
+  if (!groupSnapshot.exists) throw new Error("Invalid group provided.");
+
+  unmatched = unmatched.filter((u) => u !== studentEmail);
+
+  await Promise.all([
+    courseRef
+      .doc(courseId)
+      .update({ unmatched })
+      .catch((err) => console.log(err)),
+
+    groupSnapshot.ref
+      .update({
+        members: admin.firestore.FieldValue.arrayUnion(studentEmail),
+      })
+      .catch((err) => console.log(err)),
+  ]);
+}
+
+module.exports = { makeMatches, getGroups, addUnmatchedStudentToGroup };
