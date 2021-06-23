@@ -1,7 +1,7 @@
 const { db } = require("../config");
-const admin = require('firebase-admin')
-const courseRef = db.collection("courses");
-const studentRef = db.collection("students");
+const admin = require("firebase-admin");
+const courseRef = db.collection("courses_test");
+const studentRef = db.collection("students_test");
 
 // TODO: change to integrate crosslisting.
 async function assertIsExistingCourse(courseId) {
@@ -19,12 +19,12 @@ async function makeMatches(courseId, groupSize = 2) {
   await assertIsExistingCourse(courseId);
 
   // get all unmatched students for course.
-  const data = (await courseRef.doc(courseId).get()).data()
-  const unmatchedStudents = data.unmatched
-  const lastGroupNumber = data.lastGroupNumber
+  const data = (await courseRef.doc(courseId).get()).data();
+  const unmatchedStudents = data.unmatched;
+  const lastGroupNumber = data.lastGroupNumber;
 
   // get relevant student data to get preferred working times
-  const studentData = await Promise.all(
+  let studentData = await Promise.all(
     unmatchedStudents.map((studentEmail) =>
       studentRef
         .doc(studentEmail)
@@ -49,34 +49,49 @@ async function makeMatches(courseId, groupSize = 2) {
 
   // greedily form groups. THESE MAY NOT BE PERFECT.
   let i = 0;
+  let groupCounter = 0;
   let groups = [];
-  while (i < studentData.length) {
-    let nextGroup = studentData
+
+  // we won't match students who don't form a full group
+  let studentDataSliced = studentData.slice(
+    0,
+    -(studentData.length % groupSize)
+  );
+  while (i < studentDataSliced.length) {
+    let nextGroup = studentDataSliced
       .slice(i, i + groupSize)
       .map((studentObj) => studentObj.email);
-    groups.append({
-      groupNumber: 1,
+    groups.push({
+      groupNumber: groupCounter + lastGroupNumber,
       members: nextGroup,
     });
     i += nextGroup.length;
+    groupCounter += 1;
   }
 
-  // if last group has only one person, make sure they're not lonely :'(
-  // Also, only run this if the algorithm is being run on more than one student
-  if (studentData.length > 1 && groups[-1].length == 1) {
-    const student = groups[-1].pop();
-    groups.pop();
-    groups[-1].push(student);
-  }
+  const matchedStudentSet = new Set(studentDataSliced.map((s) => s.email));
+  const unmatched = unmatchedStudents.filter((s) => !matchedStudentSet.has(s));
 
   // lastly, update the collections to reflect this matching
-  courseRef.doc(courseId).update({
-    unmatched: unmatchedStudents.length === 1 ? data : [],
-    groups: admin.firestore.FieldValue.arrayUnion(groups),
-    lastGroupNumber = unmatchedStudents.length === 1 
-                      ? lastGroupNumber 
-                      : lastGroupNumber + groups.length
-  })
+  await Promise.all([
+    courseRef
+      .doc(courseId)
+      .update({
+        unmatched,
+        lastGroupNumber: lastGroupNumber + groups.length,
+      })
+      .catch((err) => console.log(err)),
+    ...groups.map((group) =>
+      courseRef
+        .doc(courseId)
+        .collection("groups")
+        .doc(group.groupNumber.toString())
+        .set(group, { merge: true })
+        .catch((err) => console.log(err))
+    ),
+  ]);
+
+  return groups;
 }
 
 module.exports = { makeMatches };
