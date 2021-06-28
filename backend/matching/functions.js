@@ -104,6 +104,7 @@ async function getGroups(courseId) {
   return docData;
 }
 
+// transfer student from the list of unmatched students to a group
 async function addUnmatchedStudentToGroup(courseId, studentEmail, groupNumber) {
   await assertIsExistingCourse(courseId);
 
@@ -137,4 +138,55 @@ async function addUnmatchedStudentToGroup(courseId, studentEmail, groupNumber) {
   ]);
 }
 
-module.exports = { makeMatches, getGroups, addUnmatchedStudentToGroup };
+// transfer student from group1 to group2
+async function transferStudentBetweenGroups(
+  studentEmail,
+  group1,
+  group2,
+  courseId
+) {
+  await assertIsExistingCourse(courseId);
+
+  // make sure student 1 is indeed in group1
+  const group1Data = (
+    await courseRef
+      .doc(courseId)
+      .collection("groups")
+      .doc(group1.toString())
+      .get()
+  ).data();
+
+  if (!group1Data.members.includes(studentEmail))
+    throw new Error(
+      `The student ${studentEmail} doesn't exist in group${group1}`
+    );
+
+  const group1Update = courseRef
+    .doc(courseId)
+    .collection("groups")
+    .doc(group1.toString())
+    .update({ members: admin.firestore.FieldValue.arrayRemove(studentEmail) })
+    .catch((err) => {
+      console.log(err);
+      throw new Error(`error in removing ${studentEmail} from group${group1}.`);
+    });
+
+  const group2Update = courseRef
+    .doc(courseId)
+    .collection("groups")
+    .doc(group2.toString())
+    .update({ members: admin.firestore.FieldValue.arrayUnion(studentEmail) })
+    .catch((err) => {
+      console.log(err);
+      throw new Error(`error in adding ${studentEmail} from group${group2}.`);
+    });
+
+  await Promise.all([group1Update, group2Update]);
+}
+
+module.exports = {
+  makeMatches,
+  getGroups,
+  addUnmatchedStudentToGroup,
+  transferStudentBetweenGroups,
+};
