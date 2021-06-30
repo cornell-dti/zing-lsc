@@ -25,7 +25,7 @@
   },
   {
     "question": "Will you be learning remotely this semester?",
-    "questionId": "remote",
+    "questionId": "isRemote",
     "answers": {
       "No": "No",
       "Yes": "Yes"
@@ -33,7 +33,7 @@
   },
   {
     "question": "If you are in Ithaca, would you be willing to work with a remote student?",
-    "questionId": "willing",
+    "questionId": "workWithRemote",
     "answers": {
       "Yes": "Yes",
       "No": "No",
@@ -42,14 +42,14 @@
   },
   {
     "question": "What time (in EST/EDT) do you most prefer to work?",
-    "questionId": "time",
+    "questionId": "preferredWorkingTime",
     "answers": {
-      "Morning": "Morning (8am-12pm)",
-      "Early Afternoon": "Early Afternoon (12pm-4pm)",
-      "Late Afternoon": "Late Afternoon (4pm-8pm)",
-      "Evening": "Evening (8pm-12am)",
-      "Late Night": "Late Night (12am-4am)",
-      "Early Morning": "Early Morning (4am-8am)"
+      "0": "Early Morning (4am-8am)",
+      "1": "Morning (8am-12pm)",
+      "2": "Early Afternoon (12pm-4pm)",
+      "3": "Late Afternoon (4pm-8pm)",
+      "4": "Evening (8pm-12am)",
+      "5": "Late Night (12am-4am)"
     }
   }
 ]

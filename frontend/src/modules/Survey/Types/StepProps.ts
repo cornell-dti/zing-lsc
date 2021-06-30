@@ -17,7 +17,7 @@ export interface StepProps {
   showError: boolean
 }
 
-export interface Step0Props {
+export interface StepBeginProps {
   setName: (arg: string) => void
   setEmail: (arg: string) => void
   name: string
