@@ -34,8 +34,8 @@ export const Survey = () => {
   function finalNext() {
     const mcData = Object.fromEntries(questions.map((question, index) => [question.questionId, answers[index]]))
     const surveyData: SurveyData = {
-      courseIds: courseList,
-      fullName: nameAnswer,
+      courseCatalogNames: courseList,
+      name: nameAnswer,
       email: emailAnswer,
       ...mcData
     }

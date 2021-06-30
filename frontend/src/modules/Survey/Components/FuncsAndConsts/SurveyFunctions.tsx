@@ -1,16 +1,15 @@
-import React from 'react'
 const axios = require('axios')
 
 export type SurveyData = {
-  courseIds: string[]
-  fullName: string
+  courseCatalogNames: string[]
+  name: string
   email: string
   [key: string]: any
 }
 
 export async function sendSurveyData(data: SurveyData) {
   axios
-    .post('https://us-central1-zing-backend.cloudfunctions.net/newSurvey', data)
+    .post('http://localhost:8000/student/survey', data)
     .then(
       (response: any) => {
         console.log(response)
