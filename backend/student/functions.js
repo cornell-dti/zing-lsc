@@ -2,15 +2,7 @@ const { db } = require("../config");
 const admin = require("firebase-admin");
 const courseR = db.collection("courses");
 const studentR = db.collection("students");
-
-// placeholder methods, change based on roster API.
-const mapCatalogNameToCrseId = (catalogName) => {
-  return catalogName;
-};
-
-const mapCrseIdToNames = (courseId) => {
-  return [courseId];
-};
+const mapCatalogNameToCrseId = require("../course/get_course_id");
 
 // Note: the error handling in this file is done the way it is so it is easier
 // to decide response codes based on error type.
@@ -40,10 +32,13 @@ const addStudentSurveyResponse = async (
       throw e;
     });
 
+  const crseIds = await Promise.all(
+    courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
+  );
   // Next, update each course record to add this student
-  const courseUpdates = courseCatalogNames.map((courseCatalogName) =>
+  const courseUpdates = courseCatalogNames.map((courseCatalogName, index) =>
     courseRef
-      .doc(mapCatalogNameToCrseId(courseCatalogName)) // We want the courseID to allow for crosslisting
+      .doc(crseIds[index].toString()) // We want the courseID to allow for crosslisting
       .get()
       .then((snapshot) => {
         // create a record for this course if it doesn't exist already.
@@ -51,9 +46,7 @@ const addStudentSurveyResponse = async (
           return snapshot.ref
             .set({
               unmatched: [],
-              names: mapCrseIdToNames(
-                mapCatalogNameToCrseId(courseCatalogName)
-              ),
+              names: [courseCatalogName],
               lastGroupNumber: 0,
             })
             .then(() => snapshot.ref)
@@ -61,6 +54,19 @@ const addStudentSurveyResponse = async (
               console.log(err);
               const e = new Error(
                 `Error in creating course in courseUpdate for course ${courseCatalogName}`
+              );
+              e.name = "processing_err";
+              throw e;
+            });
+        } else {
+          snapshot.ref
+            .update({
+              names: admin.firestore.FieldValue.arrayUnion(courseCatalogName),
+            })
+            .catch((err) => {
+              console.log(err);
+              const e = new Error(
+                `Error in updating course in courseUpdate for course ${courseCatalogName}`
               );
               e.name = "processing_err";
               throw e;

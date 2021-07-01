@@ -1,3 +1,4 @@
+require("dotenv").config({ path: "../.env" });
 const { db } = require("../config");
 const addStudentSurveyResponse = require("../student/functions");
 const studentRef = db.collection("students_test");
@@ -31,8 +32,8 @@ const selectClasses = (numClasses = 3) => {
   const classes = [
     "CS1110",
     "CS2110",
-    "INFO1200",
-    "INFO2300",
+    "INFO1300",
+    "ECON1110",
     "MATH1920",
     "PHYS2213",
   ];
@@ -56,5 +57,7 @@ const addTestStudents = async () => {
     )
   );
 };
+
+addTestStudents();
 
 module.exports = addTestStudents;
