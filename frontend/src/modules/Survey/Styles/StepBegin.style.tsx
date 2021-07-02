@@ -1,9 +1,7 @@
 import styled, { css } from 'styled-components'
 
-import { NameField, EmailField } from '@core'
 import { colors, h1, h2, h3, h4, StyledComponent } from '@core'
 
-import logo from '@assets/img/whitelogo.svg'
 import teamPic from '@assets/img/teamwork.svg'
 import errorIcon from '@assets/img/erroricon.svg'
 
@@ -14,15 +12,6 @@ const ErrorIcon = ({ className }: StyledComponent) => (
     <img src={errorIcon} alt="errorIcon" />
   </div>
 )
-
-const Logo = ({ className }: StyledComponent) => (
-  <div className={className}>
-    <img src={logo} alt="logo" />
-  </div>
-)
-export const StyledLogo = styled(Logo)`
-  margin: 2.5rem;
-`
 
 const TeamPic = ({ className }: StyledComponent) => (
   <div className={className}>
@@ -62,6 +51,7 @@ export const StyledWhiteActionText = styled.text`
   ${h3};
   color: ${colors.white};
   text-align: center;
+  margin: 0 6rem;
 `
 
 export const StyledRightPanel = styled.div`
@@ -89,7 +79,7 @@ export const StyledHeaderText = styled.text`
 
 export const StyledWelcomeText = styled.text`
   ${h2};
-  font-weight: 400;
+  font-weight: 300;
   color: ${colors.black};
 `
 
@@ -110,12 +100,4 @@ export const StyledErrorText = styled.text`
   position: relative;
 `
 
-export const StyledNameField = styled(NameField)`
-  display: flex;
-`
-
 export const StyledTextFieldWrapper = styled.div``
-
-export const StyledEmailField = styled(EmailField)`
-  display: flex;
-`

@@ -19,8 +19,6 @@ const PurpleRadio = withStyles({
 export const RadioButton = ({
   currentAnswer,
   onClick,
-  setClickedIndex,
-  index,
   label,
   value,
 }: RadioButtonProps) => {
@@ -34,20 +32,13 @@ export const RadioButton = ({
     borderRadius: '11px',
     marginBottom: '1rem',
   }
-  /**
-   * Function called when radio button is clicked on
-   */
-  function handleOnClick(e: React.ChangeEvent<HTMLInputElement>) {
-    onClick(e)
-    setClickedIndex(index)
-  }
 
   return (
     <StyledLabel>
       <StyledContainer style={containerStyle}>
         <PurpleRadio
           checked={value === currentAnswer}
-          onChange={handleOnClick}
+          onChange={onClick}
           value={value}
           name="radio-button-mui"
           inputProps={{ 'aria-label': value }}
