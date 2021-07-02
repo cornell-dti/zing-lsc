@@ -1,4 +1,4 @@
-import { Question } from "./Questions";
+import { Question } from '@core/Types'
 
 export interface StepTemplateProps {
   gotoPrevStep: () => void
@@ -26,6 +26,7 @@ export interface StepBeginProps {
 }
 
 export interface StepCourseProps {
+  validCourseRe: RegExp
   courses: string[]
   setCourses: (arg: string[]) => void
 }
