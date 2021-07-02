@@ -14,7 +14,7 @@ export interface InputProps extends Common {
   inputStyle?: { [key in string]: any }
   type?: string
   placeholder?: string
-  error: string
+  error?: string
   value: string
   onChange: (e: React.ChangeEvent<any>) => void
   isNumber?: boolean // is this textinput type taking in only numbers?
@@ -58,7 +58,6 @@ export interface GoToButtonProps extends Common {
 export interface RadioButtonProps extends Common {
   currentAnswer: string
   onClick: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onClickLabel?: (s: string) => void
   value: string
   label: string
   key: string
@@ -68,7 +67,6 @@ export interface RadioButtonsProps extends Common {
   currentAnswer: string
   values: string[]
   onClick: (e: React.ChangeEvent<HTMLInputElement>) => void // to set state of user information in index.tsx
-  onClickLabel?: (s: string) => void // to set state when label is clicked
   key: string
 }
 

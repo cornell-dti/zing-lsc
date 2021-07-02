@@ -1,46 +1,15 @@
-import { domainToASCII } from 'node:url'
-import React from 'react'
 const axios = require('axios')
 
-export type surveyData = {
-  courseId: string
-  fullName: string
-  studentId: string
-  identity: string
-  pronoun: string
-  graduation: string
-  college: string
-  remote: string
-  mode: string
-  time: string
-  start: string
+export type SurveyData = {
+  courseCatalogNames: string[]
+  name: string
+  email: string
+  [key: string]: any
 }
 
-export function getLetter(ans: string, isDate: boolean) {
-  if (!isDate) {
-    return String.fromCharCode(Number(ans) + 64).toLowerCase()
-  }
-  const oy = getOldestGradYear()
-  switch (Number(ans)) {
-    case oy:
-      return 'a'
-    case oy + 1:
-      return 'b'
-    case oy + 2:
-      return 'c'
-    case oy + 3:
-      return 'd'
-    case oy + 4:
-      return 'e'
-    default:
-      alert('Form validation is broken; somehow, user is entering a weird date')
-      return ''
-  }
-}
-
-export async function sendSurveyData(data: surveyData) {
+export async function sendSurveyData(data: SurveyData) {
   axios
-    .post('https://us-central1-zing-backend.cloudfunctions.net/newSurvey', data)
+    .post('http://localhost:8000/student/survey', data)
     .then(
       (response: any) => {
         console.log(response)
