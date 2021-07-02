@@ -10,13 +10,13 @@ import {
   sendSurveyData,
   SurveyData,
 } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
-import { Question } from 'Survey/Types/Questions'
+import { Question } from '@core/Types'
 
 export const Survey = () => {
   const [showError, setShowError] = useState(false)
   const [currStep, setCurrStep] = useState(0)
   // If there are custom questions the below will be a network call perhaps
-  const questions: Question[] = require('./FuncsAndConsts/Questions.json')
+  const questions: Question[] = require('@core/Questions/Questions.json')
   const numSpecialQuestions = 1 // Course list
   const totalSteps = questions.length + numSpecialQuestions
 
@@ -45,8 +45,10 @@ export const Survey = () => {
   }
 
   const multipleChoiceIndex = currStep - numSpecialQuestions - 1
-  const isStepValid =
-    currStep === 1 ? courseList.length > 0 : answers[multipleChoiceIndex] !== ''
+  const validCourseRe = /^[A-Z]{2,7} \d{4}$/
+  const isStepValid = currStep === 1
+    ? courseList.length > 0 && courseList.every(c => validCourseRe.test(c))
+    : answers[multipleChoiceIndex] !== ''
 
   return currStep === 0 ? ( // Form landing
     <StyledContainer1>
@@ -74,6 +76,7 @@ export const Survey = () => {
       >
         {currStep === 1 ? ( // Course selection
           <StepCourse
+            validCourseRe={validCourseRe}
             courses={courseList}
             setCourses={setCourseList}
           />

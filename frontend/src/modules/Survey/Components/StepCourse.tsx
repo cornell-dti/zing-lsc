@@ -6,6 +6,7 @@ import { colors } from '@core/Constants'
 import { StepCourseProps } from 'Survey/Types'
 
 export const StepCourse = ({
+  validCourseRe,
   courses,
   setCourses
 }: StepCourseProps) => {
@@ -43,11 +44,12 @@ export const StepCourse = ({
         {courses.map((course, index) => (
           <InputField
             inputStyle={textInputStyle}
-            key={course}
+            key={String(index)}
             value={course}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               updateCourse(index, e.target.value)
             }
+            error={!validCourseRe.test(course) ? 'Must be of the form ABC 1100' : ''}
           />
         ))}
         <InputField
