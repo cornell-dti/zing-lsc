@@ -1,3 +1,4 @@
+import { GridSize } from '@material-ui/core'
 import { Student } from './Student'
 
 export interface GroupGridProps {
@@ -27,4 +28,5 @@ export interface StudentGridProps {
     currentGroupIndex: number,
     destinationStudentIndex: number
   ) => void
+  xsSize?: GridSize
 }

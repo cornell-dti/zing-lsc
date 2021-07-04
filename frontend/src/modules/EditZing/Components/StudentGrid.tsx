@@ -40,6 +40,7 @@ export const StudentGrid = ({
   groupIndex,
   studentIndex,
   moveStudentWithinGrid,
+  xsSize = 6,
 }: StudentGridProps) => {
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -77,7 +78,7 @@ export const StudentGrid = ({
   }
 
   return (
-    <Grid item xs={6} ref={drop}>
+    <Grid item xs={xsSize} ref={drop}>
       <div ref={drag}>
         <Paper
           style={{

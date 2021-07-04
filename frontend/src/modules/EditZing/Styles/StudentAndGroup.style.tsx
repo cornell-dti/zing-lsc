@@ -43,3 +43,12 @@ export const StyledMetricText = styled.text`
   font-weight: 600;
   color: ${colors.darkgreen};
 `
+
+export const StyledUnmatchedContainer = styled.div`
+  padding: 2rem;
+  border: 0.5px solid rgba(205, 156, 242, 0.15);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.07);
+  border-radius: 20px;
+  margin: 0.25rem;
+  background: ${colors.verylightgreen};
+`

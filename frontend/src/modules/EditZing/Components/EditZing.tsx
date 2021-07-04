@@ -7,6 +7,7 @@ import {
   StyledText,
 } from 'EditZing/Styles/EditZing.style'
 import { GroupGrid } from 'EditZing/Components/GroupGrid'
+import { UnmatchedGrid } from './UnmatchedGrid'
 import { Student } from 'EditZing/Types/Student'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -78,11 +79,17 @@ export const EditZing = () => {
       </StyledLogoWrapper>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={1}>
-          {studentGroups.map((studentGroup, index) => (
+          <UnmatchedGrid
+            studentList={studentGroups[0]} // temporarily unmatched is index 0
+            groupIndex={0}
+            moveStudentBetweenGrids={moveStudentBetweenGrids}
+            moveStudentWithinGrid={moveStudentWithinGrid}
+          />
+          {studentGroups.slice(1).map((studentGroup, index) => (
             <GroupGrid
               key={index}
               studentList={studentGroup}
-              groupIndex={index}
+              groupIndex={index + 1}
               moveStudentBetweenGrids={moveStudentBetweenGrids}
               moveStudentWithinGrid={moveStudentWithinGrid}
             />
