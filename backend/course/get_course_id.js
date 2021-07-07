@@ -46,7 +46,7 @@ async function getCourseId(courseCatalogName, roster = "FA21") {
     throw new Error(
       `Could not find course data for class ${courseCatalogName}`
     );
-  return classData.crseId;
+  return classData.crseId.toString();
 }
 
 module.exports = getCourseId;

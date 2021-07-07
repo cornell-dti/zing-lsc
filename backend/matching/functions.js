@@ -3,7 +3,7 @@ const admin = require("firebase-admin");
 const courseRef = db.collection("courses_test");
 const studentRef = db.collection("students_test");
 
-// TODO: change to integrate crosslisting.
+// =====================  HELPER FUNCTIONS ======================
 async function assertIsExistingCourse(courseId) {
   await courseRef
     .doc(courseId)
@@ -15,6 +15,36 @@ async function assertIsExistingCourse(courseId) {
     });
 }
 
+async function updateStudentReferencesForGroup(group, courseId) {
+  return group.members.map((member) =>
+    updateStudentGroup(member, courseId, group.groupNumber)
+  );
+}
+
+async function updateStudentGroup(studentEmail, courseId, groupNumber) {
+  return studentRef
+    .doc(studentEmail)
+    .get()
+    .then((snapshot) => {
+      const data = snapshot.data();
+      const groups = data.groups;
+      for (let obj of groups) {
+        if (obj.courseId === courseId) {
+          obj.groupNumber = groupNumber;
+          break;
+        }
+      }
+      return [snapshot.ref, groups];
+    })
+    .then(([ref, groups]) =>
+      ref.update({
+        groups,
+      })
+    )
+    .catch((err) => console.log(err));
+}
+
+// =============================== EXPORTS ==================================
 async function makeMatches(courseId, groupSize = 2) {
   await assertIsExistingCourse(courseId);
 
@@ -42,7 +72,6 @@ async function makeMatches(courseId, groupSize = 2) {
         })
     )
   );
-
   studentData.sort(
     (obj1, obj2) => obj1.preferredWorkingTime - obj2.preferredWorkingTime
   );
@@ -51,11 +80,10 @@ async function makeMatches(courseId, groupSize = 2) {
   let i = 0;
   let groupCounter = 0;
   let groups = [];
-
   // we won't match students who don't form a full group
   let studentDataSliced = studentData.slice(
     0,
-    -(studentData.length % groupSize)
+    -(studentData.length % groupSize) || undefined //extend to the end of the array if we have perfect groups
   );
   while (i < studentDataSliced.length) {
     let nextGroup = studentDataSliced
@@ -68,28 +96,30 @@ async function makeMatches(courseId, groupSize = 2) {
     i += nextGroup.length;
     groupCounter += 1;
   }
-
   const matchedStudentSet = new Set(studentDataSliced.map((s) => s.email));
   const unmatched = unmatchedStudents.filter((s) => !matchedStudentSet.has(s));
 
   // lastly, update the collections to reflect this matching
-  await Promise.all([
-    courseRef
-      .doc(courseId)
-      .update({
-        unmatched,
-        lastGroupNumber: lastGroupNumber + groups.length,
-      })
-      .catch((err) => console.log(err)),
-    ...groups.map((group) =>
+  await Promise.all(
+    [
       courseRef
         .doc(courseId)
-        .collection("groups")
-        .doc(group.groupNumber.toString())
-        .set(group, { merge: true })
-        .catch((err) => console.log(err))
-    ),
-  ]);
+        .update({
+          unmatched,
+          lastGroupNumber: lastGroupNumber + groups.length,
+        })
+        .catch((err) => console.log(err)),
+      groups.map((group) =>
+        courseRef
+          .doc(courseId)
+          .collection("groups")
+          .doc(group.groupNumber.toString())
+          .set(group, { merge: true })
+          .catch((err) => console.log(err))
+      ),
+      groups.map((group) => updateStudentReferencesForGroup(group, courseId)),
+    ].flat()
+  );
 
   return groups;
 }
@@ -135,6 +165,8 @@ async function addUnmatchedStudentToGroup(courseId, studentEmail, groupNumber) {
         members: admin.firestore.FieldValue.arrayUnion(studentEmail),
       })
       .catch((err) => console.log(err)),
+
+    updateStudentGroup(studentEmail, courseId, groupNumber),
   ]);
 }
 
@@ -181,7 +213,13 @@ async function transferStudentBetweenGroups(
       throw new Error(`error in adding ${studentEmail} from group${group2}.`);
     });
 
-  await Promise.all([group1Update, group2Update]);
+  const studentRecordUpdate = updateStudentGroup(
+    studentEmail,
+    courseId,
+    group2
+  );
+
+  await Promise.all([group1Update, group2Update, studentRecordUpdate]);
 }
 
 module.exports = {

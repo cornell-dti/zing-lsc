@@ -8,7 +8,7 @@ const {
 } = require("./functions");
 
 router.post("/make", (req, res) => {
-  const { courseId, groupSize } = req.params.courseId;
+  const { courseId, groupSize } = req.body;
   (groupSize ? makeMatches(courseId, groupSize) : makeMatches(courseId))
     .then((data) => res.status(200).json({ success: true, data }))
     .catch((err) => {

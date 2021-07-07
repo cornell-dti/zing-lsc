@@ -1,5 +1,5 @@
 const express = require("express");
-const addStudentSurveyResponse = require("./functions");
+const { addStudentSurveyResponse, removeStudent } = require("./functions");
 const router = express.Router();
 
 router.post("/survey", (req, res) => {
@@ -27,6 +27,16 @@ router.post("/survey", (req, res) => {
       }
       console.log(err);
       return res.status(400).send({ sucess: false, message: err.message });
+    });
+});
+
+router.delete("/", (req, res) => {
+  const email = req.body.studentEmail;
+  removeStudent(email)
+    .then((data) => res.status(200).send({ success: true, data }))
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send({ success: false, err: err.message });
     });
 });
 module.exports = router;
