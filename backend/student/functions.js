@@ -1,8 +1,25 @@
 const { db } = require("../config");
 const admin = require("firebase-admin");
-const courseR = db.collection("courses");
-const studentR = db.collection("students");
+const courseR = db.collection("courses_test");
+const studentR = db.collection("students_test");
 const mapCatalogNameToCrseId = require("../course/get_course_id");
+
+async function removeStudentFromCourse(email, courseId, groupNumber) {
+  const ref = courseR
+    .doc(courseId)
+    .collection("groups")
+    .doc(groupNumber.toString());
+  const data = (await ref.get()).data();
+  console.log(data);
+  if (data.members.length === 1 && data.members.includes(email)) {
+    //second condition is a sanity check
+    return ref.delete();
+  } else {
+    return ref.update({
+      members: admin.firestore.FieldValue.arrayRemove(email),
+    });
+  }
+}
 
 // Note: the error handling in this file is done the way it is so it is easier
 // to decide response codes based on error type.
@@ -17,6 +34,10 @@ const addStudentSurveyResponse = async (
   studentRef = studentR
 ) => {
   // First, update the [student] collection to include the data for the new student
+  const crseIds = await Promise.all(
+    courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
+  );
+
   const studentUpdate = studentRef
     .doc(email)
     .set({
@@ -24,6 +45,10 @@ const addStudentSurveyResponse = async (
       college,
       year,
       preferredWorkingTime,
+      groups: crseIds.map((crseId) => ({
+        courseId: crseId,
+        groupNumber: -1,
+      })),
     })
     .catch((err) => {
       console.log(err);
@@ -32,9 +57,6 @@ const addStudentSurveyResponse = async (
       throw e;
     });
 
-  const crseIds = await Promise.all(
-    courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
-  );
   // Next, update each course record to add this student
   const courseUpdates = courseCatalogNames.map((courseCatalogName, index) =>
     courseRef
@@ -94,4 +116,16 @@ const addStudentSurveyResponse = async (
   await Promise.all(allUpdates);
 };
 
-module.exports = addStudentSurveyResponse;
+async function removeStudent(email) {
+  const studentDocRef = studentR.doc(email);
+  const data = (await studentDocRef.get()).data();
+  if (!data) throw new Error(`Cannot find student ${email}`);
+  const groups = data.groups;
+  const courseUpdates = groups.map(({ courseId, groupNumber }) =>
+    groupNumber !== -1
+      ? removeStudentFromCourse(email, courseId, groupNumber)
+      : undefined
+  );
+  await Promise.all([courseUpdates, studentDocRef.delete()].flat());
+}
+module.exports = { addStudentSurveyResponse, removeStudent };

@@ -1,6 +1,6 @@
 require("dotenv").config({ path: "../.env" });
 const { db } = require("../config");
-const addStudentSurveyResponse = require("../student/functions");
+const { addStudentSurveyResponse } = require("../student/functions");
 const studentRef = db.collection("students_test");
 const courseRef = db.collection("courses_test");
 
