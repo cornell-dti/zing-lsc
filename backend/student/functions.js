@@ -10,7 +10,6 @@ async function removeStudentFromCourse(email, courseId, groupNumber) {
     .collection("groups")
     .doc(groupNumber.toString());
   const data = (await ref.get()).data();
-  console.log(data);
   if (data.members.length === 1 && data.members.includes(email)) {
     //second condition is a sanity check
     return ref.delete();
