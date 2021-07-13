@@ -11,9 +11,13 @@ import { UnmatchedGrid } from './UnmatchedGrid'
 import { Student } from 'EditZing/Types/Student'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { CourseInfo, Group } from 'EditZing/Types/CourseInfo'
 
 export const EditZing = () => {
-  const fakeStudentGroupsFromJson: Student[][] = require('EditZing/fakeData.json')
+  const fakeCourseInfoFromJson: CourseInfo = require('EditZing/courseInfo.json')
+  const [courseInfo, setCourseInfo] = useState(fakeCourseInfoFromJson)
+
+  const fakeStudentGroupsFromJson: Group[] = require('EditZing/groups.json')
   const [studentGroups, setStudentGroups] = useState(fakeStudentGroupsFromJson)
 
   /** Move a student from one grid to a destination grid based
