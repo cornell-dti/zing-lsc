@@ -1,7 +1,7 @@
 const { db } = require("../config");
 const admin = require("firebase-admin");
-const courseR = db.collection("courses_test");
-const studentR = db.collection("students_test");
+const courseR = db.collection("courses");
+const studentR = db.collection("students");
 const mapCatalogNameToCrseId = require("../course/get_course_id");
 
 async function removeStudentFromCourse(email, courseId, groupNumber) {

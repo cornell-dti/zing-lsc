@@ -1,7 +1,7 @@
 const { db } = require("../config");
 const admin = require("firebase-admin");
-const courseRef = db.collection("courses_test");
-const studentRef = db.collection("students_test");
+const courseRef = db.collection("courses");
+const studentRef = db.collection("students");
 
 // =====================  HELPER FUNCTIONS ======================
 async function assertIsExistingCourse(courseId) {
