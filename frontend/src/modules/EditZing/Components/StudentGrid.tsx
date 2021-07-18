@@ -6,7 +6,7 @@ import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { genderSVG } from 'EditZing/Styles/InlineSVGs'
 import { colors } from '@core'
-import { useDrop, useDrag } from 'react-dnd'
+import { useDrag } from 'react-dnd'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,16 +37,13 @@ const useStyles = makeStyles((theme: Theme) =>
 /** the equivalent of MoveableItem */
 export const StudentGrid = ({
   student,
-  groupIndex,
-  studentIndex,
-  moveStudentWithinGrid,
+  groupNumber,
   xsSize = 6,
 }: StudentGridProps) => {
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: STUDENT_TYPE,
-      groupIndex: groupIndex,
-      studentIndex: studentIndex,
+      groupNumber: groupNumber,
       studentToMove: student,
     },
     type: STUDENT_TYPE,
@@ -55,47 +52,18 @@ export const StudentGrid = ({
     }),
   })
 
-  const [{ isOver }, drop] = useDrop({
-    accept: STUDENT_TYPE,
-    drop: (item: DnDStudentTransferType) => {
-      moveStudentWithinGrid(item.studentToMove, groupIndex, studentIndex)
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  })
-
   const classes = useStyles()
 
-  function determineOpacity() {
-    if (isDragging) {
-      return '0'
-    } else if (isOver) {
-      return '0.9'
-    } else {
-      return '1.0'
-    }
-  }
+  const opacity = isDragging ? '0' : '1.0'
 
   return (
-    <Grid item xs={xsSize} ref={drop}>
+    <Grid item xs={xsSize}>
       <div ref={drag}>
-        <Paper
-          style={{
-            opacity: determineOpacity(),
-            background: isOver ? colors.lightviolet : colors.verylightviolet,
-          }}
-          className={classes.paper1}
-        >
-          {student.fullName}
-          <div
-            className={classes.paper2}
-            style={{
-              opacity: determineOpacity(),
-              background: isOver ? colors.lightviolet : colors.verylightviolet,
-            }}
-          >
-            {genderSVG} {student.pronoun === 'a' ? 'Male' : 'Female'}
+        <Paper style={{ opacity: opacity }} className={classes.paper1}>
+          {/* {student.fullName} */}
+          {student}
+          <div className={classes.paper2} style={{ opacity: opacity }}>
+            {/* {genderSVG} {student.pronoun === 'a' ? 'Male' : 'Female'} */}
           </div>
         </Paper>
       </div>

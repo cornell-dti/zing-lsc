@@ -31,19 +31,6 @@ export const StyledGroupText = styled.text`
   margin-right: 1rem;
 `
 
-export const StyledMetricBox = styled.div`
-  border-radius: 8px;
-  background: ${colors.lightgreen};
-  text-align: center;
-  padding: 0.25rem 0.5rem 0rem 0.5rem;
-`
-
-export const StyledMetricText = styled.text`
-  ${h5};
-  font-weight: 600;
-  color: ${colors.darkgreen};
-`
-
 export const StyledUnmatchedContainer = styled.div`
   padding: 2rem;
   border: 0.5px solid rgba(205, 156, 242, 0.15);

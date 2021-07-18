@@ -20,58 +20,51 @@ export const EditZing = () => {
   const fakeStudentGroupsFromJson: Group[] = require('EditZing/groups.json')
   const [studentGroups, setStudentGroups] = useState(fakeStudentGroupsFromJson)
 
-  /** Move a student from one grid to a destination grid based
-   * on a starting and destination grid index */
-  function moveStudentBetweenGrids(
-    studentToMove: Student,
-    startingIndex: number,
-    destinationIndex: number
-  ): void {
-    // only set new groups if actually changing index
-    if (startingIndex !== destinationIndex) {
-      setStudentGroups(
-        studentGroups.map((studentList, index) => {
-          // case where the current iterated group is the starting index
-          if (index === startingIndex) {
-            // filter for only students with IDs that are not the studentToMove's
-            return studentGroups[startingIndex].filter(
-              (student) => student.studentId !== studentToMove.studentId
-            )
-          }
-          // case where the current iterated group is the destination index
-          else if (index === destinationIndex) {
-            /* based on how drop functions work, we need to first check if the 
-          destination group has the studentToMove in it first and skip it 
-          if it already contains it */
-            if (!studentGroups[destinationIndex].includes(studentToMove)) {
-              return studentGroups[destinationIndex].concat(studentToMove)
-            } else {
-              return studentList
-            }
-          }
-          // case where it is neither starting nor destination
-          else {
-            return studentList
-          }
-        })
+  /** Add an unmatched student to a group */
+  const moveStudentFromUnmatched = (student: string, toGroupNumber: number) => {
+    setCourseInfo({
+      ...courseInfo,
+      unmatched: courseInfo.unmatched.filter((s) => s !== student),
+    })
+    setStudentGroups(
+      studentGroups.map((group) =>
+        group.groupNumber === toGroupNumber
+          ? { ...group, members: [...group.members, student] }
+          : group
       )
-    }
+    )
   }
 
-  /** This function rearranges a student within the grid it is currently in */
-  function moveStudentWithinGrid(
-    studentToMove: Student,
-    currentGroupIndex: number,
-    destinationStudentIndex: number
-  ): void {
-    let groups = [...studentGroups]
-    if (groups[currentGroupIndex].includes(studentToMove)) {
-      groups[currentGroupIndex] = groups[currentGroupIndex].filter(
-        (student) => student.studentId !== studentToMove.studentId
+  /** Transfer a student from a group to another group */
+  const moveStudentIntergroup = (
+    student: string,
+    fromGroupNumber: number,
+    toGroupNumber: number
+  ) => {
+    setStudentGroups(
+      studentGroups.map((group) =>
+        group.groupNumber === toGroupNumber
+          ? { ...group, members: [...group.members, student] }
+          : group.groupNumber === fromGroupNumber
+          ? { ...group, members: group.members.filter((s) => s !== student) }
+          : group
       )
+    )
+  }
+
+  /** Move a student from some group (existing/unmatched) to a group */
+  const moveStudent = (
+    student: string,
+    fromGroupNumber: number,
+    toGroupNumber: number
+  ) => {
+    if (fromGroupNumber !== toGroupNumber) {
+      if (fromGroupNumber === -1) {
+        moveStudentFromUnmatched(student, toGroupNumber)
+      } else {
+        moveStudentIntergroup(student, fromGroupNumber, toGroupNumber)
+      }
     }
-    groups[currentGroupIndex].splice(destinationStudentIndex, 0, studentToMove)
-    setStudentGroups(groups)
   }
 
   // TODO: COURSE SHOULDN'T BE HARDCODED
@@ -79,23 +72,17 @@ export const EditZing = () => {
     <StyledContainer>
       <StyledLogoWrapper>
         <StyledLogo />
-        <StyledText>ZING 1100</StyledText>
+        <StyledText>{courseInfo.names.join(', ')}</StyledText>
       </StyledLogoWrapper>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={1}>
-          <UnmatchedGrid
-            studentList={studentGroups[0]} // temporarily unmatched is index 0
-            groupIndex={0}
-            moveStudentBetweenGrids={moveStudentBetweenGrids}
-            moveStudentWithinGrid={moveStudentWithinGrid}
-          />
-          {studentGroups.slice(1).map((studentGroup, index) => (
+          <UnmatchedGrid unmatchedStudents={courseInfo.unmatched} />
+          {studentGroups.map((studentGroup, index) => (
             <GroupGrid
               key={index}
-              studentList={studentGroup}
-              groupIndex={index + 1}
-              moveStudentBetweenGrids={moveStudentBetweenGrids}
-              moveStudentWithinGrid={moveStudentWithinGrid}
+              studentList={studentGroup.members}
+              groupNumber={studentGroup.groupNumber}
+              moveStudent={moveStudent}
             />
           ))}
         </Grid>

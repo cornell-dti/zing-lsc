@@ -8,21 +8,18 @@ import {
   StyledGroupText,
   StyledGroupTextWrapper,
   StyledGroupContainer,
-  StyledMetricBox,
-  StyledMetricText,
 } from 'EditZing/Styles/StudentAndGroup.style'
 
 /** the equivalent of Column */
 export const GroupGrid = ({
   studentList,
-  groupIndex,
-  moveStudentBetweenGrids,
-  moveStudentWithinGrid,
+  groupNumber,
+  moveStudent,
 }: GroupGridProps) => {
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
     drop: (item: DnDStudentTransferType) => {
-      moveStudentBetweenGrids(item.studentToMove, item.groupIndex, groupIndex)
+      moveStudent(item.studentToMove, item.groupNumber, groupNumber)
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -36,18 +33,13 @@ export const GroupGrid = ({
         style={{ opacity: isOver ? '0.6' : '1' }}
       >
         <StyledGroupTextWrapper>
-          <StyledGroupText>{'Group ' + String(groupIndex + 1)}</StyledGroupText>
-          <StyledMetricBox>
-            <StyledMetricText>6.9</StyledMetricText>
-          </StyledMetricBox>
+          <StyledGroupText>{'Group ' + String(groupNumber)}</StyledGroupText>
         </StyledGroupTextWrapper>
         <Grid container spacing={2}>
           {studentList.map((student, index) => (
             <StudentGrid
               key={index}
-              moveStudentWithinGrid={moveStudentWithinGrid}
-              studentIndex={index}
-              groupIndex={groupIndex}
+              groupNumber={groupNumber}
               student={student}
             />
           ))}

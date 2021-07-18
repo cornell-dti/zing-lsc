@@ -15,9 +15,9 @@ export type Student = {
 /** item type for drag and drop prop transfer via dnd */
 export type DnDStudentTransferType = {
   type: string
-  studentToMove: Student
-  studentIndex: number
-  groupIndex: number
+  // studentToMove: Student
+  studentToMove: string
+  groupNumber: number
 }
 
 /** special type for reactdnd to keep track of what items are movable. in
