@@ -5,4 +5,4 @@ service-account.json
 # extra packages
 node_modules
 
-firebase-debug.log
+**.log
