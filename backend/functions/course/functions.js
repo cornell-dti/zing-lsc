@@ -1,7 +1,7 @@
 require("dotenv").config({ path: "../.env" });
 const { db } = require("../config");
-const courseRef = db.collection("courses_test");
-const studentRef = db.collection("students_test");
+const courseRef = db.collection("courses");
+const studentRef = db.collection("students");
 
 async function getStudent(email) {
   const snapshot = await studentRef.doc(email).get();
