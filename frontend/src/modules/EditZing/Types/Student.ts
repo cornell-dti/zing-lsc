@@ -1,22 +1,21 @@
 export type Student = {
+  name: string
+  email: string
+  year: number
   college: string
-  courseId: string
-  fullName: string
-  graduation: string
-  identity: string
-  mode: string
-  pronoun: string
-  remote: string
-  start: string
-  studentId: string
-  time: string
+  preferredWorkingTime: number
+  groups: GroupMembership[]
+}
+
+export type GroupMembership = {
+  courseId: number
+  groupNumber: number
 }
 
 /** item type for drag and drop prop transfer via dnd */
 export type DnDStudentTransferType = {
   type: string
-  // studentToMove: Student
-  studentToMove: string
+  studentToMove: Student
   groupNumber: number
 }
 

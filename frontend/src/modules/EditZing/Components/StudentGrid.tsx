@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
-import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
+import { STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { genderSVG } from 'EditZing/Styles/InlineSVGs'
 import { colors } from '@core'
@@ -61,9 +61,10 @@ export const StudentGrid = ({
       <div ref={drag}>
         <Paper style={{ opacity: opacity }} className={classes.paper1}>
           {/* {student.fullName} */}
-          {student}
+          {student.name}
           <div className={classes.paper2} style={{ opacity: opacity }}>
             {/* {genderSVG} {student.pronoun === 'a' ? 'Male' : 'Female'} */}
+            {student.email}
           </div>
         </Paper>
       </div>

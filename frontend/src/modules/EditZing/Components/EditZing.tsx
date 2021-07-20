@@ -11,25 +11,33 @@ import { UnmatchedGrid } from './UnmatchedGrid'
 import { Student } from 'EditZing/Types/Student'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { CourseInfo, Group } from 'EditZing/Types/CourseInfo'
+import {
+  CourseInfo,
+  CourseStudentDataResponse,
+} from 'EditZing/Types/CourseInfo'
 
 export const EditZing = () => {
   const fakeCourseInfoFromJson: CourseInfo = require('EditZing/courseInfo.json')
   const [courseInfo, setCourseInfo] = useState(fakeCourseInfoFromJson)
 
-  const fakeStudentGroupsFromJson: Group[] = require('EditZing/groups.json')
-  const [studentGroups, setStudentGroups] = useState(fakeStudentGroupsFromJson)
+  const fakeResponse: CourseStudentDataResponse = require('EditZing/studentData.json')
+  const [unmatchedStudents, setUnmatchedStudents] = useState(
+    fakeResponse.data.unmatched
+  )
+  const [studentGroups, setStudentGroups] = useState(fakeResponse.data.groups)
 
   /** Add an unmatched student to a group */
-  const moveStudentFromUnmatched = (student: string, toGroupNumber: number) => {
-    setCourseInfo({
-      ...courseInfo,
-      unmatched: courseInfo.unmatched.filter((s) => s !== student),
-    })
+  const moveStudentFromUnmatched = (
+    student: Student,
+    toGroupNumber: number
+  ) => {
+    setUnmatchedStudents(
+      unmatchedStudents.filter((s) => s.email !== student.email)
+    )
     setStudentGroups(
       studentGroups.map((group) =>
         group.groupNumber === toGroupNumber
-          ? { ...group, members: [...group.members, student] }
+          ? { ...group, memberData: [...group.memberData, student] }
           : group
       )
     )
@@ -37,16 +45,21 @@ export const EditZing = () => {
 
   /** Transfer a student from a group to another group */
   const moveStudentIntergroup = (
-    student: string,
+    student: Student,
     fromGroupNumber: number,
     toGroupNumber: number
   ) => {
     setStudentGroups(
       studentGroups.map((group) =>
         group.groupNumber === toGroupNumber
-          ? { ...group, members: [...group.members, student] }
+          ? { ...group, memberData: [...group.memberData, student] }
           : group.groupNumber === fromGroupNumber
-          ? { ...group, members: group.members.filter((s) => s !== student) }
+          ? {
+              ...group,
+              memberData: group.memberData.filter(
+                (s) => s.email !== student.email
+              ),
+            }
           : group
       )
     )
@@ -54,7 +67,7 @@ export const EditZing = () => {
 
   /** Move a student from some group (existing/unmatched) to a group */
   const moveStudent = (
-    student: string,
+    student: Student,
     fromGroupNumber: number,
     toGroupNumber: number
   ) => {
@@ -76,11 +89,11 @@ export const EditZing = () => {
       </StyledLogoWrapper>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={1}>
-          <UnmatchedGrid unmatchedStudents={courseInfo.unmatched} />
+          <UnmatchedGrid unmatchedStudents={unmatchedStudents} />
           {studentGroups.map((studentGroup, index) => (
             <GroupGrid
               key={index}
-              studentList={studentGroup.members}
+              studentList={studentGroup.memberData}
               groupNumber={studentGroup.groupNumber}
               moveStudent={moveStudent}
             />

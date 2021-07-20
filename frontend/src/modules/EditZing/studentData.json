@@ -1,0 +1,479 @@
+{
+  "success": true,
+  "data": {
+    "unmatched": [
+      {
+        "preferredWorkingTime": 5,
+        "groups": [
+          {
+            "groupNumber": -1,
+            "courseId": "352257"
+          },
+          {
+            "groupNumber": -1,
+            "courseId": "363118"
+          },
+          {
+            "courseId": "358546",
+            "groupNumber": -1
+          }
+        ],
+        "college": "cals",
+        "name": "y",
+        "year": 2022,
+        "email": "y@gmail.com"
+      }
+    ],
+    "groups": [
+      {
+        "memberData": [
+          {
+            "year": 2022,
+            "college": "dyson",
+            "groups": [
+              {
+                "courseId": "358526",
+                "groupNumber": -1
+              },
+              {
+                "groupNumber": 0,
+                "courseId": "350025"
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "352257"
+              }
+            ],
+            "preferredWorkingTime": 0,
+            "name": "b",
+            "email": "b@gmail.com"
+          },
+          {
+            "year": 2022,
+            "preferredWorkingTime": 0,
+            "name": "u",
+            "college": "dyson",
+            "groups": [
+              {
+                "courseId": "352257",
+                "groupNumber": -1
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "355207"
+              },
+              {
+                "groupNumber": 0,
+                "courseId": "350025"
+              }
+            ],
+            "email": "u@gmail.com"
+          }
+        ],
+        "groupNumber": 0
+      },
+      {
+        "memberData": [
+          {
+            "year": 2022,
+            "name": "k",
+            "college": "dyson",
+            "preferredWorkingTime": 0,
+            "groups": [
+              {
+                "courseId": "358546",
+                "groupNumber": -1
+              },
+              {
+                "courseId": "352257",
+                "groupNumber": -1
+              },
+              {
+                "groupNumber": 1,
+                "courseId": "350025"
+              }
+            ],
+            "email": "k@gmail.com"
+          },
+          {
+            "groups": [
+              {
+                "groupNumber": -1,
+                "courseId": "355207"
+              },
+              {
+                "courseId": "350025",
+                "groupNumber": 1
+              },
+              {
+                "courseId": "352257",
+                "groupNumber": -1
+              }
+            ],
+            "preferredWorkingTime": 0,
+            "year": 2022,
+            "name": "q",
+            "college": "a&s",
+            "email": "q@gmail.com"
+          }
+        ],
+        "groupNumber": 1
+      },
+      {
+        "memberData": [
+          {
+            "year": 2022,
+            "preferredWorkingTime": 0,
+            "groups": [
+              {
+                "groupNumber": 2,
+                "courseId": "350025"
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "358526"
+              },
+              {
+                "courseId": "355207",
+                "groupNumber": -1
+              }
+            ],
+            "college": "engineering",
+            "name": "i",
+            "email": "i@gmail.com"
+          },
+          {
+            "college": "a&s",
+            "groups": [
+              {
+                "groupNumber": -1,
+                "courseId": "358546"
+              },
+              {
+                "courseId": "355207",
+                "groupNumber": -1
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "352257"
+              }
+            ],
+            "preferredWorkingTime": 1,
+            "year": 2022,
+            "name": "v",
+            "email": "v@gmail.com"
+          }
+        ],
+        "groupNumber": 2
+      },
+      {
+        "memberData": [
+          {
+            "college": "a&s",
+            "preferredWorkingTime": 1,
+            "year": 2022,
+            "groups": [
+              {
+                "groupNumber": 3,
+                "courseId": "350025"
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "358526"
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "352257"
+              }
+            ],
+            "name": "z",
+            "email": "z@gmail.com"
+          },
+          {
+            "year": 2022,
+            "college": "engineering",
+            "name": "n",
+            "groups": [
+              {
+                "groupNumber": -1,
+                "courseId": "363118"
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "358546"
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "355207"
+              }
+            ],
+            "preferredWorkingTime": 1,
+            "email": "n@gmail.com"
+          }
+        ],
+        "groupNumber": 3
+      },
+      {
+        "memberData": [
+          {
+            "name": "h",
+            "college": "engineering",
+            "preferredWorkingTime": 1,
+            "groups": [
+              {
+                "courseId": "358526",
+                "groupNumber": -1
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "355207"
+              },
+              {
+                "courseId": "358546",
+                "groupNumber": -1
+              }
+            ],
+            "year": 2022,
+            "email": "h@gmail.com"
+          },
+          {
+            "college": "engineering",
+            "preferredWorkingTime": 2,
+            "groups": [
+              {
+                "groupNumber": -1,
+                "courseId": "363118"
+              },
+              {
+                "courseId": "355207",
+                "groupNumber": "2"
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "352257"
+              }
+            ],
+            "name": "m",
+            "year": 2022,
+            "email": "m@gmail.com"
+          }
+        ],
+        "groupNumber": 4
+      },
+      {
+        "memberData": [
+          {
+            "groups": [
+              {
+                "groupNumber": -1,
+                "courseId": "352257"
+              },
+              {
+                "courseId": "358526",
+                "groupNumber": -1
+              },
+              {
+                "courseId": "358546",
+                "groupNumber": -1
+              }
+            ],
+            "preferredWorkingTime": 2,
+            "name": "o",
+            "year": 2022,
+            "college": "engineering",
+            "email": "o@gmail.com"
+          },
+          {
+            "year": 2022,
+            "groups": [
+              {
+                "groupNumber": 5,
+                "courseId": "350025"
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "352257"
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "358546"
+              }
+            ],
+            "preferredWorkingTime": 2,
+            "name": "l",
+            "college": "cals",
+            "email": "l@gmail.com"
+          }
+        ],
+        "groupNumber": 5
+      },
+      {
+        "memberData": [
+          {
+            "name": "t",
+            "college": "a&s",
+            "groups": [
+              {
+                "courseId": "355207",
+                "groupNumber": -1
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "352257"
+              },
+              {
+                "courseId": "350025",
+                "groupNumber": 6
+              }
+            ],
+            "preferredWorkingTime": 2,
+            "year": 2022,
+            "email": "t@gmail.com"
+          },
+          {
+            "preferredWorkingTime": 3,
+            "college": "engineering",
+            "name": "a",
+            "year": 2022,
+            "groups": [
+              {
+                "courseId": "355207",
+                "groupNumber": -1
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "363118"
+              },
+              {
+                "courseId": "358526",
+                "groupNumber": -1
+              }
+            ],
+            "email": "a@gmail.com"
+          }
+        ],
+        "groupNumber": 6
+      },
+      {
+        "memberData": [
+          {
+            "year": 2022,
+            "name": "c",
+            "preferredWorkingTime": 4,
+            "groups": [
+              {
+                "courseId": "355207",
+                "groupNumber": -1
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "358546"
+              },
+              {
+                "courseId": "358526",
+                "groupNumber": -1
+              }
+            ],
+            "college": "cals",
+            "email": "c@gmail.com"
+          }
+        ],
+        "groupNumber": 7
+      },
+      {
+        "memberData": [
+          {
+            "groups": [
+              {
+                "courseId": "358546",
+                "groupNumber": -1
+              },
+              {
+                "courseId": "358526",
+                "groupNumber": -1
+              },
+              {
+                "courseId": "350025",
+                "groupNumber": 8
+              }
+            ],
+            "name": "w",
+            "preferredWorkingTime": 4,
+            "year": 2022,
+            "college": "engineering",
+            "email": "w@gmail.com"
+          },
+          {
+            "name": "j",
+            "college": "dyson",
+            "preferredWorkingTime": 4,
+            "year": 2022,
+            "groups": [
+              {
+                "courseId": "358526",
+                "groupNumber": -1
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "352257"
+              },
+              {
+                "courseId": "363118",
+                "groupNumber": -1
+              }
+            ],
+            "email": "j@gmail.com"
+          }
+        ],
+        "groupNumber": 8
+      },
+      {
+        "memberData": [
+          {
+            "groups": [
+              {
+                "groupNumber": -1,
+                "courseId": "358546"
+              },
+              {
+                "courseId": "358526",
+                "groupNumber": -1
+              },
+              {
+                "courseId": "350025",
+                "groupNumber": 9
+              }
+            ],
+            "year": 2022,
+            "name": "s",
+            "college": "dyson",
+            "preferredWorkingTime": 4,
+            "email": "s@gmail.com"
+          },
+          {
+            "preferredWorkingTime": 5,
+            "college": "a&s",
+            "name": "e",
+            "groups": [
+              {
+                "courseId": "363118",
+                "groupNumber": -1
+              },
+              {
+                "courseId": "352257",
+                "groupNumber": -1
+              },
+              {
+                "groupNumber": -1,
+                "courseId": "358526"
+              }
+            ],
+            "year": 2022,
+            "email": "e@gmail.com"
+          }
+        ],
+        "groupNumber": 9
+      }
+    ]
+  }
+}

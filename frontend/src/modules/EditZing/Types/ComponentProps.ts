@@ -3,24 +3,21 @@ import { Group } from './CourseInfo'
 import { Student } from './Student'
 
 export interface UnmatchedGridProps {
-  unmatchedStudents: string[]
+  unmatchedStudents: Student[]
 }
 
 export interface GroupGridProps {
-  // studentList: Group
-  studentList: string[]
+  studentList: Student[]
   groupNumber: number
   moveStudent: (
-    // studentToMove: Student,
-    student: string,
+    studentToMove: Student,
     fromGroupNumber: number,
     toGroupNumber: number
   ) => void
 }
 
 export interface StudentGridProps {
-  // student: Student
-  student: string
+  student: Student
   groupNumber: number
   xsSize?: GridSize
 }
