@@ -1,4 +1,4 @@
-import { colors, h3, h5 } from '@core'
+import { colors, h3 } from '@core'
 import styled from 'styled-components'
 
 export const StyledContainer = styled.div`
@@ -38,4 +38,10 @@ export const StyledUnmatchedContainer = styled.div`
   border-radius: 20px;
   margin: 0.25rem;
   background: ${colors.verylightgreen};
+`
+
+export const StyledStudentDetail = styled.p`
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
 `

@@ -7,6 +7,7 @@ import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { genderSVG } from 'EditZing/Styles/InlineSVGs'
 import { colors } from '@core'
 import { useDrag } from 'react-dnd'
+import { StyledStudentDetail } from 'EditZing/Styles/StudentAndGroup.style'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,11 +26,10 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '10px',
     },
     paper2: {
-      textAlign: 'left',
-      color: colors.black,
-      fontFamily: 'Montserrat',
-      fontWeight: 400,
-      fontSize: 14,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '2px',
+      marginTop: '2px',
     },
   })
 )
@@ -60,11 +60,11 @@ export const StudentGrid = ({
     <Grid item xs={xsSize}>
       <div ref={drag}>
         <Paper style={{ opacity: opacity }} className={classes.paper1}>
-          {/* {student.fullName} */}
           {student.name}
-          <div className={classes.paper2} style={{ opacity: opacity }}>
+          <div className={classes.paper2}>
             {/* {genderSVG} {student.pronoun === 'a' ? 'Male' : 'Female'} */}
-            {student.email}
+            <StyledStudentDetail>{student.email}</StyledStudentDetail>
+            <StyledStudentDetail>{student.year}</StyledStudentDetail>
           </div>
         </Paper>
       </div>

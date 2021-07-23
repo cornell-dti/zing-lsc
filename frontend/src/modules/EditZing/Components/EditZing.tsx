@@ -43,6 +43,26 @@ export const EditZing = () => {
     )
   }
 
+  /** Move a student already in a group back to unmatched */
+  const moveStudentToUnmatched = (
+    student: Student,
+    fromGroupNumber: number
+  ) => {
+    setUnmatchedStudents([...unmatchedStudents, student])
+    setStudentGroups(
+      studentGroups.map((group) =>
+        group.groupNumber === fromGroupNumber
+          ? {
+              ...group,
+              memberData: group.memberData.filter(
+                (s) => s.email !== student.email
+              ),
+            }
+          : group
+      )
+    )
+  }
+
   /** Transfer a student from a group to another group */
   const moveStudentIntergroup = (
     student: Student,
@@ -74,6 +94,8 @@ export const EditZing = () => {
     if (fromGroupNumber !== toGroupNumber) {
       if (fromGroupNumber === -1) {
         moveStudentFromUnmatched(student, toGroupNumber)
+      } else if (toGroupNumber === -1) {
+        moveStudentToUnmatched(student, fromGroupNumber)
       } else {
         moveStudentIntergroup(student, fromGroupNumber, toGroupNumber)
       }
@@ -89,7 +111,10 @@ export const EditZing = () => {
       </StyledLogoWrapper>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={1}>
-          <UnmatchedGrid unmatchedStudents={unmatchedStudents} />
+          <UnmatchedGrid
+            unmatchedStudents={unmatchedStudents}
+            moveStudent={moveStudent}
+          />
           {studentGroups.map((studentGroup, index) => (
             <GroupGrid
               key={index}
