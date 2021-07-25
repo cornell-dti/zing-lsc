@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import Grid from '@material-ui/core/Grid'
 import {
   StyledContainer,
@@ -15,10 +16,23 @@ import {
   CourseInfo,
   CourseStudentDataResponse,
 } from 'EditZing/Types/CourseInfo'
+import { API_ROOT, COURSE_API } from '@core/Constants'
+import { useParams } from 'react-router-dom'
 
 export const EditZing = () => {
-  const fakeCourseInfoFromJson: CourseInfo = require('EditZing/courseInfo.json')
-  const [courseInfo, setCourseInfo] = useState(fakeCourseInfoFromJson)
+  const { courseId } = useParams<{ courseId: string }>()
+  const [showError, setShowError] = useState(false)
+
+  const [courseInfo, setCourseInfo] = useState<CourseInfo>()
+  useEffect(() => {
+    axios
+      .get(`${API_ROOT}${COURSE_API}/${courseId}`)
+      .then((res) => setCourseInfo(res.data.data))
+      .catch((error) => {
+        console.error(error)
+        setShowError(true)
+      })
+  }, [courseId])
 
   const fakeResponse: CourseStudentDataResponse = require('EditZing/studentData.json')
   const [unmatchedStudents, setUnmatchedStudents] = useState(
@@ -103,7 +117,7 @@ export const EditZing = () => {
   }
 
   // TODO: COURSE SHOULDN'T BE HARDCODED
-  return (
+  return courseInfo ? (
     <StyledContainer>
       <StyledLogoWrapper>
         <StyledLogo />
@@ -125,6 +139,14 @@ export const EditZing = () => {
           ))}
         </Grid>
       </DndProvider>
+    </StyledContainer>
+  ) : showError ? (
+    <StyledContainer>
+      <StyledText>Error: unable to edit course with id {courseId}</StyledText>
+    </StyledContainer>
+  ) : (
+    <StyledContainer>
+      <StyledText>Loading...</StyledText>
     </StyledContainer>
   )
 }

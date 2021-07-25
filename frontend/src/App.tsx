@@ -28,7 +28,11 @@ const App = () => {
         <Route exact path={SIGNUP_PATH} component={Signup} />
         <Route exact path={SURVEY_PATH} component={Survey} />
         <Route exact path={CREATE_ZING_PATH} component={CreateZingForm} />
-        <Route exact path={EDIT_ZING_PATH} component={EditZing} />
+        <Route
+          exact
+          path={`${EDIT_ZING_PATH}/:courseId`}
+          component={EditZing}
+        />
       </Switch>
     </Router>
   )

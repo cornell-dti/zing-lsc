@@ -4,3 +4,8 @@ export const SIGNUP_PATH = '/signup'
 export const SURVEY_PATH = '/survey'
 export const CREATE_ZING_PATH = '/createzing'
 export const EDIT_ZING_PATH = '/editzing'
+
+export const API_ROOT = 'http://localhost:8000'
+export const COURSE_API = '/course'
+export const MATCHING_API = '/matching'
+export const STUDENT_API = '/student'

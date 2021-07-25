@@ -3,11 +3,6 @@ import styled from 'styled-components'
 import logo from '@assets/img/purplelogo.svg'
 
 export const StyledContainer = styled.div`
-  height: 100%;
-  flex-grow: 1,
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin: 1rem;
 `
 
