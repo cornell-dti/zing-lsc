@@ -4,3 +4,5 @@ service-account.json
 
 # extra packages
 node_modules
+
+**.log
