@@ -18,7 +18,7 @@ import {
   CourseStudentDataResponse,
   Group,
 } from 'EditZing/Types/CourseInfo'
-import { API_ROOT, COURSE_API } from '@core/Constants'
+import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
 
 export const EditZing = () => {
@@ -70,6 +70,13 @@ export const EditZing = () => {
           : group
       )
     )
+    axios
+      .post(`${API_ROOT}${MATCHING_API}/transfer/unmatched`, {
+        courseId: courseId,
+        studentEmail: student.email,
+        groupNumber: toGroupNumber,
+      })
+      .catch((err) => console.error(err))
   }
 
   /** Move a student already in a group back to unmatched */
@@ -112,6 +119,14 @@ export const EditZing = () => {
           : group
       )
     )
+    axios
+      .post(`${API_ROOT}${MATCHING_API}/transfer/intergroup`, {
+        courseId: courseId,
+        studentEmail: student.email,
+        group1: fromGroupNumber,
+        group2: toGroupNumber,
+      })
+      .catch((err) => console.error(err))
   }
 
   /** Move a student from some group (existing/unmatched) to a group */
