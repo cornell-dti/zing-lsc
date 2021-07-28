@@ -5,6 +5,7 @@ const {
   getGroups,
   addUnmatchedStudentToGroup,
   transferStudentBetweenGroups,
+  createEmptyGroup,
 } = require("./functions");
 
 router.post("/make", (req, res) => {
@@ -40,6 +41,16 @@ router.post("/transfer/unmatched", (req, res) => {
 router.post("/transfer/intergroup", (req, res) => {
   const { courseId, studentEmail, group1, group2 } = req.body;
   transferStudentBetweenGroups(studentEmail, group1, group2, courseId)
+    .then(() => res.status(200).json({ success: true }))
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json({ success: false, err: err.message });
+    });
+});
+
+router.post("/empty-group", (req, res) => {
+  const courseId = req.body.courseId;
+  createEmptyGroup(courseId)
     .then(() => res.status(200).json({ success: true }))
     .catch((err) => {
       console.log(err);

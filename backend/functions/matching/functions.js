@@ -222,9 +222,36 @@ async function transferStudentBetweenGroups(
   await Promise.all([group1Update, group2Update, studentRecordUpdate]);
 }
 
+async function createEmptyGroup(courseId) {
+  await assertIsExistingCourse(courseId);
+  const data = (await courseRef.doc(courseId).get()).data();
+  const lastGroupNumber = data.lastGroupNumber;
+
+  const groupCreationUpdate = courseRef
+    .doc(courseId)
+    .collection("groups")
+    .doc(lastGroupNumber.toString())
+    .set({ groupNumber: lastGroupNumber, members: [] })
+    .catch((err) => {
+      console.log(err);
+      throw new Error(`Error in creating empty group for ${courseId}`);
+    });
+
+  const groupNumberUpdate = courseRef
+    .doc(courseId)
+    .update({ lastGroupNumber: lastGroupNumber + 1 })
+    .catch((err) => {
+      console.log(err);
+      throw new Error(`Error in creating empty group for ${courseId}`);
+    });
+
+  await Promise.all([groupCreationUpdate, groupNumberUpdate]);
+}
+
 module.exports = {
   makeMatches,
   getGroups,
   addUnmatchedStudentToGroup,
   transferStudentBetweenGroups,
+  createEmptyGroup,
 };
