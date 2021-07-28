@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import Grid from '@material-ui/core/Grid'
 import {
   StyledContainer,
@@ -14,7 +14,9 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import {
   CourseInfo,
+  CourseInfoResponse,
   CourseStudentDataResponse,
+  Group,
 } from 'EditZing/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
@@ -27,18 +29,31 @@ export const EditZing = () => {
   useEffect(() => {
     axios
       .get(`${API_ROOT}${COURSE_API}/${courseId}`)
-      .then((res) => setCourseInfo(res.data.data))
+      .then((res: AxiosResponse<CourseInfoResponse>) => {
+        setCourseInfo(res.data.data)
+      })
       .catch((error) => {
         console.error(error)
         setShowError(true)
       })
   }, [courseId])
 
-  const fakeResponse: CourseStudentDataResponse = require('EditZing/studentData.json')
-  const [unmatchedStudents, setUnmatchedStudents] = useState(
-    fakeResponse.data.unmatched
-  )
-  const [studentGroups, setStudentGroups] = useState(fakeResponse.data.groups)
+  const [unmatchedStudents, setUnmatchedStudents] = useState<Student[]>([])
+  const [studentGroups, setStudentGroups] = useState<Group[]>([])
+  const [hasLoadedStudentData, setHasLoadedStudentData] = useState(false)
+  useEffect(() => {
+    axios
+      .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
+      .then((res: AxiosResponse<CourseStudentDataResponse>) => {
+        setUnmatchedStudents(res.data.data.unmatched)
+        setStudentGroups(res.data.data.groups)
+        setHasLoadedStudentData(true)
+      })
+      .catch((error) => {
+        console.error(error)
+        setShowError(true)
+      })
+  }, [courseId])
 
   /** Add an unmatched student to a group */
   const moveStudentFromUnmatched = (
@@ -116,8 +131,7 @@ export const EditZing = () => {
     }
   }
 
-  // TODO: COURSE SHOULDN'T BE HARDCODED
-  return courseInfo ? (
+  return courseInfo && hasLoadedStudentData ? (
     <StyledContainer>
       <StyledLogoWrapper>
         <StyledLogo />

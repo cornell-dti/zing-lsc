@@ -10,6 +10,11 @@ export type Group = {
   memberData: Student[]
 }
 
+export interface CourseInfoResponse {
+  success: boolean
+  data: CourseInfo
+}
+
 export interface CourseStudentDataResponse {
   success: boolean
   data: {
