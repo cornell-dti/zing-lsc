@@ -97,6 +97,13 @@ export const EditZing = () => {
           : group
       )
     )
+    axios
+      .post(`${API_ROOT}${MATCHING_API}/transfer/unmatch`, {
+        courseId: courseId,
+        studentEmail: student.email,
+        groupNumber: fromGroupNumber,
+      })
+      .catch((err) => console.error(err))
   }
 
   /** Transfer a student from a group to another group */
