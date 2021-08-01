@@ -1,6 +1,6 @@
 const { db } = require("../config");
 const admin = require("firebase-admin");
-const courseRef = db.collection("courses");
+const courseRef = db.collection("courses_test");
 const studentRef = db.collection("students");
 
 // =====================  HELPER FUNCTIONS ======================
@@ -135,7 +135,7 @@ async function getGroups(courseId) {
 }
 
 // transfer student from the list of unmatched students to a group
-async function addUnmatchedStudentToGroup(courseId, studentEmail, groupNumber) {
+async function addUnmatchedStudentToGroup(courseId, groupNumber, studentEmail) {
   await assertIsExistingCourse(courseId);
 
   const courseData = (await courseRef.doc(courseId).get()).data();
@@ -172,10 +172,10 @@ async function addUnmatchedStudentToGroup(courseId, studentEmail, groupNumber) {
 
 // transfer student from group1 to group2
 async function transferStudentBetweenGroups(
-  studentEmail,
+  courseId,
   group1,
   group2,
-  courseId
+  studentEmail
 ) {
   await assertIsExistingCourse(courseId);
 
@@ -222,6 +222,35 @@ async function transferStudentBetweenGroups(
   await Promise.all([group1Update, group2Update, studentRecordUpdate]);
 }
 
+// transfer student from group to unmatched students
+async function unmatchStudent(courseId, groupNumber, studentEmail) {
+  await assertIsExistingCourse(courseId);
+
+  const groupUpdate = courseRef
+    .doc(courseId)
+    .collection("groups")
+    .doc(groupNumber.toString())
+    .update({
+      members: admin.firestore.FieldValue.arrayRemove(studentEmail),
+    })
+    .catch((err) => {
+      console.log(err);
+      throw new Error(
+        `error in removing ${studentEmail} from group${groupNumber}.`
+      );
+    });
+
+  const unmatchedUpdate = courseRef
+    .doc(courseId)
+    .update({ unmatched: admin.firestore.FieldValue.arrayUnion(studentEmail) })
+    .catch((err) => {
+      console.log(err);
+      throw new Error(`error in adding ${studentEmail} to unmatched students.`);
+    });
+
+  await Promise.all([groupUpdate, unmatchedUpdate]);
+}
+
 async function createEmptyGroup(courseId) {
   await assertIsExistingCourse(courseId);
   const data = (await courseRef.doc(courseId).get()).data();
@@ -254,4 +283,5 @@ module.exports = {
   addUnmatchedStudentToGroup,
   transferStudentBetweenGroups,
   createEmptyGroup,
+  unmatchStudent,
 };
