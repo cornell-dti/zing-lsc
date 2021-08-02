@@ -7,7 +7,11 @@ import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { genderSVG } from 'EditZing/Styles/InlineSVGs'
 import { colors } from '@core'
 import { useDrag } from 'react-dnd'
-import { StyledStudentDetail } from 'EditZing/Styles/StudentAndGroup.style'
+import {
+  StyledStudentDetail,
+  StyledStudentName,
+} from 'EditZing/Styles/StudentAndGroup.style'
+import { Tooltip } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,7 +23,6 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'left',
       color: colors.black,
       fontFamily: 'Montserrat',
-      fontWeight: 700,
       fontSize: 14,
       border: '0px solid rgba(205, 156, 242, 0.15)',
       boxShadow: '0px 2px 5px rgba(205, 156, 242, 0.2);',
@@ -30,6 +33,9 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       gap: '2px',
       marginTop: '2px',
+    },
+    tooltipPlacementBottom: {
+      margin: 0,
     },
   })
 )
@@ -60,7 +66,15 @@ export const StudentGrid = ({
     <Grid item xs={xsSize}>
       <div ref={drag}>
         <Paper style={{ opacity: opacity }} className={classes.paper1}>
-          {student.name}
+          <Tooltip
+            title={`${student.name} requested study partner`}
+            placement="bottom-start"
+            classes={{
+              tooltipPlacementBottom: classes.tooltipPlacementBottom,
+            }}
+          >
+            <StyledStudentName>{student.name}</StyledStudentName>
+          </Tooltip>
           <div className={classes.paper2}>
             {/* {genderSVG} {student.pronoun === 'a' ? 'Male' : 'Female'} */}
             <StyledStudentDetail>{student.email}</StyledStudentDetail>

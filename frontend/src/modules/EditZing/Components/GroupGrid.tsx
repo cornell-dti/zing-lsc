@@ -9,6 +9,15 @@ import {
   StyledGroupTextWrapper,
   StyledGroupContainer,
 } from 'EditZing/Styles/StudentAndGroup.style'
+import { createStyles, makeStyles, Theme, Tooltip } from '@material-ui/core'
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    tooltipPlacementBottom: {
+      margin: 0,
+    },
+  })
+)
 
 /** the equivalent of Column */
 export const GroupGrid = ({
@@ -26,6 +35,8 @@ export const GroupGrid = ({
     }),
   })
 
+  const classes = useStyles()
+
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <StyledGroupContainer
@@ -33,7 +44,13 @@ export const GroupGrid = ({
         style={{ opacity: isOver ? '0.6' : '1' }}
       >
         <StyledGroupTextWrapper>
-          <StyledGroupText>{'Group ' + String(groupNumber)}</StyledGroupText>
+          <Tooltip
+            title={`Group ${groupNumber}: Matched on`}
+            placement="bottom-start"
+            classes={{ tooltipPlacementBottom: classes.tooltipPlacementBottom }}
+          >
+            <StyledGroupText>{'Group ' + String(groupNumber)}</StyledGroupText>
+          </Tooltip>
         </StyledGroupTextWrapper>
         <Grid container spacing={2}>
           {studentList.map((student, index) => (

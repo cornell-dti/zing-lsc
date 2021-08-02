@@ -40,6 +40,12 @@ export const StyledUnmatchedContainer = styled.div`
   background: ${colors.verylightgreen};
 `
 
+export const StyledStudentName = styled.span`
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+`
+
 export const StyledStudentDetail = styled.p`
   font-weight: 400;
   margin: 0;
