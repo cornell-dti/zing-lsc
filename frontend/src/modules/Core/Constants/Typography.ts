@@ -60,6 +60,19 @@ export const h4 = css`
   } ;
 `
 
+export const h5 = css`
+  ${body};
+  @media ${device.mobileS} {
+    font-size: 0.5rem;
+    line-height: 0.75rem;
+  }
+
+  @media ${device.tablet} {
+    font-size: 1rem;
+    line-height: 1.33rem;
+  } ;
+`
+
 /**
  * Object formatted so MuiTheme can use it to populate component w/ montserrat
  */

@@ -1,4 +1,5 @@
-const axios = require('axios')
+import axios from 'axios'
+import { API_ROOT, STUDENT_API } from '@core/Constants'
 
 export type SurveyData = {
   courseCatalogNames: string[]
@@ -8,16 +9,14 @@ export type SurveyData = {
 }
 
 export async function sendSurveyData(data: SurveyData) {
-  axios
-    .post('http://localhost:8000/student/survey', data)
-    .then(
-      (response: any) => {
-        console.log(response)
-      },
-      (error: any) => {
-        console.log(error)
-      }
-    )
+  axios.post(`${API_ROOT}${STUDENT_API}/survey`, data).then(
+    (response: any) => {
+      console.log(response)
+    },
+    (error: any) => {
+      console.log(error)
+    }
+  )
 }
 
 export function getYoungestGradYear() {
