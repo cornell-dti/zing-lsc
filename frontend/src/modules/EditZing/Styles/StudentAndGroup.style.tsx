@@ -40,6 +40,20 @@ export const StyledUnmatchedContainer = styled.div`
   background: ${colors.verylightgreen};
 `
 
+export const StyledUnmatchedTextWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+`
+
+export const StyledUnmatchedText = styled.text`
+  ${h3};
+  font-weight: 800;
+  color: ${colors.darkgreen};
+  margin-right: 1rem;
+`
+
 export const StyledStudentDetail = styled.p`
   font-weight: 400;
   margin: 0;

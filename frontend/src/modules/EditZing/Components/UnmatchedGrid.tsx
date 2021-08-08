@@ -3,12 +3,13 @@ import { StudentGrid } from 'EditZing/Components/StudentGrid'
 import Grid, { GridSize } from '@material-ui/core/Grid'
 import { UnmatchedGridProps } from 'EditZing/Types/ComponentProps'
 import {
-  StyledGroupText,
-  StyledGroupTextWrapper,
   StyledUnmatchedContainer,
+  StyledUnmatchedTextWrapper,
+  StyledUnmatchedText,
 } from 'EditZing/Styles/StudentAndGroup.style'
 import { useDrop } from 'react-dnd'
 import { DnDStudentTransferType, STUDENT_TYPE } from 'EditZing/Types/Student'
+import { MatchButton } from './MatchButton'
 
 /** Where unmatched students live in the grid */
 export const UnmatchedGrid = ({
@@ -32,11 +33,15 @@ export const UnmatchedGrid = ({
         ref={drop}
         style={{ opacity: isOver ? '0.6' : '1' }}
       >
-        <StyledGroupTextWrapper>
-          <StyledGroupText>
+        <StyledUnmatchedTextWrapper>
+          <StyledUnmatchedText>
             Unmatched Students ({unmatchedStudents.length})
-          </StyledGroupText>
-        </StyledGroupTextWrapper>
+          </StyledUnmatchedText>
+          <MatchButton
+            label="Match"
+            onClick={() => console.log('Pressed match button')}
+          />
+        </StyledUnmatchedTextWrapper>
         <Grid container spacing={2}>
           {unmatchedStudents.map((student, index) => (
             <StudentGrid
