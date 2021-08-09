@@ -15,6 +15,7 @@ import { MatchButton } from './MatchButton'
 export const UnmatchedGrid = ({
   unmatchedStudents,
   moveStudent,
+  matchStudents,
 }: UnmatchedGridProps) => {
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -37,10 +38,7 @@ export const UnmatchedGrid = ({
           <StyledUnmatchedText>
             Unmatched Students ({unmatchedStudents.length})
           </StyledUnmatchedText>
-          <MatchButton
-            label="Match"
-            onClick={() => console.log('Pressed match button')}
-          />
+          <MatchButton label="Match" onClick={matchStudents} />
         </StyledUnmatchedTextWrapper>
         <Grid container spacing={2}>
           {unmatchedStudents.map((student, index) => (

@@ -20,6 +20,7 @@ import {
 } from 'EditZing/Types/CourseInfo'
 import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
+import { MatchLoading } from './MatchLoading'
 
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
@@ -54,6 +55,9 @@ export const EditZing = () => {
         setShowError(true)
       })
   }, [courseId])
+
+  const [showMatchLoading, setShowMatchLoading] = useState(false)
+  const [isCurrentlyGrouping, setIsCurrentlyGrouping] = useState(false)
 
   /** Add an unmatched student to a group */
   const moveStudentFromUnmatched = (
@@ -153,8 +157,23 @@ export const EditZing = () => {
     }
   }
 
+  const matchStudents = () => {
+    setShowMatchLoading(true)
+    setIsCurrentlyGrouping(true)
+    new Promise((resolve) => setTimeout(resolve, 5000)).then(() => {
+      setIsCurrentlyGrouping(false)
+    })
+  }
+
   return courseInfo && hasLoadedStudentData ? (
     <StyledContainer>
+      <MatchLoading
+        showMatchLoading={showMatchLoading}
+        isCurrentlyGrouping={isCurrentlyGrouping}
+        numberGrouping={unmatchedStudents.length}
+        courseNames={courseInfo.names}
+        setShowMatchLoading={setShowMatchLoading}
+      />
       <StyledLogoWrapper>
         <StyledLogo />
         <StyledText>{courseInfo.names.join(', ')}</StyledText>
@@ -164,6 +183,7 @@ export const EditZing = () => {
           <UnmatchedGrid
             unmatchedStudents={unmatchedStudents}
             moveStudent={moveStudent}
+            matchStudents={matchStudents}
           />
           {studentGroups.map((studentGroup, index) => (
             <GroupGrid
