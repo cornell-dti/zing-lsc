@@ -1,6 +1,10 @@
-import { assert } from 'console'
 import parse from './template-parser'
 
+function assertEqual(expect: any, expression: any) {
+  if (expect !== expression) {
+    throw new Error(`AssertionFailure: expected ${expect}, got ${expression}`)
+  }
+}
 function constructMailtoUrl(
   receivers: string[],
   subject: string,
@@ -14,22 +18,24 @@ function constructMailtoUrl(
 }
 
 type ValidTemplates = 'matched' | 'no-match-1' | 'no-match-2'
-export default function getMailUrl(
+export default async function getMailUrl(
   receivers: string[],
   template: ValidTemplates,
   data: string[]
 ) {
   if (template === 'matched') {
-    assert(data.length === 0)
-    let { subject, body } = parse('matching.template', data)
+    assertEqual(0, data.length)
+    let { subject, body } = await parse('matching.template', data)
     return constructMailtoUrl(receivers, subject, body)
   } else if (template === 'no-match-1') {
-    assert(data.length === 2) // [student name, class]
-    let { subject, body } = parse('no-match-1.template', data)
+    assertEqual(2, data.length) // [student name, class]
+    let { subject, body } = await parse('no-match-1.template', data)
     return constructMailtoUrl(receivers, subject, body)
   } else if (template === 'no-match-2') {
-    assert(data.length === 1) // [student name]
-    let { subject, body } = parse('no-match-2.template', data)
+    assertEqual(1, data.length) // [student name]
+    let { subject, body } = await parse('no-match-2.template', data)
     return constructMailtoUrl(receivers, subject, body)
   }
 }
+
+getMailUrl([], 'matched', []).then((s) => console.log(s))

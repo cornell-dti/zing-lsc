@@ -1,13 +1,12 @@
 // A naive template parser for the .template email files
-import { readFileSync } from 'fs'
 
 type EmailTemplate = {
   subject: string
   body: string
 }
 
-function readFile(filename: string) {
-  return readFileSync(`./bodies/${filename}`, 'utf-8')
+async function readFile(filename: string): Promise<string> {
+  return fetch(filename).then((r) => r.text())
 }
 
 function replaceTemplateTagsUtil(
@@ -55,11 +54,11 @@ function extractBetweenTag(tagName: string, text: string) {
   return text.substring(firstIndex + tagName.length + 2, lastIndex).trim()
 }
 
-export default function parseTemplate(
+export default async function parseTemplate(
   fileName: string,
   data: string[]
-): EmailTemplate {
-  const fileText = readFile(fileName)
+): Promise<EmailTemplate> {
+  const fileText = await readFile(fileName)
   const subject = extractBetweenTag('subject', fileText)
   const body = replaceTemplateTags(extractBetweenTag('body', fileText), data)
 
