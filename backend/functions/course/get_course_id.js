@@ -30,7 +30,8 @@ function constructUrl(courseCatalogName, roster = "FA21") {
   return url;
 }
 
-async function getCourseId(courseCatalogName, roster = "FA21") {
+async function getCourseId(courseCatalogNameRaw, roster = "FA21") {
+  const courseCatalogName = courseCatalogNameRaw.replace(/\s+/g, "");
   const url = constructUrl(courseCatalogName, roster);
   const response = await axios.get(url);
 
@@ -46,6 +47,7 @@ async function getCourseId(courseCatalogName, roster = "FA21") {
     throw new Error(
       `Could not find course data for class ${courseCatalogName}`
     );
+
   return classData.crseId.toString();
 }
 
