@@ -10,7 +10,9 @@ import { MatchLoadingProps } from 'EditZing/Types/ComponentProps'
 import {
   StyledLoadingContainer,
   StyledLoadingText,
-  StyledProgressWrapper,
+  StyledCenterWrapper,
+  StyledWellDoneImg,
+  StyledWellDoneText,
 } from 'EditZing/Styles/MatchLoading.style'
 import { colors } from '@core/Constants'
 
@@ -50,20 +52,29 @@ export const MatchLoading = ({
       onClick={close}
     >
       <StyledLoadingContainer>
-        <StyledLoadingText>
-          Grouping {numberGrouping} unmatched students in{' '}
-          {courseNames.join(', ')}...
-        </StyledLoadingText>
-        <StyledProgressWrapper>
-          <CircularProgress
-            className={classes.progress}
-            classes={{
-              circle: classes.circle,
-            }}
-            size={120}
-            thickness={3}
-          />
-        </StyledProgressWrapper>
+        {isCurrentlyGrouping ? (
+          <StyledCenterWrapper>
+            <StyledLoadingText>
+              Grouping {numberGrouping} unmatched students in{' '}
+              {courseNames.join(', ')}...
+            </StyledLoadingText>
+            <CircularProgress
+              className={classes.progress}
+              classes={{
+                circle: classes.circle,
+              }}
+              size={120}
+              thickness={3}
+            />
+          </StyledCenterWrapper>
+        ) : (
+          <StyledCenterWrapper>
+            <StyledWellDoneImg />
+            <StyledWellDoneText>
+              Congrats! Your students have been successfully grouped.
+            </StyledWellDoneText>
+          </StyledCenterWrapper>
+        )}
       </StyledLoadingContainer>
     </Backdrop>
   )
