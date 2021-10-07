@@ -9,6 +9,7 @@
 - **Katie Go** - Product Manager/Mentor
 - **Alyssa Zhang** - Designer
 - **Jahin Aishee** - Designer
+- **Miranda Luo** - Developer
 
 ### Summer 2021
 - **Katie Go** - Product Manager
