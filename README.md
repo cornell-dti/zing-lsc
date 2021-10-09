@@ -7,9 +7,9 @@
 - **Sean Yu** - Associate Product Manager
 - **Changyuan Lin** - Technical Product Manager
 - **Katie Go** - Product Manager/Mentor
+- **Miranda Luo** - Developer
 - **Alyssa Zhang** - Designer
 - **Jahin Aishee** - Designer
-- **Miranda Luo** - Developer
 
 ### Summer 2021
 - **Katie Go** - Product Manager
