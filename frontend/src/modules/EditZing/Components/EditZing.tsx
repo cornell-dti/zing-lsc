@@ -157,12 +157,34 @@ export const EditZing = () => {
     }
   }
 
+  /** called by the match button to match the unmatched students */
   const matchStudents = () => {
     setShowMatchLoading(true)
     setIsCurrentlyGrouping(true)
-    new Promise((resolve) => setTimeout(resolve, 5000)).then(() => {
-      setIsCurrentlyGrouping(false)
-    })
+    // call this and then call the getGroups function to repopulate the state
+    axios
+      .post(`${API_ROOT}${MATCHING_API}/make`, {
+        courseId: courseId,
+      })
+      .then((response) => {
+        axios
+          .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
+          .then((response: AxiosResponse<CourseStudentDataResponse>) => {
+            console.log(response.data)
+            setUnmatchedStudents(response.data.data.unmatched)
+            setStudentGroups(response.data.data.groups)
+          })
+          .catch((err) => {
+            console.log(err)
+            setShowError(true)
+          })
+        setIsCurrentlyGrouping(false)
+      })
+      .catch((err) => console.error(err))
+    // old code
+    // new Promise((resolve) => setTimeout(resolve, 5000)).then(() => {
+    //   setIsCurrentlyGrouping(false)
+    // })
   }
 
   return courseInfo && hasLoadedStudentData ? (
