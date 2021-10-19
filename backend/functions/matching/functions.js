@@ -1,5 +1,6 @@
 const { db } = require("../config");
 const admin = require("firebase-admin");
+const { getDataForStudents } = require("../course/functions");
 const courseRef = db.collection("courses");
 const studentRef = db.collection("students");
 
@@ -17,7 +18,7 @@ async function assertIsExistingCourse(courseId) {
 
 async function updateStudentReferencesForGroup(group, courseId) {
   return group.members.map((member) =>
-    updateStudentGroup(member, courseId, group.groupNumber)
+    updateStudentGroup(member.email, courseId, group.groupNumber)
   );
 }
 
@@ -45,7 +46,7 @@ async function updateStudentGroup(studentEmail, courseId, groupNumber) {
 }
 
 // =============================== EXPORTS ==================================
-async function makeMatches(courseId, groupSize = 2) {
+async function makeMatches(courseId, groupSize = 3) {
   await assertIsExistingCourse(courseId);
 
   // get all unmatched students for course.
@@ -86,18 +87,24 @@ async function makeMatches(courseId, groupSize = 2) {
     -(studentData.length % groupSize) || undefined //extend to the end of the array if we have perfect groups
   );
   while (i < studentDataSliced.length) {
-    let nextGroup = studentDataSliced
-      .slice(i, i + groupSize)
-      .map((studentObj) => studentObj.email);
+    let nextGroup = studentDataSliced.slice(i, i + groupSize);
     groups.push({
       groupNumber: groupCounter + lastGroupNumber,
-      members: nextGroup,
+      memberData: nextGroup, // this is to keep things consistent
     });
     i += nextGroup.length;
     groupCounter += 1;
   }
   const matchedStudentSet = new Set(studentDataSliced.map((s) => s.email));
   const unmatched = unmatchedStudents.filter((s) => !matchedStudentSet.has(s));
+
+  // map for specific firebase data (just emails, as preserved from the previous function)
+  let groupsWithMembersEmail = groups.map((group) => {
+    return {
+      groupNumber: group.groupNumber,
+      members: group.memberData.map((member) => member.email),
+    };
+  });
 
   // lastly, update the collections to reflect this matching
   await Promise.all(
@@ -106,10 +113,10 @@ async function makeMatches(courseId, groupSize = 2) {
         .doc(courseId)
         .update({
           unmatched,
-          lastGroupNumber: lastGroupNumber + groups.length,
+          lastGroupNumber: lastGroupNumber + groupsWithMembersEmail.length,
         })
         .catch((err) => console.log(err)),
-      groups.map((group) =>
+      groupsWithMembersEmail.map((group) =>
         courseRef
           .doc(courseId)
           .collection("groups")
@@ -117,11 +124,19 @@ async function makeMatches(courseId, groupSize = 2) {
           .set(group, { merge: true })
           .catch((err) => console.log(err))
       ),
-      groups.map((group) => updateStudentReferencesForGroup(group, courseId)),
+      groupsWithMembersEmail.map((group) =>
+        updateStudentReferencesForGroup(group, courseId)
+      ),
     ].flat()
   );
 
-  return groups;
+  // map this to student objects
+  let unmatchedAsStudents = await getDataForStudents(unmatched);
+
+  return {
+    unmatched: unmatchedAsStudents,
+    groups: groups,
+  };
 }
 
 async function getGroups(courseId) {

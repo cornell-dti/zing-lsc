@@ -161,26 +161,20 @@ export const EditZing = () => {
   const matchStudents = () => {
     setShowMatchLoading(true)
     setIsCurrentlyGrouping(true)
-    // call this and then call the getGroups function to repopulate the state
     axios
-      .post(`${API_ROOT}${MATCHING_API}/make`, {
-        courseId: courseId,
-      })
+      .post(`${API_ROOT}${MATCHING_API}/make`, { courseId: courseId })
       .then((response) => {
-        axios
-          .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
-          .then((response: AxiosResponse<CourseStudentDataResponse>) => {
-            console.log(response.data)
-            setUnmatchedStudents(response.data.data.unmatched)
-            setStudentGroups(response.data.data.groups)
-          })
-          .catch((err) => {
-            console.log(err)
-            setShowError(true)
-          })
+        let newGroups = studentGroups.concat(response.data.data.groups)
+        console.log(response.data.data.unmatched)
+        setUnmatchedStudents(response.data.data.unmatched)
+        console.log(newGroups)
+        setStudentGroups(newGroups)
         setIsCurrentlyGrouping(false)
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        console.error(err)
+        setShowError(true)
+      })
     // old code
     // new Promise((resolve) => setTimeout(resolve, 5000)).then(() => {
     //   setIsCurrentlyGrouping(false)
