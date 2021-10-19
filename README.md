@@ -10,6 +10,7 @@
 - **Miranda Luo** - Developer
 - **Alyssa Zhang** - Designer
 - **Jahin Aishee** - Designer
+- **Jessica Chai** -Developer
 
 ### Summer 2021
 - **Katie Go** - Product Manager
