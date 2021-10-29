@@ -84,7 +84,7 @@ export const Dashboard = () => {
           >
             <StyledName>
               {/* {useAppSelector((state) => state.auth.user?.displayName)} */}
-              'Jessica'
+              Jessica Chai
               <StyledArrowDown />
             </StyledName>
           </Button>
