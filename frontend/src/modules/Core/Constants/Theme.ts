@@ -5,6 +5,7 @@ export const colors = {
   white: '#FFFFFF',
   darkpurple: '#CE9EF2',
   lightviolet: '#E5CEFA',
+  paleviolet: '#F7EDFF',
   red: '#FF6584',
   yellow: '#FFFFB1',
   verylightgreen: '#F0F9F4',
