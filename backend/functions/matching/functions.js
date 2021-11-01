@@ -18,7 +18,7 @@ async function assertIsExistingCourse(courseId) {
 
 async function updateStudentReferencesForGroup(group, courseId) {
   return group.members.map((member) =>
-    updateStudentGroup(member.email, courseId, group.groupNumber)
+    updateStudentGroup(member, courseId, group.groupNumber)
   );
 }
 
@@ -99,12 +99,10 @@ async function makeMatches(courseId, groupSize = 3) {
   const unmatched = unmatchedStudents.filter((s) => !matchedStudentSet.has(s));
 
   // map for specific firebase data (just emails, as preserved from the previous function)
-  let groupsWithMembersEmail = groups.map((group) => {
-    return {
-      groupNumber: group.groupNumber,
-      members: group.memberData.map((member) => member.email),
-    };
-  });
+  const groupsWithMembersEmail = groups.map((group) => ({
+    groupNumber: group.groupNumber,
+    members: group.memberData.map((member) => member.email),
+  }));
 
   // lastly, update the collections to reflect this matching
   await Promise.all(

@@ -175,10 +175,6 @@ export const EditZing = () => {
         console.error(err)
         setShowError(true)
       })
-    // old code
-    // new Promise((resolve) => setTimeout(resolve, 5000)).then(() => {
-    //   setIsCurrentlyGrouping(false)
-    // })
   }
 
   return courseInfo && hasLoadedStudentData ? (
