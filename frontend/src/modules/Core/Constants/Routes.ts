@@ -5,7 +5,8 @@ export const SURVEY_PATH = '/survey'
 export const CREATE_ZING_PATH = '/createzing'
 export const EDIT_ZING_PATH = '/edit'
 
-export const API_ROOT = 'http://localhost:5001/zing-lsc-backend/us-central1/api'
+// replaced API_ROOT with '' and used proxy instead to get rid of CORS error
+export const API_ROOT = ''
 export const COURSE_API = '/course'
 export const MATCHING_API = '/matching'
 export const STUDENT_API = '/student'

@@ -9,6 +9,11 @@ const {
   unmatchStudent,
 } = require("./functions");
 
+// should return
+// {
+//     unmatched: unmatchedStudentData,
+//     groups: groupStudentData,
+//   }; ?
 router.post("/make", (req, res) => {
   const { courseId, groupSize } = req.body;
   (groupSize ? makeMatches(courseId, groupSize) : makeMatches(courseId))
