@@ -9,7 +9,8 @@ import {
   StyledAddButton,
   StyledText,
 } from 'Dashboard/Styles/Groups.style'
-// import { GroupCard } from 'Dashboard/Components/GroupCard'
+
+import { GroupCard } from 'Dashboard/Components/GroupCard'
 import { CourseInfo } from 'Dashboard/Types'
 
 export const Groups = ({
@@ -18,12 +19,10 @@ export const Groups = ({
 }: ModalProps & GroupsProps) => {
   return (
     <StyledContainer>
-      {groups.length === 0 && (
-        <StyledTitle>Welcome to Zing! Make your first Zing.</StyledTitle>
-      )}
+      {groups.length === 0 && <StyledTitle>No classes to show</StyledTitle>}
       <StyledGroupArea>
         <StyledGroupCardArea>
-          {/* {groups.map((g, i) => (
+          {groups.map((g, i) => (
             <GroupCard
               key={i}
               id={g.courseId}
@@ -32,7 +31,7 @@ export const Groups = ({
               total={300}
               deadline={new Date(g.dueDateStr)}
             />
-          ))} */}
+          ))}
           <StyledAddButton onClick={() => toggleModalOpen()} />
         </StyledGroupCardArea>
         {groups.length === 0 && (

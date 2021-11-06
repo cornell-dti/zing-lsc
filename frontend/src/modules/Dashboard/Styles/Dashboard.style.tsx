@@ -1,18 +1,21 @@
 import styled from 'styled-components'
-import logo from '@assets/img/purplelogo.svg'
+import { ReactComponent as CSVExportImg } from '@assets/img/lscicon.svg'
+// import logo from '@assets/img/lscicon.svg'
 import { BsChevronDown } from 'react-icons/bs'
-import { colors, StyledComponent, h4 } from '@core'
+import { colors, StyledComponent, h4, h3 } from '@core'
 
-const Logo = ({ className }: StyledComponent) => (
-  <div className={className}>
-    <img src={logo} alt="logo" />
-  </div>
-)
+const Logo = CSVExportImg
+
+//   ({ className }: StyledComponent) => (
+//   <div className={className}>
+//     <img src={logo} alt="logo" />
+//   </div>
+// )
 
 export const StyledContainer = styled.div`
   height: 100%;
   width: 100%;
-  background-color: ${colors.white};
+  background-color: ${colors.lightpurple};
   box-shadow: -10px -10px 150px rgba(0, 0, 0, 0.05),
     10px 10px 150px rgba(0, 0, 0, 0.05);
   border-radius: 30px;
@@ -62,4 +65,19 @@ export const StyledModalContainer = styled.div`
   width: 80%;
   height: 95%;
   overflow: auto;
+`
+
+export const StyledTextBox = styled.div`
+  ${h4};
+  text-align: center;
+`
+
+export const StyledSmallText = styled.div`
+  font-size: 1.5rem;
+  ${h3};
+  width: 50%;
+  height: 95%;
+  margin: auto;
+  text-align: center;
+  font-size: 1.5rem;
 `

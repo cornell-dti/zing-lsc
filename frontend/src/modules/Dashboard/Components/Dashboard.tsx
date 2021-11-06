@@ -19,8 +19,10 @@ import {
   StyledName,
   StyledArrowDown,
   StyledModalContainer,
+  StyledTextBox,
+  StyledSmallText,
 } from 'Dashboard/Styles/Dashboard.style'
-// import { Groups } from 'Dashboard/Components/Groups'
+import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types'
 // import { useAppSelector } from '@redux/hooks'
 import { API_ROOT, COURSE_API, USER_API } from '@core/Constants'
@@ -111,6 +113,13 @@ export const Dashboard = () => {
             </ThemeProvider>
           </Menu>
         </StyledHeaderMenu>
+        <StyledTextBox>
+          <h1>No Classes to Show</h1>
+        </StyledTextBox>
+        <StyledSmallText>
+          Once students request study partners, they'll automatically be placed
+          into classes on this page!
+        </StyledSmallText>
         {/* <Groups groups={groups} toggleModalOpen={() => setModalOpen(true)} /> */}
       </StyledContainer>
       <Modal
@@ -120,16 +129,7 @@ export const Dashboard = () => {
           setModalOpen(false)
         }}
       >
-        <StyledModalContainer>
-          {/* <CreateZing
-            onSubmit={(newGroup: CourseInfo) => {
-              const groupsCopy = groups.slice()
-              groupsCopy.push(newGroup)
-              setGroups(groupsCopy)
-              setModalOpen(false)
-            }}
-          /> */}
-        </StyledModalContainer>
+        <StyledModalContainer></StyledModalContainer>
       </Modal>
     </StyledOuterContainer>
   )
