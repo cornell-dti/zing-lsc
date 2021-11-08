@@ -114,7 +114,7 @@ export const Dashboard = () => {
           </Menu>
         </StyledHeaderMenu>
         <StyledTextBox>
-          <h1>No Classes to Show</h1>
+          <h2>No Classes to Show</h2>
         </StyledTextBox>
         <StyledSmallText>
           Once students request study partners, they'll automatically be placed

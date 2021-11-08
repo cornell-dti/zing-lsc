@@ -1,10 +1,13 @@
 import styled from 'styled-components'
-import { ReactComponent as CSVExportImg } from '@assets/img/lscicon.svg'
+import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 // import logo from '@assets/img/lscicon.svg'
+import { ReactComponent as NoClassesIcon } from '@assets/img/noclassesicon.svg'
 import { BsChevronDown } from 'react-icons/bs'
-import { colors, StyledComponent, h4, h3 } from '@core'
+import { colors, StyledComponent, h4, h3, h2 } from '@core'
 
-const Logo = CSVExportImg
+const Logo = LogoImg
+
+const NoClasses = NoClassesIcon
 
 //   ({ className }: StyledComponent) => (
 //   <div className={className}>
@@ -26,6 +29,7 @@ export const StyledContainer = styled.div`
 
 export const StyledLogo = styled(Logo)``
 
+export const StyledEmptyClasses = styled(NoClasses)``
 export const StyledOuterContainer = styled.div`
   min-height: 100%;
   height: 1px;
@@ -73,11 +77,11 @@ export const StyledTextBox = styled.div`
 `
 
 export const StyledSmallText = styled.div`
-  font-size: 1.5rem;
   ${h3};
+  font-size: 1.3rem !important;
   width: 50%;
   height: 95%;
+  word-wrap: break-word;
   margin: auto;
   text-align: center;
-  font-size: 1.5rem;
 `
