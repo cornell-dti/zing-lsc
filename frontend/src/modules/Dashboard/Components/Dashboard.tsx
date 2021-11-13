@@ -123,20 +123,14 @@ export const Dashboard = () => {
           into classes on this page!
         </StyledSmallText>
         <StyledClassesContainer>
-          <div className="column">
-            <div className="row">
-              <StyledNoClasses></StyledNoClasses>
-              <StyledNoClasses></StyledNoClasses>
-              <StyledNoClasses></StyledNoClasses>
-              <StyledNoClasses></StyledNoClasses>
-            </div>
-            <div className="row">
-              <StyledNoClasses></StyledNoClasses>
-              <StyledNoClasses></StyledNoClasses>
-              <StyledNoClasses></StyledNoClasses>
-              <StyledNoClasses></StyledNoClasses>
-            </div>
-          </div>
+          <StyledNoClasses />
+          <StyledNoClasses />
+          <StyledNoClasses />
+          <StyledNoClasses />
+          <StyledNoClasses />
+          <StyledNoClasses />
+          <StyledNoClasses />
+          <StyledNoClasses />
         </StyledClassesContainer>
 
         {/* <Groups groups={groups} toggleModalOpen={() => setModalOpen(true)} /> */}

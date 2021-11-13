@@ -39,7 +39,6 @@ export const StyledNoClasses = styled(NoClasses)`
 `
 export const StyledOuterContainer = styled.div`
   min-height: 100%;
-  height: 1px;
   box-sizing: border-box;
   padding: 2.5rem;
   display: flex;
@@ -47,14 +46,11 @@ export const StyledOuterContainer = styled.div`
   align-items: center;
 `
 export const StyledClassesContainer = styled.div`
-  height: min-content;
+  display: flex;
   justify-content: center;
-  display: flex;
-  align-items: center;
   padding: 5.5rem;
-  overflow: clip;
-  display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 `
 
 export const StyledHeaderMenu = styled.div`
