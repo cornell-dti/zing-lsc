@@ -1,15 +1,5 @@
 import styled from 'styled-components'
-import addbutton from '@assets/img/addbutton.svg'
 import { GenericHTMLProps, h2, StyledComponent } from '@core'
-
-const AddButton = ({
-  className,
-  onClick,
-}: StyledComponent & GenericHTMLProps) => (
-  <div className={className} onClick={onClick}>
-    <img src={addbutton} alt="addbutton" />
-  </div>
-)
 
 export const StyledContainer = styled.div`
   display: flex;
@@ -37,11 +27,6 @@ export const StyledGroupCardArea = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-`
-
-export const StyledAddButton = styled(AddButton)`
-  cursor: pointer;
-  margin: 2rem;
 `
 
 export const StyledText = styled.div`

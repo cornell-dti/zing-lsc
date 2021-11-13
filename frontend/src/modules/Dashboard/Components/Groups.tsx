@@ -6,7 +6,6 @@ import {
   StyledTitle,
   StyledGroupArea,
   StyledGroupCardArea,
-  StyledAddButton,
   StyledText,
 } from 'Dashboard/Styles/Groups.style'
 
@@ -32,7 +31,6 @@ export const Groups = ({
               deadline={new Date(g.dueDateStr)}
             />
           ))}
-          <StyledAddButton onClick={() => toggleModalOpen()} />
         </StyledGroupCardArea>
         {groups.length === 0 && (
           <StyledText>Click "+" to create a new group.</StyledText>

@@ -3,7 +3,7 @@ import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 // import logo from '@assets/img/lscicon.svg'
 import { ReactComponent as NoClassesIcon } from '@assets/img/noclassesicon.svg'
 import { BsChevronDown } from 'react-icons/bs'
-import { colors, StyledComponent, h4, h3, h2 } from '@core'
+import { colors, StyledComponent, h4, h3 } from '@core'
 
 const Logo = LogoImg
 
@@ -29,16 +29,32 @@ export const StyledContainer = styled.div`
 
 export const StyledLogo = styled(Logo)``
 
-export const StyledEmptyClasses = styled(NoClasses)``
+export const StyledNoClasses = styled(NoClasses)`
+  position: static;
+  width: 295px;
+  height: 300px;
+  left: 0px;
+  top: 0px;
+  padding: 15px;
+`
 export const StyledOuterContainer = styled.div`
   min-height: 100%;
   height: 1px;
   box-sizing: border-box;
-
   padding: 2.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
+`
+export const StyledClassesContainer = styled.div`
+  height: min-content;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  padding: 5.5rem;
+  overflow: clip;
+  display: flex;
+  flex-direction: row;
 `
 
 export const StyledHeaderMenu = styled.div`
@@ -80,7 +96,7 @@ export const StyledSmallText = styled.div`
   ${h3};
   font-size: 1.3rem !important;
   width: 50%;
-  height: 95%;
+  height: 30%;
   word-wrap: break-word;
   margin: auto;
   text-align: center;

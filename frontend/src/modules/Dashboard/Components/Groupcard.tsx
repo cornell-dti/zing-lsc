@@ -10,7 +10,6 @@ import {
   StyledRows,
   StyledRow,
   StyledClock,
-  StyledManIcon,
   StyledText,
   StyledButtons,
 } from 'Dashboard/Styles/GroupCard.style'
@@ -46,7 +45,6 @@ export const GroupCard = ({
       <StyledName>{name}</StyledName>
       <StyledRows>
         <StyledRow>
-          <StyledManIcon />
           <StyledText>{submitted} Forms Submitted</StyledText>
         </StyledRow>
         <StyledRow>

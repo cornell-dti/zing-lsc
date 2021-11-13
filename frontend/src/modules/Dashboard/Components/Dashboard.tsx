@@ -16,9 +16,11 @@ import {
   StyledContainer,
   StyledHeaderMenu,
   StyledLogo,
+  StyledNoClasses,
   StyledName,
   StyledArrowDown,
   StyledModalContainer,
+  StyledClassesContainer,
   StyledTextBox,
   StyledSmallText,
 } from 'Dashboard/Styles/Dashboard.style'
@@ -120,17 +122,25 @@ export const Dashboard = () => {
           Once students request study partners, they'll automatically be placed
           into classes on this page!
         </StyledSmallText>
+        <StyledClassesContainer>
+          <div className="column">
+            <div className="row">
+              <StyledNoClasses></StyledNoClasses>
+              <StyledNoClasses></StyledNoClasses>
+              <StyledNoClasses></StyledNoClasses>
+              <StyledNoClasses></StyledNoClasses>
+            </div>
+            <div className="row">
+              <StyledNoClasses></StyledNoClasses>
+              <StyledNoClasses></StyledNoClasses>
+              <StyledNoClasses></StyledNoClasses>
+              <StyledNoClasses></StyledNoClasses>
+            </div>
+          </div>
+        </StyledClassesContainer>
+
         {/* <Groups groups={groups} toggleModalOpen={() => setModalOpen(true)} /> */}
       </StyledContainer>
-      <Modal
-        className={classes.modal}
-        open={modalOpen}
-        onClose={() => {
-          setModalOpen(false)
-        }}
-      >
-        <StyledModalContainer></StyledModalContainer>
-      </Modal>
     </StyledOuterContainer>
   )
 }
