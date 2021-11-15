@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
-// import logo from '@assets/img/lscicon.svg'
 import { ReactComponent as NoClassesIcon } from '@assets/img/noclassesicon.svg'
 import { BsChevronDown } from 'react-icons/bs'
 import { colors, StyledComponent, h4, h3 } from '@core'
@@ -8,12 +7,6 @@ import { colors, StyledComponent, h4, h3 } from '@core'
 const Logo = LogoImg
 
 const NoClasses = NoClassesIcon
-
-//   ({ className }: StyledComponent) => (
-//   <div className={className}>
-//     <img src={logo} alt="logo" />
-//   </div>
-// )
 
 export const StyledContainer = styled.div`
   height: 100%;
