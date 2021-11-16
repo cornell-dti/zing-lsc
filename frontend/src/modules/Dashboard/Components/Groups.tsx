@@ -7,18 +7,39 @@ import {
   StyledGroupArea,
   StyledGroupCardArea,
   StyledText,
+  StyledTextBox,
+  StyledSmallText,
+  StyledClassesContainer,
+  StyledNoClasses,
 } from 'Dashboard/Styles/Groups.style'
 
 import { GroupCard } from 'Dashboard/Components/GroupCard'
 import { CourseInfo } from 'Dashboard/Types'
 
-export const Groups = ({
-  toggleModalOpen,
-  groups,
-}: ModalProps & GroupsProps) => {
+export const Groups = ({ groups }: ModalProps & GroupsProps) => {
   return (
     <StyledContainer>
-      {groups.length === 0 && <StyledTitle>No classes to show</StyledTitle>}
+      {groups.length === 0 && (
+        <React.Fragment>
+          <StyledTextBox>
+            <h2>No Classes to Show</h2>
+          </StyledTextBox>
+          <StyledSmallText>
+            Once students request study partners, they'll automatically be
+            placed into classes on this page!
+          </StyledSmallText>
+          <StyledClassesContainer>
+            <StyledNoClasses />
+            <StyledNoClasses />
+            <StyledNoClasses />
+            <StyledNoClasses />
+            <StyledNoClasses />
+            <StyledNoClasses />
+            <StyledNoClasses />
+            <StyledNoClasses />
+          </StyledClassesContainer>
+        </React.Fragment>
+      )}
       <StyledGroupArea>
         <StyledGroupCardArea>
           {groups.map((g, i) => (
@@ -32,9 +53,6 @@ export const Groups = ({
             />
           ))}
         </StyledGroupCardArea>
-        {groups.length === 0 && (
-          <StyledText>Click "+" to create a new group.</StyledText>
-        )}
       </StyledGroupArea>
     </StyledContainer>
   )

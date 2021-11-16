@@ -15,12 +15,8 @@ import {
   StyledContainer,
   StyledHeaderMenu,
   StyledLogo,
-  StyledNoClasses,
   StyledName,
   StyledArrowDown,
-  StyledClassesContainer,
-  StyledTextBox,
-  StyledSmallText,
 } from 'Dashboard/Styles/Dashboard.style'
 import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types'
@@ -113,25 +109,8 @@ export const Dashboard = () => {
             </ThemeProvider>
           </Menu>
         </StyledHeaderMenu>
-        <StyledTextBox>
-          <h2>No Classes to Show</h2>
-        </StyledTextBox>
-        <StyledSmallText>
-          Once students request study partners, they'll automatically be placed
-          into classes on this page!
-        </StyledSmallText>
-        <StyledClassesContainer>
-          <StyledNoClasses />
-          <StyledNoClasses />
-          <StyledNoClasses />
-          <StyledNoClasses />
-          <StyledNoClasses />
-          <StyledNoClasses />
-          <StyledNoClasses />
-          <StyledNoClasses />
-        </StyledClassesContainer>
 
-        {/* <Groups groups={groups} toggleModalOpen={() => setModalOpen(true)} /> */}
+        <Groups groups={groups} toggleModalOpen={() => setModalOpen(true)} />
       </StyledContainer>
     </StyledOuterContainer>
   )

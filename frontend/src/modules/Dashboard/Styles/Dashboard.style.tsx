@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
-import { ReactComponent as NoClassesIcon } from '@assets/img/noclassesicon.svg'
+// import { ReactComponent as NoClassesIcon } from '@assets/img/noclassesicon.svg'
 import { BsChevronDown } from 'react-icons/bs'
 import { colors, StyledComponent, h4, h3 } from '@core'
 
 const Logo = LogoImg
 
-const NoClasses = NoClassesIcon
+// const NoClasses = NoClassesIcon
 
 export const StyledContainer = styled.div`
   height: 100%;
@@ -22,14 +22,6 @@ export const StyledContainer = styled.div`
 
 export const StyledLogo = styled(Logo)``
 
-export const StyledNoClasses = styled(NoClasses)`
-  position: static;
-  width: 295px;
-  height: 300px;
-  left: 0px;
-  top: 0px;
-  padding: 15px;
-`
 export const StyledOuterContainer = styled.div`
   min-height: 100%;
   box-sizing: border-box;
@@ -37,13 +29,6 @@ export const StyledOuterContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`
-export const StyledClassesContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 5.5rem;
-  flex-direction: row;
-  flex-wrap: wrap;
 `
 
 export const StyledHeaderMenu = styled.div`
@@ -74,19 +59,4 @@ export const StyledModalContainer = styled.div`
   width: 80%;
   height: 95%;
   overflow: auto;
-`
-
-export const StyledTextBox = styled.div`
-  ${h4};
-  text-align: center;
-`
-
-export const StyledSmallText = styled.div`
-  ${h3};
-  font-size: 1.3rem !important;
-  width: 50%;
-  height: 30%;
-  word-wrap: break-word;
-  margin: auto;
-  text-align: center;
 `
