@@ -3,10 +3,8 @@ import React from 'react'
 
 import {
   StyledContainer,
-  StyledTitle,
   StyledGroupArea,
   StyledGroupCardArea,
-  StyledText,
   StyledTextBox,
   StyledSmallText,
   StyledClassesContainer,

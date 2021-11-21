@@ -22,7 +22,6 @@ import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types'
 // import { useAppSelector } from '@redux/hooks'
 import { API_ROOT, COURSE_API, USER_API } from '@core/Constants'
-import { ControlPointDuplicateOutlined } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -52,12 +51,10 @@ export const Dashboard = () => {
 
   var showMenu = false
   useEffect(() => {
-    axios
-      .get(`${API_ROOT}${USER_API}/${userEmail}${COURSE_API}`)
-      .then((res) => {
-        setGroups(res.data)
-      })
-  }, [userEmail])
+    axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
+      setGroups(res.data)
+    })
+  }, [])
 
   const MenuItemtheme = createMuiTheme({
     typography: {
@@ -65,8 +62,6 @@ export const Dashboard = () => {
       fontFamily: 'Montserrat',
     },
   })
-
-  const Menutheme = createMuiTheme({})
 
   return (
     <StyledOuterContainer>
