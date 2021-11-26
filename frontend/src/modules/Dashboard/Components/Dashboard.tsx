@@ -44,15 +44,14 @@ export const Dashboard = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
-
-  const userEmail = 'cornell@cornell.edu'
   // useAppSelector((state) => state.auth.user?.email)
   const [groups, setGroups] = useState<CourseInfo[]>([])
 
   var showMenu = false
   useEffect(() => {
     axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
-      setGroups(res.data)
+      console.log(res.data)
+      setGroups(res.data.data)
     })
   }, [])
 

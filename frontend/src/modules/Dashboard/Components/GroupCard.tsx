@@ -25,7 +25,6 @@ export const GroupCard = ({
   name,
   submitted,
   total,
-  deadline,
 }: GroupCardProps) => {
   const history = useHistory()
   const [open, setOpen] = React.useState(false)
@@ -48,21 +47,21 @@ export const GroupCard = ({
           <StyledText>{submitted} Forms Submitted</StyledText>
         </StyledRow>
         <StyledRow>
-          <StyledClock />
+          {/* <StyledClock /> */}
           {/* <StyledText>{moment(deadline).format('Do MMM YYYY')}</StyledText> */}
         </StyledRow>
       </StyledRows>
       <StyledButtons>
         <Button
           containerStyle={{
-            background: new Date() > deadline ? colors.white : colors.purple,
-            border:
-              new Date() > deadline ? `1px solid ${colors.purple}` : '0px',
+            background: colors.purple,
+            // border:
+            //   new Date() > deadline ? `1px solid ${colors.purple}` : '0px',
             width: '45%',
             borderRadius: '40px',
           }}
           labelStyle={{
-            color: new Date() > deadline ? colors.purple : colors.white,
+            color: colors.white,
             textTransform: 'none',
             fontWeight: 600,
             fontSize: '1rem',
@@ -75,25 +74,23 @@ export const GroupCard = ({
           }}
           label={'Copy link'}
         />
-        {new Date() > deadline && (
-          <Button
-            containerStyle={{
-              background: colors.purple,
-              width: '45%',
-              borderRadius: '40px',
-            }}
-            labelStyle={{
-              color: colors.white,
-              textTransform: 'none',
-              fontWeight: 600,
-              fontSize: '1rem',
-            }}
-            onClick={() => {
-              history.push(`/editZing/?id=${'z98mmggpO05931CviaUy'}`) // TODO: @shichong replace with real docID
-            }}
-            label={'Match'}
-          />
-        )}
+        <Button
+          containerStyle={{
+            background: colors.purple,
+            width: '45%',
+            borderRadius: '40px',
+          }}
+          labelStyle={{
+            color: colors.white,
+            textTransform: 'none',
+            fontWeight: 600,
+            fontSize: '1rem',
+          }}
+          onClick={() => {
+            history.push(`/editZing/?id=${'z98mmggpO05931CviaUy'}`) // TODO: @shichong replace with real docID
+          }}
+          label={'Match'}
+        />
       </StyledButtons>
       <Snackbar
         open={open}
@@ -115,5 +112,4 @@ interface GroupCardProps {
   name: string
   submitted: number
   total: number
-  deadline: Date
 }

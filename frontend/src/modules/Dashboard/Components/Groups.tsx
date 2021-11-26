@@ -44,10 +44,10 @@ export const Groups = ({ groups }: ModalProps & GroupsProps) => {
             <GroupCard
               key={i}
               id={g.courseId}
-              name={g.name}
+              name={g.names[0]}
               submitted={300}
               total={300}
-              deadline={new Date(g.dueDateStr)}
+              // deadline={new Date(g.dueDateStr)}
             />
           ))}
         </StyledGroupCardArea>

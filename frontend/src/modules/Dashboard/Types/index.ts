@@ -1,6 +1,6 @@
 export interface CourseInfo {
-  name: string
+  unmatched: string[]
+  lastGroupNumber: number
+  names: string[]
   courseId: string
-  minGroupSize: number
-  dueDateStr: string
 }
