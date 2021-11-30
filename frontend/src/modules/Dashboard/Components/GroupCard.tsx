@@ -1,6 +1,5 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-// import moment from 'moment'
 import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
 

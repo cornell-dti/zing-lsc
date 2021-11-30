@@ -7,7 +7,7 @@ export const EDIT_ZING_PATH = '/edit'
 export const DASHBOARD_PATH = '/dashboard'
 
 export const API_ROOT = 'http://localhost:5001/zing-lsc-backend/us-central1/api'
-export const USER_API = '/instructor'
+export const INSTRUCTOR_API = '/instructor'
 export const COURSE_API = '/course'
 export const MATCHING_API = '/matching'
 export const STUDENT_API = '/student'

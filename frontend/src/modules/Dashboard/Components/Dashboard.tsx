@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles'
-import { Modal } from '@material-ui/core'
 
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -19,7 +18,7 @@ import {
   StyledArrowDown,
 } from 'Dashboard/Styles/Dashboard.style'
 import { Groups } from 'Dashboard/Components/Groups'
-import { CourseInfo } from 'Dashboard/Types'
+import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +39,7 @@ export const Dashboard = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
-  // useAppSelector((state) => state.auth.user?.email)
+
   const [groups, setGroups] = useState<CourseInfo[]>([])
 
   useEffect(() => {
@@ -70,7 +69,6 @@ export const Dashboard = () => {
             onClick={handleClick}
           >
             <StyledName>
-              {/* {useAppSelector((state) => state.auth.user?.displayName)} */}
               User Name
               <StyledArrowDown />
             </StyledName>

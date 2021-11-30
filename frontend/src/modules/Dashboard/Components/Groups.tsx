@@ -11,7 +11,7 @@ import {
 } from 'Dashboard/Styles/Groups.style'
 
 import { GroupCard } from 'Dashboard/Components/GroupCard'
-import { CourseInfo } from 'Dashboard/Types'
+import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 
 export const Groups = ({ groups }: GroupsProps) => {
   return (
