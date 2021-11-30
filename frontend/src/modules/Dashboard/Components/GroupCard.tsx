@@ -9,7 +9,6 @@ import {
   StyledName,
   StyledRows,
   StyledRow,
-  StyledClock,
   StyledText,
   StyledButtons,
 } from 'Dashboard/Styles/GroupCard.style'
@@ -46,17 +45,12 @@ export const GroupCard = ({
         <StyledRow>
           <StyledText>{submitted} Forms Submitted</StyledText>
         </StyledRow>
-        <StyledRow>
-          {/* <StyledClock /> */}
-          {/* <StyledText>{moment(deadline).format('Do MMM YYYY')}</StyledText> */}
-        </StyledRow>
+        <StyledRow></StyledRow>
       </StyledRows>
       <StyledButtons>
         <Button
           containerStyle={{
-            background: colors.purple,
-            // border:
-            //   new Date() > deadline ? `1px solid ${colors.purple}` : '0px',
+            background: colors.darkpurple,
             width: '45%',
             borderRadius: '40px',
           }}
@@ -66,30 +60,8 @@ export const GroupCard = ({
             fontWeight: 600,
             fontSize: '1rem',
           }}
-          onClick={() => {
-            const index = window.location.href.indexOf('/dashboard')
-            const baseUrl = window.location.href.slice(0, index)
-            navigator.clipboard.writeText(`${baseUrl}${SURVEY_PATH}?id=${id}`)
-            setOpen(true)
-          }}
-          label={'Copy link'}
-        />
-        <Button
-          containerStyle={{
-            background: colors.purple,
-            width: '45%',
-            borderRadius: '40px',
-          }}
-          labelStyle={{
-            color: colors.white,
-            textTransform: 'none',
-            fontWeight: 600,
-            fontSize: '1rem',
-          }}
-          onClick={() => {
-            history.push(`/editZing/?id=${'z98mmggpO05931CviaUy'}`) // TODO: @shichong replace with real docID
-          }}
-          label={'Match'}
+          onClick={() => {}}
+          label={'View'}
         />
       </StyledButtons>
       <Snackbar

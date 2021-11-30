@@ -1,4 +1,3 @@
-// export { }
 import React from 'react'
 
 import {
@@ -14,7 +13,7 @@ import {
 import { GroupCard } from 'Dashboard/Components/GroupCard'
 import { CourseInfo } from 'Dashboard/Types'
 
-export const Groups = ({ groups }: ModalProps & GroupsProps) => {
+export const Groups = ({ groups }: GroupsProps) => {
   return (
     <StyledContainer>
       {groups.length === 0 && (
@@ -27,14 +26,9 @@ export const Groups = ({ groups }: ModalProps & GroupsProps) => {
             placed into classes on this page!
           </StyledSmallText>
           <StyledClassesContainer>
-            <StyledNoClasses />
-            <StyledNoClasses />
-            <StyledNoClasses />
-            <StyledNoClasses />
-            <StyledNoClasses />
-            <StyledNoClasses />
-            <StyledNoClasses />
-            <StyledNoClasses />
+            {[...Array(8)].map(() => (
+              <StyledNoClasses />
+            ))}
           </StyledClassesContainer>
         </React.Fragment>
       )}
@@ -47,17 +41,12 @@ export const Groups = ({ groups }: ModalProps & GroupsProps) => {
               name={g.names[0]}
               submitted={300}
               total={300}
-              // deadline={new Date(g.dueDateStr)}
             />
           ))}
         </StyledGroupCardArea>
       </StyledGroupArea>
     </StyledContainer>
   )
-}
-
-interface ModalProps {
-  toggleModalOpen: () => void
 }
 
 interface GroupsProps {

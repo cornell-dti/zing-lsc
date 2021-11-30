@@ -20,8 +20,7 @@ import {
 } from 'Dashboard/Styles/Dashboard.style'
 import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types'
-// import { useAppSelector } from '@redux/hooks'
-import { API_ROOT, COURSE_API, USER_API } from '@core/Constants'
+import { API_ROOT, COURSE_API } from '@core/Constants'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -32,9 +31,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const Dashboard = () => {
-  const classes = useStyles()
-  const [modalOpen, setModalOpen] = useState(false)
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -47,7 +43,6 @@ export const Dashboard = () => {
   // useAppSelector((state) => state.auth.user?.email)
   const [groups, setGroups] = useState<CourseInfo[]>([])
 
-  var showMenu = false
   useEffect(() => {
     axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
       console.log(res.data)
@@ -104,7 +99,7 @@ export const Dashboard = () => {
           </Menu>
         </StyledHeaderMenu>
 
-        <Groups groups={groups} toggleModalOpen={() => setModalOpen(true)} />
+        <Groups groups={groups} />
       </StyledContainer>
     </StyledOuterContainer>
   )
