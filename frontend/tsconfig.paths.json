@@ -18,7 +18,9 @@
       "Survey": ["src/modules/Survey/"],
       "Survey/*": ["src/modules/Survey/*"],
       "EditZing": ["src/modules/EditZing/"],
-      "EditZing/*": ["src/modules/EditZing/*"]
+      "EditZing/*": ["src/modules/EditZing/*"],
+      "Dashboard": ["src/modules/Dashboard/"],
+      "Dashboard/*": ["src/modules/Dashboard/*"]
     }
   }
 }

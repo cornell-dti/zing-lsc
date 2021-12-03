@@ -1,4 +1,3 @@
-import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import {
@@ -8,6 +7,7 @@ import {
   SURVEY_PATH,
   CREATE_ZING_PATH,
   EDIT_ZING_PATH,
+  DASHBOARD_PATH,
 } from '@core'
 
 import { Home } from 'Home'
@@ -16,6 +16,7 @@ import { Signup } from 'Signup'
 import { Survey } from 'Survey'
 import { CreateZingForm } from 'CreateZing'
 import { EditZing } from 'EditZing'
+import { Dashboard } from 'Dashboard'
 
 import './App.css'
 
@@ -28,6 +29,7 @@ const App = () => {
         <Route exact path={SIGNUP_PATH} component={Signup} />
         <Route exact path={SURVEY_PATH} component={Survey} />
         <Route exact path={CREATE_ZING_PATH} component={CreateZingForm} />
+        <Route exact path={DASHBOARD_PATH} component={Dashboard} />
         <Route
           exact
           path={`${EDIT_ZING_PATH}/:courseId`}
