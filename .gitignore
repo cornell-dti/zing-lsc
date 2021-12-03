@@ -2,3 +2,6 @@
 /.vscode
 
 .DS_Store
+
+# jetbrains thing
+.idea

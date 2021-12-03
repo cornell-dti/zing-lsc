@@ -58,4 +58,9 @@ async function getStudentsForCourse(courseId) {
   };
 }
 
-module.exports = { getCourseInfo, getAllCourses, getStudentsForCourse };
+module.exports = {
+  getDataForStudents,
+  getCourseInfo,
+  getAllCourses,
+  getStudentsForCourse,
+};

@@ -20,6 +20,7 @@ import {
 } from 'EditZing/Types/CourseInfo'
 import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
+import { MatchLoading } from './MatchLoading'
 
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
@@ -54,6 +55,9 @@ export const EditZing = () => {
         setShowError(true)
       })
   }, [courseId])
+
+  const [showMatchLoading, setShowMatchLoading] = useState(false)
+  const [isCurrentlyGrouping, setIsCurrentlyGrouping] = useState(false)
 
   /** Add an unmatched student to a group */
   const moveStudentFromUnmatched = (
@@ -153,8 +157,35 @@ export const EditZing = () => {
     }
   }
 
+  /** called by the match button to match the unmatched students */
+  const matchStudents = () => {
+    setShowMatchLoading(true)
+    setIsCurrentlyGrouping(true)
+    axios
+      .post(`${API_ROOT}${MATCHING_API}/make`, { courseId: courseId })
+      .then((response) => {
+        let newGroups = studentGroups.concat(response.data.data.groups)
+        console.log(response.data.data.unmatched)
+        setUnmatchedStudents(response.data.data.unmatched)
+        console.log(newGroups)
+        setStudentGroups(newGroups)
+        setIsCurrentlyGrouping(false)
+      })
+      .catch((err) => {
+        console.error(err)
+        setShowError(true)
+      })
+  }
+
   return courseInfo && hasLoadedStudentData ? (
     <StyledContainer>
+      <MatchLoading
+        showMatchLoading={showMatchLoading}
+        isCurrentlyGrouping={isCurrentlyGrouping}
+        numberGrouping={unmatchedStudents.length}
+        courseNames={courseInfo.names}
+        setShowMatchLoading={setShowMatchLoading}
+      />
       <StyledLogoWrapper>
         <StyledLogo />
         <StyledText>{courseInfo.names.join(', ')}</StyledText>
@@ -164,6 +195,7 @@ export const EditZing = () => {
           <UnmatchedGrid
             unmatchedStudents={unmatchedStudents}
             moveStudent={moveStudent}
+            matchStudents={matchStudents}
           />
           {studentGroups.map((studentGroup, index) => (
             <GroupGrid

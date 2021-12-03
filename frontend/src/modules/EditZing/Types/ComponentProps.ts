@@ -8,6 +8,7 @@ export interface UnmatchedGridProps {
     fromGroupNumber: number,
     toGroupNumber: number
   ) => void
+  matchStudents: () => void
 }
 
 export interface GroupGridProps {
@@ -24,4 +25,12 @@ export interface StudentGridProps {
   student: Student
   groupNumber: number
   xsSize?: GridSize
+}
+
+export interface MatchLoadingProps {
+  showMatchLoading: boolean
+  isCurrentlyGrouping: boolean
+  numberGrouping: number
+  courseNames: string[]
+  setShowMatchLoading: (arg: boolean) => void
 }
