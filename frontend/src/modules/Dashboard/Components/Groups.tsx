@@ -39,8 +39,8 @@ export const Groups = ({ groups }: GroupsProps) => {
               key={i}
               id={g.courseId}
               name={g.names[0]}
-              submitted={300}
-              total={300}
+              newStudents={g.unmatched.length}
+              groupsFormed={g.lastGroupNumber}
             />
           ))}
         </StyledGroupCardArea>

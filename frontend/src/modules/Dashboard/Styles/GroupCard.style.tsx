@@ -1,11 +1,24 @@
 import styled from 'styled-components'
 import { FiClock } from 'react-icons/fi'
+import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
+import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
+import { ReactComponent as NewlyMatchable } from '@assets/img/newlymatchable.svg'
 import { colors, h3, h4, StyledComponent } from '@core'
+import { Props } from 'react'
 
-export const StyledContainer = styled.div`
+export const StyledGroupsIcon = styled(GroupsIcon)`
+  padding-right: 1rem;
+`
+
+export const StyledPlusIcon = styled(PlusIcon)`
+  padding-right: 1rem;
+`
+export const StyledNewlyMatchable = styled(NewlyMatchable)``
+
+export const StyledContainer = styled.div<Pick<ColorProps, 'color'>>`
   height: 300px;
   width: 320px;
-  background: ${colors.paleviolet};
+  background: ${(p) => p.color};
   border-radius: 30px;
   margin: 2rem;
   padding: 3rem 1.5rem;
@@ -26,7 +39,7 @@ export const StyledRows = styled.div``
 
 export const StyledRow = styled.div`
   width: 100%;
-
+  padding: 3px;
   display: flex;
   align-items: center;
 `
@@ -44,3 +57,6 @@ export const StyledButtons = styled.div`
   display: flex;
   justify-content: space-around;
 `
+interface ColorProps {
+  color: string
+}

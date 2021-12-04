@@ -10,6 +10,9 @@ import {
   StyledRow,
   StyledText,
   StyledButtons,
+  StyledGroupsIcon,
+  StyledPlusIcon,
+  StyledNewlyMatchable,
 } from 'Dashboard/Styles/GroupCard.style'
 import { Button, colors, SURVEY_PATH } from '@core'
 
@@ -21,8 +24,8 @@ export const GroupCard = ({
   key,
   id,
   name,
-  submitted,
-  total,
+  newStudents,
+  groupsFormed,
 }: GroupCardProps) => {
   const history = useHistory()
   const [open, setOpen] = React.useState(false)
@@ -36,20 +39,45 @@ export const GroupCard = ({
     }
     setOpen(false)
   }
-
+  // returns color of background, button, and if newly matchable
+  function getColor(students: number, groups: number) {
+    //all students are matched
+    if (students === 0 && groups > 0) {
+      return [colors.paleviolet, colors.darkpurple, 'no']
+    }
+    //students are ready to be matched
+    else if (newStudents > 0 && groupsFormed > 0) {
+      return [colors.lightgreen, colors.darkgreen, 'no']
+    }
+    //NEWLY MATCHABLE
+    else if (newStudents > 1 && groupsFormed === 0) {
+      return [colors.lightgreen, colors.darkgreen, 'yes']
+    }
+    //only 1 student & 0 groups formed
+    else return [colors.lightyellow, colors.darkyellow, 'no']
+  }
+  const styleArray = getColor(
+    { newStudents }.newStudents,
+    { groupsFormed }.groupsFormed
+  )
   return (
-    <StyledContainer key={key}>
+    <StyledContainer color={styleArray[0]} key={key}>
+      {styleArray[2] === 'yes' && <StyledNewlyMatchable />}
       <StyledName>{name}</StyledName>
       <StyledRows>
         <StyledRow>
-          <StyledText>{submitted} Forms Submitted</StyledText>
+          <StyledPlusIcon></StyledPlusIcon>
+          <StyledText>{newStudents} News Student</StyledText>
         </StyledRow>
-        <StyledRow></StyledRow>
+        <StyledRow>
+          <StyledGroupsIcon></StyledGroupsIcon>
+          <StyledText>{groupsFormed} Groups Formed</StyledText>
+        </StyledRow>
       </StyledRows>
       <StyledButtons>
         <Button
           containerStyle={{
-            background: colors.darkpurple,
+            background: styleArray[1],
             width: '45%',
             borderRadius: '40px',
           }}
@@ -81,6 +109,6 @@ interface GroupCardProps {
   key: number
   id: string
   name: string
-  submitted: number
-  total: number
+  newStudents: number
+  groupsFormed: number
 }
