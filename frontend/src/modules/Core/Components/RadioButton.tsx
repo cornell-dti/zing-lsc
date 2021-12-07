@@ -2,9 +2,9 @@ import React from 'react'
 
 import { RadioButtonProps } from '@core/Types/FormFieldProps'
 import { StyledLabel, StyledContainer } from '@core/Styles/RadioButton.style'
-import Radio, { RadioProps } from '@material-ui/core/Radio'
+import Radio, { RadioProps } from '@mui/material/Radio'
 import { colors } from '@core'
-import { withStyles } from '@material-ui/core/styles'
+import withStyles from '@mui/styles/withStyles'
 
 const PurpleRadio = withStyles({
   root: {

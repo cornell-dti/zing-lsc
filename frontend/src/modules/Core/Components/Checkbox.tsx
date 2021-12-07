@@ -2,11 +2,9 @@ import React from 'react'
 
 import { colors } from '@core'
 import { CheckboxProps } from '@core/Types'
-import {
-  Checkbox as MaterialUICheckbox,
-  FormControlLabel,
-} from '@material-ui/core'
-import { makeStyles, withStyles } from '@material-ui/core/styles'
+import { Checkbox as MaterialUICheckbox, FormControlLabel } from '@mui/material'
+import makeStyles from '@mui/styles/makeStyles'
+import withStyles from '@mui/styles/withStyles'
 import {
   defaultContainerStyle,
   defaultLabelStyle,

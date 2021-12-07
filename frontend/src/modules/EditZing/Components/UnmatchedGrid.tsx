@@ -1,6 +1,6 @@
 import React from 'react'
 import { StudentGrid } from 'EditZing/Components/StudentGrid'
-import Grid, { GridSize } from '@material-ui/core/Grid'
+import Grid, { GridSize } from '@mui/material/Grid'
 import { UnmatchedGridProps } from 'EditZing/Types/ComponentProps'
 import {
   StyledUnmatchedContainer,

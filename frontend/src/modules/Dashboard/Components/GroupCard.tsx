@@ -1,7 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar'
-import MuiAlert from '@material-ui/lab/Alert'
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar'
+import MuiAlert from '@mui/material/Alert'
 
 import {
   StyledContainer,
@@ -11,7 +11,7 @@ import {
   StyledText,
   StyledButtons,
 } from 'Dashboard/Styles/GroupCard.style'
-import { Button, colors, SURVEY_PATH } from '@core'
+import { Button, colors } from '@core'
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -24,11 +24,12 @@ export const GroupCard = ({
   submitted,
   total,
 }: GroupCardProps) => {
-  const history = useHistory()
+  // const history = useHistory()
   const [open, setOpen] = React.useState(false)
 
   const handleClose = (
-    event: React.SyntheticEvent,
+    // fixed type of event
+    event: React.SyntheticEvent<any> | Event,
     reason: SnackbarCloseReason
   ) => {
     if (reason === 'clickaway') {
@@ -44,7 +45,7 @@ export const GroupCard = ({
         <StyledRow>
           <StyledText>{submitted} Forms Submitted</StyledText>
         </StyledRow>
-        <StyledRow></StyledRow>
+        <StyledRow />
       </StyledRows>
       <StyledButtons>
         <Button

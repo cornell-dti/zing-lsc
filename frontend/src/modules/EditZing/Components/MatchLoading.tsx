@@ -1,11 +1,7 @@
 import React from 'react'
-import {
-  Backdrop,
-  CircularProgress,
-  createStyles,
-  makeStyles,
-  Theme,
-} from '@material-ui/core'
+import { Backdrop, CircularProgress, Theme } from '@mui/material'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
 import { MatchLoadingProps } from 'EditZing/Types/ComponentProps'
 import {
   StyledLoadingContainer,
@@ -16,7 +12,7 @@ import {
 } from 'EditZing/Styles/MatchLoading.style'
 import { colors } from '@core/Constants'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     backdrop: {
       zIndex: 1,

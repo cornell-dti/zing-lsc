@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   ThemeProvider,
-  createMuiTheme,
-  // makeStyles,
-} from '@material-ui/core/styles'
+  Theme, // makeStyles,
+  StyledEngineProvider,
+  createTheme,
+} from '@mui/material/styles'
 
 import {
   HOME_PATH,
@@ -25,27 +26,34 @@ import { Dashboard } from 'Dashboard'
 
 import './App.css'
 
-const theme = createMuiTheme()
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
+const theme = createTheme()
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Switch>
-          <Route exact path={HOME_PATH} component={Home} />
-          <Route exact path={LOGIN_PATH} component={Login} />
-          <Route exact path={SIGNUP_PATH} component={Signup} />
-          <Route exact path={SURVEY_PATH} component={Survey} />
-          <Route exact path={CREATE_ZING_PATH} component={CreateZingForm} />
-          <Route exact path={DASHBOARD_PATH} component={Dashboard} />
-          <Route
-            exact
-            path={`${EDIT_ZING_PATH}/:courseId`}
-            component={EditZing}
-          />
-        </Switch>
-      </Router>
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <Switch>
+            <Route exact path={HOME_PATH} component={Home} />
+            <Route exact path={LOGIN_PATH} component={Login} />
+            <Route exact path={SIGNUP_PATH} component={Signup} />
+            <Route exact path={SURVEY_PATH} component={Survey} />
+            <Route exact path={CREATE_ZING_PATH} component={CreateZingForm} />
+            <Route exact path={DASHBOARD_PATH} component={Dashboard} />
+            <Route
+              exact
+              path={`${EDIT_ZING_PATH}/:courseId`}
+              component={EditZing}
+            />
+          </Switch>
+        </Router>
+      </ThemeProvider>
+    </StyledEngineProvider>
   )
 }
 

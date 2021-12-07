@@ -1,6 +1,6 @@
 import React from 'react'
-import { Slider as MaterialUISlider } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { Slider as MaterialUISlider } from '@mui/material'
+import makeStyles from '@mui/styles/makeStyles'
 
 import { SliderProps } from '@core/Types/FormFieldProps'
 export const Slider = ({

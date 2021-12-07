@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
-import { TextField, ThemeProvider, createMuiTheme } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import {
+  TextField,
+  ThemeProvider,
+  Theme,
+  StyledEngineProvider,
+  createTheme,
+  adaptV4Theme,
+} from '@mui/material'
+import makeStyles from '@mui/styles/makeStyles'
 import styled from 'styled-components'
 import { colors, montserratFont } from '@core'
 import { InputProps } from '@core/Types/FormFieldProps'
@@ -8,7 +15,12 @@ import {
   defaultContainerStyle,
   defaultInputStyle,
 } from '@core/Styles/InputField.style'
-import ErrorIconOutline from '@material-ui/icons/ErrorOutline'
+import ErrorIconOutline from '@mui/icons-material/ErrorOutline'
+
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
 
 /** customized TextInput with themed underlines */
 const StyledTextField = styled(TextField)`
@@ -62,72 +74,76 @@ export const InputField = ({
    * occurs */
   const icon = <ErrorIconOutline style={{ fill: colors.red }} />
 
-  const inputFieldTheme = createMuiTheme({
-    typography: {
-      fontFamily: 'Montserrat',
-    },
-    overrides: {
-      MuiCssBaseline: {
-        '@global': {
-          '@font-face': [montserratFont],
+  const inputFieldTheme = createTheme(
+    adaptV4Theme({
+      typography: {
+        fontFamily: 'Montserrat',
+      },
+      overrides: {
+        MuiCssBaseline: {
+          '@global': {
+            '@font-face': [montserratFont],
+          },
         },
       },
-    },
-  })
+    })
+  )
 
   return (
-    <ThemeProvider theme={inputFieldTheme}>
-      {error === '' ? (
-        <StyledTextField
-          onClick={() =>
-            // if number input, make sure its > 0
-            isNumber && Number(localValue) < 0
-              ? setLocalValue('0')
-              : setLocalValue(localValue)
-          }
-          fullWidth={fullWidth}
-          key={key}
-          className={classes.container}
-          inputProps={{ className: classes.input }}
-          placeholder={placeholder}
-          type={type}
-          disabled={disabled}
-          value={localValue}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setLocalValue(e.target.value)
-          }
-          onBlur={onChange}
-          {...inputProps}
-        />
-      ) : (
-        <StyledErrorTextField
-          error
-          onClick={() =>
-            // if number input, make sure its > 0
-            isNumber && Number(localValue) < 0
-              ? setLocalValue('0')
-              : setLocalValue(localValue)
-          }
-          fullWidth={fullWidth}
-          key={key}
-          helperText={error}
-          className={classes.container}
-          inputProps={{ className: classes.input }}
-          placeholder={placeholder}
-          type={type}
-          disabled={disabled}
-          value={localValue}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setLocalValue(e.target.value)
-          }
-          // onChange is really actually an onBlur for optimization
-          onBlur={onChange}
-          InputProps={{
-            endAdornment: icon,
-          }}
-          {...inputProps}
-        />
-      )}
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={inputFieldTheme}>
+        {error === '' ? (
+          <StyledTextField
+            onClick={() =>
+              // if number input, make sure its > 0
+              isNumber && Number(localValue) < 0
+                ? setLocalValue('0')
+                : setLocalValue(localValue)
+            }
+            fullWidth={fullWidth}
+            key={key}
+            className={classes.container}
+            inputProps={{ className: classes.input }}
+            placeholder={placeholder}
+            type={type}
+            disabled={disabled}
+            value={localValue}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setLocalValue(e.target.value)
+            }
+            onBlur={onChange}
+            {...inputProps}
+          />
+        ) : (
+          <StyledErrorTextField
+            error
+            onClick={() =>
+              // if number input, make sure its > 0
+              isNumber && Number(localValue) < 0
+                ? setLocalValue('0')
+                : setLocalValue(localValue)
+            }
+            fullWidth={fullWidth}
+            key={key}
+            helperText={error}
+            className={classes.container}
+            inputProps={{ className: classes.input }}
+            placeholder={placeholder}
+            type={type}
+            disabled={disabled}
+            value={localValue}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setLocalValue(e.target.value)
+            }
+            // onChange is really actually an onBlur for optimization
+            onBlur={onChange}
+            InputProps={{
+              endAdornment: icon,
+            }}
+            {...inputProps}
+          />
+        )}
+      </ThemeProvider>
+    </StyledEngineProvider>
   )
 }

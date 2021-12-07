@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-// import { makeStyles } from '@material-ui/core/styles'
+// import { makeStyles } from '@mui/material/styles'
 
-import { createMuiTheme } from '@material-ui/core/styles'
-import { ThemeProvider } from '@material-ui/core/styles'
+import { createTheme, adaptV4Theme } from '@mui/material/styles'
+import {
+  ThemeProvider,
+  Theme,
+  StyledEngineProvider,
+} from '@mui/material/styles'
 
-import Button from '@material-ui/core/Button'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@mui/material/Button'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 
 import {
   StyledOuterContainer,
@@ -20,6 +24,11 @@ import {
 import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
+
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
 
 // commented this out because it's not used for now
 // const useStyles = makeStyles((theme) => ({
@@ -50,12 +59,14 @@ export const Dashboard = () => {
     })
   }, [])
 
-  const MenuItemtheme = createMuiTheme({
-    typography: {
-      fontSize: 16,
-      fontFamily: 'Montserrat',
-    },
-  })
+  const MenuItemtheme = createTheme(
+    adaptV4Theme({
+      typography: {
+        fontSize: 16,
+        fontFamily: 'Montserrat',
+      },
+    })
+  )
 
   return (
     <StyledOuterContainer>
@@ -77,7 +88,8 @@ export const Dashboard = () => {
           <Menu
             id="logout-menu"
             anchorEl={anchorEl}
-            getContentAnchorEl={null}
+            // getContentAnchorEl
+            // getContentAnchorEl={null}
             open={open}
             onClose={handleClose}
             MenuListProps={{
@@ -92,9 +104,11 @@ export const Dashboard = () => {
               horizontal: 'center',
             }}
           >
-            <ThemeProvider theme={MenuItemtheme}>
-              <MenuItem>Log Out</MenuItem>
-            </ThemeProvider>
+            <StyledEngineProvider injectFirst>
+              <ThemeProvider theme={MenuItemtheme}>
+                <MenuItem>Log Out</MenuItem>
+              </ThemeProvider>
+            </StyledEngineProvider>
           </Menu>
         </StyledHeaderMenu>
 
