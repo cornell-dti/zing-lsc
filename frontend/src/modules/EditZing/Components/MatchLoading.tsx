@@ -29,7 +29,6 @@ const StyledBackdrop = styled(Backdrop)`
     color: ${colors.mediumviolet};
   }
 
-  ,
   &.${classes.circle} {
     stroke-linecap: round;
   }
