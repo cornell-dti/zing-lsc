@@ -31,7 +31,7 @@ const StyledGrid = styled(Grid)(
     box-shadow: 0px 2px 5px rgba(205, 156, 242, 0.2);
     border-radius: 10px;
     //overflow-x: scroll;
-  },
+  }
 
   & .${classes.paper2} {
     display: flex;

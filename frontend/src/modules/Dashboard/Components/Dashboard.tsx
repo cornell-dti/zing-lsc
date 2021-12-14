@@ -31,6 +31,7 @@ declare module '@mui/styles/defaultTheme' {
 }
 
 // commented this out because it's not used for now
+// if you choose to use this, it will not work because makeStyles will have been removed. Use the styled API in MUI 5 now.
 // const useStyles = makeStyles((theme) => ({
 //   modal: {
 //     display: 'flex',

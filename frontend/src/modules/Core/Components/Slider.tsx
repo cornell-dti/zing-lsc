@@ -1,8 +1,12 @@
 import React from 'react'
 import { Slider as MaterialUISlider } from '@mui/material'
-import makeStyles from '@mui/styles/makeStyles'
 
 import { SliderProps } from '@core/Types/FormFieldProps'
+const PREFIX = 'Slider'
+
+// migrating using sx because this makes things slightly easier
+// https://mui.com/customization/how-to-customize/#1-one-off-customization
+
 export const Slider = ({
   containerStyle = {},
   railStyle = {},
@@ -19,26 +23,16 @@ export const Slider = ({
   onChange,
   ...sliderProps
 }: SliderProps) => {
-  const classes = makeStyles({
-    container: containerStyle,
-    rail: railStyle,
-    track: trackStyle,
-    thumb: thumbStyle,
-    thumbLabel: thumbLabelStyle,
-    mark: markStyle,
-    markLabel: markLabelStyle,
-  })()
-
   return (
     <MaterialUISlider
-      classes={{
-        root: classes.container,
-        rail: classes.rail,
-        track: classes.track,
-        thumb: classes.thumb,
-        valueLabel: classes.thumbLabel,
-        mark: classes.mark,
-        markLabel: classes.markLabel,
+      sx={{
+        '& .MuiSlider-root': containerStyle,
+        '& .MuiSlider-rail': railStyle,
+        '& .MuiSlider-track': trackStyle,
+        '& .MuiSlider-thumb': thumbStyle,
+        '& .MuiSlider-valueLabel': thumbLabelStyle,
+        '& .MuiSlider-mark': markStyle,
+        '& .MuiSlider-markLabel': markLabelStyle,
       }}
       disabled={disabled}
       step={step}
