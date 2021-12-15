@@ -1,7 +1,5 @@
 import React from 'react'
 import { Button as MaterialUIButton } from '@mui/material'
-import makeStyles from '@mui/styles/makeStyles'
-
 import { ButtonProps } from '@core/Types/FormFieldProps'
 import {
   defaultContainerStyle,
@@ -16,17 +14,18 @@ export const Button = ({
   disabled = false,
   ...buttonProps
 }: ButtonProps) => {
-  const classes = makeStyles({
-    container: Object.assign({}, defaultContainerStyle, containerStyle),
-    input: Object.assign({}, defaultLabelStyle, labelStyle),
-  })()
+  const newContainerStyles = Object.assign(
+    {},
+    defaultContainerStyle,
+    containerStyle
+  )
+  const newLabelStyles = Object.assign({}, defaultLabelStyle, labelStyle)
 
   return (
     <MaterialUIButton
-      classes={{
-        root: classes.container,
-        // changed this text upgrading from v4 to v5, label does not exist anymore
-        text: classes.input,
+      sx={{
+        '&.MuiButton-root': newContainerStyles,
+        '&.MuiButton-text': newLabelStyles,
       }}
       onClick={onClick}
       disabled={disabled}

@@ -1,18 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-// import { makeStyles } from '@mui/material/styles'
-
-import { createTheme, adaptV4Theme } from '@mui/material/styles'
-import {
-  ThemeProvider,
-  Theme,
-  StyledEngineProvider,
-} from '@mui/material/styles'
-
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-
 import {
   StyledOuterContainer,
   StyledContainer,
@@ -25,13 +15,14 @@ import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
 
-declare module '@mui/styles/defaultTheme' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
-
 // commented this out because it's not used for now
 // if you choose to use this, it will not work because makeStyles will have been removed. Use the styled API in MUI 5 now.
+
+// declare module '@mui/styles/defaultTheme' {
+//   // eslint-disable-next-line @typescript-eslint/no-empty-interface
+//   interface DefaultTheme extends Theme {}
+// }
+
 // const useStyles = makeStyles((theme) => ({
 //   modal: {
 //     display: 'flex',
@@ -55,19 +46,10 @@ export const Dashboard = () => {
 
   useEffect(() => {
     axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
-      console.log(res.data)
+      // console.log(res.data)
       setGroups(res.data.data)
     })
   }, [])
-
-  const MenuItemtheme = createTheme(
-    adaptV4Theme({
-      typography: {
-        fontSize: 16,
-        fontFamily: 'Montserrat',
-      },
-    })
-  )
 
   return (
     <StyledOuterContainer>
@@ -89,7 +71,6 @@ export const Dashboard = () => {
           <Menu
             id="logout-menu"
             anchorEl={anchorEl}
-            // getContentAnchorEl
             // getContentAnchorEl={null}
             open={open}
             onClose={handleClose}
@@ -105,11 +86,14 @@ export const Dashboard = () => {
               horizontal: 'center',
             }}
           >
-            <StyledEngineProvider injectFirst>
-              <ThemeProvider theme={MenuItemtheme}>
-                <MenuItem>Log Out</MenuItem>
-              </ThemeProvider>
-            </StyledEngineProvider>
+            <MenuItem
+              sx={{
+                fontFamily: 'Montserrat',
+                fontSize: 16,
+              }}
+            >
+              Log Out
+            </MenuItem>
           </Menu>
         </StyledHeaderMenu>
 
