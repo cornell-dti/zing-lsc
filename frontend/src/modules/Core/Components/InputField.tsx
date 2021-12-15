@@ -5,10 +5,8 @@ import {
   Theme,
   StyledEngineProvider,
   createTheme,
-  adaptV4Theme,
 } from '@mui/material'
 import makeStyles from '@mui/styles/makeStyles'
-import styled from 'styled-components'
 import { colors, montserratFont } from '@core'
 import { InputProps } from '@core/Types/FormFieldProps'
 import {
@@ -16,36 +14,64 @@ import {
   defaultInputStyle,
 } from '@core/Styles/InputField.style'
 import ErrorIconOutline from '@mui/icons-material/ErrorOutline'
+import styled from '@mui/styled-engine'
 
 declare module '@mui/styles/defaultTheme' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface DefaultTheme extends Theme {}
 }
 
+// converted these with styled components from the styled API in MUI
+
 /** customized TextInput with themed underlines */
 const StyledTextField = styled(TextField)`
-&& .MuiInput-underline:hover::before {
-  border-color: ${(props) => (props.color ? props.color : colors.darkpurple)};
-},
-&& .MuiInput-underline:before {
-  border-color: ${(props) => (props.color ? props.color : colors.darkpurple)};
-},
-&& .MuiInput-underline:after {
-  border-color: ${(props) => (props.color ? props.color : colors.darkpurple)};
-},
+  &&.MuiInput-underline:hover::before {
+    border-color: ${(props) => (props.color ? props.color : colors.darkpurple)};
+  }
+
+  &&.MuiInput-underline:before {
+    border-color: ${(props) => (props.color ? props.color : colors.darkpurple)};
+  }
+
+  &&.MuiInput-underline:after {
+    border-color: ${(props) => (props.color ? props.color : colors.darkpurple)};
+  }
 `
+
 /** customized TextInput for form validation errors with red underlines */
 const StyledErrorTextField = styled(TextField)`
-&& .MuiInput-underline:hover::before {
-  border-color: ${colors.red};
-},
-&& .MuiInput-underline:before {
-  border-color: ${colors.red};
-},
-&& .MuiInput-underline:after {
-  border-color: ${colors.red};
-},
+  && .MuiInput-underline:hover::before {
+    border-color: ${colors.red};
+  }
+
+  && .MuiInput-underline:before {
+    border-color: ${colors.red};
+  }
+
+  && .MuiInput-underline:after {
+    border-color: ${colors.red};
+  }
 `
+
+// using new input theme
+const inputFieldTheme = createTheme({
+  typography: {
+    fontFamily: 'Montserrat, Arial',
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+      @font-face {
+        font-family: ${montserratFont.fontFamily};
+        font-style: ${montserratFont.fontStyle};
+        font-display: ${montserratFont.fontDisplay};
+        font-weight: ${montserratFont.fontWeight};
+        src: ${montserratFont.src};
+      }
+    `,
+    },
+  },
+})
 
 /** Generic InputField component for more specific fields to customize */
 export const InputField = ({
@@ -64,30 +90,10 @@ export const InputField = ({
   isNumber = false,
   ...inputProps
 }: InputProps) => {
-  const classes = makeStyles({
-    container: Object.assign({}, defaultContainerStyle, containerStyle),
-    input: Object.assign({}, defaultInputStyle, inputStyle),
-  })()
-
   const [localValue, setLocalValue] = useState(value)
   /** Error icon that is attached as a endAndornment to the textfield when error
    * occurs */
   const icon = <ErrorIconOutline style={{ fill: colors.red }} />
-
-  const inputFieldTheme = createTheme(
-    adaptV4Theme({
-      typography: {
-        fontFamily: 'Montserrat',
-      },
-      overrides: {
-        MuiCssBaseline: {
-          '@global': {
-            '@font-face': [montserratFont],
-          },
-        },
-      },
-    })
-  )
 
   return (
     <StyledEngineProvider injectFirst>
@@ -102,8 +108,10 @@ export const InputField = ({
             }
             fullWidth={fullWidth}
             key={key}
-            className={classes.container}
-            inputProps={{ className: classes.input }}
+            sx={Object.assign({}, defaultContainerStyle, containerStyle)}
+            inputProps={{
+              sx: Object.assign({}, defaultInputStyle, inputStyle),
+            }}
             placeholder={placeholder}
             type={type}
             disabled={disabled}
@@ -126,8 +134,10 @@ export const InputField = ({
             fullWidth={fullWidth}
             key={key}
             helperText={error}
-            className={classes.container}
-            inputProps={{ className: classes.input }}
+            sx={Object.assign({}, defaultContainerStyle, containerStyle)}
+            inputProps={{
+              sx: Object.assign({}, defaultInputStyle, inputStyle),
+            }}
             placeholder={placeholder}
             type={type}
             disabled={disabled}
