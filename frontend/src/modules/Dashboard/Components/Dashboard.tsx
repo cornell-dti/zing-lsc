@@ -18,11 +18,6 @@ import { API_ROOT, COURSE_API } from '@core/Constants'
 // commented this out because it's not used for now
 // if you choose to use this, it will not work because makeStyles will have been removed. Use the styled API in MUI 5 now.
 
-// declare module '@mui/styles/defaultTheme' {
-//   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-//   interface DefaultTheme extends Theme {}
-// }
-
 // const useStyles = makeStyles((theme) => ({
 //   modal: {
 //     display: 'flex',

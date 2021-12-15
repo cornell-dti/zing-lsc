@@ -2,11 +2,9 @@ import React, { useState } from 'react'
 import {
   TextField,
   ThemeProvider,
-  Theme,
   StyledEngineProvider,
   createTheme,
 } from '@mui/material'
-import makeStyles from '@mui/styles/makeStyles'
 import { colors, montserratFont } from '@core'
 import { InputProps } from '@core/Types/FormFieldProps'
 import {
@@ -15,11 +13,6 @@ import {
 } from '@core/Styles/InputField.style'
 import ErrorIconOutline from '@mui/icons-material/ErrorOutline'
 import styled from '@mui/styled-engine'
-
-declare module '@mui/styles/defaultTheme' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
 
 // converted these with styled components from the styled API in MUI
 

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   ThemeProvider,
-  Theme, // makeStyles,
+  Theme,
   StyledEngineProvider,
   createTheme,
 } from '@mui/material/styles'
@@ -25,11 +25,6 @@ import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
 
 import './App.css'
-
-declare module '@mui/styles/defaultTheme' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
 
 const theme = createTheme()
 
