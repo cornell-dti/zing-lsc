@@ -1,8 +1,6 @@
 import React from 'react'
 import { Slider as MaterialUISlider } from '@mui/material'
-
 import { SliderProps } from '@core/Types/FormFieldProps'
-const PREFIX = 'Slider'
 
 // migrating using sx because this makes things slightly easier
 // https://mui.com/customization/how-to-customize/#1-one-off-customization

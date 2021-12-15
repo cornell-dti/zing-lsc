@@ -4,17 +4,19 @@ import { RadioButtonProps } from '@core/Types/FormFieldProps'
 import { StyledLabel, StyledContainer } from '@core/Styles/RadioButton.style'
 import Radio, { RadioProps } from '@mui/material/Radio'
 import { colors } from '@core'
-import withStyles from '@mui/styles/withStyles'
+import styled from '@mui/styled-engine'
 
-const PurpleRadio = withStyles({
-  root: {
-    color: colors.darkpurple,
-    '&$checked': {
-      color: colors.darkpurple,
-    },
-  },
-  checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />)
+const PurpleRadio = styled((props: RadioProps) => (
+  <Radio color="default" {...props} />
+))`
+  &.MuiCheckbox-root {
+    color: ${colors.darkpurple};
+  }
+
+  .Mui-checked {
+    color: ${colors.darkpurple};
+  }
+`
 
 export const RadioButton = ({
   currentAnswer,
@@ -22,11 +24,11 @@ export const RadioButton = ({
   label,
   value,
 }: RadioButtonProps) => {
+  // potentially change this kind of styling later?
   const containerStyle = {
     display: 'flex',
     justifyContent: 'flex-start',
     padding: '0 1rem',
-
     background: '#FFFFFF',
     boxShadow: '2px 2px 8px rgba(0, 0, 0, 0.15)',
     borderRadius: '11px',
