@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles'
-import { Backdrop, CircularProgress, Theme } from '@mui/material'
+import { Backdrop, CircularProgress } from '@mui/material'
 import { MatchLoadingProps } from 'EditZing/Types/ComponentProps'
 import {
   StyledLoadingContainer,
@@ -10,7 +10,7 @@ import {
 } from 'EditZing/Styles/MatchLoading.style'
 import { colors } from '@core/Constants'
 
-// randomly generated from codemod
+// generated from codemod
 const PREFIX = 'MatchLoading'
 
 const classes = {

@@ -1,6 +1,5 @@
 import React from 'react'
 import { styled } from '@mui/material/styles'
-import { Theme } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import { STUDENT_TYPE } from 'EditZing/Types/Student'

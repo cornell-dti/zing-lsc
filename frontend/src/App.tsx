@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   ThemeProvider,
-  Theme,
   StyledEngineProvider,
   createTheme,
 } from '@mui/material/styles'
