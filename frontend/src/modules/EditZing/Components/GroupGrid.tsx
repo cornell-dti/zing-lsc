@@ -1,6 +1,6 @@
 import React from 'react'
 import { StudentGrid } from 'EditZing/Components/StudentGrid'
-import Grid from '@material-ui/core/Grid'
+import Grid from '@mui/material/Grid'
 import { GroupGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrop } from 'react-dnd'
 import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
