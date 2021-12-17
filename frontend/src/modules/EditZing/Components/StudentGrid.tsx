@@ -1,37 +1,44 @@
 import React from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
-import Grid from '@material-ui/core/Grid'
+import { styled } from '@mui/material/styles'
+import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid'
 import { STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
-import { genderSVG } from 'EditZing/Styles/InlineSVGs'
+// import { genderSVG } from 'EditZing/Styles/InlineSVGs'
 import { colors } from '@core'
 import { useDrag } from 'react-dnd'
 import { StyledStudentDetail } from 'EditZing/Styles/StudentAndGroup.style'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    paper1: {
-      padding: theme.spacing(2),
-      textAlign: 'left',
-      color: colors.black,
-      fontFamily: 'Montserrat',
-      fontWeight: 700,
-      fontSize: 14,
-      border: '0px solid rgba(205, 156, 242, 0.15)',
-      boxShadow: '0px 2px 5px rgba(205, 156, 242, 0.2);',
-      borderRadius: '10px',
-    },
-    paper2: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '2px',
-      marginTop: '2px',
-    },
-  })
+const PREFIX = 'StudentGrid'
+
+const classes = {
+  paper1: `${PREFIX}-paper1`,
+  paper2: `${PREFIX}-paper2`,
+}
+
+// should we make it so that when it overflows, then the user can scroll?
+const StyledGrid = styled(Grid)(
+  ({ theme }) => `
+  & .${classes.paper1} {
+    padding: ${theme.spacing(2)};
+    text-align: left;
+    color: ${colors.black};
+    font-family: 'Montserrat';
+    font-weight: 700;
+    font-size: 14;
+    border: 0px solid rgba(205, 156, 242, 0.15);
+    box-shadow: 0px 2px 5px rgba(205, 156, 242, 0.2);
+    border-radius: 10px;
+    //overflow-x: scroll;
+  }
+
+  & .${classes.paper2} {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 2px;
+  }
+`
 )
 
 /** the equivalent of MoveableItem */
@@ -52,12 +59,10 @@ export const StudentGrid = ({
     }),
   })
 
-  const classes = useStyles()
-
   const opacity = isDragging ? '0' : '1.0'
 
   return (
-    <Grid item xs={xsSize}>
+    <StyledGrid item xs={xsSize}>
       <div ref={drag}>
         <Paper style={{ opacity: opacity }} className={classes.paper1}>
           {student.name}
@@ -68,6 +73,6 @@ export const StudentGrid = ({
           </div>
         </Paper>
       </div>
-    </Grid>
+    </StyledGrid>
   )
 }

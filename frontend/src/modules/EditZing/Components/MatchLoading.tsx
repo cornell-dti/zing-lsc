@@ -1,11 +1,5 @@
-import React from 'react'
-import {
-  Backdrop,
-  CircularProgress,
-  createStyles,
-  makeStyles,
-  Theme,
-} from '@material-ui/core'
+import { styled } from '@mui/material/styles'
+import { Backdrop, CircularProgress } from '@mui/material'
 import { MatchLoadingProps } from 'EditZing/Types/ComponentProps'
 import {
   StyledLoadingContainer,
@@ -16,19 +10,29 @@ import {
 } from 'EditZing/Styles/MatchLoading.style'
 import { colors } from '@core/Constants'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    backdrop: {
-      zIndex: 1,
-    },
-    progress: {
-      color: colors.mediumviolet,
-    },
-    circle: {
-      strokeLinecap: 'round',
-    },
-  })
-)
+// generated from codemod
+const PREFIX = 'MatchLoading'
+
+const classes = {
+  backdrop: `${PREFIX}-backdrop`,
+  progress: `${PREFIX}-progress`,
+  circle: `${PREFIX}-circle`,
+}
+
+// using styled-components instead of emotion
+const StyledBackdrop = styled(Backdrop)`
+  &.${classes.backdrop} {
+    z-index: 1;
+  }
+
+  ${classes.progress} {
+    color: ${colors.mediumviolet};
+  }
+
+  &.${classes.circle} {
+    stroke-linecap: round;
+  }
+`
 
 export const MatchLoading = ({
   showMatchLoading,
@@ -37,8 +41,6 @@ export const MatchLoading = ({
   courseNames,
   setShowMatchLoading,
 }: MatchLoadingProps) => {
-  const classes = useStyles()
-
   const close = () => {
     if (!isCurrentlyGrouping) {
       setShowMatchLoading(false)
@@ -46,7 +48,7 @@ export const MatchLoading = ({
   }
 
   return (
-    <Backdrop
+    <StyledBackdrop
       className={classes.backdrop}
       open={showMatchLoading}
       onClick={close}
@@ -76,6 +78,6 @@ export const MatchLoading = ({
           </StyledCenterWrapper>
         )}
       </StyledLoadingContainer>
-    </Backdrop>
+    </StyledBackdrop>
   )
 }

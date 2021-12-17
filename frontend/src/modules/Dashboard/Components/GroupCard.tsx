@@ -1,7 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar'
-import MuiAlert from '@material-ui/lab/Alert'
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar'
+import MuiAlert from '@mui/material/Alert'
 
 import {
   StyledContainer,
@@ -26,11 +26,12 @@ export const GroupCard = ({
   newStudents,
   groupsFormed,
 }: GroupCardProps) => {
-  const history = useHistory()
+  // const history = useHistory()
   const [open, setOpen] = React.useState(false)
 
   const handleClose = (
-    event: React.SyntheticEvent,
+    // fixed type of event
+    event: React.SyntheticEvent<any> | Event,
     reason: SnackbarCloseReason
   ) => {
     if (reason === 'clickaway') {
@@ -80,6 +81,7 @@ export const GroupCard = ({
             <StyledText>{groupsFormed} Groups Formed</StyledText>
           )}
         </StyledRow>
+        <StyledRow />
       </StyledRows>
       <StyledButtons>
         <Button

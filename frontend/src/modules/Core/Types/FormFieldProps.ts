@@ -44,7 +44,8 @@ export interface SliderProps extends Common {
   step?: number
   marks?: boolean | Array<MarkProps>
   value: number | Array<number>
-  onChange: (e: React.ChangeEvent<any>, value: number | number[]) => void
+  // MUI v5 upgrade: changed type of event to just a native Event
+  onChange: (e: Event, value: number | number[]) => void
 }
 
 export interface GoToButtonProps extends Common {
