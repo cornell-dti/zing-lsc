@@ -14,7 +14,7 @@ import {
   StyledPlusIcon,
   StyledNewlyMatchable,
 } from 'Dashboard/Styles/GroupCard.style'
-import { Button, colors, SURVEY_PATH } from '@core'
+import { Button, colors } from '@core'
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -22,7 +22,6 @@ function Alert(props: any) {
 
 export const GroupCard = ({
   key,
-  id,
   name,
   newStudents,
   groupsFormed,
@@ -56,10 +55,8 @@ export const GroupCard = ({
     //only 1 student & 0 groups formed
     else return [colors.lightyellow, colors.darkyellow, 'no']
   }
-  const styleArray = getColor(
-    { newStudents }.newStudents,
-    { groupsFormed }.groupsFormed
-  )
+  const styleArray = getColor(newStudents, groupsFormed)
+
   return (
     <StyledContainer color={styleArray[0]} key={key}>
       {styleArray[2] === 'yes' && <StyledNewlyMatchable />}
@@ -67,11 +64,21 @@ export const GroupCard = ({
       <StyledRows>
         <StyledRow>
           <StyledPlusIcon></StyledPlusIcon>
-          <StyledText>{newStudents} News Student</StyledText>
+          {newStudents === 1 && (
+            <StyledText>{newStudents} New Student</StyledText>
+          )}
+          {newStudents != 1 && (
+            <StyledText>{newStudents} New Students</StyledText>
+          )}
         </StyledRow>
         <StyledRow>
           <StyledGroupsIcon></StyledGroupsIcon>
-          <StyledText>{groupsFormed} Groups Formed</StyledText>
+          {groupsFormed === 1 && (
+            <StyledText>{groupsFormed} Group Formed</StyledText>
+          )}
+          {groupsFormed != 1 && (
+            <StyledText>{groupsFormed} Groups Formed</StyledText>
+          )}
         </StyledRow>
       </StyledRows>
       <StyledButtons>

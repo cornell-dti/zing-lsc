@@ -21,14 +21,6 @@ import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-}))
-
 export const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -44,7 +36,6 @@ export const Dashboard = () => {
 
   useEffect(() => {
     axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
-      console.log(res.data)
       setGroups(res.data.data)
     })
   }, [])

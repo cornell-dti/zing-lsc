@@ -3,8 +3,7 @@ import { FiClock } from 'react-icons/fi'
 import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
 import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
 import { ReactComponent as NewlyMatchable } from '@assets/img/newlymatchable.svg'
-import { colors, h3, h4, StyledComponent } from '@core'
-import { Props } from 'react'
+import { h3, h4, ColorProps } from '@core'
 
 export const StyledGroupsIcon = styled(GroupsIcon)`
   padding-right: 1rem;
@@ -57,6 +56,6 @@ export const StyledButtons = styled.div`
   display: flex;
   justify-content: space-around;
 `
-interface ColorProps {
-  color: string
-}
+// interface ColorProps {
+//   color: string
+// }
