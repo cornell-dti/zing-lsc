@@ -23,6 +23,7 @@ import { CreateZingForm } from 'CreateZing'
 import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
 import './App.css'
+import Components from './modules/Components'
 
 // module augmentation, needed for TypeScript
 
@@ -63,9 +64,10 @@ declare module '@mui/material/styles' {
 }
 
 // https://www.figma.com/file/5sae0s8rk6r9iVwpn74RY4/Zing-Components?node-id=804%3A10807
-// can pick the different colors with sx
+// can pick the different colors with sx (e.g. color: 'purple.120')
 // essentials is all the blacks (white is located within "common")
-const theme = createTheme({
+// this theme statement defines all of the colors
+let theme = createTheme({
   palette: {
     essentials: {
       main: '#2F2E41',
@@ -77,19 +79,19 @@ const theme = createTheme({
       6: '#EDEDEE',
     },
     purple: {
-      main: '#CE9EF2',
-      120: '#AE88CF',
-      100: '#CE9EF2',
-      75: '#D9B6F6',
-      50: '#E8D6FB',
-      30: '#F7EDFF',
-      25: '#F6F3FF',
-      12: '#FBF9FF',
+      main: '#815ED4',
+      120: '#6D52AF',
+      100: '#815ED4',
+      75: '#A186DF',
+      50: '#C0AEEA',
+      30: '#D9CFF2',
+      25: '#DFD7F4',
+      12: '#F0ECFA',
     },
     primary: {
-      main: '#CE9EF2',
-      light: '#D9B6F6',
-      dark: '#AE88CF',
+      main: '#815ED4',
+      light: '#A186DF',
+      dark: '#6D52AF',
     },
     error: {
       main: '#FF6584',
@@ -106,11 +108,17 @@ const theme = createTheme({
       dark: '#CEF5D6',
     },
   },
+  breakpoints: {},
+})
+
+// this defines everything else
+theme = createTheme(theme, {
   typography: {
     fontFamily: 'Montserrat, Arial',
   },
   components: {
     MuiCssBaseline: {
+      // inject font face in to CSS
       styleOverrides: `
       @font-face {
         font-family: ${montserratFont.fontFamily};
@@ -120,6 +128,49 @@ const theme = createTheme({
         src: ${montserratFont.src};
       }
     `,
+    },
+    MuiButton: {
+      defaultProps: {
+        // make the default contained
+        variant: 'contained',
+      },
+      styleOverrides: {
+        // for all buttons
+        root: {
+          fontFamily: 'Montserrat',
+          fontWeight: 600,
+          borderRadius: 40,
+          paddingLeft: 15,
+          paddingRight: 15,
+          textTransform: 'initial',
+          fontSize: 18,
+        },
+        sizeSmall: {
+          fontSize: 14,
+        },
+        containedPrimary: {
+          backgroundColor: theme.palette.purple.main,
+          color: theme.palette.common.white,
+          '&.Mui-disabled': {
+            color: theme.palette.common.white,
+            backgroundColor: theme.palette.essentials[25],
+          },
+        },
+        outlinedSecondary: {
+          borderColor: theme.palette.purple[100],
+          backgroundColor: theme.palette.common.white,
+          color: theme.palette.purple[100],
+          '&:hover': {
+            backgroundColor: theme.palette.essentials[6],
+            borderColor: theme.palette.purple[100],
+          },
+          '&.Mui-disabled': {
+            color: theme.palette.essentials[50],
+            backgroundColor: theme.palette.essentials[25],
+            borderColor: theme.palette.essentials[25],
+          },
+        },
+      },
     },
   },
 })
@@ -142,6 +193,7 @@ const App = () => {
               path={`${EDIT_ZING_PATH}/:courseId`}
               component={EditZing}
             />
+            <Route exact path="/components" component={Components} />
           </Switch>
         </Router>
       </ThemeProvider>
