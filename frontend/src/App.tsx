@@ -167,7 +167,7 @@ theme = createTheme(theme, {
           '&.Mui-disabled': {
             color: theme.palette.essentials[50],
             backgroundColor: theme.palette.essentials[25],
-            borderColor: '#898992',
+            borderColor: theme.palette.essentials[50],
           },
         },
       },
@@ -201,6 +201,26 @@ theme = createTheme(theme, {
             backgroundColor: theme.palette.essentials[25],
             borderColor: '#898992',
           },
+        },
+      },
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        colorPrimary: {
+          color: theme.palette.primary.main,
+        },
+        colorSecondary: {
+          color: theme.palette.essentials[50],
+          '&.Mui-checked': {
+            color: theme.palette.essentials[50],
+          },
+        },
+      },
+    },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: {
+          fontFamily: 'Montserrat',
         },
       },
     },

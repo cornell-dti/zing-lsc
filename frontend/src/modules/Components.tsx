@@ -1,5 +1,14 @@
 import { ArrowBack, ArrowForward } from '@mui/icons-material'
-import { Box, Button, Stack, IconButton } from '@mui/material'
+import {
+  Box,
+  Button,
+  Stack,
+  IconButton,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Radio,
+} from '@mui/material'
 
 const Components = () => {
   return (
@@ -91,6 +100,33 @@ const Components = () => {
             <ArrowBack />
           </IconButton>
         </Stack>
+      </Box>
+      <Box my={3}>
+        <FormGroup>
+          <FormControlLabel control={<Checkbox />} label="Primary" />
+          <FormControlLabel
+            disabled
+            control={<Checkbox />}
+            label="Primary Disabled"
+          />
+          <FormControlLabel
+            control={<Checkbox color="secondary" />}
+            label="Secondary"
+          />
+          <FormControlLabel
+            disabled
+            control={<Checkbox />}
+            label="Secondary Disabled"
+          />
+        </FormGroup>
+      </Box>
+      <Box my={3}>
+        <FormControlLabel value="female" control={<Radio />} label="Female" />
+        <FormControlLabel
+          value="male"
+          control={<Radio disabled />}
+          label="Male"
+        />
       </Box>
     </Box>
   )
