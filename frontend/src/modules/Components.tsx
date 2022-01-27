@@ -84,10 +84,10 @@ const Components = () => {
           <IconButton disabled>
             <ArrowBack />
           </IconButton>
-          <IconButton>
+          <IconButton color="secondary">
             <ArrowBack />
           </IconButton>
-          <IconButton disabled>
+          <IconButton color="secondary" disabled>
             <ArrowBack />
           </IconButton>
         </Stack>

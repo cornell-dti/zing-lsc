@@ -167,7 +167,39 @@ theme = createTheme(theme, {
           '&.Mui-disabled': {
             color: theme.palette.essentials[50],
             backgroundColor: theme.palette.essentials[25],
-            borderColor: theme.palette.essentials[25],
+            borderColor: '#898992',
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      defaultProps: {
+        color: 'primary',
+        size: 'large',
+      },
+      styleOverrides: {
+        colorPrimary: {
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.common.white,
+          '&:hover': {
+            backgroundColor: theme.palette.purple[120],
+          },
+          '&.Mui-disabled': {
+            backgroundColor: theme.palette.essentials[25],
+            color: theme.palette.common.white,
+          },
+        },
+        colorSecondary: {
+          border: `1px solid ${theme.palette.primary.main}`,
+          color: theme.palette.primary.main,
+          '&:hover': {
+            backgroundColor: theme.palette.essentials[6],
+            borderColor: theme.palette.primary.main,
+          },
+          '&.Mui-disabled': {
+            color: theme.palette.essentials[50],
+            backgroundColor: theme.palette.essentials[25],
+            borderColor: '#898992',
           },
         },
       },
