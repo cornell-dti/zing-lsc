@@ -8,11 +8,26 @@ import {
   FormControlLabel,
   Checkbox,
   Radio,
+  FormControl,
+  Select,
+  MenuItem,
+  OutlinedInput,
+  SelectChangeEvent,
 } from '@mui/material'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { useState } from 'react'
+import SearchBar from '@core/Components/SearchBar'
+import PageNumbers from '@core/Components/PageNumbers'
 
 const Components = () => {
+  const [age, setAge] = useState('')
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value)
+  }
+
   return (
-    <Box m={5}>
+    <Box m={8} pb={6}>
       <Box my={3}>
         <Stack spacing={2} direction="row">
           <Button>Button text</Button>
@@ -127,6 +142,59 @@ const Components = () => {
           control={<Radio disabled />}
           label="Male"
         />
+      </Box>
+      <Box my={3}>
+        <FormControl
+          sx={{ m: 1, minWidth: 300 }}
+          hiddenLabel
+          margin="normal"
+          size="medium"
+        >
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Age"
+            displayEmpty
+            IconComponent={KeyboardArrowDownIcon}
+            input={<OutlinedInput />}
+            onChange={handleChange}
+            sx={{
+              borderRadius: '6px',
+              color: '#898992',
+              fontFamily: 'Montserrat',
+              fontWeight: 600,
+              px: 0.5,
+            }}
+            value={age}
+            MenuProps={{
+              MenuListProps: {
+                dense: true,
+                sx: {
+                  borderRadius: '10px',
+                  '& .MuiMenuItem-root': {
+                    fontFamily: 'Montserrat',
+                    '&:hover': {
+                      backgroundColor: '#EBE5F8',
+                    },
+                  },
+                },
+              },
+            }}
+          >
+            <MenuItem value="">
+              <em>Select</em>
+            </MenuItem>
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+      <Box my={3}>
+        <SearchBar />
+      </Box>
+      <Box my={3}>
+        <PageNumbers count={10} />
       </Box>
     </Box>
   )
