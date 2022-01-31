@@ -18,6 +18,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useState } from 'react'
 import SearchBar from '@core/Components/SearchBar'
 import PageNumbers from '@core/Components/PageNumbers'
+import ZingModal from '@core/Components/ZingModal'
+import ProgressBar from '@core/Components/ProgressBar'
 
 const Components = () => {
   const [age, setAge] = useState('')
@@ -25,6 +27,10 @@ const Components = () => {
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value)
   }
+
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
   return (
     <Box m={8} pb={6}>
@@ -195,6 +201,13 @@ const Components = () => {
       </Box>
       <Box my={3}>
         <PageNumbers count={10} />
+      </Box>
+      <Box my={3}>
+        <Button>Modal</Button>
+        <ZingModal />
+      </Box>
+      <Box my={3}>
+        <ProgressBar />
       </Box>
     </Box>
   )
