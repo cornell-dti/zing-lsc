@@ -1,50 +1,61 @@
 import {
   FormControl,
-  MenuItem,
+  FormHelperText,
   OutlinedInput,
   Select,
-  SelectChangeEvent,
 } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { useState } from 'react'
+import { DropdownSelectProps } from '@core'
 
-const DropdownSelect = () => {
-  const [age, setAge] = useState('')
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value)
-  }
-
+const DropdownSelect = ({
+  minWidth = 300,
+  margin = 'normal',
+  size = 'medium',
+  helperText,
+  children,
+  fullWidth,
+  disabled,
+  ...props
+}: DropdownSelectProps) => {
   return (
     <FormControl
-      sx={{ m: 1, minWidth: 120 }}
+      sx={{ minWidth: minWidth }}
+      fullWidth={fullWidth}
+      disabled={disabled}
       hiddenLabel
-      margin="normal"
-      size="medium"
+      margin={margin}
+      size={size}
     >
       <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        label="Age"
         displayEmpty
         IconComponent={KeyboardArrowDownIcon}
         input={<OutlinedInput />}
-        onChange={handleChange}
         sx={{
           borderRadius: '6px',
           color: '#898992',
           fontFamily: 'Montserrat',
+          fontWeight: 600,
+          px: 0.5,
         }}
-        value={age}
-        MenuProps={{ MenuListProps: { sx: { fontFamily: 'Montserrat' } } }}
+        MenuProps={{
+          MenuListProps: {
+            dense: true,
+            sx: {
+              borderRadius: '10px',
+              '& .MuiMenuItem-root': {
+                fontFamily: 'Montserrat',
+                '&:hover': {
+                  backgroundColor: '#EBE5F8',
+                },
+              },
+            },
+          },
+        }}
+        {...props}
       >
-        <MenuItem value="">
-          <em>Select</em>
-        </MenuItem>
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
+        {children}
       </Select>
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   )
 }

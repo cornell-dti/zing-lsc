@@ -1,11 +1,15 @@
 import { InputAdornment, TextField } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
+import { SearchBarProps } from '@core'
 
 // insert the correct props here
-const SearchBar = () => {
+const SearchBar = ({
+  size = 'small',
+  margin = 'none',
+  ...props
+}: SearchBarProps) => {
   return (
     <TextField
-      size="small"
       variant="outlined"
       InputProps={{
         placeholder: 'Search...',
@@ -25,6 +29,9 @@ const SearchBar = () => {
           </InputAdornment>
         ),
       }}
+      size={size}
+      margin={margin}
+      {...props}
     />
   )
 }

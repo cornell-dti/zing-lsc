@@ -8,18 +8,15 @@ import {
   FormControlLabel,
   Checkbox,
   Radio,
-  FormControl,
-  Select,
   MenuItem,
-  OutlinedInput,
   SelectChangeEvent,
 } from '@mui/material'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useState } from 'react'
 import SearchBar from '@core/Components/SearchBar'
 import PageNumbers from '@core/Components/PageNumbers'
 import ZingModal from '@core/Components/ZingModal'
 import ProgressBar from '@core/Components/ProgressBar'
+import DropdownSelect from '@core/Components/DropdownSelect'
 
 const Components = () => {
   const [age, setAge] = useState('')
@@ -28,9 +25,9 @@ const Components = () => {
     setAge(event.target.value)
   }
 
-  const [open, setOpen] = useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const handleModalOpen = () => setModalOpen(true)
+  const handleModalClose = () => setModalOpen(false)
 
   return (
     <Box m={8} pb={6}>
@@ -150,51 +147,14 @@ const Components = () => {
         />
       </Box>
       <Box my={3}>
-        <FormControl
-          sx={{ m: 1, minWidth: 300 }}
-          hiddenLabel
-          margin="normal"
-          size="medium"
-        >
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="Age"
-            displayEmpty
-            IconComponent={KeyboardArrowDownIcon}
-            input={<OutlinedInput />}
-            onChange={handleChange}
-            sx={{
-              borderRadius: '6px',
-              color: '#898992',
-              fontFamily: 'Montserrat',
-              fontWeight: 600,
-              px: 0.5,
-            }}
-            value={age}
-            MenuProps={{
-              MenuListProps: {
-                dense: true,
-                sx: {
-                  borderRadius: '10px',
-                  '& .MuiMenuItem-root': {
-                    fontFamily: 'Montserrat',
-                    '&:hover': {
-                      backgroundColor: '#EBE5F8',
-                    },
-                  },
-                },
-              },
-            }}
-          >
-            <MenuItem value="">
-              <em>Select</em>
-            </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
+        <DropdownSelect value={age} onChange={handleChange}>
+          <MenuItem value="">
+            <em>Select</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </DropdownSelect>
       </Box>
       <Box my={3}>
         <SearchBar />
@@ -203,8 +163,15 @@ const Components = () => {
         <PageNumbers count={10} />
       </Box>
       <Box my={3}>
-        <Button>Modal</Button>
-        <ZingModal />
+        <Button onClick={handleModalOpen}>Modal</Button>
+        <ZingModal
+          open={modalOpen}
+          onClose={handleModalClose}
+          primaryButtonText="Button Text"
+          secondaryButtonText="Button Text"
+        >
+          Modal text goes here!
+        </ZingModal>
       </Box>
       <Box my={3}>
         <ProgressBar />

@@ -7,11 +7,11 @@ import {
   DialogTitle,
   IconButton,
   styled,
-  Typography,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
 import React from 'react'
+import { ZingModalProps } from '@core'
 
 const TempDialog = styled(Dialog)(({ theme }) => ({
   '&.MuiDialog-root *': {
@@ -19,6 +19,7 @@ const TempDialog = styled(Dialog)(({ theme }) => ({
   },
   '& .MuiDialogContent-root': {
     minWidth: 500,
+    minHeight: 100,
     padding: theme.spacing(1, 4),
   },
   '& .MuiDialogActions-root': {
@@ -27,16 +28,15 @@ const TempDialog = styled(Dialog)(({ theme }) => ({
 }))
 
 interface DialogTitleProps {
-  id: string
   children?: React.ReactNode
   onClose: () => void
 }
 
 const TempDialogTitle = (props: DialogTitleProps) => {
-  const { children, onClose, ...other } = props
+  const { children, onClose } = props
 
   return (
-    <DialogTitle sx={{ m: 0, pl: 3, pr: 2, pt: 2, pb: 1 }} {...other}>
+    <DialogTitle sx={{ m: 0, pl: 3, pr: 2, pt: 2, pb: 1 }}>
       {children}
       {onClose ? (
         <IconButton
@@ -57,22 +57,11 @@ const TempDialogTitle = (props: DialogTitleProps) => {
   )
 }
 
-const Backdrop = styled('div')`
-  z-index: -1;
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  -webkit-tap-highlight-color: transparent;
-`
-
-const ZingModal = () => {
+const ZingModal = (props: ZingModalProps) => {
   return (
     <TempDialog
-      // onClose={handleClose}
-      open={true}
+      onClose={props.onClose}
+      open={props.open}
       BackdropProps={{
         sx: {
           backgroundColor: 'rgba(0, 0, 0, 0.7)',
@@ -80,18 +69,24 @@ const ZingModal = () => {
         },
       }}
     >
-      <TempDialogTitle id="customized-dialog-title" onClose={() => {}}>
-        Modal title
-      </TempDialogTitle>
-      <DialogContent>
-        <Typography gutterBottom>Modal text can go here</Typography>
-      </DialogContent>
-      <DialogActions sx={{ display: 'flex' }}>
-        <Button color="secondary" variant="outlined">
-          Save changes
-        </Button>
+      <TempDialogTitle onClose={props.onClose}>{props.title}</TempDialogTitle>
+      <DialogContent>{props.children}</DialogContent>
+      <DialogActions sx={{ display: { md: 'flex' } }}>
+        {props.secondaryButtonText && (
+          <Button
+            color="secondary"
+            variant="outlined"
+            {...props.secondaryButtonProps}
+          >
+            {props.secondaryButtonText}
+          </Button>
+        )}
         <Box flexGrow={1} />
-        <Button>Save changes</Button>
+        {props.primaryButtonText && (
+          <Button {...props.primaryButtonProps}>
+            {props.primaryButtonText}
+          </Button>
+        )}
       </DialogActions>
     </TempDialog>
   )
