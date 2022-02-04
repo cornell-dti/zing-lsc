@@ -160,7 +160,7 @@ const Components = () => {
         <SearchBar />
       </Box>
       <Box my={3}>
-        <PageNumbers count={10} />
+        <PageNumbers count={5} />
       </Box>
       <Box my={3}>
         <Button onClick={handleModalOpen}>Modal</Button>
@@ -174,7 +174,7 @@ const Components = () => {
         </ZingModal>
       </Box>
       <Box my={3}>
-        <ProgressBar />
+        <ProgressBar total={8} step={4} />
       </Box>
     </Box>
   )

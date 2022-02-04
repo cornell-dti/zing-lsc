@@ -1,6 +1,7 @@
 import { ButtonProps, SelectChangeEvent } from '@mui/material'
 import React, { ChangeEventHandler } from 'react'
 
+// for the modal (dialog box)
 export interface ZingModalProps {
   open: boolean
   onClose: () => void
@@ -12,6 +13,7 @@ export interface ZingModalProps {
   secondaryButtonProps?: ButtonProps
 }
 
+// for general input components
 export interface InputSubsetProps {
   disabled?: boolean
   fullWidth?: boolean
@@ -22,6 +24,7 @@ export interface InputSubsetProps {
   defaultValue?: any
 }
 
+// for the search bar
 export interface SearchBarProps extends InputSubsetProps {
   helperText?: React.ReactNode
   autoFocus?: boolean
@@ -29,9 +32,29 @@ export interface SearchBarProps extends InputSubsetProps {
   onChange?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
 }
 
+// for the dropdown select (meant for forms)
 export interface DropdownSelectProps extends InputSubsetProps {
   minWidth?: number
   children?: React.ReactNode
   helperText?: string
   onChange?: (event: SelectChangeEvent, child: React.ReactNode) => void
+}
+
+// for the pagination (no support for making this controlled)
+export interface PageNumberProps {
+  count?: number
+  defaultPage?: number
+  page?: number
+  disabled?: boolean
+  onChange?: (event: React.ChangeEvent<unknown>, page: number) => void
+  siblingCount?: number
+  boundaryCount?: number
+  useRouter?: boolean
+}
+
+// for the progress bar
+export interface ProgressBarProps {
+  value?: number
+  step?: number
+  total?: number
 }
