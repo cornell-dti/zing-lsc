@@ -6,18 +6,22 @@ import { SearchBarProps } from '@core'
 const SearchBar = ({
   size = 'small',
   margin = 'none',
+  minWidth,
   ...props
 }: SearchBarProps) => {
   return (
     <TextField
       variant="outlined"
+      sx={{
+        minWidth: minWidth ? minWidth : 'initial',
+      }}
       InputProps={{
         placeholder: 'Search...',
         sx: {
           py: 0.5,
           borderRadius: '40px',
-          borderColor: '#B8B7BC',
-          color: '#898992',
+          borderColor: 'essentials.25',
+          color: 'essentials.50',
           fontFamily: 'Montserrat',
           '& .MuiOutlinedInput-input::placeholder': {
             fontWeight: 600,

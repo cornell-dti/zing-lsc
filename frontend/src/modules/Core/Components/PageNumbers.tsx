@@ -11,7 +11,7 @@ const PageNumberButton = ({ direction }: { direction: string }) => {
         fontFamily: 'Montserrat',
         fontWeight: 600,
         color: '#000',
-        '& .arrow-icon': { color: '#898992' },
+        '& .arrow-icon': { color: 'essentials.50' },
       }}
       display="flex"
       alignItems="center"
@@ -66,7 +66,7 @@ const PageNumbers = ({
               color: '#898992',
               fontWeight: 600,
               '&.Mui-selected': {
-                backgroundColor: '#DBDBDD',
+                backgroundColor: 'essentials.12',
                 color: 'black',
               },
             }}

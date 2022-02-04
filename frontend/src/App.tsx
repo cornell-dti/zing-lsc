@@ -40,6 +40,12 @@ declare module '@mui/material/styles' {
   interface PaletteOptions {
     essentials: PaletteOptions['primary']
   }
+  interface Palette {
+    green: Palette['primary']
+  }
+  interface PaletteOptions {
+    green: PaletteOptions['primary']
+  }
 
   interface PaletteColor {
     120?: string
@@ -88,6 +94,13 @@ let theme = createTheme({
       25: '#DFD7F4',
       12: '#F0ECFA',
     },
+    green: {
+      main: '#157E2C',
+      120: '#55705B',
+      100: '#157E2C',
+      50: '#CEF5D6',
+      6: '#F0F9F4',
+    },
     primary: {
       main: '#815ED4',
       light: '#A186DF',
@@ -104,17 +117,17 @@ let theme = createTheme({
     },
     success: {
       main: '#157E2C',
-      light: '#F0F9F4',
-      dark: '#CEF5D6',
+      light: '#CEF5D6',
     },
   },
-  breakpoints: {},
 })
+
+const font = 'Montserrat, Arial, sans-serif'
 
 // this defines everything else
 theme = createTheme(theme, {
   typography: {
-    fontFamily: 'Montserrat, Arial',
+    fontFamily: font,
   },
   components: {
     MuiCssBaseline: {
@@ -129,6 +142,11 @@ theme = createTheme(theme, {
       }
     `,
     },
+    MuiTypography: {
+      defaultProps: {
+        fontFamily: font,
+      },
+    },
     MuiButton: {
       defaultProps: {
         // make the default contained
@@ -137,16 +155,18 @@ theme = createTheme(theme, {
       styleOverrides: {
         // for all buttons
         root: {
-          fontFamily: 'Montserrat',
+          fontFamily: font,
           fontWeight: 600,
           borderRadius: 40,
-          paddingLeft: 15,
-          paddingRight: 15,
+          paddingLeft: 16,
+          paddingRight: 16,
+          paddingBottom: 8,
+          paddingTop: 8,
           textTransform: 'initial',
-          fontSize: 18,
+          fontSize: '1.1rem',
         },
         sizeSmall: {
-          fontSize: 14,
+          fontSize: '0.85rem',
         },
         containedPrimary: {
           backgroundColor: theme.palette.purple.main,
@@ -179,6 +199,8 @@ theme = createTheme(theme, {
       },
       styleOverrides: {
         colorPrimary: {
+          // need this otherwise width gets messed up if in line with other bordered buttons
+          border: `1px solid transparent`,
           backgroundColor: theme.palette.primary.main,
           color: theme.palette.common.white,
           '&:hover': {
@@ -199,7 +221,7 @@ theme = createTheme(theme, {
           '&.Mui-disabled': {
             color: theme.palette.essentials[50],
             backgroundColor: theme.palette.essentials[25],
-            borderColor: '#898992',
+            borderColor: theme.palette.essentials[50],
           },
         },
       },
@@ -214,13 +236,6 @@ theme = createTheme(theme, {
           '&.Mui-checked': {
             color: theme.palette.essentials[50],
           },
-        },
-      },
-    },
-    MuiFormControlLabel: {
-      styleOverrides: {
-        label: {
-          fontFamily: 'Montserrat',
         },
       },
     },

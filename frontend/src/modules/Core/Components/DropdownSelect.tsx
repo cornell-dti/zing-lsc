@@ -32,7 +32,7 @@ const DropdownSelect = ({
         input={<OutlinedInput />}
         sx={{
           borderRadius: '6px',
-          color: '#898992',
+          color: 'essentials.50',
           fontFamily: 'Montserrat',
           fontWeight: 600,
           px: 0.5,

@@ -30,6 +30,7 @@ export interface SearchBarProps extends InputSubsetProps {
   autoFocus?: boolean
   autoComplete?: string
   onChange?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
+  minWidth?: number
 }
 
 // for the dropdown select (meant for forms)
