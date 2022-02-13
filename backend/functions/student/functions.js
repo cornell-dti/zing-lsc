@@ -36,7 +36,7 @@ const addStudentSurveyResponse = async (
   const crseIds = await Promise.all(
     courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
   );
-
+  
   const studentUpdate = studentRef
     .doc(email)
     .set({
@@ -44,11 +44,12 @@ const addStudentSurveyResponse = async (
       college,
       year,
       preferredWorkingTime,
-      groups: crseIds.map((crseId) => ({
-        courseId: crseId,
+      groups:admin.firestore.FieldValue.arrayUnion( 
+      {
+        courseId: crseIds[0],
         groupNumber: -1,
-      })),
-    })
+      })
+    },{merge:true})
     .catch((err) => {
       console.log(err);
       const e = new Error(`Error in processing studentUpdate for ${email}`);
@@ -56,6 +57,7 @@ const addStudentSurveyResponse = async (
       throw e;
     });
 
+  
   // Next, update each course record to add this student
   const courseUpdates = courseCatalogNames.map((courseCatalogName, index) =>
     courseRef
