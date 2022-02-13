@@ -8,9 +8,9 @@
 - **Sean Yu** - Product Manager
 - **Changyuan Lin** - Technical Product Manager
 - **Alyssa Zhang** - Designer
+- **Grace Han** - Developer
 - **Jessica Chai** - Developer
 - **Miranda Luo** - Developer
-- **Grace Han** - Developer
 
 ### Fall 2021
 
