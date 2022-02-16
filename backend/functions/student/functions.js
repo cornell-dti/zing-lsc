@@ -37,18 +37,17 @@ const addStudentSurveyResponse = async (
     courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
   );
   
-  const studentUpdate = studentRef
+  const studentUpdate = await studentRef
     .doc(email)
     .set({
       name,
       college,
       year,
       preferredWorkingTime,
-      groups:admin.firestore.FieldValue.arrayUnion( 
-      {
-        courseId: crseIds[0],
+      groups:admin.firestore.FieldValue.arrayUnion(...crseIds.map((crseId) => ({
+        courseId: crseId,
         groupNumber: -1,
-      })
+      })))
     },{merge:true})
     .catch((err) => {
       console.log(err);
