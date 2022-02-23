@@ -32,6 +32,7 @@ const ProgressBar = ({
   value = 0,
   step = value,
   total = 100,
+  sx,
 }: ProgressBarProps) => {
   return (
     <BorderLinearProgress
@@ -39,6 +40,7 @@ const ProgressBar = ({
       value={step && total ? toVal(step, total) : value}
       step={step}
       total={total}
+      sx={sx}
     />
   )
 }

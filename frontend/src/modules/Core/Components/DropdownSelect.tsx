@@ -19,7 +19,7 @@ const DropdownSelect = ({
 }: DropdownSelectProps) => {
   return (
     <FormControl
-      sx={{ minWidth: minWidth }}
+      sx={{ minWidth: minWidth, ...props.sx }}
       fullWidth={fullWidth}
       disabled={disabled}
       hiddenLabel
@@ -36,6 +36,7 @@ const DropdownSelect = ({
           fontFamily: 'Montserrat',
           fontWeight: 600,
           px: 0.5,
+          ...props.inputSx,
         }}
         MenuProps={{
           MenuListProps: {

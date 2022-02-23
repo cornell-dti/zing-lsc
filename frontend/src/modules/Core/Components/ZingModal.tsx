@@ -68,6 +68,7 @@ const ZingModal = (props: ZingModalProps) => {
           '-webkit-tap-highlight-color': 'transparent',
         },
       }}
+      sx={props.sx}
     >
       <TempDialogTitle onClose={props.onClose}>{props.title}</TempDialogTitle>
       <DialogContent>{props.children}</DialogContent>

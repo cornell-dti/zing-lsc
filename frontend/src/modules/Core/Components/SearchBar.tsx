@@ -14,6 +14,7 @@ const SearchBar = ({
       variant="outlined"
       sx={{
         minWidth: minWidth ? minWidth : 'initial',
+        ...props.sx,
       }}
       InputProps={{
         placeholder: 'Search...',
@@ -26,6 +27,7 @@ const SearchBar = ({
           '& .MuiOutlinedInput-input::placeholder': {
             fontWeight: 600,
           },
+          ...props.inputSx,
         },
         startAdornment: (
           <InputAdornment position="start">

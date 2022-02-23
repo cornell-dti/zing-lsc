@@ -1,4 +1,5 @@
 import { ButtonProps, SelectChangeEvent } from '@mui/material'
+import { SxProps, Theme } from '@mui/material/styles'
 import React, { ChangeEventHandler } from 'react'
 
 // for the modal (dialog box)
@@ -9,8 +10,9 @@ export interface ZingModalProps {
   title?: string
   primaryButtonText?: string
   secondaryButtonText?: string
-  primaryButtonProps?: ButtonProps
-  secondaryButtonProps?: ButtonProps
+  primaryButtonProps?: ButtonProps // can take sx
+  secondaryButtonProps?: ButtonProps // can take sx
+  sx?: SxProps<Theme>
 }
 
 // for general input components
@@ -22,6 +24,7 @@ export interface InputSubsetProps {
   margin?: 'dense' | 'none' | 'normal'
   value?: any
   defaultValue?: any
+  inputSx?: SxProps<Theme>
 }
 
 // for the search bar
@@ -31,6 +34,7 @@ export interface SearchBarProps extends InputSubsetProps {
   autoComplete?: string
   onChange?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
   minWidth?: number
+  sx?: SxProps<Theme>
 }
 
 // for the dropdown select (meant for forms)
@@ -39,6 +43,7 @@ export interface DropdownSelectProps extends InputSubsetProps {
   children?: React.ReactNode
   helperText?: string
   onChange?: (event: SelectChangeEvent, child: React.ReactNode) => void
+  sx?: SxProps<Theme>
 }
 
 // for the pagination (no support for making this controlled)
@@ -51,6 +56,8 @@ export interface PageNumberProps {
   siblingCount?: number
   boundaryCount?: number
   useRouter?: boolean
+  sx?: SxProps<Theme>
+  itemSx?: SxProps<Theme>
 }
 
 // for the progress bar
@@ -58,4 +65,5 @@ export interface ProgressBarProps {
   value?: number
   step?: number
   total?: number
+  sx?: SxProps<Theme>
 }

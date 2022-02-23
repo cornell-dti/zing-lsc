@@ -48,7 +48,7 @@ const PageNumbers = ({
 }: PageNumberProps) => {
   return (
     <Pagination
-      sx={{ fontFamily: 'Montserrat' }}
+      sx={{ fontFamily: 'Montserrat', ...props.sx }}
       count={count}
       boundaryCount={boundaryCount}
       defaultPage={defaultPage}
@@ -69,6 +69,7 @@ const PageNumbers = ({
                 backgroundColor: 'essentials.12',
                 color: 'black',
               },
+              ...props.itemSx,
             }}
             components={{
               previous: BackButton,

@@ -1,6 +1,7 @@
-import { createTheme, responsiveFontSizes } from '@mui/material'
+import { createTheme } from '@mui/material'
 import { montserratFont } from '@core/Constants/Typography'
 
+// old colors
 export const colors = {
   mediumviolet: '#C794EE',
   verylightviolet: '#FCFAFF',
@@ -59,6 +60,13 @@ declare module '@mui/material/styles' {
   }
 }
 
+// constants for colors in the case where theme is not accessible:
+export const purple = {}
+
+export const essentials = {}
+
+export const themeFont = 'Montserrat, Arial, sans-serif'
+
 // https://www.figma.com/file/5sae0s8rk6r9iVwpn74RY4/Zing-Components?node-id=804%3A10807
 // can pick the different colors with sx (e.g. color: 'purple.120')
 // essentials is all the blacks (white is located within "common")
@@ -110,16 +118,14 @@ let theme = createTheme({
       light: '#CEF5D6',
     },
   },
-})
-
-export const themeFont = 'Montserrat, Arial, sans-serif'
-
-// this defines everything else
-theme = createTheme(theme, {
   typography: {
     fontFamily: themeFont,
     fontWeightMedium: 600,
   },
+})
+
+// this defines everything else
+theme = createTheme(theme, {
   components: {
     MuiCssBaseline: {
       // inject font face in to CSS
@@ -151,8 +157,8 @@ theme = createTheme(theme, {
           borderRadius: 40,
           paddingLeft: 16,
           paddingRight: 16,
-          paddingBottom: 8,
-          paddingTop: 8,
+          paddingBottom: 6,
+          paddingTop: 6,
           textTransform: 'initial',
           fontSize: '1.1rem',
         },
@@ -232,7 +238,5 @@ theme = createTheme(theme, {
     },
   },
 })
-
-theme = responsiveFontSizes(theme)
 
 export default theme

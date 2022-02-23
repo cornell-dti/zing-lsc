@@ -11,6 +11,7 @@ import {
   MenuItem,
   SelectChangeEvent,
   Typography,
+  Menu,
 } from '@mui/material'
 import { useState } from 'react'
 import SearchBar from '@core/Components/SearchBar'
@@ -29,6 +30,16 @@ const Components = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const handleModalOpen = () => setModalOpen(true)
   const handleModalClose = () => setModalOpen(false)
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const open = Boolean(anchorEl)
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
   return (
     <Box m={8} pb={6}>
@@ -158,7 +169,7 @@ const Components = () => {
         </DropdownSelect>
       </Box>
       <Box my={3}>
-        <SearchBar />
+        <SearchBar sx={{ minWidth: 400 }} />
       </Box>
       <Box my={3}>
         <PageNumbers count={5} />
@@ -176,6 +187,25 @@ const Components = () => {
       </Box>
       <Box my={3}>
         <ProgressBar total={8} step={4} />
+      </Box>
+      <Box my={3}>
+        <Typography variant="h4">Checking to see if Menu works</Typography>
+        <Button onClick={handleClickListItem}>Hello</Button>
+        <Menu
+          id="lock-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'lock-button',
+            role: 'listbox',
+          }}
+        >
+          <MenuItem>Hello there</MenuItem>
+          <MenuItem>Hello there</MenuItem>
+          <MenuItem>Hello there</MenuItem>
+          <MenuItem>Hello there</MenuItem>
+        </Menu>
       </Box>
       <Box my={3}>
         <Typography variant="h1">Heading 1</Typography>
