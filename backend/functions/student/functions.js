@@ -19,7 +19,16 @@ async function removeStudentFromCourse(email, courseId, groupNumber) {
     });
   }
 }
-
+//should_add compares inputted ids and existing ids to see which ones to add
+function should_add(ids,existing_set) {
+  const ids_to_add = new Array(); 
+  for (let i = 0; i < ids.length; i ++ ) {
+    if (!existing_set.has(ids[i])) {
+        ids_to_add.push(ids[i]);
+    }
+  }
+  return ids_to_add;
+}
 // Note: the error handling in this file is done the way it is so it is easier
 // to decide response codes based on error type.
 const addStudentSurveyResponse = async (
@@ -36,7 +45,24 @@ const addStudentSurveyResponse = async (
   const crseIds = await Promise.all(
     courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
   );
-  
+  const ref = studentRef
+  .doc(email)
+  const data = (await ref.get()).data();
+  const existing_crses = data.groups;
+  const existing_set = new Set();
+  //gets an array of just the courseids
+  for (let j = 0; j < existing_crses.length; j++) {
+    existing_set.add(existing_crses[j].courseId)
+  }
+  //creates the unioned array of courses
+  const crses_to_add = should_add(crseIds,existing_set);
+  for (let i = 0; i < crses_to_add.length; i++) {
+    existing_crses.push({
+      courseId: crses_to_add[i],
+      groupNumber:-1
+    })
+  }
+
   const studentUpdate = await studentRef
     .doc(email)
     .set({
@@ -44,11 +70,8 @@ const addStudentSurveyResponse = async (
       college,
       year,
       preferredWorkingTime,
-      groups:admin.firestore.FieldValue.arrayUnion(...crseIds.map((crseId) => ({
-        courseId: crseId,
-        groupNumber: -1,
-      })))
-    },{merge:true})
+      groups: existing_crses
+    })
     .catch((err) => {
       console.log(err);
       const e = new Error(`Error in processing studentUpdate for ${email}`);
