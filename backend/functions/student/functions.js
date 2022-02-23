@@ -47,21 +47,15 @@ const addStudentSurveyResponse = async (
   );
   const ref = studentRef
   .doc(email)
-  const data = (await ref.get()).data();
-  const existing_crses = data.groups;
-  const existing_set = new Set();
-  //gets an array of just the courseids
-  for (let j = 0; j < existing_crses.length; j++) {
-    existing_set.add(existing_crses[j].courseId)
-  }
+  const existing_crses = (await ref.get()).data().groups;
+  const existing_set = new Set(existing_crses.map((crse) => crse.courseId));
   //creates the unioned array of courses
   const crses_to_add = should_add(crseIds,existing_set);
-  for (let i = 0; i < crses_to_add.length; i++) {
-    existing_crses.push({
-      courseId: crses_to_add[i],
-      groupNumber:-1
-    })
-  }
+  crses_to_add.forEach((crse) => existing_crses.push({
+    courseId: crse,
+    groupNumber:-1
+  }))
+
 
   const studentUpdate = await studentRef
     .doc(email)
