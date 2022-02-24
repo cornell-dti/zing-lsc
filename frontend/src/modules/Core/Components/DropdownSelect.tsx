@@ -7,7 +7,7 @@ import {
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { DropdownSelectProps } from '@core'
 
-const DropdownSelect = ({
+export const DropdownSelect = ({
   minWidth = 300,
   margin = 'normal',
   size = 'medium',
@@ -46,7 +46,7 @@ const DropdownSelect = ({
               '& .MuiMenuItem-root': {
                 fontFamily: 'Montserrat',
                 '&:hover': {
-                  backgroundColor: '#EBE5F8',
+                  bgcolor: 'purple.16',
                 },
               },
             },
@@ -60,5 +60,3 @@ const DropdownSelect = ({
     </FormControl>
   )
 }
-
-export default DropdownSelect

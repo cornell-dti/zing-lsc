@@ -57,7 +57,7 @@ const TempDialogTitle = (props: DialogTitleProps) => {
   )
 }
 
-const ZingModal = (props: ZingModalProps) => {
+export const ZingModal = (props: ZingModalProps) => {
   return (
     <TempDialog
       onClose={props.onClose}
@@ -92,5 +92,3 @@ const ZingModal = (props: ZingModalProps) => {
     </TempDialog>
   )
 }
-
-export default ZingModal

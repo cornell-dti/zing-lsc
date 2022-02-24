@@ -28,7 +28,7 @@ const BorderLinearProgress = styled(LinearProgress, {
   },
 }))
 
-const ProgressBar = ({
+export const ProgressBar = ({
   value = 0,
   step = value,
   total = 100,
@@ -44,5 +44,3 @@ const ProgressBar = ({
     />
   )
 }
-
-export default ProgressBar

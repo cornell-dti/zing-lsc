@@ -3,7 +3,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import { SearchBarProps } from '@core'
 
 // insert the correct props here
-const SearchBar = ({
+export const SearchBar = ({
   size = 'small',
   margin = 'none',
   minWidth,
@@ -41,5 +41,3 @@ const SearchBar = ({
     />
   )
 }
-
-export default SearchBar

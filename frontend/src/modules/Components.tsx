@@ -14,11 +14,13 @@ import {
   Menu,
 } from '@mui/material'
 import { useState } from 'react'
-import SearchBar from '@core/Components/SearchBar'
-import PageNumbers from '@core/Components/PageNumbers'
-import ZingModal from '@core/Components/ZingModal'
-import ProgressBar from '@core/Components/ProgressBar'
-import DropdownSelect from '@core/Components/DropdownSelect'
+import {
+  DropdownSelect,
+  PageNumbers,
+  ProgressBar,
+  SearchBar,
+  ZingModal,
+} from '@core'
 
 const Components = () => {
   const [age, setAge] = useState('')
