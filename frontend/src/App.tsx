@@ -18,7 +18,6 @@ import { CreateZingForm } from 'CreateZing'
 import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
 import './App.css'
-import Components from './modules/Components'
 import theme from '@core/Constants/Theme'
 
 const App = () => {
@@ -39,7 +38,6 @@ const App = () => {
               path={`${EDIT_ZING_PATH}/:courseId`}
               component={EditZing}
             />
-            <Route exact path="/components" component={Components} />
           </Switch>
         </Router>
       </ThemeProvider>
