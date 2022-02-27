@@ -20,14 +20,14 @@ async function removeStudentFromCourse(email, courseId, groupNumber) {
   }
 }
 //should_add compares inputted ids and existing ids to see which ones to add
-function should_add(ids,existing_set) {
-  const ids_to_add = new Array(); 
+function shouldAdd(ids,existingSet) {
+  const idsToAdd = new Array(); 
   for (let i = 0; i < ids.length; i ++ ) {
-    if (!existing_set.has(ids[i])) {
-        ids_to_add.push(ids[i]);
+    if (!existingSet.has(ids[i])) {
+        idsToAdd.push(ids[i]);
     }
   }
-  return ids_to_add;
+  return idsToAdd;
 }
 // Note: the error handling in this file is done the way it is so it is easier
 // to decide response codes based on error type.
@@ -45,16 +45,26 @@ const addStudentSurveyResponse = async (
   const crseIds = await Promise.all(
     courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
   );
-  const ref = studentRef
-  .doc(email)
-  const existing_crses = (await ref.get()).data().groups;
-  const existing_set = new Set(existing_crses.map((crse) => crse.courseId));
-  //creates the unioned array of courses
-  const crses_to_add = should_add(crseIds,existing_set);
-  crses_to_add.forEach((crse) => existing_crses.push({
-    courseId: crse,
-    groupNumber:-1
-  }))
+  const studentCrses = new Array();
+  try {
+    const ref = studentRef.doc(email)
+    studentCrses = (await ref.get()).data().groups;
+    const existingSet = new Set(studentCrses.map((crse) => crse.courseId));
+    const crsesToAdd = shouldAdd(crseIds,existingSet);
+    //creates the unioned array of courses
+    crsesToAdd.forEach((crse) => studentCrses.push({
+      courseId: crse,
+      groupNumber:-1
+    }))
+  }
+  catch(err){ {
+    crseIds.map((crseId) => {
+    studentCrses.push({
+      courseId: crseId,
+      groupNumber: -1
+    })
+   })
+  }}
 
 
   const studentUpdate = await studentRef
@@ -64,7 +74,7 @@ const addStudentSurveyResponse = async (
       college,
       year,
       preferredWorkingTime,
-      groups: existing_crses
+      groups: studentCrses
     })
     .catch((err) => {
       console.log(err);
