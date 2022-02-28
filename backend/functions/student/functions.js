@@ -22,11 +22,16 @@ async function removeStudentFromCourse(email, courseId, groupNumber) {
 //should_add compares inputted ids and existing ids to see which ones to add
 function shouldAdd(ids,existingSet) {
   const idsToAdd = new Array(); 
-  for (let i = 0; i < ids.length; i ++ ) {
-    if (!existingSet.has(ids[i])) {
-        idsToAdd.push(ids[i]);
+  ids.forEach((id) => {
+    if (!existingSet.has(id)) {
+    idsToAdd.push(id);
     }
-  }
+  })
+  // for (let i = 0; i < ids.length; i ++ ) {
+  //   if (!existingSet.has(ids[i])) {
+  //       idsToAdd.push(ids[i]);
+  //   }
+  // }
   return idsToAdd;
 }
 // Note: the error handling in this file is done the way it is so it is easier
@@ -45,9 +50,9 @@ const addStudentSurveyResponse = async (
   const crseIds = await Promise.all(
     courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
   );
-  const studentCrses = new Array();
+  var studentCrses = new Array();
   try {
-    const ref = studentRef.doc(email)
+    const ref = studentRef.doc(email);
     studentCrses = (await ref.get()).data().groups;
     const existingSet = new Set(studentCrses.map((crse) => crse.courseId));
     const crsesToAdd = shouldAdd(crseIds,existingSet);
@@ -57,14 +62,14 @@ const addStudentSurveyResponse = async (
       groupNumber:-1
     }))
   }
-  catch(err){ {
+  catch(err){ 
     crseIds.map((crseId) => {
     studentCrses.push({
       courseId: crseId,
       groupNumber: -1
     })
    })
-  }}
+  }
 
 
   const studentUpdate = await studentRef
