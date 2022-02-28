@@ -27,11 +27,6 @@ function shouldAdd(ids,existingSet) {
     idsToAdd.push(id);
     }
   })
-  // for (let i = 0; i < ids.length; i ++ ) {
-  //   if (!existingSet.has(ids[i])) {
-  //       idsToAdd.push(ids[i]);
-  //   }
-  // }
   return idsToAdd;
 }
 // Note: the error handling in this file is done the way it is so it is easier
