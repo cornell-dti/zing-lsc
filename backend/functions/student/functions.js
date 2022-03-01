@@ -19,16 +19,7 @@ async function removeStudentFromCourse(email, courseId, groupNumber) {
     });
   }
 }
-//should_add compares inputted ids and existing ids to see which ones to add
-function shouldAdd(ids,existingSet) {
-  const idsToAdd = new Array(); 
-  ids.forEach((id) => {
-    if (!existingSet.has(id)) {
-    idsToAdd.push(id);
-    }
-  })
-  return idsToAdd;
-}
+
 // Note: the error handling in this file is done the way it is so it is easier
 // to decide response codes based on error type.
 const addStudentSurveyResponse = async (
@@ -45,27 +36,17 @@ const addStudentSurveyResponse = async (
   const crseIds = await Promise.all(
     courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
   );
-  var studentCrses = new Array();
-  try {
-    const ref = studentRef.doc(email);
-    studentCrses = (await ref.get()).data().groups;
-    const existingSet = new Set(studentCrses.map((crse) => crse.courseId));
-    const crsesToAdd = shouldAdd(crseIds,existingSet);
-    //creates the unioned array of courses
-    crsesToAdd.forEach((crse) => studentCrses.push({
-      courseId: crse,
-      groupNumber:-1
-    }))
-  }
-  catch(err){ 
-    crseIds.map((crseId) => {
-    studentCrses.push({
-      courseId: crseId,
-      groupNumber: -1
-    })
-   })
-  }
 
+  const existingData = (await studentRef.doc(email).get()).data()
+  //studentCourses becomes courseIds of existingData.groups if available, otherwise []
+  let studentCrses = existingData ? existingData.groups : []
+  const studentCrseIds = studentCrses.map((crse)=> crse.courseId)
+  const crsesToAdd = crseIds.filter((crse) => (!studentCrseIds.includes(crse)))
+
+  crsesToAdd.map((crse) => studentCrses.push({
+    courseId: crse,
+    groupNumber:-1
+  }))
 
   const studentUpdate = await studentRef
     .doc(email)
@@ -85,7 +66,8 @@ const addStudentSurveyResponse = async (
 
   
   // Next, update each course record to add this student
-  const courseUpdates = courseCatalogNames.map((courseCatalogName, index) =>
+  const coursesToUpdate = courseCatalogNames.filter((crse) => crsesToAdd.includes(mapCatalogNameToCrseId(crse)))
+  const courseUpdates = coursesToUpdate.map((courseCatalogName, index) =>
     courseRef
       .doc(crseIds[index].toString()) // We want the courseID to allow for crosslisting
       .get()
