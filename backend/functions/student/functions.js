@@ -43,7 +43,7 @@ const addStudentSurveyResponse = async (
   const studentCrseIds = studentCrses.map((crse)=> crse.courseId)
   const crsesToAdd = crseIds.filter((crse) => (!studentCrseIds.includes(crse)))
 
-  crsesToAdd.map((crse) => studentCrses.push({
+  crsesToAdd.forEach((crse) => studentCrses.push({
     courseId: crse,
     groupNumber:-1
   }))
@@ -66,10 +66,9 @@ const addStudentSurveyResponse = async (
 
   
   // Next, update each course record to add this student
-  const coursesToUpdate = courseCatalogNames.filter((crse) => crsesToAdd.includes(mapCatalogNameToCrseId(crse)))
-  const courseUpdates = coursesToUpdate.map((courseCatalogName, index) =>
+  const courseUpdates = crsesToAdd.map((courseCatalogName, index) =>
     courseRef
-      .doc(crseIds[index].toString()) // We want the courseID to allow for crosslisting
+      .doc(crsesToAdd[index].toString()) // We want the courseID to allow for crosslisting
       .get()
       .then((snapshot) => {
         // create a record for this course if it doesn't exist already.
