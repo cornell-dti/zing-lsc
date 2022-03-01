@@ -41,7 +41,14 @@ const addStudentSurveyResponse = async (
   //studentCourses becomes courseIds of existingData.groups if available, otherwise []
   let studentCrses = existingData ? existingData.groups : []
   const studentCrseIds = studentCrses.map((crse)=> crse.courseId)
-  const crsesToAdd = crseIds.filter((crse) => (!studentCrseIds.includes(crse)))
+  let crsesToAdd = new Array();
+  let crseCatalogsToUpdate = new Array();
+  crseIds.forEach((crse, index) => {
+    if (!studentCrseIds.includes(crse)) {
+      crsesToAdd.push(crse);
+      crseCatalogsToUpdate.push(courseCatalogNames[index])
+    }
+  })
 
   crsesToAdd.forEach((crse) => studentCrses.push({
     courseId: crse,
@@ -66,7 +73,7 @@ const addStudentSurveyResponse = async (
 
   
   // Next, update each course record to add this student
-  const courseUpdates = crsesToAdd.map((courseCatalogName, index) =>
+  const courseUpdates = crseCatalogsToUpdate.map((courseCatalogName, index) =>
     courseRef
       .doc(crsesToAdd[index].toString()) // We want the courseID to allow for crosslisting
       .get()
