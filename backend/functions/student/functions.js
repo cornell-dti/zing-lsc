@@ -48,6 +48,7 @@ const addStudentSurveyResponse = async (
         courseId: crseId,
         groupNumber: -1,
       })),
+      time: admin.firestore.FieldValue.serverTimestamp()
     })
     .catch((err) => {
       console.log(err);
