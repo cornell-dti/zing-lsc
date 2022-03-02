@@ -37,17 +37,32 @@ const addStudentSurveyResponse = async (
     courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
   );
 
-  const studentUpdate = studentRef
+  const existingData = (await studentRef.doc(email).get()).data();
+  //studentCourses becomes courseIds of existingData.groups if available, otherwise []
+  let studentCrses = existingData ? existingData.groups : [];
+  const studentCrseIds = studentCrses.map((crse)=> crse.courseId);
+  let crsesToAdd = new Array();
+  let crseCatalogsToUpdate = new Array();
+  crseIds.forEach((crse, index) => {
+    if (!studentCrseIds.includes(crse)) {
+      crsesToAdd.push(crse);
+      crseCatalogsToUpdate.push(courseCatalogNames[index]);
+    }
+  })
+
+  crsesToAdd.forEach((crse) => studentCrses.push({
+    courseId: crse,
+    groupNumber:-1
+  }))
+
+  const studentUpdate = await studentRef
     .doc(email)
     .set({
       name,
       college,
       year,
       preferredWorkingTime,
-      groups: crseIds.map((crseId) => ({
-        courseId: crseId,
-        groupNumber: -1,
-      })),
+      groups: studentCrses
     })
     .catch((err) => {
       console.log(err);
@@ -56,10 +71,11 @@ const addStudentSurveyResponse = async (
       throw e;
     });
 
+  
   // Next, update each course record to add this student
-  const courseUpdates = courseCatalogNames.map((courseCatalogName, index) =>
+  const courseUpdates = crseCatalogsToUpdate.map((courseCatalogName, index) =>
     courseRef
-      .doc(crseIds[index].toString()) // We want the courseID to allow for crosslisting
+      .doc(crsesToAdd[index].toString()) // We want the courseID to allow for crosslisting
       .get()
       .then((snapshot) => {
         // create a record for this course if it doesn't exist already.
