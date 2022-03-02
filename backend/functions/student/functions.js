@@ -37,16 +37,16 @@ const addStudentSurveyResponse = async (
     courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
   );
 
-  const existingData = (await studentRef.doc(email).get()).data()
+  const existingData = (await studentRef.doc(email).get()).data();
   //studentCourses becomes courseIds of existingData.groups if available, otherwise []
-  let studentCrses = existingData ? existingData.groups : []
-  const studentCrseIds = studentCrses.map((crse)=> crse.courseId)
+  let studentCrses = existingData ? existingData.groups : [];
+  const studentCrseIds = studentCrses.map((crse)=> crse.courseId);
   let crsesToAdd = new Array();
   let crseCatalogsToUpdate = new Array();
   crseIds.forEach((crse, index) => {
     if (!studentCrseIds.includes(crse)) {
       crsesToAdd.push(crse);
-      crseCatalogsToUpdate.push(courseCatalogNames[index])
+      crseCatalogsToUpdate.push(courseCatalogNames[index]);
     }
   })
 
