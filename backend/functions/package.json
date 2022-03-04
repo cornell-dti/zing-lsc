@@ -7,9 +7,9 @@
     "mock": "node lib/utils/add-test-data.js",
     "lint": "eslint .",
     "build": "tsc",
-    "serve": "firebase emulators:start --only functions",
-    "emulate": "firebase emulators:start --only functions,firestore",
-    "shell": "firebase functions:shell",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "emulate": "npm run build && firebase emulators:start --only functions,firestore",
+    "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
@@ -30,6 +30,7 @@
     "eslint-plugin-promise": "^4.0.1",
     "firebase-functions-test": "^0.2.0",
     "nodemon": "^2.0.7",
+    "prettier": "2.5.1",
     "typescript": "^4.6.2"
   },
   "engines": {
