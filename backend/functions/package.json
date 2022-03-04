@@ -2,13 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "The Zing LSC backend",
-  "main": "index.js",
-  "author": "Ansh Godha",
-  "license": "MIT",
+  "main": "lib/index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "mock": "node utils/add-test-data.js",
+    "mock": "node lib/utils/add-test-data.js",
     "lint": "eslint .",
+    "build": "tsc",
     "serve": "firebase emulators:start --only functions",
     "emulate": "firebase emulators:start --only functions,firestore",
     "shell": "firebase functions:shell",
@@ -24,11 +22,15 @@
     "firebase-functions": "^3.6.1"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
     "dotenv": "^10.0.0",
-    "nodemon": "^2.0.7",
-    "eslint": "^5.12.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-promise": "^4.0.1",
-    "firebase-functions-test": "^0.2.0"
+    "firebase-functions-test": "^0.2.0",
+    "nodemon": "^2.0.7",
+    "typescript": "^4.6.2"
   },
   "engines": {
     "node": "16"
