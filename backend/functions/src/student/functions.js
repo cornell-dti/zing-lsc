@@ -41,8 +41,8 @@ const addStudentSurveyResponse = async (
   //studentCourses becomes courseIds of existingData.groups if available, otherwise []
   let studentCrses = existingData ? existingData.groups : [];
   const studentCrseIds = studentCrses.map((crse)=> crse.courseId);
-  let crsesToAdd = new Array();
-  let crseCatalogsToUpdate = new Array();
+  let crsesToAdd = [];
+  let crseCatalogsToUpdate = [];
   crseIds.forEach((crse, index) => {
     if (!studentCrseIds.includes(crse)) {
       crsesToAdd.push(crse);
