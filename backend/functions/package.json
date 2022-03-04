@@ -6,6 +6,7 @@
   "scripts": {
     "mock": "node lib/utils/add-test-data.js",
     "lint": "eslint .",
+    "format": "prettier --write .",
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
     "emulate": "npm run build && firebase emulators:start --only functions,firestore",
@@ -26,6 +27,7 @@
     "@typescript-eslint/parser": "^5.13.0",
     "dotenv": "^10.0.0",
     "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-promise": "^4.0.1",
     "firebase-functions-test": "^0.2.0",

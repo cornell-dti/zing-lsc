@@ -1,4 +1,4 @@
-import * as functions from "firebase-functions";
+import * as functions from 'firebase-functions'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -8,20 +8,20 @@ import * as functions from "firebase-functions";
 //   response.send("Hello from Firebase!");
 // });
 
-const express = require("express");
-require("dotenv").config();
+const express = require('express')
+require('dotenv').config()
 
 // Initialize express app
-const app = express();
-app.use(express.json());
+const app = express()
+app.use(express.json())
 
 // import routers
-const studentsRouter = require("./student/routes");
-const matchingRouter = require("./matching/routes");
-const courseRouter = require("./course/routes");
+const studentsRouter = require('./student/routes')
+const matchingRouter = require('./matching/routes')
+const courseRouter = require('./course/routes')
 // const { makeMatches } = require("./matching/functions");
-app.use("/student", studentsRouter);
-app.use("/matching", matchingRouter);
-app.use("/course", courseRouter);
+app.use('/student', studentsRouter)
+app.use('/matching', matchingRouter)
+app.use('/course', courseRouter)
 
-exports.api = functions.https.onRequest(app);
+exports.api = functions.https.onRequest(app)
