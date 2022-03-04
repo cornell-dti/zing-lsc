@@ -10,6 +10,7 @@
     "mock": "node utils/add-test-data.js",
     "lint": "eslint .",
     "serve": "firebase emulators:start --only functions",
+    "emulate": "firebase emulators:start --only functions,firestore",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
@@ -28,5 +29,8 @@
     "eslint": "^5.12.0",
     "eslint-plugin-promise": "^4.0.1",
     "firebase-functions-test": "^0.2.0"
+  },
+  "engines": {
+    "node": "16"
   }
 }
