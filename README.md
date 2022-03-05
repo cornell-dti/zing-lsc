@@ -8,6 +8,7 @@
 - **Sean Yu** - Product Manager
 - **Changyuan Lin** - Technical Product Manager
 - **Alyssa Zhang** - Designer
+- **Colin Wu** - Developer
 - **Grace Han** - Developer
 - **Jessica Chai** - Developer
 - **Miranda Luo** - Developer
