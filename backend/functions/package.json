@@ -13,7 +13,8 @@
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "prepare": "cd ../.. && husky install backend/functions/.husky"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -31,9 +32,14 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-promise": "^4.0.1",
     "firebase-functions-test": "^0.2.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
     "nodemon": "^2.0.7",
     "prettier": "2.5.1",
     "typescript": "^4.6.2"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   },
   "engines": {
     "node": "16"
