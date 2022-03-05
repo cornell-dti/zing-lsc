@@ -36,16 +36,8 @@ export const Home = () => {
             <StyledWelcomeText>Welcome to Zing!</StyledWelcomeText>
           </StyledTitleWrapper>
           <StyledButtonsWrapper>
-            <Button
-              color="secondary"
-              variant="outlined"
-              component={Link}
-              to="/login"
-            >
-              Log In
-            </Button>
-            <Button color="primary" component={Link} to="/signup">
-              Sign Up
+            <Button component={Link} to="/login">
+              Sign in with Cornell
             </Button>
           </StyledButtonsWrapper>
         </StyledRightPanel>
