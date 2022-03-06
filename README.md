@@ -13,7 +13,6 @@
 - **Jessica Wang** - Developer
 - **Miranda Luo** - Developer
 
-
 ### Fall 2021
 
 - **Annie Zhou** - Associate Product Manager
