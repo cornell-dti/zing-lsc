@@ -11,6 +11,7 @@
 - **Grace Han** - Developer
 - **Jessica Chai** - Developer
 - **Miranda Luo** - Developer
+- **Will Zhang** - Developer 
 
 ### Fall 2021
 
