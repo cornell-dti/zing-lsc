@@ -19,8 +19,14 @@ import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
 import './App.css'
 import theme from '@core/Constants/Theme'
+import { useEffect } from 'react'
+import { initializeFirebase } from './firebase/firebase'
 
 const App = () => {
+  useEffect(() => {
+    initializeFirebase()
+  }, [])
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>

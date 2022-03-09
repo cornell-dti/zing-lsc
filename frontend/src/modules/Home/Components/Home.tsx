@@ -14,6 +14,7 @@ import {
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import Button from '@mui/material/Button'
+import { signInSSO } from '../../../firebase/firebase'
 
 export const Home = () => {
   return (
@@ -32,7 +33,7 @@ export const Home = () => {
             <StyledWelcomeText>Welcome to Zing!</StyledWelcomeText>
           </StyledTitleWrapper>
           <StyledButtonsWrapper>
-            <Button>Sign in with Cornell</Button>
+            <Button onClick={signInSSO}>Sign in with Cornell</Button>
           </StyledButtonsWrapper>
         </StyledRightPanel>
       </StyledContainer>
