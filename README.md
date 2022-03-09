@@ -10,7 +10,9 @@
 - **Alyssa Zhang** - Designer
 - **Grace Han** - Developer
 - **Jessica Chai** - Developer
+- **Jessica Wang** - Developer
 - **Miranda Luo** - Developer
+- **Will Zhang** - Developer 
 
 ### Fall 2021
 
