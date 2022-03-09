@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 import {
   StyledBackground,
@@ -14,12 +13,9 @@ import {
   StyledWelcomeText,
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
-// import { PrimaryGradientButton, WhiteButton } from '@core/Components'
 import Button from '@mui/material/Button'
 
 export const Home = () => {
-  // const history = useHistory()
-
   return (
     <StyledBackground>
       <StyledContainer>
@@ -36,9 +32,7 @@ export const Home = () => {
             <StyledWelcomeText>Welcome to Zing!</StyledWelcomeText>
           </StyledTitleWrapper>
           <StyledButtonsWrapper>
-            <Button component={Link} to="/login">
-              Sign in with Cornell
-            </Button>
+            <Button>Sign in with Cornell</Button>
           </StyledButtonsWrapper>
         </StyledRightPanel>
       </StyledContainer>
