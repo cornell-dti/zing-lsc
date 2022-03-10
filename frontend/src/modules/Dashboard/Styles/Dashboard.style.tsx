@@ -8,7 +8,7 @@ const Logo = LogoImg
 export const StyledContainer = styled.div`
   height: 100%;
   width: 100%;
-  background-color: ${colors.lightpurple};
+  background-color: ${colors.white};
   box-shadow: -10px -10px 150px rgba(0, 0, 0, 0.05),
     10px 10px 150px rgba(0, 0, 0, 0.05);
   border-radius: 30px;
@@ -18,15 +18,6 @@ export const StyledContainer = styled.div`
 `
 
 export const StyledLogo = styled(Logo)``
-
-export const StyledOuterContainer = styled.div`
-  min-height: 100%;
-  box-sizing: border-box;
-  padding: 2.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
 
 export const StyledHeaderMenu = styled.div`
   height: fit-content;

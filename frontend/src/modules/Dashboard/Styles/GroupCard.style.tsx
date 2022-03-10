@@ -3,7 +3,7 @@ import { FiClock } from 'react-icons/fi'
 import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
 import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
 import { ReactComponent as NewlyMatchable } from '@assets/img/newlymatchable.svg'
-import { h3, h4, ColorProps } from '@core'
+import { h3, h4, colors } from '@core'
 
 export const StyledGroupsIcon = styled(GroupsIcon)`
   padding-right: 1rem;
@@ -14,11 +14,12 @@ export const StyledPlusIcon = styled(PlusIcon)`
 `
 export const StyledNewlyMatchable = styled(NewlyMatchable)``
 
-export const StyledContainer = styled.div<Pick<ColorProps, 'color'>>`
+export const StyledContainer = styled.div`
   height: 300px;
   width: 320px;
-  background: ${(p) => p.color};
-  border-radius: 30px;
+  background: ${colors.white};
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 10px;
   margin: 2rem;
   padding: 3rem 1.5rem;
   box-sizing: border-box;

@@ -4,7 +4,6 @@ import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import {
-  StyledOuterContainer,
   StyledContainer,
   StyledHeaderMenu,
   StyledLogo,
@@ -35,53 +34,51 @@ export const Dashboard = () => {
   }, [])
 
   return (
-    <StyledOuterContainer>
-      <StyledContainer>
-        <StyledHeaderMenu>
-          <StyledLogo />
-          <Button
-            id="logout-button"
-            aria-controls="logout-menu"
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
+    <StyledContainer>
+      <StyledHeaderMenu>
+        <StyledLogo />
+        <Button
+          id="logout-button"
+          aria-controls="logout-menu"
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+        >
+          <StyledName>
+            User Name
+            <StyledArrowDown />
+          </StyledName>
+        </Button>
+        <Menu
+          id="logout-menu"
+          anchorEl={anchorEl}
+          // getContentAnchorEl={null}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'logout-button',
+          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <MenuItem
+            sx={{
+              fontFamily: 'Montserrat',
+              fontSize: 16,
+            }}
           >
-            <StyledName>
-              User Name
-              <StyledArrowDown />
-            </StyledName>
-          </Button>
-          <Menu
-            id="logout-menu"
-            anchorEl={anchorEl}
-            // getContentAnchorEl={null}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'logout-button',
-            }}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-          >
-            <MenuItem
-              sx={{
-                fontFamily: 'Montserrat',
-                fontSize: 16,
-              }}
-            >
-              Log Out
-            </MenuItem>
-          </Menu>
-        </StyledHeaderMenu>
+            Log Out
+          </MenuItem>
+        </Menu>
+      </StyledHeaderMenu>
 
-        <Groups groups={groups} />
-      </StyledContainer>
-    </StyledOuterContainer>
+      <Groups groups={groups} />
+    </StyledContainer>
   )
 }

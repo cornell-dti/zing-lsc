@@ -2,7 +2,7 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
-
+import { colors } from '@core'
 import {
   StyledContainer,
   StyledName,
@@ -14,7 +14,7 @@ import {
   StyledPlusIcon,
   StyledNewlyMatchable,
 } from 'Dashboard/Styles/GroupCard.style'
-import { Button, colors } from '@core'
+import { Button } from '@mui/material'
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -54,7 +54,7 @@ export const GroupCard = ({
       return [colors.lightgreen, colors.darkgreen, 'yes']
     }
     //only 1 student & 0 groups formed
-    else return [colors.lightyellow, colors.darkyellow, 'no']
+    else return [colors.yellow, colors.yellow, 'no']
   }
   const styleArray = getColor(newStudents, groupsFormed)
 
@@ -85,20 +85,27 @@ export const GroupCard = ({
       </StyledRows>
       <StyledButtons>
         <Button
-          containerStyle={{
-            background: styleArray[1],
-            width: '45%',
-            borderRadius: '40px',
+          sx={{
+            width: 1 / 3,
+            padding: 1,
+            margin: 0.5,
+            boxShadow: 2,
           }}
-          labelStyle={{
-            color: colors.white,
-            textTransform: 'none',
-            fontWeight: 600,
-            fontSize: '1rem',
+          color="secondary"
+          variant="outlined"
+        >
+          View
+        </Button>
+        <Button
+          sx={{
+            width: 1 / 3,
+            padding: 1,
+            margin: 0.5,
+            boxShadow: 2,
           }}
-          onClick={() => {}}
-          label={'View'}
-        />
+        >
+          Match
+        </Button>
       </StyledButtons>
       <Snackbar
         open={open}
