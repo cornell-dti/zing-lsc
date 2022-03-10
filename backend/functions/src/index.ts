@@ -19,9 +19,11 @@ app.use(express.json())
 const studentsRouter = require('./student/routes')
 const matchingRouter = require('./matching/routes')
 const courseRouter = require('./course/routes')
+const emailRouter = require('./utils/email')
 // const { makeMatches } = require("./matching/functions");
 app.use('/student', studentsRouter)
 app.use('/matching', matchingRouter)
 app.use('/course', courseRouter)
+app.use('/email', emailRouter)
 
 exports.api = functions.https.onRequest(app)
