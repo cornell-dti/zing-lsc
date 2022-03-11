@@ -16,7 +16,8 @@ export async function signInSSO() {
   const provider = new SAMLAuthProvider('saml.cornell-sso')
 
   const userCredential = await signInWithPopup(auth, provider)
-  console.log('user credential', userCredential)
+  const user = userCredential.user
+  console.log('user credential', user)
 
   // do not need these credentials?
   // const credential = SAMLAuthProvider.credentialFromResult(userCredential)
