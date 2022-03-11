@@ -1,9 +1,7 @@
 const nodemailer = require('nodemailer')
 const express = require('express')
 const router = express.Router()
-const { renderEmail } = require('react-html-email')
-
-const m = require('./templates/Matched')
+import { matched } from './templates/Matched'
 
 var transport = {
   host: 'smtp.ethereal.email',
@@ -25,19 +23,26 @@ transporter.verify((err, succs) => {
   }
 })
 
+//Test Route
+router.post('/test', (req, res, next) => {
+  res.json('hello')
+})
+
+const localMessage = `<div> Dear students, <div> my local message 1 </div>
+  <div> Best, the LSC. </div></div>`
+
 // Route for sending an email
 router.post('/send', (req, res, next) => {
   const name = req.body.name
   const email = req.body.email
   const message = req.body.messageHtml
-  const renderedM = renderEmail(m)
 
   let mail = {
     from: 'zhanliam21@gmail.com',
     to: `wi37u2zcwxyqd7nu@ethereal.email, retta.keebler47@ethereal.email`,
-    cc: `zhanliam21@gmail.com`,
+    cc: ``,
     subject: `Cornell LSC Student Matching Results`,
-    html: renderedM,
+    html: matched,
   }
 
   transporter.sendMail(mail, (err, data) => {
@@ -48,7 +53,7 @@ router.post('/send', (req, res, next) => {
     } else {
       res.json({
         msg: 'success',
-        email: renderedM,
+        email: message,
       })
       console.log('message sent')
     }
