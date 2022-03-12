@@ -1,10 +1,6 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import {
-  ThemeProvider,
-  StyledEngineProvider,
-  createTheme,
-} from '@mui/material/styles'
-
+import { StyledEngineProvider, ThemeProvider } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 import {
   HOME_PATH,
   LOGIN_PATH,
@@ -14,7 +10,6 @@ import {
   EDIT_ZING_PATH,
   DASHBOARD_PATH,
 } from '@core'
-
 import { Home } from 'Home'
 import { Login } from 'Login'
 import { Signup } from 'Signup'
@@ -22,15 +17,14 @@ import { Survey } from 'Survey'
 import { CreateZingForm } from 'CreateZing'
 import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
-
 import './App.css'
-
-const theme = createTheme()
+import theme from '@core/Constants/Theme'
 
 const App = () => {
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Router>
           <Switch>
             <Route exact path={HOME_PATH} component={Home} />
