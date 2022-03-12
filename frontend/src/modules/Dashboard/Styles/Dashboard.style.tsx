@@ -23,6 +23,8 @@ export const StyledHeaderMenu = styled.div`
   height: fit-content;
 
   padding: 2.5rem;
+  padding-left: 10rem;
+  padding-right: 10rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -31,7 +33,7 @@ export const StyledHeaderMenu = styled.div`
 export const StyledName = styled.div`
   ${h4};
   font-weight: 600;
-  color: ${colors.darkpurple};
+  color: ${colors.white};
 
   display: flex;
   align-items: center;

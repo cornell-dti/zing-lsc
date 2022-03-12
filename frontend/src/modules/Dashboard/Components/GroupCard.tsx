@@ -88,8 +88,9 @@ export const GroupCard = ({
           sx={{
             width: 1 / 3,
             padding: 1,
-            margin: 0.5,
+            margin: -1,
             boxShadow: 2,
+            justifyContent: '',
           }}
           color="secondary"
           variant="outlined"
@@ -100,7 +101,7 @@ export const GroupCard = ({
           sx={{
             width: 1 / 3,
             padding: 1,
-            margin: 0.5,
+            margin: -1,
             boxShadow: 2,
           }}
         >

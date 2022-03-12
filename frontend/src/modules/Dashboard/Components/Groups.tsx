@@ -1,4 +1,5 @@
 import React from 'react'
+import Grid from '@mui/material/Grid'
 
 import {
   StyledContainer,
@@ -34,15 +35,19 @@ export const Groups = ({ groups }: GroupsProps) => {
       )}
       <StyledGroupArea>
         <StyledGroupCardArea>
-          {groups.map((g, i) => (
-            <GroupCard
-              key={i}
-              id={g.courseId}
-              name={g.names[0]}
-              newStudents={g.unmatched.length}
-              groupsFormed={g.lastGroupNumber}
-            />
-          ))}
+          <Grid container xs={10.5}>
+            {groups.map((g, i) => (
+              <Grid item xs={3}>
+                <GroupCard
+                  key={i}
+                  id={g.courseId}
+                  name={g.names[0]}
+                  newStudents={g.unmatched.length}
+                  groupsFormed={g.lastGroupNumber}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </StyledGroupCardArea>
       </StyledGroupArea>
     </StyledContainer>

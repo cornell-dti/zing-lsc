@@ -1,6 +1,6 @@
 # Secrets
 .env
-service-account.json
+../service-account.json
 
 # extra packages
 node_modules

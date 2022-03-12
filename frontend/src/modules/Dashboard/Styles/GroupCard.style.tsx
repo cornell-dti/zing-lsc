@@ -7,16 +7,18 @@ import { h3, h4, colors } from '@core'
 
 export const StyledGroupsIcon = styled(GroupsIcon)`
   padding-right: 1rem;
+  width: 2rem;
 `
 
 export const StyledPlusIcon = styled(PlusIcon)`
   padding-right: 1rem;
+  width: 2rem;
 `
 export const StyledNewlyMatchable = styled(NewlyMatchable)``
 
 export const StyledContainer = styled.div`
   height: 300px;
-  width: 320px;
+  width: 88%;
   background: ${colors.white};
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   border-radius: 10px;
