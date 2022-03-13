@@ -8,10 +8,13 @@
 - **Sean Yu** - Product Manager
 - **Changyuan Lin** - Technical Product Manager
 - **Alyssa Zhang** - Designer
+- **Benjamin Tang** - Developer
 - **Colin Wu** - Developer
 - **Grace Han** - Developer
 - **Jessica Chai** - Developer
+- **Jessica Wang** - Developer
 - **Miranda Luo** - Developer
+- **Will Zhang** - Developer 
 
 ### Fall 2021
 
