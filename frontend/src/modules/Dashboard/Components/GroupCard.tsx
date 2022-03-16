@@ -82,7 +82,7 @@ export const GroupCard = ({
               {newStudents} New Student
             </Typography>
           )}
-          {newStudents != 1 && (
+          {newStudents !== 1 && (
             <Typography
               sx={{
                 background: styleArray[0],
@@ -106,7 +106,7 @@ export const GroupCard = ({
               {groupsFormed} Group Formed
             </Typography>
           )}
-          {groupsFormed != 1 && (
+          {groupsFormed !== 1 && (
             <Typography
               sx={{
                 fontSize: 18,

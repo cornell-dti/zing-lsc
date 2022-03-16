@@ -50,9 +50,3 @@ export const StyledModalContainer = styled.div`
   height: 95%;
   overflow: auto;
 `
-
-export const StyledPagination = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 2em;
-`
