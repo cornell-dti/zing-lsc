@@ -12,9 +12,11 @@ import {
   StyledButtons,
   StyledGroupsIcon,
   StyledPlusIcon,
+  StyledWarningIcon,
   StyledNewlyMatchable,
 } from 'Dashboard/Styles/GroupCard.style'
-import { Button } from '@mui/material'
+import { Button, TextField, Typography } from '@mui/material'
+import { Label } from '@mui/icons-material'
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -59,26 +61,59 @@ export const GroupCard = ({
   const styleArray = getColor(newStudents, groupsFormed)
 
   return (
-    <StyledContainer color={styleArray[0]} key={key}>
-      {styleArray[2] === 'yes' && <StyledNewlyMatchable />}
-      <StyledName>{name}</StyledName>
+    <StyledContainer key={key}>
+      <StyledRows>
+        {styleArray[2] === 'yes' && <StyledNewlyMatchable />}
+      </StyledRows>
+      <StyledRows>
+        <StyledName>{name}</StyledName>
+      </StyledRows>
       <StyledRows>
         <StyledRow>
-          <StyledPlusIcon></StyledPlusIcon>
           {newStudents === 1 && (
-            <StyledText>{newStudents} New Student</StyledText>
+            <Typography
+              sx={{
+                background: styleArray[0],
+                fontSize: 18,
+                width: 1,
+              }}
+            >
+              <StyledWarningIcon></StyledWarningIcon>
+              {newStudents} New Student
+            </Typography>
           )}
           {newStudents != 1 && (
-            <StyledText>{newStudents} New Students</StyledText>
+            <Typography
+              sx={{
+                background: styleArray[0],
+                fontSize: 18,
+                width: 1,
+              }}
+            >
+              <StyledPlusIcon></StyledPlusIcon>
+              {newStudents} New Students
+            </Typography>
           )}
         </StyledRow>
         <StyledRow>
           <StyledGroupsIcon></StyledGroupsIcon>
           {groupsFormed === 1 && (
-            <StyledText>{groupsFormed} Group Formed</StyledText>
+            <Typography
+              sx={{
+                fontSize: 18,
+              }}
+            >
+              {groupsFormed} Group Formed
+            </Typography>
           )}
           {groupsFormed != 1 && (
-            <StyledText>{groupsFormed} Groups Formed</StyledText>
+            <Typography
+              sx={{
+                fontSize: 18,
+              }}
+            >
+              {groupsFormed} Groups Formed
+            </Typography>
           )}
         </StyledRow>
         <StyledRow />
@@ -88,7 +123,6 @@ export const GroupCard = ({
           sx={{
             width: 1 / 3,
             padding: 1,
-            margin: -1,
             boxShadow: 2,
             justifyContent: '',
           }}
@@ -97,16 +131,18 @@ export const GroupCard = ({
         >
           View
         </Button>
-        <Button
-          sx={{
-            width: 1 / 3,
-            padding: 1,
-            margin: -1,
-            boxShadow: 2,
-          }}
-        >
-          Match
-        </Button>
+        {newStudents > 1 && (
+          <Button
+            sx={{
+              width: 1 / 3,
+              padding: 1,
+              ml: -6,
+              boxShadow: 2,
+            }}
+          >
+            Match
+          </Button>
+        )}
       </StyledButtons>
       <Snackbar
         open={open}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
@@ -9,6 +9,7 @@ import {
   StyledLogo,
   StyledName,
   StyledArrowDown,
+  StyledPagination,
 } from 'Dashboard/Styles/Dashboard.style'
 import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
@@ -77,7 +78,6 @@ export const Dashboard = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-
       <Groups groups={groups} />
     </StyledContainer>
   )
