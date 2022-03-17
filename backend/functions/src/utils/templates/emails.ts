@@ -1,4 +1,4 @@
-function matched() {
+const matched = () => {
   return `Subject: Study Partners!
   <div> 
     Dear students,  
@@ -10,62 +10,68 @@ function matched() {
   <div>
     We are writing to you because you have expressed interest in studying with 
     other students. We are so glad you reached out! Studying with peers is 
-    known to be an <a href="http://lsc.cornell.edu/studying-together/" > effective learning tool </a>, but whether you are learning online or
-    in-person it can be challenging, especially in large classes, to find study 
-    partners. 
-      <br> 
-      <br> 
-    Study partners should take it from here and get in touch with each other 
-    about when and how to study together. You can just hit “reply all” to get 
-    connected with each other. Based on student feedback from last semester- 
-    this semester we are offering study partners the opportunity to meet with 
-    LSC peer study skills tutors to help facilitate introductions and get you 
-    launched. <a href="https://canvas.cornell.edu/enroll/PWR8F9"> Self-enroll </a> in the study skills tutors’ Canvas site to see when drop-
-    in hours are held, you can show up any time that works for your group. You 
-    can also drop in to see the study skills tutors if you have questions about 
+    known to be an <a href="http://lsc.cornell.edu/studying-together/">
+    effective learning tool </a>, but whether you are learning online or
+    in-person it can be challenging, especially in large classes, to find study
+    partners.
+      <br>
+      <br>
+    Study partners should take it from here and get in touch with each other
+    about when and how to study together. You can just hit “reply all” to get
+    connected with each other. Based on student feedback from last semester-
+    this semester we are offering study partners the opportunity to meet with
+    LSC peer study skills tutors to help facilitate introductions and get you
+    launched. 
+    <a href="https://canvas.cornell.edu/enroll/PWR8F9"> Self-enroll </a>
+    in the study skills tutors’ Canvas site to see when drop-in hours are held,
+    you can show up any time that works for your group.You
+    can also drop in to see the study skills tutors if you have questions about
     getting started with your group.
       <br>
-      <br> 
-    Due to privacy rules we are not able to disclose which classes the student(s) 
-    receiving this email are taking, but you have been matched because you 
-    expressed interest in finding study partners for the same course. So, your 
+    <br>
+    Due to privacy rules we are not able to disclose which classes the student(s)
+    receiving this email are taking, but you have been matched because you
+    expressed interest in finding study partners for the same course.So, your
     first group assignment will be to figure it out!
-      <br> 
-      <br> 
-    Whether you will be studying together <a href="http://lsc.cornell.edu/studying-together/studying-together-in-person/">in-person </a> 
-    or <a href= "http://lsc.cornell.edu/studying-together/studying-together-online/ "> online </a>, 
-    use the LSC’s tips 
-    for setting your group’s agenda and making the most out of studying 
-    together. Consider working together at a time when you can use course 
-    <a href="http://lsc.cornell.edu/how-to-study/office-hours/" > office hours </a> or 
-    <a href="http://lsc.cornell.edu/tutoring/schedule/"> LSC tutoring </a> to answer questions that may arise!
-      <br> 
-      <br> 
-    If you’d like more info about studying together please contact LSC Study 
-    Partners lscstudypartners@cornell.edu We will be following up later in the 
-    semester to find out how it’s going. 
+    <br>
+    <br>
+    Whether you will be studying together 
+    <a href = "http://lsc.cornell.edu/studying-together/studying-together-in-person/">
+    in -person </a>
+  or 
+  <a href = "http://lsc.cornell.edu/studying-together/studying-together-online/" > online </a>,
+    use the LSC’s tips
+  for setting your group’s agenda and making the most out of studying
+  together.Consider working together at a time when you can use course
+    <a href = "http://lsc.cornell.edu/how-to-study/office-hours/"> office hours </a> or
+      <a href = "http://lsc.cornell.edu/tutoring/schedule/"> LSC tutoring </a> to answer questions that may arise!
+        <br>
+        <br>
+        If you’d like more info about studying together please contact LSC Study
+    Partners lscstudypartners @cornell.edu We will be following up later in the
+    semester to find out how it’s going.
   </div>
 
-    <br> 
-    <br> 
+    <br>
+    <br>
 
-  Happy studying!`
+    Happy studying!`
 }
 
-function firstNoMatch(className: string) {
-  return `<div> Dear Student, </div>
-    <br> 
-    <br> 
+const firstNoMatch = (className: string) => {
+  return `< div > Dear Student, </>
+    < br >
+    <br>
 
-  <div> 
-    We are writing to let you know that we are still working on finding study partners 
-    for the class(es) you requested: ${className}. We'll be in touch soon with an update!
-    In the meantime, the <a href="http://lsc.cornell.edu/"> LSC website </a> offers lots of 
+    <div>
+    We are writing to let you know that we are still working on finding study partners
+  for the class(es) you requested: <b>${className} </b>. We'll be in touch soon with an update!
+    In the meantime, the < a href = "http://lsc.cornell.edu/" > LSC website < /a> offers lots of
     information about general study skills, learning effectively, and tutoring.
-  </div>`
+  < /div>`
 }
 
-function secondNoMatch() {
+const secondNoMatch = () => {
   return `<div> Dear Student, </div>
     <br> 
     <br> 
@@ -79,7 +85,7 @@ function secondNoMatch() {
   </div>`
 }
 
-function addStudent() {
+const addStudent = () => {
   return `<div> Dear Students,  </div>  
     <br> 
     <br> 
@@ -97,7 +103,7 @@ function addStudent() {
  `
 }
 
-function lateAddStudent() {
+const lateAddStudent = () => {
   return ` 
   <div> Dear Students, </div> 
     <br> 
@@ -122,17 +128,17 @@ function lateAddStudent() {
   </div>`
 }
 
-function askJoinGroup(newStudent: string, otherStudents: string[]) {
-  const studentNames = () => {
+const askJoinGroup = (newStudent: string, studentsRaw: string[]) => {
+  const parseNames = () => {
     let res = ''
-    otherStudents.forEach((e: string) => {
+    studentsRaw.forEach((e: string) => {
       res += ', ' + e
     })
 
     return res
   }
 
-  const students = studentNames()
+  const students = parseNames()
 
   return ` 
   <div> Dear students,  </div>
@@ -150,45 +156,45 @@ function askJoinGroup(newStudent: string, otherStudents: string[]) {
   <br> 
 
   <div> 
-  ${newStudent}, within the past few days we tried to match 
-  you with another student who requested a study partner for the same 
-  class(es) you listed but haven’t had any luck. Fortunately, a small group that 
+  <b> ${newStudent} </b>, within the past few days we tried to match
+  you with another student who requested a study partner for the same
+  class(es) you listed but haven’t had any luck. Fortunately, a small group that
   we matched recently is happy to have another student join them in studying.
-  Thank you${students}!
+  Thank you<b>${students}</b>!
   </div>
 
-  <br> 
+  <br>
 
-  <div> 
+  <div>
   (Due to privacy rules we are not able to disclose which classes the student(s)
   receiving this email are taking, but you have been matched because you
   expressed interest in finding study partners for the same course.)
   </div>
 
-  <br> 
+  <br>
 
-  <div> 
+  <div>
   Whether you will be studying together in -person or online, use the LSC’s tips
   for setting your group’s agenda and making the most out of studying
   together.Consider working together at a time when you can use course
   office hours or LSC tutoring to answer questions that may arise!
   </div>
 
-  <br> 
+  <br>
 
-  <div> 
+  <div>
   If you’d like more info about studying together please contact LSC Study
   Partners lscstudypartners@cornell.edu  We will be following up later in the
   semester to find out how it’s going.
   </div>
 
-  <br> 
+  <br>
   <br>
 
   Happy studying!`
 }
 
-function checkIn() {
+const checkIn = () => {
   return ` 
   <div>  Dear students, </div>
     <br> 
@@ -230,6 +236,15 @@ function checkIn() {
   `
 }
 
+const custom = (body: string) => {
+  return `<div> Dear Student(s), </div> 
+    <br> 
+    <br>  
+    
+    <div> 
+  ${body}
+  </div>`
+}
 export {
   matched,
   firstNoMatch,
@@ -238,4 +253,5 @@ export {
   lateAddStudent,
   askJoinGroup,
   checkIn,
+  custom,
 }

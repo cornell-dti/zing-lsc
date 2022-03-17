@@ -1,21 +1,30 @@
-const nodemailer = require('nodemailer')
-const express = require('express')
-const router = express.Router()
-import * as emails from './templates/Matched'
+import { Router } from 'express'
+import * as nodemailer from 'nodemailer'
+import { config } from 'dotenv'
 
-var transport = {
-  host: 'smtp.ethereal.email',
-  port: 587,
-  secure: false,
+const router = Router()
+config()
+
+import * as emails from './templates/emails'
+
+async function testAccount() {
+  nodemailer.createTestAccount()
+}
+testAccount()
+
+const transport = {
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   auth: {
-    user: 'retta.keebler47@ethereal.email',
-    pass: 'TH6peHYbjTQeHJUBCd',
+    user: process.env.EMAIL_EMAIL,
+    pass: process.env.EMAIL_PASS,
   },
 }
 
-var transporter = nodemailer.createTransport(transport)
+const transporter = nodemailer.createTransport(transport)
 
-transporter.verify((err, succs) => {
+transporter.verify((err, succ) => {
   if (err) {
     console.log('transporter error: ', err)
   } else {
@@ -28,7 +37,7 @@ router.post('/test', (req, res, next) => {
   res.json('hello')
 })
 
-function parseRecipients(recipients) {
+function parseRecipients(recipients: string[]) {
   let res = ''
   recipients.forEach((e) => {
     res += ', ' + e
@@ -39,21 +48,22 @@ function parseRecipients(recipients) {
 // Route for sending an email
 router.post('/send', (req, res, next) => {
   const {
-    name,
-    email,
+    // name,
+    // email,
     recipientsList,
     message,
     template,
     newStudent,
     existingStudents,
     className,
+    customBody,
   } = req.body
 
   const recipients = parseRecipients(recipientsList)
   //  [body] can be of type email.
   // {
   //   matched, firstNoMatch, secondNoMatch, addStudent,
-  //   lateAddStudent, askJoinGroup, checkIn
+  //   lateAddStudent, askJoinGroup, checkIn, custom
   // }
   let body
   switch (template) {
@@ -85,15 +95,27 @@ router.post('/send', (req, res, next) => {
       body = emails.checkIn()
       break
     }
+    case 'custom': {
+      body = emails.custom(customBody)
+      break
+    }
     default: {
       body = 'LSC did not select a valid email template.'
       break
     }
   }
 
-  let mail = {
-    from: 'zhanliam21@gmail.com',
-    to: `wi37u2zcwxyqd7nu@ethereal.email, retta.keebler47@ethereal.email`,
+  type mailType = {
+    from: string
+    to: string
+    cc: string
+    subject: string
+    html: string
+  }
+
+  const mail: mailType = {
+    from: ' "Cornell LSC Study Partners" <lscstudypartners@gmail.com>',
+    to: `jewell.schultz19@ethereal.email, wz282@cornell.edu`,
     cc: `${recipients}`,
     subject: `Cornell LSC Student Matching Results`,
     html: body,
