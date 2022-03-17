@@ -14,7 +14,7 @@ import {
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import Button from '@mui/material/Button'
-import { logOut, signInSSO } from '../../../firebase/firebase'
+import { signInSSO } from '../../../firebase/firebase'
 import { useHistory } from 'react-router'
 
 export const Home = () => {
@@ -43,9 +43,9 @@ export const Home = () => {
                 })
               }}
             >
-              Sign in with Cornell
+              Sign in with Google
             </Button>
-            <Button onClick={logOut}>Log out</Button>
+            {/*<Button onClick={logOut}>Log out</Button>*/}
           </StyledButtonsWrapper>
         </StyledRightPanel>
       </StyledContainer>

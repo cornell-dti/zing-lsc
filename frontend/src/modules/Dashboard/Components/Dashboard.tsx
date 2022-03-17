@@ -8,27 +8,18 @@ import {
   StyledContainer,
   StyledHeaderMenu,
   StyledLogo,
-  StyledName,
-  StyledArrowDown,
 } from 'Dashboard/Styles/Dashboard.style'
 import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
-
-// commented this out because it's not used for now
-// if you choose to use this, it will not work because makeStyles will have been removed. Use the styled API in MUI 5 now.
-
-// const useStyles = makeStyles((theme) => ({
-//   modal: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// }))
+import { KeyboardArrowDown } from '@mui/icons-material'
+import { logOut } from '../../../firebase/firebase'
+import { useHistory } from 'react-router'
 
 export const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+  const history = useHistory()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -41,7 +32,6 @@ export const Dashboard = () => {
 
   useEffect(() => {
     axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
-      // console.log(res.data)
       setGroups(res.data.data)
     })
   }, [])
@@ -52,21 +42,22 @@ export const Dashboard = () => {
         <StyledHeaderMenu>
           <StyledLogo />
           <Button
+            sx={{
+              color: '#000',
+            }}
             id="logout-button"
             aria-controls="logout-menu"
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
+            endIcon={<KeyboardArrowDown />}
+            variant="text"
           >
-            <StyledName>
-              User Name
-              <StyledArrowDown />
-            </StyledName>
+            User Name
           </Button>
           <Menu
             id="logout-menu"
             anchorEl={anchorEl}
-            // getContentAnchorEl={null}
             open={open}
             onClose={handleClose}
             MenuListProps={{
@@ -82,16 +73,16 @@ export const Dashboard = () => {
             }}
           >
             <MenuItem
-              sx={{
-                fontFamily: 'Montserrat',
-                fontSize: 16,
+              onClick={() => {
+                logOut().then((res) => {
+                  history.push('/')
+                })
               }}
             >
               Log Out
             </MenuItem>
           </Menu>
         </StyledHeaderMenu>
-
         <Groups groups={groups} />
       </StyledContainer>
     </StyledOuterContainer>
