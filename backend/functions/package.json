@@ -2,18 +2,19 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "The Zing LSC backend",
-  "main": "index.js",
-  "author": "Ansh Godha",
-  "license": "MIT",
+  "main": "lib/index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "mock": "node utils/add-test-data.js",
+    "mock": "node lib/utils/add-test-data.js",
     "lint": "eslint .",
-    "serve": "firebase emulators:start --only functions",
-    "shell": "firebase functions:shell",
+    "format": "prettier --write .",
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "emulate": "npm run build && firebase emulators:start --only functions,firestore",
+    "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "prepare": "cd ../.. && husky install backend/functions/.husky"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -23,10 +24,24 @@
     "firebase-functions": "^3.6.1"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
     "dotenv": "^10.0.0",
-    "nodemon": "^2.0.7",
-    "eslint": "^5.12.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-promise": "^4.0.1",
-    "firebase-functions-test": "^0.2.0"
+    "firebase-functions-test": "^0.2.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
+    "nodemon": "^2.0.7",
+    "prettier": "2.5.1",
+    "typescript": "^4.6.2"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "engines": {
+    "node": "16"
   }
 }
