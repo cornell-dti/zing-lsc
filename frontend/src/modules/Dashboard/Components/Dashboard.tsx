@@ -31,7 +31,7 @@ export const Dashboard = () => {
 
   const [groups, setGroups] = useState<CourseInfo[]>([])
 
-  const user = useAuthValue()
+  const { user } = useAuthValue()
 
   useEffect(() => {
     axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {

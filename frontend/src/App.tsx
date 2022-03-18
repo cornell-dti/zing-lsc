@@ -3,16 +3,12 @@ import { StyledEngineProvider, ThemeProvider } from '@mui/material'
 import { CssBaseline } from '@mui/material'
 import {
   HOME_PATH,
-  LOGIN_PATH,
-  SIGNUP_PATH,
   SURVEY_PATH,
   CREATE_ZING_PATH,
   EDIT_ZING_PATH,
   DASHBOARD_PATH,
 } from '@core'
 import { Home } from 'Home'
-import { Login } from 'Login'
-import { Signup } from 'Signup'
 import { Survey } from 'Survey'
 import { CreateZingForm } from 'CreateZing'
 import { EditZing } from 'EditZing'
@@ -28,10 +24,12 @@ import { PublicRoute } from './auth/PublicRoute'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
+      setIsLoading(false)
     })
   }, [])
 
@@ -40,11 +38,9 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <AuthProvider value={currentUser}>
+          <AuthProvider value={{ user: currentUser, isLoading }}>
             <Switch>
               <PublicRoute exact path={HOME_PATH} component={Home} />
-              <Route exact path={LOGIN_PATH} component={Login} />
-              <Route exact path={SIGNUP_PATH} component={Signup} />
               <Route exact path={SURVEY_PATH} component={Survey} />
               <Route exact path={CREATE_ZING_PATH} component={CreateZingForm} />
               <PrivateRoute exact path={DASHBOARD_PATH} component={Dashboard} />

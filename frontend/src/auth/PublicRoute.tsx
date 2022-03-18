@@ -8,8 +8,8 @@ export const PublicRoute = ({
   component: Component,
   ...routeProps
 }: RouteProps) => {
-  const user = useAuthValue()
-
+  const { user, isLoading } = useAuthValue()
+  if (isLoading) return <div>Loading</div>
   return (
     <Route
       {...routeProps}
