@@ -13,7 +13,7 @@ import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
 import { KeyboardArrowDown } from '@mui/icons-material'
-import { logOut } from '../../../firebase/firebase'
+import { logOut } from '@fire'
 import { useHistory } from 'react-router'
 import { useAuthValue } from '../../../auth/AuthContext'
 

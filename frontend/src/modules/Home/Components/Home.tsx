@@ -14,7 +14,7 @@ import {
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import Button from '@mui/material/Button'
-import { signInSSO } from '../../../firebase/firebase'
+import { signInSSO } from '@fire'
 import { useHistory } from 'react-router'
 
 export const Home = () => {
