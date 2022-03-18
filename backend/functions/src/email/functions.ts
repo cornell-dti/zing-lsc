@@ -44,6 +44,7 @@ const sendEmail = (req: any, res: any) => {
     newStudent,
     existingStudents,
     className,
+    customSubject,
     customBody,
   } = req.body
 
@@ -54,41 +55,51 @@ const sendEmail = (req: any, res: any) => {
   //   lateAddStudent, askJoinGroup, checkIn, custom
   // }
   let body
+  let subject
   switch (template) {
     case 'matched': {
       body = emails.matched()
+      subject = 'Cornell LSC Student Matching Results'
       break
     }
     case 'firstNoMatch': {
       body = emails.firstNoMatch(className)
+      subject = 'Cornell LSC No Matches Yet'
       break
     }
     case 'secondNoMatch': {
       body = emails.secondNoMatch()
+      subject = 'Cornell LSC No Matches Yet'
       break
     }
     case 'addStudent': {
       body = emails.addStudent()
+      subject = 'Cornell LSC Adding a Student'
       break
     }
     case 'lateAddStudent': {
       body = emails.lateAddStudent()
+      subject = 'Cornell LSC Adding a Student'
       break
     }
     case 'askJoinGroup': {
       body = emails.askJoinGroup(newStudent, existingStudents)
+      subject = 'Cornell LSC Potential New Group Member'
       break
     }
     case 'checkIn': {
       body = emails.checkIn()
+      subject = 'Cornell LSC Checking In!'
       break
     }
     case 'custom': {
       body = emails.custom(customBody)
+      subject = customSubject
       break
     }
     default: {
       body = 'LSC did not select a valid email template.'
+      subject = 'Message'
       break
     }
   }
@@ -105,7 +116,7 @@ const sendEmail = (req: any, res: any) => {
     from: ' "Cornell LSC Study Partners" <lscstudypartners@gmail.com>',
     to: `jewell.schultz19@ethereal.email, wz282@cornell.edu`,
     cc: `${recipients}`,
-    subject: `Cornell LSC Student Matching Results`,
+    subject: `${subject}`,
     html: body,
   }
 
@@ -119,7 +130,7 @@ const sendEmail = (req: any, res: any) => {
         msg: 'success',
         email: message,
       })
-      console.log('message sent')
+      console.log('message sent with data being:: \n ', data)
     }
   })
 }
