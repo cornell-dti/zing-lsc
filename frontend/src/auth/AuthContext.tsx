@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { User } from 'firebase/auth'
+
 const AuthContext = React.createContext<User | null>(null)
 
 export function AuthProvider({

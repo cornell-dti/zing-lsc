@@ -38,14 +38,15 @@ export const Home = () => {
           <StyledButtonsWrapper>
             <Button
               onClick={() => {
-                signInSSO().then((res) => {
-                  history.push('/dashboard')
-                })
+                signInSSO()
+                  .then(() => {
+                    history.push('/dashboard')
+                  })
+                  .catch(() => {})
               }}
             >
               Sign in with Google
             </Button>
-            {/*<Button onClick={logOut}>Log out</Button>*/}
           </StyledButtonsWrapper>
         </StyledRightPanel>
       </StyledContainer>

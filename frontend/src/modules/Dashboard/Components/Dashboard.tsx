@@ -15,6 +15,7 @@ import { API_ROOT, COURSE_API } from '@core/Constants'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '../../../firebase/firebase'
 import { useHistory } from 'react-router'
+import { useAuthValue } from '../../../auth/AuthContext'
 
 export const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -29,6 +30,8 @@ export const Dashboard = () => {
   }
 
   const [groups, setGroups] = useState<CourseInfo[]>([])
+
+  const user = useAuthValue()
 
   useEffect(() => {
     axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
@@ -53,7 +56,7 @@ export const Dashboard = () => {
             endIcon={<KeyboardArrowDown />}
             variant="text"
           >
-            User Name
+            {user?.displayName}
           </Button>
           <Menu
             id="logout-menu"
@@ -74,7 +77,7 @@ export const Dashboard = () => {
           >
             <MenuItem
               onClick={() => {
-                logOut().then((res) => {
+                logOut().then(() => {
                   history.push('/')
                 })
               }}

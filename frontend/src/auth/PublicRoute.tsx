@@ -1,11 +1,10 @@
 import React from 'react'
 import { Redirect, Route } from 'react-router'
-
-import { HOME_PATH } from '@core/Constants'
+import { DASHBOARD_PATH } from '@core/Constants'
 import { useAuthValue } from './AuthContext'
 import { RouteProps } from '@core'
 
-export const PrivateRoute = ({
+export const PublicRoute = ({
   component: Component,
   ...routeProps
 }: RouteProps) => {
@@ -14,9 +13,9 @@ export const PrivateRoute = ({
   return (
     <Route
       {...routeProps}
-      render={(props) => {
-        return user ? <Component {...props} /> : <Redirect to={HOME_PATH} />
-      }}
+      render={(props) =>
+        user ? <Redirect to={DASHBOARD_PATH} /> : <Component {...props} />
+      }
     />
   )
 }

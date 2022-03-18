@@ -24,6 +24,7 @@ import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider } from './auth/AuthContext'
 import { auth } from './firebase/firebase'
 import { PrivateRoute } from './auth/PrivateRoute'
+import { PublicRoute } from './auth/PublicRoute'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -41,13 +42,13 @@ const App = () => {
         <Router>
           <AuthProvider value={currentUser}>
             <Switch>
-              <Route exact path={HOME_PATH} component={Home} />
+              <PublicRoute exact path={HOME_PATH} component={Home} />
               <Route exact path={LOGIN_PATH} component={Login} />
               <Route exact path={SIGNUP_PATH} component={Signup} />
               <Route exact path={SURVEY_PATH} component={Survey} />
               <Route exact path={CREATE_ZING_PATH} component={CreateZingForm} />
               <PrivateRoute exact path={DASHBOARD_PATH} component={Dashboard} />
-              <Route
+              <PrivateRoute
                 exact
                 path={`${EDIT_ZING_PATH}/:courseId`}
                 component={EditZing}
