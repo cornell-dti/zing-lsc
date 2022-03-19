@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
   StyledBackground,
-  StyledButtonsWrapper,
   StyledContainer,
   StyledHeaderText,
   StyledLeftPanel,
@@ -17,6 +16,7 @@ import { signInWithGoogle } from '@fire'
 import { useHistory } from 'react-router'
 import { ReactComponent as Google } from '@assets/img/googleicon.svg'
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
+import { Box } from '@mui/material'
 
 function GoogleIcon(props: SvgIconProps) {
   return <SvgIcon inheritViewBox component={Google} {...props} />
@@ -41,7 +41,7 @@ export const Home = () => {
               Let's form study partner groups!
             </StyledWelcomeText>
           </StyledTitleWrapper>
-          <StyledButtonsWrapper>
+          <Box>
             <Button
               startIcon={<GoogleIcon />}
               sx={{
@@ -59,7 +59,7 @@ export const Home = () => {
             >
               Log In with Google
             </Button>
-          </StyledButtonsWrapper>
+          </Box>
         </StyledRightPanel>
       </StyledContainer>
     </StyledBackground>
