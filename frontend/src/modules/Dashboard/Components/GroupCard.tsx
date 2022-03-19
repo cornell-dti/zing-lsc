@@ -8,15 +8,14 @@ import {
   StyledName,
   StyledRows,
   StyledRow,
-  StyledText,
   StyledButtons,
   StyledGroupsIcon,
   StyledPlusIcon,
   StyledWarningIcon,
-  StyledNewlyMatchable,
 } from 'Dashboard/Styles/GroupCard.style'
-import { Button, TextField, Typography } from '@mui/material'
+import { Button, SvgIcon, Typography } from '@mui/material'
 import { Label } from '@mui/icons-material'
+import { ReactComponent as NewlyMatchable } from '@assets/img/newlymatchable.svg'
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -45,77 +44,71 @@ export const GroupCard = ({
   function getColor(students: number, groups: number) {
     //all students are matched
     if (students === 0 && groups > 0) {
-      return [colors.paleviolet, colors.darkpurple, 'no']
+      return [colors.paleviolet, 'no']
     }
     //students are ready to be matched
     else if (newStudents > 0 && groupsFormed > 0) {
-      return [colors.lightgreen, colors.darkgreen, 'no']
+      return [colors.lightgreen, 'no']
     }
     //NEWLY MATCHABLE
     else if (newStudents > 1 && groupsFormed === 0) {
-      return [colors.lightgreen, colors.darkgreen, 'yes']
+      return [colors.lightgreen, 'yes']
     }
     //only 1 student & 0 groups formed
-    else return [colors.yellow, colors.yellow, 'no']
+    else return [colors.yellow, 'no']
   }
   const styleArray = getColor(newStudents, groupsFormed)
 
   return (
     <StyledContainer key={key}>
       <StyledRows>
-        {styleArray[2] === 'yes' && <StyledNewlyMatchable />}
+        {/*1 index tells whether array is newly matchable*/}
+        {styleArray[1] === 'yes' && <NewlyMatchable />}
       </StyledRows>
       <StyledRows>
         <StyledName>{name}</StyledName>
       </StyledRows>
       <StyledRows>
-        <StyledRow>
+        <Typography
+          sx={{
+            background: styleArray[0],
+            fontSize: 18,
+            width: 1,
+          }}
+        >
           {newStudents === 1 && (
-            <Typography
-              sx={{
-                background: styleArray[0],
-                fontSize: 18,
-                width: 1,
-              }}
-            >
-              <StyledWarningIcon></StyledWarningIcon>
+            <StyledRow>
+              <StyledWarningIcon />
               {newStudents} New Student
-            </Typography>
+            </StyledRow>
           )}
+
           {newStudents !== 1 && (
-            <Typography
-              sx={{
-                background: styleArray[0],
-                fontSize: 18,
-                width: 1,
-              }}
-            >
-              <StyledPlusIcon></StyledPlusIcon>
+            <StyledRow>
+              <StyledPlusIcon />
               {newStudents} New Students
-            </Typography>
+            </StyledRow>
           )}
-        </StyledRow>
-        <StyledRow>
-          <StyledGroupsIcon></StyledGroupsIcon>
+        </Typography>
+
+        <Typography
+          sx={{
+            fontSize: 18,
+          }}
+        >
           {groupsFormed === 1 && (
-            <Typography
-              sx={{
-                fontSize: 18,
-              }}
-            >
+            <StyledRow>
+              <StyledGroupsIcon />
               {groupsFormed} Group Formed
-            </Typography>
+            </StyledRow>
           )}
           {groupsFormed !== 1 && (
-            <Typography
-              sx={{
-                fontSize: 18,
-              }}
-            >
+            <StyledRow>
+              <StyledGroupsIcon />
               {groupsFormed} Groups Formed
-            </Typography>
+            </StyledRow>
           )}
-        </StyledRow>
+        </Typography>
         <StyledRow />
       </StyledRows>
       <StyledButtons>
@@ -124,7 +117,6 @@ export const GroupCard = ({
             width: 1 / 3,
             padding: 1,
             boxShadow: 2,
-            justifyContent: '',
           }}
           color="secondary"
           variant="outlined"
