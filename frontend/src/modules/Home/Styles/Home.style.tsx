@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 import { colors, device, h1, h2, h3, StyledComponent } from '@core'
 
 import bg from '@assets/img/homebg.svg'
+import bg2 from '@assets/img/blobhomebg2.svg'
 import teacher from '@assets/img/teacher.svg'
 import { Typography } from '@mui/material'
 
@@ -24,12 +25,27 @@ export const StyledBackground = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  // blob overlay
+  &:before {
+    content: '';
+    background: url(${bg2});
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+  }
 `
 
 export const StyledContainer = styled.div`
   height: 86.5%;
   width: 80%;
-  @media ${device.laptop} {
+  // make this more proportional with larger screens
+  @media screen and ${device.laptopL} {
+    height: 680px;
     width: 1200px;
   }
   background-color: ${colors.white};
@@ -65,6 +81,7 @@ export const StyledWhiteActionText = styled(Typography)`
   ${h3};
   color: ${colors.white};
   text-align: center;
+  z-index: 1;
 `
 
 export const StyledRightPanel = styled.div`
@@ -78,15 +95,18 @@ export const StyledTitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: -6rem;
+  z-index: 1;
 `
 
 export const StyledHeaderText = styled(Typography)`
   ${h1};
   color: #3d2d49;
+  z-index: 1;
 `
 
 export const StyledWelcomeText = styled(Typography)`
   ${h2};
   font-weight: 400;
   color: #3d2d49;
+  z-index: 1;
 `
