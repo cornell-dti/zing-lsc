@@ -102,6 +102,8 @@ async function makeMatches(courseId, groupSize = 3) {
   const groupsWithMembersEmail = groups.map((group) => ({
     groupNumber: group.groupNumber,
     members: group.memberData.map((member) => member.email),
+    createTime: admin.firestore.FieldValue.serverTimestamp(),
+    updateTime: admin.firestore.FieldValue.serverTimestamp(),
   }))
 
   // lastly, update the collections to reflect this matching
@@ -119,7 +121,12 @@ async function makeMatches(courseId, groupSize = 3) {
           .doc(courseId)
           .collection('groups')
           .doc(group.groupNumber.toString())
-          .set(group, { merge: true })
+          .set(
+            group,
+            { merge: true },
+            { createTime: admin.firestore.FieldValue.serverTimestamp() },
+            { updateTime: admin.firestore.FieldValue.serverTimestamp() }
+          )
           .catch((err) => console.log(err))
       ),
       groupsWithMembersEmail.map((group) =>
@@ -176,6 +183,7 @@ async function addUnmatchedStudentToGroup(courseId, groupNumber, studentEmail) {
     groupSnapshot.ref
       .update({
         members: admin.firestore.FieldValue.arrayUnion(studentEmail),
+        updateTime: admin.firestore.FieldValue.serverTimestamp(),
       })
       .catch((err) => console.log(err)),
 
@@ -210,7 +218,10 @@ async function transferStudentBetweenGroups(
     .doc(courseId)
     .collection('groups')
     .doc(group1.toString())
-    .update({ members: admin.firestore.FieldValue.arrayRemove(studentEmail) })
+    .update({
+      members: admin.firestore.FieldValue.arrayRemove(studentEmail),
+      updateTime: admin.firestore.FieldValue.serverTimestamp(),
+    })
     .catch((err) => {
       console.log(err)
       throw new Error(`error in removing ${studentEmail} from group${group1}.`)
@@ -220,7 +231,10 @@ async function transferStudentBetweenGroups(
     .doc(courseId)
     .collection('groups')
     .doc(group2.toString())
-    .update({ members: admin.firestore.FieldValue.arrayUnion(studentEmail) })
+    .update({
+      members: admin.firestore.FieldValue.arrayUnion(studentEmail),
+      updateTime: admin.firestore.FieldValue.serverTimestamp(),
+    })
     .catch((err) => {
       console.log(err)
       throw new Error(`error in adding ${studentEmail} from group${group2}.`)
@@ -241,6 +255,7 @@ async function unmatchStudent(courseId, groupNumber, studentEmail) {
     .doc(groupNumber.toString())
     .update({
       members: admin.firestore.FieldValue.arrayRemove(studentEmail),
+      updateTime: admin.firestore.FieldValue.serverTimestamp(),
     })
     .catch((err) => {
       console.log(err)
@@ -269,7 +284,12 @@ async function createEmptyGroup(courseId) {
     .doc(courseId)
     .collection('groups')
     .doc(lastGroupNumber.toString())
-    .set({ groupNumber: lastGroupNumber, members: [] })
+    .set({
+      groupNumber: lastGroupNumber,
+      members: [],
+      createTime: admin.firestore.FieldValue.serverTimestamp(),
+      updateTime: admin.firestore.FieldValue.serverTimestamp(),
+    })
     .catch((err) => {
       console.log(err)
       throw new Error(`Error in creating empty group for ${courseId}`)
