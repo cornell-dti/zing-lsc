@@ -6,8 +6,6 @@ import {
   StyledHeaderText,
   StyledLeftPanel,
   StyledRightPanel,
-  StyledTeacherPic,
-  StyledTitleWrapper,
   StyledWelcomeText,
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
@@ -17,6 +15,7 @@ import { useHistory } from 'react-router'
 import { ReactComponent as Google } from '@assets/img/googleicon.svg'
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
 import { Box } from '@mui/material'
+import teacher from '@assets/img/teacher.svg'
 
 function GoogleIcon(props: SvgIconProps) {
   return <SvgIcon inheritViewBox component={Google} {...props} />
@@ -32,15 +31,17 @@ export const Home = () => {
           <StyledWhiteActionText>
             Connect students, create Zings
           </StyledWhiteActionText>
-          <StyledTeacherPic />
+          <Box sx={{ maxWidth: '100%', mt: 8 }}>
+            <img src={teacher} alt="teacher" width="100%" />
+          </Box>
         </StyledLeftPanel>
         <StyledRightPanel>
-          <StyledTitleWrapper>
+          <Box display="flex" flexDirection="column" mt={-10} zIndex={1}>
             <StyledHeaderText>Hi,</StyledHeaderText>
             <StyledWelcomeText>
               Let's form study partner groups!
             </StyledWelcomeText>
-          </StyledTitleWrapper>
+          </Box>
           <Box>
             <Button
               startIcon={<GoogleIcon />}

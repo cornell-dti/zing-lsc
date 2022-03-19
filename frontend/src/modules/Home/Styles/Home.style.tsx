@@ -1,21 +1,21 @@
 import styled, { css } from 'styled-components'
 
-import { colors, device, h1, h2, h3, StyledComponent } from '@core'
+import { colors, device, h1, h2, h3 } from '@core'
 
 import bg from '@assets/img/homebg.svg'
 import bg2 from '@assets/img/blobhomebg2.svg'
-import teacher from '@assets/img/teacher.svg'
 import { Typography } from '@mui/material'
 
-const TeacherPic = ({ className }: StyledComponent) => (
-  <div className={className}>
-    <img src={teacher} alt="teacher" width="100%" />
-  </div>
-)
+const panel = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
 
-export const StyledTeacherPic = styled(TeacherPic)`
-  max-width: 100%;
-  margin-top: 4rem;
+const halfPanel = css`
+  ${panel};
+  height: 100%;
+  width: 50%;
 `
 
 export const StyledBackground = styled.div`
@@ -54,18 +54,6 @@ export const StyledContainer = styled.div`
   display: flex;
 `
 
-const panel = css`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`
-
-const halfPanel = css`
-  ${panel};
-  height: 100%;
-  width: 50%;
-`
-
 export const StyledLeftPanel = styled.div`
   ${halfPanel};
   align-items: center;
@@ -89,13 +77,6 @@ export const StyledRightPanel = styled.div`
   box-sizing: border-box;
   padding: 0 6rem;
   gap: 3rem;
-`
-
-export const StyledTitleWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: -6rem;
-  z-index: 1;
 `
 
 export const StyledHeaderText = styled(Typography)`
