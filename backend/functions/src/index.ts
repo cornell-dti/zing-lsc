@@ -24,7 +24,7 @@ const courseRouter = require('./course/routes')
 
 // auth middleware before router
 app.use('/student', studentsRouter)
-app.use('/matching', matchingRouter)
+app.use('/matching', checkAuth, matchingRouter)
 app.use('/course', checkAuth, courseRouter)
 
 exports.api = functions.https.onRequest(app)
