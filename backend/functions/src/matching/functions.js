@@ -121,12 +121,7 @@ async function makeMatches(courseId, groupSize = 3) {
           .doc(courseId)
           .collection('groups')
           .doc(group.groupNumber.toString())
-          .set(
-            group,
-            { merge: true },
-            { createTime: admin.firestore.FieldValue.serverTimestamp() },
-            { updateTime: admin.firestore.FieldValue.serverTimestamp() }
-          )
+          .set(group, { merge: true })
           .catch((err) => console.log(err))
       ),
       groupsWithMembersEmail.map((group) =>

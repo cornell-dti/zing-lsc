@@ -65,7 +65,7 @@ const addStudentSurveyResponse = async (
       year,
       preferredWorkingTime,
       groups: studentCrses,
-      time: admin.firestore.FieldValue.serverTimestamp(),
+      submissionTime: admin.firestore.FieldValue.serverTimestamp(),
     })
     .catch((err) => {
       console.log(err)
