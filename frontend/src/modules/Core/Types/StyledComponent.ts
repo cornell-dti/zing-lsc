@@ -11,3 +11,7 @@ export interface GenericHTMLProps {
 export interface Collapsible {
   collapse: boolean
 }
+
+export interface ColorProps {
+  color: string
+}

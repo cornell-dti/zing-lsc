@@ -3,15 +3,16 @@ import axios from 'axios'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import {
-  StyledOuterContainer,
   StyledContainer,
   StyledHeaderMenu,
-  StyledLogo,
+  StyledName,
 } from 'Dashboard/Styles/Dashboard.style'
 import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
+
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
@@ -40,54 +41,49 @@ export const Dashboard = () => {
   }, [])
 
   return (
-    <StyledOuterContainer>
-      <StyledContainer>
-        <StyledHeaderMenu>
-          <StyledLogo />
-          <Button
-            sx={{
-              color: '#000',
+    <StyledContainer>
+      <StyledHeaderMenu>
+        <LogoImg />
+        <Button
+          id="logout-button"
+          aria-controls="logout-menu"
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          endIcon={<KeyboardArrowDown />}
+          variant="text"
+        >
+          <StyledName>{user?.displayName}</StyledName>
+        </Button>
+        <Menu
+          id="logout-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'logout-button',
+          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              logOut().then(() => {
+                history.push('/')
+              })
             }}
-            id="logout-button"
-            aria-controls="logout-menu"
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-            endIcon={<KeyboardArrowDown />}
-            variant="text"
           >
-            {user?.displayName}
-          </Button>
-          <Menu
-            id="logout-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'logout-button',
-            }}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-          >
-            <MenuItem
-              onClick={() => {
-                logOut().then(() => {
-                  history.push('/')
-                })
-              }}
-            >
-              Log Out
-            </MenuItem>
-          </Menu>
-        </StyledHeaderMenu>
-        <Groups groups={groups} />
-      </StyledContainer>
-    </StyledOuterContainer>
+            Log Out
+          </MenuItem>
+        </Menu>
+      </StyledHeaderMenu>
+      <Groups groups={groups} />
+    </StyledContainer>
   )
 }
