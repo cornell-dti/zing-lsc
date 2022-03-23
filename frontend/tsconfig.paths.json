@@ -3,6 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
+      "@auth": ["src/auth/"],
+      "@auth/*": ["src/auth/*"],
       "@core": ["src/modules/Core/"],
       "@core/*": ["src/modules/Core/*"],
       "@fire": ["src/firebase/"],

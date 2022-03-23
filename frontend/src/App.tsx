@@ -17,10 +17,8 @@ import './App.css'
 import theme from '@core/Constants/Theme'
 import { useEffect, useState } from 'react'
 import { User, onAuthStateChanged } from 'firebase/auth'
-import { AuthProvider } from './auth/AuthContext'
+import { AuthProvider, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
-import { PrivateRoute } from './auth/PrivateRoute'
-import { PublicRoute } from './auth/PublicRoute'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)

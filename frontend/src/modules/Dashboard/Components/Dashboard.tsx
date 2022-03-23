@@ -14,8 +14,8 @@ import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
+import { useAuthValue } from '@auth'
 import { useHistory } from 'react-router'
-import { useAuthValue } from '../../../auth/AuthContext'
 
 export const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)

@@ -14,7 +14,7 @@ import {
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import Button from '@mui/material/Button'
-import { signInSSO } from '@fire'
+import { signInWithGoogle } from '@fire'
 import { useHistory } from 'react-router'
 
 export const Home = () => {
@@ -38,7 +38,7 @@ export const Home = () => {
           <StyledButtonsWrapper>
             <Button
               onClick={() => {
-                signInSSO()
+                signInWithGoogle()
                   .then(() => {
                     history.push('/dashboard')
                   })

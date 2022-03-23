@@ -7,6 +7,7 @@ module.exports = override(
     ['@assets']: path.resolve(__dirname, './src/assets'),
     ['@core']: path.resolve(__dirname, './src/modules/Core'),
     ['@fire']: path.resolve(__dirname, './src/firebase'),
+    ['@auth']: path.resolve(__dirname, './src/auth'),
     ['Home']: path.resolve(__dirname, './src/modules/Home'),
     ['EditZing']: path.resolve(__dirname, './src/modules/EditZing'),
     ['Login']: path.resolve(__dirname, './src/modules/Login'),

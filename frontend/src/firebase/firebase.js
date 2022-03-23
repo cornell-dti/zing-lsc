@@ -11,9 +11,9 @@ initializeApp(firebaseConfig)
 export const auth = getAuth()
 
 // function attempting to sign in with Google
-export async function signInSSO() {
+export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider()
-  const userCredential = await signInWithPopup(auth, provider)
+  await signInWithPopup(auth, provider)
 }
 
 export async function logOut() {
