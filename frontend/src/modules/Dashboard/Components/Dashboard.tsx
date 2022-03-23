@@ -7,7 +7,6 @@ import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import {
   StyledContainer,
   StyledHeaderMenu,
-  StyledName,
 } from 'Dashboard/Styles/Dashboard.style'
 import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
@@ -51,9 +50,8 @@ export const Dashboard = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           endIcon={<KeyboardArrowDown />}
-          variant="text"
         >
-          <StyledName>{user?.displayName}</StyledName>
+          {user?.displayName}
         </Button>
         <Menu
           id="logout-menu"
