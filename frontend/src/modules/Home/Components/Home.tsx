@@ -49,7 +49,7 @@ export const Home = () => {
                 pl: 3,
                 background:
                   'linear-gradient(288.93deg, #C693EE 2.66%, #7C5ED3 69.33%)',
-                fontSize: 20,
+                fontSize: { sm: 14, md: 22 },
               }}
               onClick={() => {
                 signInWithGoogle()

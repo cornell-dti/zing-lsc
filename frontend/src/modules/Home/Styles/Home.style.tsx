@@ -29,14 +29,15 @@ export const StyledBackground = styled.div`
   // blob overlay
   &:before {
     content: '';
-    background: url(${bg2});
-    background-size: cover;
+    background: url(${bg2}) no-repeat bottom;
+    background-size: 100% auto;
+    height: 100%;
+    width: 100%;
     position: absolute;
     top: 0;
     left: 0;
-    height: 100%;
-    width: 100%;
     z-index: 0;
+    object-fit: contain;
   }
 `
 
@@ -45,8 +46,8 @@ export const StyledContainer = styled.div`
   width: 80%;
   // make this more proportional with larger screens
   @media screen and ${device.laptopL} {
-    height: 680px;
-    width: 1200px;
+    height: 700px;
+    width: 1175px;
   }
   background-color: ${colors.white};
   box-shadow: -10px -10px 150px rgba(0, 0, 0, 0.1),
