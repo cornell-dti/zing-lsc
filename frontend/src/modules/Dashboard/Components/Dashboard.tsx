@@ -3,10 +3,10 @@ import axios from 'axios'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import {
   StyledContainer,
   StyledHeaderMenu,
-  StyledLogo,
   StyledName,
   StyledArrowDown,
 } from 'Dashboard/Styles/Dashboard.style'
@@ -36,7 +36,7 @@ export const Dashboard = () => {
   return (
     <StyledContainer>
       <StyledHeaderMenu>
-        <StyledLogo />
+        <LogoImg />
         <Button
           id="logout-button"
           aria-controls="logout-menu"
@@ -52,7 +52,6 @@ export const Dashboard = () => {
         <Menu
           id="logout-menu"
           anchorEl={anchorEl}
-          // getContentAnchorEl={null}
           open={open}
           onClose={handleClose}
           MenuListProps={{

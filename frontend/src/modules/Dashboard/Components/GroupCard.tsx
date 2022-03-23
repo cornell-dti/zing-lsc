@@ -13,8 +13,7 @@ import {
   StyledPlusIcon,
   StyledWarningIcon,
 } from 'Dashboard/Styles/GroupCard.style'
-import { Button, SvgIcon, Typography } from '@mui/material'
-import { Label } from '@mui/icons-material'
+import { Button, Typography } from '@mui/material'
 import { ReactComponent as NewlyMatchable } from '@assets/img/newlymatchable.svg'
 
 function Alert(props: any) {
@@ -44,26 +43,26 @@ export const GroupCard = ({
   function getColor(students: number, groups: number) {
     //all students are matched
     if (students === 0 && groups > 0) {
-      return [colors.paleviolet, 'no']
+      return { color: colors.white, new_match: 'no' }
     }
     //students are ready to be matched
     else if (newStudents > 0 && groupsFormed > 0) {
-      return [colors.lightgreen, 'no']
+      return { color: colors.lightgreen, new_match: 'no' }
     }
     //NEWLY MATCHABLE
     else if (newStudents > 1 && groupsFormed === 0) {
-      return [colors.lightgreen, 'yes']
+      return { color: colors.lightgreen, new_match: 'yes' }
     }
     //only 1 student & 0 groups formed
-    else return [colors.yellow, 'no']
+    else return { color: colors.yellow, new_match: 'no' }
   }
-  const styleArray = getColor(newStudents, groupsFormed)
+  const styleMap = getColor(newStudents, groupsFormed)
 
   return (
     <StyledContainer key={key}>
       <StyledRows>
         {/*1 index tells whether array is newly matchable*/}
-        {styleArray[1] === 'yes' && <NewlyMatchable />}
+        {styleMap.new_match === 'yes' && <NewlyMatchable />}
       </StyledRows>
       <StyledRows>
         <StyledName>{name}</StyledName>
@@ -71,24 +70,15 @@ export const GroupCard = ({
       <StyledRows>
         <Typography
           sx={{
-            background: styleArray[0],
+            background: styleMap.color,
             fontSize: 18,
             width: 1,
           }}
         >
-          {newStudents === 1 && (
-            <StyledRow>
-              <StyledWarningIcon />
-              {newStudents} New Student
-            </StyledRow>
-          )}
-
-          {newStudents !== 1 && (
-            <StyledRow>
-              <StyledPlusIcon />
-              {newStudents} New Students
-            </StyledRow>
-          )}
+          <StyledRow>
+            {newStudents === 1 ? <StyledWarningIcon /> : <StyledPlusIcon />}
+            {newStudents} {newStudents === 1 ? 'New Student' : 'New Students'}
+          </StyledRow>
         </Typography>
 
         <Typography
@@ -96,18 +86,11 @@ export const GroupCard = ({
             fontSize: 18,
           }}
         >
-          {groupsFormed === 1 && (
-            <StyledRow>
-              <StyledGroupsIcon />
-              {groupsFormed} Group Formed
-            </StyledRow>
-          )}
-          {groupsFormed !== 1 && (
-            <StyledRow>
-              <StyledGroupsIcon />
-              {groupsFormed} Groups Formed
-            </StyledRow>
-          )}
+          <StyledRow>
+            <StyledGroupsIcon />
+            {groupsFormed}{' '}
+            {groupsFormed === 1 ? 'Group Formed' : 'Groups Formed'}
+          </StyledRow>
         </Typography>
         <StyledRow />
       </StyledRows>

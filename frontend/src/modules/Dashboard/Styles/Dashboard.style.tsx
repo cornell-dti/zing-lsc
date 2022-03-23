@@ -1,9 +1,6 @@
 import styled from 'styled-components'
-import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import { BsChevronDown } from 'react-icons/bs'
-import { colors, StyledComponent, h4 } from '@core'
-
-const Logo = LogoImg
+import { colors, h4 } from '@core'
 
 export const StyledContainer = styled.div`
   height: 100%;
@@ -16,8 +13,6 @@ export const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
 `
-
-export const StyledLogo = styled(Logo)``
 
 export const StyledHeaderMenu = styled.div`
   height: fit-content;
