@@ -20,7 +20,9 @@ const halfPanel = css`
 
 export const StyledBackground = styled.div`
   background-image: url(${bg});
-  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -44,9 +46,9 @@ export const StyledBackground = styled.div`
 export const StyledContainer = styled.div`
   height: 86.5%;
   width: 80%;
-  // make this more proportional with larger screens
+  // make this more proportional with larger screens/standardize with design
   @media screen and ${device.laptopL} {
-    height: 700px;
+    height: 750px;
     width: 1175px;
   }
   background-color: ${colors.white};
