@@ -3,42 +3,52 @@ import { StyledEngineProvider, ThemeProvider } from '@mui/material'
 import { CssBaseline } from '@mui/material'
 import {
   HOME_PATH,
-  LOGIN_PATH,
-  SIGNUP_PATH,
   SURVEY_PATH,
   CREATE_ZING_PATH,
   EDIT_ZING_PATH,
   DASHBOARD_PATH,
 } from '@core'
 import { Home } from 'Home'
-import { Login } from 'Login'
-import { Signup } from 'Signup'
 import { Survey } from 'Survey'
 import { CreateZingForm } from 'CreateZing'
 import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
 import './App.css'
 import theme from '@core/Constants/Theme'
+import { useEffect, useState } from 'react'
+import { User, onAuthStateChanged } from 'firebase/auth'
+import { AuthProvider, PrivateRoute, PublicRoute } from '@auth'
+import { auth } from '@fire'
 
 const App = () => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user)
+      setIsLoading(false)
+    })
+  }, [])
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <Switch>
-            <Route exact path={HOME_PATH} component={Home} />
-            <Route exact path={LOGIN_PATH} component={Login} />
-            <Route exact path={SIGNUP_PATH} component={Signup} />
-            <Route exact path={SURVEY_PATH} component={Survey} />
-            <Route exact path={CREATE_ZING_PATH} component={CreateZingForm} />
-            <Route exact path={DASHBOARD_PATH} component={Dashboard} />
-            <Route
-              exact
-              path={`${EDIT_ZING_PATH}/:courseId`}
-              component={EditZing}
-            />
-          </Switch>
+          <AuthProvider value={{ user: currentUser, isLoading }}>
+            <Switch>
+              <PublicRoute exact path={HOME_PATH} component={Home} />
+              <Route exact path={SURVEY_PATH} component={Survey} />
+              <Route exact path={CREATE_ZING_PATH} component={CreateZingForm} />
+              <PrivateRoute exact path={DASHBOARD_PATH} component={Dashboard} />
+              <PrivateRoute
+                exact
+                path={`${EDIT_ZING_PATH}/:courseId`}
+                component={EditZing}
+              />
+            </Switch>
+          </AuthProvider>
         </Router>
       </ThemeProvider>
     </StyledEngineProvider>

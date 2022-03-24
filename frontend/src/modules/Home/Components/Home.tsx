@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 import {
   StyledBackground,
@@ -14,11 +13,12 @@ import {
   StyledWelcomeText,
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
-// import { PrimaryGradientButton, WhiteButton } from '@core/Components'
 import Button from '@mui/material/Button'
+import { signInWithGoogle } from '@fire'
+import { useHistory } from 'react-router'
 
 export const Home = () => {
-  // const history = useHistory()
+  const history = useHistory()
 
   return (
     <StyledBackground>
@@ -37,15 +37,15 @@ export const Home = () => {
           </StyledTitleWrapper>
           <StyledButtonsWrapper>
             <Button
-              color="secondary"
-              variant="outlined"
-              component={Link}
-              to="/login"
+              onClick={() => {
+                signInWithGoogle()
+                  .then(() => {
+                    history.push('/dashboard')
+                  })
+                  .catch(() => {})
+              }}
             >
-              Log In
-            </Button>
-            <Button color="primary" component={Link} to="/signup">
-              Sign Up
+              Sign in with Google
             </Button>
           </StyledButtonsWrapper>
         </StyledRightPanel>
