@@ -29,7 +29,7 @@ export const Home = () => {
       <StyledContainer>
         <StyledLeftPanel>
           <StyledWhiteActionText>
-            Connect students, create Zings
+            Connect students, create groups
           </StyledWhiteActionText>
           <Box sx={{ maxWidth: '100%', mt: 8 }}>
             <img src={teacher} alt="teacher" width="100%" />
