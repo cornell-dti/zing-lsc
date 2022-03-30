@@ -1,5 +1,6 @@
 require('dotenv').config({ path: '../.env' })
-const { db } = require('../config')
+
+import { db } from '../config'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
 
@@ -58,7 +59,7 @@ async function getStudentsForCourse(courseId) {
   }
 }
 
-module.exports = {
+export {
   getDataForStudents,
   getCourseInfo,
   getAllCourses,

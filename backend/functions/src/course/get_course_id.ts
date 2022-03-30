@@ -1,10 +1,10 @@
-const axios = require('axios').default
+import axios from 'axios'
 
-function isNumeric(n) {
+function isNumeric(n: string) {
   return !isNaN(parseFloat(n))
 }
 
-function getCourseParams(courseCatalogName) {
+function getCourseParams(courseCatalogName: any) {
   let i = 0
   while (i < courseCatalogName.length && !isNumeric(courseCatalogName[i])) {
     i += 1
@@ -19,7 +19,7 @@ function getCourseParams(courseCatalogName) {
   ]
 }
 
-function constructUrl(courseCatalogName, roster = 'FA21') {
+function constructUrl(courseCatalogName: any, roster: any) {
   let url = 'https://classes.cornell.edu/api/2.0/search/classes.json?'
   const [subject, numberBracket] = getCourseParams(courseCatalogName)
 
@@ -30,7 +30,7 @@ function constructUrl(courseCatalogName, roster = 'FA21') {
   return url
 }
 
-async function getCourseId(courseCatalogNameRaw, roster = 'FA21') {
+async function getCourseId(courseCatalogNameRaw: string, roster: any) {
   const courseCatalogName = courseCatalogNameRaw.replace(/\s+/g, '')
   const url = constructUrl(courseCatalogName, roster)
   const response = await axios.get(url)
@@ -39,7 +39,7 @@ async function getCourseId(courseCatalogNameRaw, roster = 'FA21') {
   // .data gets the "data" field in the API response.
   const data = response.data.data
   const classData = data.classes.find(
-    (courseObject) =>
+    (courseObject: { subject: any; catalogNbr: any }) =>
       courseObject.subject + courseObject.catalogNbr === courseCatalogName
   )
 
@@ -49,4 +49,4 @@ async function getCourseId(courseCatalogNameRaw, roster = 'FA21') {
   return classData.crseId.toString()
 }
 
-module.exports = getCourseId
+export default getCourseId

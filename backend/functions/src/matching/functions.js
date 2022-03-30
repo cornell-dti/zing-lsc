@@ -301,7 +301,7 @@ async function createEmptyGroup(courseId) {
   await Promise.all([groupCreationUpdate, groupNumberUpdate])
 }
 
-module.exports = {
+export {
   makeMatches,
   getGroups,
   addUnmatchedStudentToGroup,

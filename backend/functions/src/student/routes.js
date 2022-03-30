@@ -39,4 +39,4 @@ router.delete('/', (req, res) => {
       res.status(400).send({ success: false, err: err.message })
     })
 })
-module.exports = router
+export default router

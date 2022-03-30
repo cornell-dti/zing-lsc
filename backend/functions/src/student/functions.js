@@ -145,4 +145,5 @@ async function removeStudent(email) {
   )
   await Promise.all([courseUpdates, studentDocRef.delete()].flat())
 }
-module.exports = { addStudentSurveyResponse, removeStudent }
+
+export { addStudentSurveyResponse, removeStudent }
