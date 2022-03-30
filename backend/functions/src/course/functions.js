@@ -8,6 +8,7 @@ async function getStudent(email) {
   if (!snapshot.exists) throw new Error(`Student ${email} does not exist`)
   const result = snapshot.data()
   result.email = email
+  result.submissionTime = result.submissionTime.toDate()
   return result
 }
 
