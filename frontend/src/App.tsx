@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react'
 import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
+import axios from 'axios'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -27,6 +28,10 @@ const App = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
+      user?.getIdToken(true).then((idToken) => {
+        // adds auth token to header to all axios instances making the request
+        axios.defaults.headers.common['authtoken'] = idToken
+      })
       setIsLoading(false)
     })
   }, [])
