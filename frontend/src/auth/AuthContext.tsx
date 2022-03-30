@@ -4,6 +4,7 @@ import { User } from 'firebase/auth'
 interface AuthContextType {
   user: User | null
   isLoading: boolean
+  token: string
 }
 
 const AuthContext = React.createContext<AuthContextType>({} as AuthContextType)

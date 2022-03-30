@@ -24,24 +24,44 @@ import axios from 'axios'
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [token, setToken] = useState('')
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
-      user?.getIdToken(true).then((idToken) => {
-        // adds auth token to header to all axios instances making the request
-        axios.defaults.headers.common['authtoken'] = idToken
-      })
-      setIsLoading(false)
+      // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
+      if (user)
+        user
+          .getIdToken(true)
+          .then((idToken) => {
+            // store token in local storage
+            axios.interceptors.request.use(
+              (request) => {
+                request.headers.authtoken = idToken
+                return request
+              },
+              (error) => {
+                return Promise.reject(error)
+              }
+            )
+            setToken(idToken)
+            setIsLoading(false)
+          })
+          .catch(() => {
+            setIsLoading(false)
+          })
+      else {
+        setIsLoading(false)
+      }
     })
-  }, [])
+  }, [currentUser, token])
 
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <AuthProvider value={{ user: currentUser, isLoading }}>
+          <AuthProvider value={{ user: currentUser, isLoading, token }}>
             <Switch>
               <PublicRoute exact path={HOME_PATH} component={Home} />
               <Route exact path={SURVEY_PATH} component={Survey} />

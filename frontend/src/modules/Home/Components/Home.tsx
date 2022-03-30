@@ -42,7 +42,7 @@ export const Home = () => {
               Let's form study partner groups!
             </StyledWelcomeText>
           </Box>
-          <Box>
+          <Box sx={{ zIndex: 2 }}>
             <Button
               startIcon={<GoogleIcon />}
               sx={{
@@ -54,7 +54,7 @@ export const Home = () => {
               onClick={() => {
                 signInWithGoogle()
                   .then(() => {
-                    history.push('/dashboard')
+                    history.replace('/dashboard')
                   })
                   .catch(() => {})
               }}
