@@ -2,7 +2,7 @@ import admin = require('firebase-admin')
 import { config } from 'dotenv'
 config()
 
-import serviceAccount from '../service-account.json'
+const serviceAccount: string = require('../service-account.json')
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
