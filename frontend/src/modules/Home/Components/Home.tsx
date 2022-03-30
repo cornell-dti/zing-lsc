@@ -54,7 +54,7 @@ export const Home = () => {
               onClick={() => {
                 signInWithGoogle()
                   .then(() => {
-                    history.replace('/dashboard')
+                    history.push('/dashboard')
                   })
                   .catch(() => {})
               }}

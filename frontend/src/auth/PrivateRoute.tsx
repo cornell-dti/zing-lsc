@@ -13,17 +13,6 @@ export const PrivateRoute = ({
   const { user, isLoading } = useAuthValue()
   if (isLoading) return <RouteLoading isLoading />
 
-  // putting this here because auth token will always be needed for Private Routes
-  // axios.interceptors.request.use(
-  //   (request) => {
-  //     request.headers.authtoken = token
-  //     return request
-  //   },
-  //   (error) => {
-  //     return Promise.reject(error)
-  //   }
-  // )
-
   return (
     <Route
       {...routeProps}

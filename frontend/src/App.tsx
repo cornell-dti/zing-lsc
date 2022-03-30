@@ -32,7 +32,7 @@ const App = () => {
       // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
       if (user)
         user
-          .getIdToken(true)
+          .getIdToken(false)
           .then((idToken) => {
             // store token in local storage
             axios.interceptors.request.use(
@@ -44,7 +44,7 @@ const App = () => {
                 return Promise.reject(error)
               }
             )
-            setToken(idToken)
+            setToken(idToken) // might have to leave this in here
             setIsLoading(false)
           })
           .catch(() => {
@@ -61,7 +61,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <AuthProvider value={{ user: currentUser, isLoading, token }}>
+          <AuthProvider value={{ user: currentUser, isLoading }}>
             <Switch>
               <PublicRoute exact path={HOME_PATH} component={Home} />
               <Route exact path={SURVEY_PATH} component={Survey} />
