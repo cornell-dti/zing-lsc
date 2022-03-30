@@ -48,7 +48,6 @@ export const StyledContainer = styled.div`
   width: 80%;
   // make this more proportional with larger screens/standardize with design
   @media screen and ${device.laptopL} {
-    height: 750px;
     width: 1175px;
   }
   background-color: ${colors.white};
