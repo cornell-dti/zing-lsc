@@ -14,11 +14,12 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "prepare": "cd ../.. && husky install backend/functions/.husky"
+    "prepare": "cd ../.. && node -e \"try { require('husky').install('backend/functions/.husky') } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\""
   },
   "dependencies": {
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
+    "dotenv": "^16.0.0",
     "express": "^4.17.1",
     "firebase-admin": "^9.9.0",
     "firebase-functions": "^3.6.1"
@@ -26,7 +27,6 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
-    "dotenv": "^10.0.0",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",

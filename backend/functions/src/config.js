@@ -1,5 +1,5 @@
 const admin = require('firebase-admin')
-require('dotenv').config()
+import 'dotenv/config'
 
 const serviceAccount = require(process.env.SA_PATH)
 admin.initializeApp({

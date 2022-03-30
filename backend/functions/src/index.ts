@@ -1,4 +1,5 @@
 import * as functions from 'firebase-functions'
+import 'dotenv/config'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -9,7 +10,6 @@ import * as functions from 'firebase-functions'
 // });
 
 const express = require('express')
-require('dotenv').config()
 
 // Initialize express app
 const app = express()
