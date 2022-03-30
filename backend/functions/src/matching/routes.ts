@@ -1,13 +1,14 @@
-const express = require('express')
-const router = express.Router()
-const {
+import { Router } from 'express'
+const router = Router()
+
+import {
   makeMatches,
   getGroups,
   addUnmatchedStudentToGroup,
   transferStudentBetweenGroups,
   createEmptyGroup,
   unmatchStudent,
-} = require('./functions')
+} from './functions'
 
 // should return
 // {

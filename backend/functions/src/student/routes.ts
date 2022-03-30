@@ -1,6 +1,7 @@
-const express = require('express')
-const { addStudentSurveyResponse, removeStudent } = require('./functions')
-const router = express.Router()
+import { Router } from 'express'
+const router = Router()
+
+import { addStudentSurveyResponse, removeStudent } from './functions'
 
 router.post('/survey', (req, res) => {
   const {
