@@ -31,12 +31,12 @@ const App = () => {
       // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
       if (user)
         user
-          .getIdToken(false)
+          .getIdToken(false) // this must be false or first load will fail
           .then((idToken) => {
-            // store token in local storage
+            // interceptor so that every axios request will have this header
             axios.interceptors.request.use(
               (request) => {
-                request.headers.authtoken = idToken
+                request.headers.authorization = `Bearer ${idToken}`
                 return request
               },
               (error) => {
