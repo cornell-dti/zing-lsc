@@ -11,9 +11,9 @@ export function checkAuth(req, res, next) {
         next()
       })
       .catch(() => {
-        res.status(403).send('Unauthorized: error occurred')
+        res.status(401).send('Unauthorized: error occurred')
       })
   } else {
-    res.status(403).send('Unauthorized: please sign in')
+    res.status(401).send('Unauthorized: please sign in')
   }
 }

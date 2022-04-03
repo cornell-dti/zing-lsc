@@ -24,7 +24,6 @@ import axios from 'axios'
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [token, setToken] = useState('')
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -44,7 +43,6 @@ const App = () => {
                 return Promise.reject(error)
               }
             )
-            setToken(idToken) // might have to leave this in here
             setIsLoading(false)
           })
           .catch(() => {
@@ -54,7 +52,7 @@ const App = () => {
         setIsLoading(false)
       }
     })
-  }, [currentUser, token])
+  }, [])
 
   return (
     <StyledEngineProvider injectFirst>
