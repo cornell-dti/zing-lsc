@@ -1,13 +1,15 @@
 import * as admin from 'firebase-admin'
+import { Request, Response, NextFunction } from 'express'
 
 // function courtesy of https://itnext.io/how-to-use-firebase-auth-with-a-custom-node-backend-99a106376c8a
 // checks if valid based on the auth token in firebase admin
-export function checkAuth(req, res, next) {
+export function checkAuth(req: Request, res: Response, next: NextFunction) {
   // Bearer token
-  if (req.headers.authorization) {
+  if (req.headers?.authorization?.startsWith('Bearer ')) {
+    const idToken = req.headers.authorization.split('Bearer ')[1]
     admin
       .auth()
-      .verifyIdToken(req.headers.authorization.split(' ')[1])
+      .verifyIdToken(idToken)
       .then(() => {
         next()
       })
