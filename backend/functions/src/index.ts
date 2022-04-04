@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions'
 import 'dotenv/config'
+import * as cors from 'cors'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -14,6 +15,7 @@ const express = require('express')
 // Initialize express app
 const app = express()
 app.use(express.json())
+app.use(cors())
 
 // import routers
 const studentsRouter = require('./student/routes')

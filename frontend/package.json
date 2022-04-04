@@ -2,7 +2,6 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5001/zing-lsc/us-central1/api",
   "dependencies": {
     "@date-io/core": "^1.3.6",
     "@date-io/date-fns": "1.3.11",
