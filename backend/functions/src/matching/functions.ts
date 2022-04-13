@@ -207,8 +207,8 @@ async function addUnmatchedStudentToGroup(
 // transfer student from group1 to group2
 async function transferStudentBetweenGroups(
   courseId: string,
-  group1: { toString: () => string },
-  group2: { toString: () => string },
+  group1: string,
+  group2: string,
   studentEmail: any
 ) {
   await assertIsExistingCourse(courseId)
