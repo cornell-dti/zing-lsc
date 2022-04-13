@@ -1,4 +1,5 @@
 import * as functions from 'firebase-functions'
+import { checkAuth } from './middleware/auth-middleware'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -20,8 +21,10 @@ app.use(express.json())
 import studentsRouter from './student/routes'
 import matchingRouter from './matching/routes'
 import courseRouter from './course/routes'
+
+// auth middleware before router
 app.use('/student', studentsRouter)
-app.use('/matching', matchingRouter)
-app.use('/course', courseRouter)
+app.use('/matching', checkAuth, matchingRouter)
+app.use('/course', checkAuth, courseRouter)
 
 exports.api = functions.https.onRequest(app)

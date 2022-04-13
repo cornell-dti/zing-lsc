@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { checkAuth } from '../middleware/auth-middleware'
 const router = Router()
 
 import { addStudentSurveyResponse, removeStudent } from './functions'
@@ -23,15 +24,15 @@ router.post('/survey', (req, res) => {
   )
     .then(() => res.status(200).json({ success: true }))
     .catch((err) => {
-      if (err.name == 'processing_err') {
-        return res.status(500).send({ sucess: false, message: err.message })
+      if (err.name === 'processing_err') {
+        return res.status(500).send({ success: false, message: err.message })
       }
       console.log(err)
-      return res.status(400).send({ sucess: false, message: err.message })
+      return res.status(400).send({ success: false, message: err.message })
     })
 })
 
-router.delete('/', (req, res) => {
+router.delete('/', checkAuth, (req, res) => {
   const email = req.body.studentEmail
   removeStudent(email)
     .then((data) => res.status(200).send({ success: true, data }))
@@ -40,4 +41,5 @@ router.delete('/', (req, res) => {
       res.status(400).send({ success: false, err: err.message })
     })
 })
+
 export default router

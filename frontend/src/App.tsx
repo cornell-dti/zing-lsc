@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react'
 import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
+import axios from 'axios'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -27,7 +28,29 @@ const App = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
-      setIsLoading(false)
+      // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
+      if (user)
+        user
+          .getIdToken(false) // this must be false or first load will fail
+          .then((idToken) => {
+            // interceptor so that every axios request will have this header
+            axios.interceptors.request.use(
+              (request) => {
+                request.headers.authorization = `Bearer ${idToken}`
+                return request
+              },
+              (error) => {
+                return Promise.reject(error)
+              }
+            )
+            setIsLoading(false)
+          })
+          .catch(() => {
+            setIsLoading(false)
+          })
+      else {
+        setIsLoading(false)
+      }
     })
   }, [])
 
