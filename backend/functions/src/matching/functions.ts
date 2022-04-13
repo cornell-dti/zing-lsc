@@ -1,35 +1,47 @@
-const { db } = require('../config')
-const admin = require('firebase-admin')
-const { getDataForStudents } = require('../course/functions')
+import { db } from '../config'
+import admin from 'firebase-admin'
+import { getDataForStudents } from '../course/functions'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
 
 // =====================  HELPER FUNCTIONS ======================
-async function assertIsExistingCourse(courseId) {
+async function assertIsExistingCourse(courseId: any) {
   await courseRef
     .doc(courseId)
     .get()
-    .then((snapshot) => {
+    .then((snapshot: any) => {
       if (!snapshot.exists) {
         throw new Error(`Course ${courseId} does not exist`)
       }
     })
 }
 
-async function updateStudentReferencesForGroup(group, courseId) {
-  return group.members.map((member) =>
+async function updateStudentReferencesForGroup(
+  group: {
+    groupNumber: any
+    members: any
+    createTime?: FirebaseFirestore.FieldValue
+    updateTime?: FirebaseFirestore.FieldValue
+  },
+  courseId: any
+) {
+  return group.members.map((member: any) =>
     updateStudentGroup(member, courseId, group.groupNumber)
   )
 }
 
-async function updateStudentGroup(studentEmail, courseId, groupNumber) {
+async function updateStudentGroup(
+  studentEmail: string,
+  courseId: any,
+  groupNumber: any
+) {
   return studentRef
     .doc(studentEmail)
     .get()
     .then((snapshot) => {
-      const data = snapshot.data()
+      const data: any = snapshot.data()
       const groups = data.groups
-      for (let obj of groups) {
+      for (const obj of groups) {
         if (obj.courseId === courseId) {
           obj.groupNumber = groupNumber
           break
@@ -46,24 +58,24 @@ async function updateStudentGroup(studentEmail, courseId, groupNumber) {
 }
 
 // =============================== EXPORTS ==================================
-async function makeMatches(courseId, groupSize = 3) {
+async function makeMatches(courseId: string, groupSize = 3) {
   await assertIsExistingCourse(courseId)
 
   // get all unmatched students for course.
-  const data = (await courseRef.doc(courseId).get()).data()
+  const data: any = (await courseRef.doc(courseId).get()).data()
   const unmatchedStudents = data.unmatched
   const lastGroupNumber = data.lastGroupNumber
 
   // get relevant student data to get preferred working times
-  let studentData = await Promise.all(
-    unmatchedStudents.map((studentEmail) =>
+  const studentData = await Promise.all(
+    unmatchedStudents.map((studentEmail: string) =>
       studentRef
         .doc(studentEmail)
         .get()
         .then((snapshot) => {
           if (!snapshot.exists)
             throw new Error(`Student ${studentEmail} does not exist`)
-          let d = snapshot.data()
+          const d: any = snapshot.data()
           d['email'] = snapshot.id
           return d
         })
@@ -80,14 +92,14 @@ async function makeMatches(courseId, groupSize = 3) {
   // greedily form groups. THESE MAY NOT BE PERFECT.
   let i = 0
   let groupCounter = 0
-  let groups = []
+  const groups = []
   // we won't match students who don't form a full group
-  let studentDataSliced = studentData.slice(
+  const studentDataSliced = studentData.slice(
     0,
     -(studentData.length % groupSize) || undefined //extend to the end of the array if we have perfect groups
   )
   while (i < studentDataSliced.length) {
-    let nextGroup = studentDataSliced.slice(i, i + groupSize)
+    const nextGroup = studentDataSliced.slice(i, i + groupSize)
     groups.push({
       groupNumber: groupCounter + lastGroupNumber,
       memberData: nextGroup, // this is to keep things consistent
@@ -96,7 +108,9 @@ async function makeMatches(courseId, groupSize = 3) {
     groupCounter += 1
   }
   const matchedStudentSet = new Set(studentDataSliced.map((s) => s.email))
-  const unmatched = unmatchedStudents.filter((s) => !matchedStudentSet.has(s))
+  const unmatched = unmatchedStudents.filter(
+    (s: any) => !matchedStudentSet.has(s)
+  )
 
   // map for specific firebase data (just emails, as preserved from the previous function)
   const groupsWithMembersEmail = groups.map((group) => ({
@@ -131,7 +145,7 @@ async function makeMatches(courseId, groupSize = 3) {
   )
 
   // map this to student objects
-  let unmatchedAsStudents = await getDataForStudents(unmatched)
+  const unmatchedAsStudents = await getDataForStudents(unmatched)
 
   return {
     unmatched: unmatchedAsStudents,
@@ -139,7 +153,7 @@ async function makeMatches(courseId, groupSize = 3) {
   }
 }
 
-async function getGroups(courseId) {
+async function getGroups(courseId: string) {
   await assertIsExistingCourse(courseId)
   const querySnapshotDocs = await courseRef
     .doc(courseId)
@@ -150,10 +164,14 @@ async function getGroups(courseId) {
 }
 
 // transfer student from the list of unmatched students to a group
-async function addUnmatchedStudentToGroup(courseId, groupNumber, studentEmail) {
+async function addUnmatchedStudentToGroup(
+  courseId: string,
+  groupNumber: { toString: () => string },
+  studentEmail: any
+) {
   await assertIsExistingCourse(courseId)
 
-  const courseData = (await courseRef.doc(courseId).get()).data()
+  const courseData: any = (await courseRef.doc(courseId).get()).data()
   let unmatched = courseData.unmatched
 
   if (!unmatched.includes(studentEmail))
@@ -167,7 +185,7 @@ async function addUnmatchedStudentToGroup(courseId, groupNumber, studentEmail) {
 
   if (!groupSnapshot.exists) throw new Error('Invalid group provided.')
 
-  unmatched = unmatched.filter((u) => u !== studentEmail)
+  unmatched = unmatched.filter((u: any) => u !== studentEmail)
 
   await Promise.all([
     courseRef
@@ -188,15 +206,15 @@ async function addUnmatchedStudentToGroup(courseId, groupNumber, studentEmail) {
 
 // transfer student from group1 to group2
 async function transferStudentBetweenGroups(
-  courseId,
-  group1,
-  group2,
-  studentEmail
+  courseId: string,
+  group1: string,
+  group2: string,
+  studentEmail: any
 ) {
   await assertIsExistingCourse(courseId)
 
   // make sure student 1 is indeed in group1
-  const group1Data = (
+  const group1Data: any = (
     await courseRef
       .doc(courseId)
       .collection('groups')
@@ -241,7 +259,11 @@ async function transferStudentBetweenGroups(
 }
 
 // transfer student from group to unmatched students
-async function unmatchStudent(courseId, groupNumber, studentEmail) {
+async function unmatchStudent(
+  courseId: string,
+  groupNumber: { toString: () => string },
+  studentEmail: any
+) {
   await assertIsExistingCourse(courseId)
 
   const groupUpdate = courseRef
@@ -270,9 +292,9 @@ async function unmatchStudent(courseId, groupNumber, studentEmail) {
   await Promise.all([groupUpdate, unmatchedUpdate])
 }
 
-async function createEmptyGroup(courseId) {
+async function createEmptyGroup(courseId: string) {
   await assertIsExistingCourse(courseId)
-  const data = (await courseRef.doc(courseId).get()).data()
+  const data: any = (await courseRef.doc(courseId).get()).data()
   const lastGroupNumber = data.lastGroupNumber
 
   const groupCreationUpdate = courseRef
@@ -301,7 +323,7 @@ async function createEmptyGroup(courseId) {
   await Promise.all([groupCreationUpdate, groupNumberUpdate])
 }
 
-module.exports = {
+export {
   makeMatches,
   getGroups,
   addUnmatchedStudentToGroup,
