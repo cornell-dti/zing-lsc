@@ -1,4 +1,5 @@
 import * as functions from 'firebase-functions'
+import { checkAuth } from './middleware/auth-middleware'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -8,20 +9,22 @@ import * as functions from 'firebase-functions'
 //   response.send("Hello from Firebase!");
 // });
 
-const express = require('express')
-require('dotenv').config()
-
+import express from 'express'
+import { config } from 'dotenv'
+config()
 // Initialize express app
 const app = express()
+
 app.use(express.json())
 
 // import routers
-const studentsRouter = require('./student/routes')
-const matchingRouter = require('./matching/routes')
-const courseRouter = require('./course/routes')
-// const { makeMatches } = require("./matching/functions");
+import studentsRouter from './student/routes'
+import matchingRouter from './matching/routes'
+import courseRouter from './course/routes'
+
+// auth middleware before router
 app.use('/student', studentsRouter)
-app.use('/matching', matchingRouter)
-app.use('/course', courseRouter)
+app.use('/matching', checkAuth, matchingRouter)
+app.use('/course', checkAuth, courseRouter)
 
 exports.api = functions.https.onRequest(app)

@@ -7,16 +7,20 @@ import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import {
   StyledContainer,
   StyledHeaderMenu,
-  StyledName,
-  StyledArrowDown,
 } from 'Dashboard/Styles/Dashboard.style'
 import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
 
+import { KeyboardArrowDown } from '@mui/icons-material'
+import { logOut } from '@fire'
+import { useAuthValue } from '@auth'
+import { useHistory } from 'react-router'
+
 export const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+  const history = useHistory()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -26,6 +30,8 @@ export const Dashboard = () => {
   }
 
   const [groups, setGroups] = useState<CourseInfo[]>([])
+
+  const { user } = useAuthValue()
 
   useEffect(() => {
     axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
@@ -43,11 +49,9 @@ export const Dashboard = () => {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
+          endIcon={<KeyboardArrowDown />}
         >
-          <StyledName>
-            User Name
-            <StyledArrowDown />
-          </StyledName>
+          {user?.displayName}
         </Button>
         <Menu
           id="logout-menu"
@@ -67,9 +71,10 @@ export const Dashboard = () => {
           }}
         >
           <MenuItem
-            sx={{
-              fontFamily: 'Montserrat',
-              fontSize: 16,
+            onClick={() => {
+              logOut().then(() => {
+                history.push('/')
+              })
             }}
           >
             Log Out

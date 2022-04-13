@@ -1,22 +1,23 @@
 require('dotenv').config({ path: '../.env' })
-const { db } = require('../config')
+
+import { db } from '../config'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
 
-async function getStudent(email) {
+async function getStudent(email: string) {
   const snapshot = await studentRef.doc(email).get()
   if (!snapshot.exists) throw new Error(`Student ${email} does not exist`)
-  const result = snapshot.data()
+  const result: any = snapshot.data()
   result.email = email
   result.submissionTime = result.submissionTime.toDate()
   return result
 }
 
-async function getDataForStudents(emails) {
+async function getDataForStudents(emails: string[]) {
   return Promise.all(emails.map((email) => getStudent(email)))
 }
 
-async function getCourseInfo(courseId) {
+async function getCourseInfo(courseId: any) {
   const snapshot = await courseRef.doc(courseId).get()
   if (!snapshot.exists) throw new Error("This course doesn't exist")
   return snapshot.data()
@@ -25,17 +26,17 @@ async function getCourseInfo(courseId) {
 async function getAllCourses() {
   const snapshot = await courseRef.get()
   return snapshot.docs.map((doc) => {
-    let obj = doc.data()
+    const obj = doc.data()
     obj.courseId = doc.id
     return obj
   })
 }
 
-async function getStudentsForCourse(courseId) {
+async function getStudentsForCourse(courseId: any) {
   const courseSnapshot = await courseRef.doc(courseId).get()
   if (!courseSnapshot.exists)
     throw new Error(`Course ${courseId} does not exist`)
-  const courseData = courseSnapshot.data()
+  const courseData: any = courseSnapshot.data()
   const unmatched = courseData.unmatched
 
   const groupsQueryDocSnapshots = (
@@ -59,7 +60,7 @@ async function getStudentsForCourse(courseId) {
   }
 }
 
-module.exports = {
+export {
   getDataForStudents,
   getCourseInfo,
   getAllCourses,
