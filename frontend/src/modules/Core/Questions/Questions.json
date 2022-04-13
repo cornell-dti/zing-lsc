@@ -3,53 +3,24 @@
     "question": "What college are you in?",
     "questionId": "college",
     "answers": {
-      "AAP": "Architecture, Art and Planning",
-      "A&S": "Arts & Sciences",
-      "CALS": "Agriculture & Life Sciences",
-      "HumEc": "Human Ecology",
-      "ILR": "Industrial and Labor Relations",
-      "SC Johnson": "SC Johnson College of Business",
-      "Engineering": "Engineering"
+      "CALS": "CALS",
+      "AAP": "AAP",
+      "A&S": "CAS",
+      "Hotel Admin": "Hotel Administration",
+      "Dyson": "Dyson School",
+      "Engineering": "Engineering",
+      "ILR": "ILR"
     }
   },
   {
     "question": "What year are you?",
     "questionId": "year",
     "answers": {
-      "Freshman": "Freshman",
-      "Sophomore": "Sophomore",
-      "Junior": "Junior",
-      "Senior": "Senior",
-      "Grad": "Graduate Student"
-    }
-  },
-  {
-    "question": "Will you be learning remotely this semester?",
-    "questionId": "isRemote",
-    "answers": {
-      "No": "No",
-      "Yes": "Yes"
-    }
-  },
-  {
-    "question": "If you are in Ithaca, would you be willing to work with a remote student?",
-    "questionId": "workWithRemote",
-    "answers": {
-      "Yes": "Yes",
-      "No": "No",
-      "N/A": "I am not in Ithaca"
-    }
-  },
-  {
-    "question": "What time (in EST/EDT) do you most prefer to work?",
-    "questionId": "preferredWorkingTime",
-    "answers": {
-      "0": "Early Morning (4am-8am)",
-      "1": "Morning (8am-12pm)",
-      "2": "Early Afternoon (12pm-4pm)",
-      "3": "Late Afternoon (4pm-8pm)",
-      "4": "Evening (8pm-12am)",
-      "5": "Late Night (12am-4am)"
+      "Freshman": "1st year undergraduate",
+      "Sophomore": "2nd year undergraduate",
+      "Junior": "3rd year undergraduate",
+      "Senior": "4th year undergraduate",
+      "Grad": "Grad student"
     }
   }
 ]
