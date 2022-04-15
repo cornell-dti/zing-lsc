@@ -8,8 +8,6 @@ import {
   StyledNextButton,
   StyledFullPanelNoPadding,
 } from 'Survey/Styles/StepTemplate.style'
-import prev from '@assets/img/prev.svg'
-import next from '@assets/img/next.svg'
 import { ProgressBar } from '@core/Components/index'
 import { IconButton, Box } from '@mui/material'
 import { ArrowBack, ArrowForward } from '@mui/icons-material'
@@ -41,20 +39,22 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
     <Box sx={{ backgroundColor: 'white' }}>
       <ProgressBar step={stepNumber} total={totalSteps} />
       <StyledFullPanel>
-        <StyledWrapper style={{ height: '90%', display: 'flex' }}>
-          {children}
-        </StyledWrapper>
+        <StyledWrapper style={{ height: '90%' }}>{children}</StyledWrapper>
+
         <StyledWrapper style={{ height: '10%' }}>
-          <IconButton className="prev" onClick={handlePrev}>
-            <ArrowBack />
-          </IconButton>
-          <IconButton
-            className="next"
-            onClick={handleNext}
-            sx={{ marginLeft: 'auto' }}
-          >
-            {<ArrowForward />}
-          </IconButton>
+          <div style={{ textAlign: 'center' }}>
+            <IconButton className="prev" onClick={handlePrev}>
+              <ArrowBack />
+            </IconButton>
+            <div>Prev</div>
+          </div>
+
+          <div style={{ marginLeft: 'auto', textAlign: 'center' }}>
+            <IconButton className="next" onClick={handleNext}>
+              {<ArrowForward />}
+            </IconButton>
+            <div>Next</div>
+          </div>
         </StyledWrapper>
       </StyledFullPanel>
     </Box>
