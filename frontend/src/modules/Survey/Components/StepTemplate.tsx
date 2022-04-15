@@ -38,7 +38,7 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   return (
     <Box sx={{ backgroundColor: 'white' }}>
       <ProgressBar step={stepNumber} total={totalSteps} />
-      <StyledFullPanel>
+      <StyledFullPanel style={{ width: '1175px', height: '757px' }}>
         <StyledWrapper style={{ height: '90%' }}>{children}</StyledWrapper>
 
         <StyledWrapper style={{ height: '10%' }}>
