@@ -10,7 +10,7 @@ import {
 } from 'Survey/Styles/StepTemplate.style'
 import prev from '@assets/img/prev.svg'
 import next from '@assets/img/next.svg'
-import ProgressBar from './UIElements/ProgressBar'
+import { ProgressBar } from '@core/Components/ProgressBar'
 
 export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   isStepValid,
@@ -21,7 +21,6 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   children,
   setShowError,
 }) => {
-
   const handlePrev = () => {
     setShowError(false)
     gotoPrevStep()
@@ -39,7 +38,7 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   return (
     <StyledContainer>
       <StyledFullPanelNoPadding>
-        <ProgressBar stepNumber={stepNumber} totalSteps={totalSteps} />
+        <ProgressBar step={stepNumber} total={totalSteps} />
         <StyledFullPanel>
           <StyledWrapper style={{ height: '90%' }}>{children}</StyledWrapper>
           <StyledWrapper style={{ height: '10%' }}>
