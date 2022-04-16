@@ -1,12 +1,8 @@
 import React, { FunctionComponent } from 'react'
 import { StepTemplateProps } from 'Survey/Types'
 import {
-  StyledContainer,
   StyledWrapper,
   StyledFullPanel,
-  StyledPrevButton,
-  StyledNextButton,
-  StyledFullPanelNoPadding,
 } from 'Survey/Styles/StepTemplate.style'
 import { ProgressBar } from '@core/Components/index'
 import { IconButton, Box } from '@mui/material'
@@ -36,14 +32,22 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   }
 
   return (
-    <Box sx={{ backgroundColor: 'white' }}>
+    <Box
+      sx={{
+        backgroundColor: 'white',
+        width: '80%',
+        height: '90%',
+      }}
+    >
       <ProgressBar step={stepNumber} total={totalSteps} />
-      <StyledFullPanel style={{ height: '757px' }}>
-        <StyledWrapper style={{ height: '90%' }}>{children}</StyledWrapper>
+      <StyledFullPanel>
+        <StyledWrapper style={{ height: '85%', overflow: 'scroll' }}>
+          {children}
+        </StyledWrapper>
 
-        <StyledWrapper style={{ height: '10%' }}>
+        <StyledWrapper style={{ height: '15%', color: '#815ed4' }}>
           <div style={{ textAlign: 'center' }}>
-            <IconButton className="prev" onClick={handlePrev}>
+            <IconButton className="prev" onClick={handlePrev} color="secondary">
               <ArrowBack />
             </IconButton>
             <div>Prev</div>
