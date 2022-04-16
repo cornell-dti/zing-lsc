@@ -9,12 +9,15 @@ import {
   StyledGroupTextWrapper,
   StyledGroupContainer,
 } from 'EditZing/Styles/StudentAndGroup.style'
+import Tooltip from '@mui/material/Tooltip'
+import Button from '@mui/material/Button'
 
 /** the equivalent of Column */
 export const GroupGrid = ({
   studentList,
   groupNumber,
   moveStudent,
+  createTime,
 }: GroupGridProps) => {
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -33,7 +36,15 @@ export const GroupGrid = ({
         style={{ opacity: isOver ? '0.6' : '1' }}
       >
         <StyledGroupTextWrapper>
-          <StyledGroupText>{'Group ' + String(groupNumber)}</StyledGroupText>
+          <Tooltip
+            disableFocusListener
+            disableTouchListener
+            title={
+              'Created on ' + createTime.getMonth() + '/' + createTime.getDay()
+            }
+          >
+            <StyledGroupText>{'Group ' + String(groupNumber)}</StyledGroupText>
+          </Tooltip>
         </StyledGroupTextWrapper>
         <Grid container spacing={2}>
           {studentList.map((student, index) => (

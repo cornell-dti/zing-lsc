@@ -21,6 +21,7 @@ import {
 import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
 import { MatchLoading } from './MatchLoading'
+import { group } from 'node:console'
 
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
@@ -47,7 +48,12 @@ export const EditZing = () => {
       .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
       .then((res: AxiosResponse<CourseStudentDataResponse>) => {
         setUnmatchedStudents(res.data.data.unmatched)
-        setStudentGroups(res.data.data.groups)
+        setStudentGroups(
+          res.data.data.groups.map((group) => ({
+            ...group,
+            createTime: new Date(group.createTime),
+          }))
+        )
         setHasLoadedStudentData(true)
       })
       .catch((error) => {
@@ -203,6 +209,7 @@ export const EditZing = () => {
               studentList={studentGroup.memberData}
               groupNumber={studentGroup.groupNumber}
               moveStudent={moveStudent}
+              createTime={studentGroup.createTime}
             />
           ))}
         </Grid>

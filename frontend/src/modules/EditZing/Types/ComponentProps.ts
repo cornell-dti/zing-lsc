@@ -19,6 +19,7 @@ export interface GroupGridProps {
     fromGroupNumber: number,
     toGroupNumber: number
   ) => void
+  createTime: Date
 }
 
 export interface StudentGridProps {
