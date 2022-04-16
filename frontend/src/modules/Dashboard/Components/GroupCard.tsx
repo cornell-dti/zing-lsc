@@ -22,11 +22,17 @@ function Alert(props: any) {
 
 export const GroupCard = ({
   key,
+  id,
   name,
   newStudents,
   groupsFormed,
 }: GroupCardProps) => {
-  // const history = useHistory()
+  let history = useHistory()
+
+  const handleClickView = () => {
+    history.push('/edit/' + id)
+  }
+
   const [open, setOpen] = React.useState(false)
 
   const handleClose = (
@@ -96,6 +102,7 @@ export const GroupCard = ({
       </StyledRows>
       <StyledButtons>
         <Button
+          onClick={handleClickView}
           sx={{
             width: 1 / 3,
             padding: 1,
