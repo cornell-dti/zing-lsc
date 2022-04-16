@@ -10,7 +10,6 @@ import {
   StyledGroupContainer,
 } from 'EditZing/Styles/StudentAndGroup.style'
 import Tooltip from '@mui/material/Tooltip'
-import Button from '@mui/material/Button'
 
 /** the equivalent of Column */
 export const GroupGrid = ({
