@@ -59,3 +59,9 @@ export const StyledStudentDetail = styled.p`
   margin: 0;
   padding: 0;
 `
+
+export const StyledStudentText = styled.p`
+  font-weight: 800;
+  margin: 0;
+  padding: 0;
+`
