@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions'
-import { checkAuth } from './middleware/auth-middleware'
+import { checkAuth, checkIsAuthorized } from './middleware/auth-middleware'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -24,7 +24,7 @@ const courseRouter = require('./course/routes')
 
 // auth middleware before router
 app.use('/student', studentsRouter)
-app.use('/matching', checkAuth, matchingRouter)
-app.use('/course', checkAuth, courseRouter)
+app.use('/matching', [checkAuth, checkIsAuthorized], matchingRouter)
+app.use('/course', [checkAuth, checkIsAuthorized], courseRouter)
 
 exports.api = functions.https.onRequest(app)

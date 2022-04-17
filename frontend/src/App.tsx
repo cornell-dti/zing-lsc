@@ -29,7 +29,7 @@ const App = () => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
       // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
-      if (user)
+      if (user) {
         user
           .getIdToken(false) // this must be false or first load will fail
           .then((idToken) => {
@@ -48,7 +48,7 @@ const App = () => {
           .catch(() => {
             setIsLoading(false)
           })
-      else {
+      } else {
         setIsLoading(false)
       }
     })
