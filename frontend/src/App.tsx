@@ -24,6 +24,19 @@ import axios from 'axios'
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isAuthorized, setIsAuthorized] = useState(true)
+
+  // Response interceptor for 403 responses
+  axios.interceptors.response.use(
+    function (response) {
+      setIsAuthorized(true)
+      return response
+    },
+    function (error) {
+      setIsAuthorized(false)
+      return Promise.reject(error)
+    }
+  )
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -59,7 +72,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <AuthProvider value={{ user: currentUser, isLoading }}>
+          <AuthProvider value={{ user: currentUser, isLoading, isAuthorized }}>
             <Switch>
               <PublicRoute exact path={HOME_PATH} component={Home} />
               <Route exact path={SURVEY_PATH} component={Survey} />

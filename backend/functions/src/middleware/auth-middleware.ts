@@ -58,7 +58,6 @@ export function checkIsAuthorized(
           .auth()
           .getUser(uid)
           .then((user) => {
-            // const cornellEmail = new RegExp('^[a-zA-Z0-9._%+-]+@cornell.edu$')
             if (user.email) {
               if (allowedUsers.includes(user.email)) {
                 next()
