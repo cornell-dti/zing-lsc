@@ -1,5 +1,23 @@
+const { db } = require('../config')
 import * as admin from 'firebase-admin'
 import { Request, Response, NextFunction } from 'express'
+import { firestore } from 'firebase-admin'
+import QuerySnapshot = firestore.QuerySnapshot
+
+// get data in global scope so this is shared across all function invocations:
+function getAllowedUsers() {
+  const users: string[] = []
+  db.collection('allowed_users')
+    .get()
+    .then((querySnapshot: QuerySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        users.push(doc.id)
+      })
+    })
+  return users
+}
+
+const allowedUsers = getAllowedUsers()
 
 // function courtesy of https://itnext.io/how-to-use-firebase-auth-with-a-custom-node-backend-99a106376c8a
 // checks if valid based on the auth token in firebase admin
@@ -40,9 +58,9 @@ export function checkIsAuthorized(
           .auth()
           .getUser(uid)
           .then((user) => {
-            const cornellEmail = new RegExp('^[a-zA-Z0-9._%+-]+@cornell.edu$')
+            // const cornellEmail = new RegExp('^[a-zA-Z0-9._%+-]+@cornell.edu$')
             if (user.email) {
-              if (cornellEmail.test(user.email)) {
+              if (allowedUsers.includes(user.email)) {
                 next()
               } else {
                 res.status(403).send('Unauthorized: not correct permissions')
