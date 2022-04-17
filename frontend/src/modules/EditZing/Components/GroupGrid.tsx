@@ -39,7 +39,8 @@ export const GroupGrid = ({
             disableFocusListener
             disableTouchListener
             title={
-              'Created on ' + createTime.getMonth() + '/' + createTime.getDay()
+              /* Could use getMonth and getDate to format mm/dd */
+              'Created on ' + createTime.toLocaleDateString()
             }
           >
             <StyledGroupText>{'Group ' + String(groupNumber)}</StyledGroupText>
