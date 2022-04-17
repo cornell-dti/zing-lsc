@@ -45,7 +45,9 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
           {children}
         </StyledWrapper>
 
-        <StyledWrapper style={{ height: '15%', color: '#815ed4' }}>
+        <StyledWrapper
+          style={{ height: '15%', color: '#815ed4', margin: '0% 2%' }}
+        >
           <div style={{ textAlign: 'center' }}>
             <IconButton className="prev" onClick={handlePrev} color="secondary">
               <ArrowBack />
