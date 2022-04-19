@@ -1,10 +1,9 @@
-const express = require('express')
-const router = express.Router()
-const {
-  getCourseInfo,
-  getAllCourses,
-  getStudentsForCourse,
-} = require('./functions')
+import { Router } from 'express'
+import { config } from 'dotenv'
+import { getCourseInfo, getAllCourses, getStudentsForCourse } from './functions'
+
+const router = Router()
+config()
 
 router.get('/:courseId', (req, res) => {
   const courseId = req.params.courseId
@@ -35,4 +34,4 @@ router.get('/students/:courseId', (req, res) => {
     })
 })
 
-module.exports = router
+export default router

@@ -1,9 +1,16 @@
 import styled from 'styled-components'
 import { ReactComponent as NoClassesIcon } from '@assets/img/noclassesicon.svg'
-import { GenericHTMLProps, h2, StyledComponent, h3, h4 } from '@core'
+import { GenericHTMLProps, h2, h3, h4 } from '@core'
 
-const NoClasses = NoClassesIcon
-
+export const StyledNoClasses = styled(NoClassesIcon)`
+  position: static;
+  width: 375px;
+  height: 380px;
+  left: 0px;
+  top: 0px;
+  padding: 0px;
+  margin: -20px;
+`
 export const StyledContainer = styled.div`
   display: flex;
   flex: 1;
@@ -58,12 +65,4 @@ export const StyledClassesContainer = styled.div`
   padding: 5.5rem;
   flex-direction: row;
   flex-wrap: wrap;
-`
-export const StyledNoClasses = styled(NoClasses)`
-  position: static;
-  width: 295px;
-  height: 300px;
-  left: 0px;
-  top: 0px;
-  padding: 15px;
 `
