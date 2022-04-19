@@ -1,5 +1,4 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
 import { colors } from '@core'

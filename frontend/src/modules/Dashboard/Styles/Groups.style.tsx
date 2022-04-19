@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { ReactComponent as NoClassesIcon } from '@assets/img/noclassesicon.svg'
-import { GenericHTMLProps, h2, h3, h4 } from '@core'
+import { h2, h3, h4 } from '@core'
 
 export const StyledNoClasses = styled(NoClassesIcon)`
   position: static;

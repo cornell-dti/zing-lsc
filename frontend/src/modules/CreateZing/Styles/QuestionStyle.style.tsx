@@ -1,8 +1,5 @@
-import React from 'react'
-
-import styled, { css } from 'styled-components'
-import { colors, h2, h4, StyledComponent } from '@core'
-import { Question } from '../Components/Question'
+import styled from 'styled-components'
+import { h4 } from '@core'
 
 export const StyledText = styled.text`
   ${h4};
