@@ -48,19 +48,21 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
         <StyledWrapper
           style={{ height: '15%', color: '#815ed4', margin: '0% 2%' }}
         >
-          <div style={{ textAlign: 'center' }}>
+          <Box sx={{ textAlign: 'center' }}>
             <IconButton className="prev" onClick={handlePrev} color="secondary">
               <ArrowBack />
             </IconButton>
-            <div>Prev</div>
-          </div>
+            <br />
+            Prev
+          </Box>
 
-          <div style={{ marginLeft: 'auto', textAlign: 'center' }}>
+          <Box sx={{ marginLeft: 'auto', textAlign: 'center' }}>
             <IconButton className="next" onClick={handleNext}>
               {<ArrowForward />}
             </IconButton>
-            <div>Next</div>
-          </div>
+            <br />
+            Next
+          </Box>
         </StyledWrapper>
       </StyledFullPanel>
     </Box>
