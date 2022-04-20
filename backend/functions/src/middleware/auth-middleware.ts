@@ -58,12 +58,8 @@ export function checkIsAuthorized(
           .auth()
           .getUser(uid)
           .then((user) => {
-            if (user.email) {
-              if (allowedUsers.includes(user.email)) {
-                next()
-              } else {
-                res.status(403).send('Unauthorized: not correct permissions')
-              }
+            if (user.email && allowedUsers.includes(user.email)) {
+              next()
             } else {
               res.status(403).send('Unauthorized: not correct permissions')
             }
