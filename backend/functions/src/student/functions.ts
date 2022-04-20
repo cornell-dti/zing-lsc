@@ -29,7 +29,6 @@ async function removeStudentFromCourse(
 const addStudentSurveyResponse = async (
   name: any,
   email: string,
-  preferredWorkingTime: any,
   college: any,
   year: any,
   courseCatalogNames: any[],
@@ -71,7 +70,6 @@ const addStudentSurveyResponse = async (
       name,
       college,
       year,
-      preferredWorkingTime,
       groups: studentCrses,
       submissionTime: admin.firestore.FieldValue.serverTimestamp(),
     })

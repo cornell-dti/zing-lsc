@@ -85,9 +85,10 @@ async function makeMatches(courseId: string, groupSize = 3) {
         })
     )
   )
-  studentData.sort(
-    (obj1, obj2) => obj1.preferredWorkingTime - obj2.preferredWorkingTime
-  )
+  studentData
+    .sort
+    //(obj1, obj2) => obj1.preferredWorkingTime - obj2.preferredWorkingTime
+    ()
 
   // greedily form groups. THESE MAY NOT BE PERFECT.
   let i = 0
