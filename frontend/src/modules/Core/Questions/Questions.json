@@ -5,11 +5,12 @@
     "answers": {
       "CALS": "CALS",
       "AAP": "AAP",
-      "A&S": "CAS",
+      "A&S": "A&S",
       "Hotel Admin": "Hotel Administration",
       "Dyson": "Dyson School",
       "Engineering": "Engineering",
-      "ILR": "ILR"
+      "ILR": "ILR",
+      "HumEc": "Human Ecology"
     }
   },
   {
