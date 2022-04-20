@@ -21,7 +21,6 @@ import {
 import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
 import { MatchLoading } from './MatchLoading'
-import { group } from 'node:console'
 
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
@@ -47,11 +46,21 @@ export const EditZing = () => {
     axios
       .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
       .then((res: AxiosResponse<CourseStudentDataResponse>) => {
-        setUnmatchedStudents(res.data.data.unmatched)
+        setUnmatchedStudents(
+          res.data.data.unmatched.map((student) => ({
+            ...student,
+            submissionTime: new Date(student.submissionTime),
+          }))
+        )
         setStudentGroups(
           res.data.data.groups.map((group) => ({
             ...group,
+            memberData: group.memberData.map((student) => ({
+              ...student,
+              submissionTime: new Date(student.submissionTime),
+            })),
             createTime: new Date(group.createTime),
+            updateTime: new Date(group.updateTime),
           }))
         )
         setHasLoadedStudentData(true)
@@ -172,9 +181,24 @@ export const EditZing = () => {
       .then((response) => {
         let newGroups = studentGroups.concat(response.data.data.groups)
         console.log(response.data.data.unmatched)
-        setUnmatchedStudents(response.data.data.unmatched)
+        setUnmatchedStudents(
+          response.data.data.unmatched.map((student: any) => ({
+            ...student,
+            submissionTime: new Date(student.submissionTime),
+          }))
+        )
         console.log(newGroups)
-        setStudentGroups(newGroups)
+        setStudentGroups(
+          newGroups.map((group) => ({
+            ...group,
+            memberData: group.memberData.map((student) => ({
+              ...student,
+              submissionTime: new Date(student.submissionTime),
+            })),
+            createTime: new Date(group.createTime),
+            updateTime: new Date(group.updateTime),
+          }))
+        )
         setIsCurrentlyGrouping(false)
       })
       .catch((err) => {
@@ -210,6 +234,7 @@ export const EditZing = () => {
               groupNumber={studentGroup.groupNumber}
               moveStudent={moveStudent}
               createTime={studentGroup.createTime}
+              updateTime={studentGroup.updateTime}
             />
           ))}
         </Grid>

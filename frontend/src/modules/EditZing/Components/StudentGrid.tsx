@@ -50,6 +50,7 @@ export const StudentGrid = ({
   student,
   groupNumber,
   xsSize = 6,
+  submissionTime,
 }: StudentGridProps) => {
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -73,9 +74,10 @@ export const StudentGrid = ({
             disableFocusListener
             disableTouchListener
             title={
-              /* Could use getMonth and getDate to format mm/dd */
               'Requested study partner ' +
-              new Date(student.submissionTime).toLocaleDateString()
+              (submissionTime.getMonth() + 1) +
+              '/' +
+              submissionTime.getDate()
             }
           >
             <StyledStudentText>{student.name}</StyledStudentText>

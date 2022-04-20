@@ -17,6 +17,7 @@ export const GroupGrid = ({
   groupNumber,
   moveStudent,
   createTime,
+  updateTime,
 }: GroupGridProps) => {
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -39,8 +40,10 @@ export const GroupGrid = ({
             disableFocusListener
             disableTouchListener
             title={
-              /* Could use getMonth and getDate to format mm/dd */
-              'Created on ' + createTime.toLocaleDateString()
+              'Created on ' +
+              (createTime.getMonth() + 1) +
+              '/' +
+              createTime.getDate()
             }
           >
             <StyledGroupText>{'Group ' + String(groupNumber)}</StyledGroupText>
@@ -52,6 +55,7 @@ export const GroupGrid = ({
               key={index}
               groupNumber={groupNumber}
               student={student}
+              submissionTime={student.submissionTime}
             />
           ))}
         </Grid>
