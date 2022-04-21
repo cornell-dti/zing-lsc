@@ -15,7 +15,7 @@ import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
 import './App.css'
 import theme from '@core/Constants/Theme'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
@@ -25,6 +25,7 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthorized, setIsAuthorized] = useState(true)
+  const axiosAuthInterceptor = useRef<number | null>(null)
 
   // Response interceptor for 403 responses
   axios.interceptors.response.use(
@@ -46,22 +47,29 @@ const App = () => {
         user
           .getIdToken(false) // this must be false or first load will fail
           .then((idToken) => {
-            // interceptor so that every axios request will have this header
-            axios.interceptors.request.use(
-              (request) => {
-                request.headers.authorization = `Bearer ${idToken}`
-                return request
-              },
-              (error) => {
-                return Promise.reject(error)
-              }
-            )
+            if (axiosAuthInterceptor.current === null) {
+              // interceptor so that every axios request will have this header
+              axiosAuthInterceptor.current = axios.interceptors.request.use(
+                (request) => {
+                  request.headers.authorization = `Bearer ${idToken}`
+                  return request
+                },
+                (error) => {
+                  return Promise.reject(error)
+                }
+              )
+            }
             setIsLoading(false)
           })
           .catch(() => {
             setIsLoading(false)
           })
       } else {
+        if (axiosAuthInterceptor.current !== null) {
+          axios.interceptors.request.eject(axiosAuthInterceptor.current)
+          axiosAuthInterceptor.current = null
+          setIsAuthorized(true) // need to reset to initial value
+        }
         setIsLoading(false)
       }
     })
