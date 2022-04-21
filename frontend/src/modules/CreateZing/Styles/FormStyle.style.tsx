@@ -2,7 +2,7 @@ import React from 'react'
 
 import styled, { css } from 'styled-components'
 import logo from '@assets/img/purplelogo.svg'
-import { colors, h2, h3, StyledComponent } from '@core'
+import { colors, h3, StyledComponent } from '@core'
 import bg2 from '@assets/img/bg2.svg'
 import { Question } from '../Components/Question'
 
@@ -57,9 +57,6 @@ export const StyledQuestionWrapper = styled.div`
   margin: 0.5rem;
 `
 
-export const StyledWrapper = styled.div`
-  display: flex;
-`
 export const StyledHeaderWrapper = styled.div`
   height: 7%;
   display: flex;

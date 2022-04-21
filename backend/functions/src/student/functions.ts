@@ -1,15 +1,19 @@
-const { db } = require('../config')
-const admin = require('firebase-admin')
+import { db } from '../config'
+import admin from 'firebase-admin'
 const courseR = db.collection('courses')
 const studentR = db.collection('students')
-const mapCatalogNameToCrseId = require('../course/get_course_id')
+import mapCatalogNameToCrseId from '../course/get_course_id'
 
-async function removeStudentFromCourse(email, courseId, groupNumber) {
+async function removeStudentFromCourse(
+  email: any,
+  courseId: string,
+  groupNumber: any
+) {
   const ref = courseR
     .doc(courseId)
     .collection('groups')
     .doc(groupNumber.toString())
-  const data = (await ref.get()).data()
+  const data: any = (await ref.get()).data()
   if (data.members.length === 1 && data.members.includes(email)) {
     //second condition is a sanity check
     return ref.delete()
@@ -23,26 +27,30 @@ async function removeStudentFromCourse(email, courseId, groupNumber) {
 // Note: the error handling in this file is done the way it is so it is easier
 // to decide response codes based on error type.
 const addStudentSurveyResponse = async (
-  name,
-  email,
-  preferredWorkingTime,
-  college,
-  year,
-  courseCatalogNames,
+  name: any,
+  email: string,
+  preferredWorkingTime: any,
+  college: any,
+  year: any,
+  courseCatalogNames: any[],
   courseRef = courseR,
   studentRef = studentR
 ) => {
   // First, update the [student] collection to include the data for the new student
   const crseIds = await Promise.all(
-    courseCatalogNames.map((name) => mapCatalogNameToCrseId(name))
+    courseCatalogNames.map((name: string) =>
+      mapCatalogNameToCrseId(name, 'FA21')
+    )
   )
 
   const existingData = (await studentRef.doc(email).get()).data()
   //studentCourses becomes courseIds of existingData.groups if available, otherwise []
-  let studentCrses = existingData ? existingData.groups : []
-  const studentCrseIds = studentCrses.map((crse) => crse.courseId)
-  let crsesToAdd = []
-  let crseCatalogsToUpdate = []
+  const studentCrses = existingData ? existingData.groups : []
+  const studentCrseIds = studentCrses.map(
+    (crse: { courseId: any }) => crse.courseId
+  )
+  const crsesToAdd: any[] = []
+  const crseCatalogsToUpdate: any[] = []
   crseIds.forEach((crse, index) => {
     if (!studentCrseIds.includes(crse)) {
       crsesToAdd.push(crse)
@@ -57,7 +65,7 @@ const addStudentSurveyResponse = async (
     })
   )
 
-  const studentUpdate = await studentRef
+  const studentUpdate = studentRef
     .doc(email)
     .set({
       name,
@@ -129,20 +137,21 @@ const addStudentSurveyResponse = async (
       )
   )
 
-  const allUpdates = courseUpdates.concat(studentUpdate)
+  const allUpdates = [...courseUpdates, studentUpdate]
   await Promise.all(allUpdates)
 }
 
-async function removeStudent(email) {
+async function removeStudent(email: string) {
   const studentDocRef = studentR.doc(email)
   const data = (await studentDocRef.get()).data()
   if (!data) throw new Error(`Cannot find student ${email}`)
   const groups = data.groups
-  const courseUpdates = groups.map(({ courseId, groupNumber }) =>
+  const courseUpdates = groups.map(({ courseId, groupNumber }: any) =>
     groupNumber !== -1
       ? removeStudentFromCourse(email, courseId, groupNumber)
       : undefined
   )
   await Promise.all([courseUpdates, studentDocRef.delete()].flat())
 }
-module.exports = { addStudentSurveyResponse, removeStudent }
+
+export { addStudentSurveyResponse, removeStudent }

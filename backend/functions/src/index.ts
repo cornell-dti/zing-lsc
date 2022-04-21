@@ -1,4 +1,7 @@
 import * as functions from 'firebase-functions'
+import 'dotenv/config'
+import express from 'express'
+import cors from 'cors'
 import { checkAuth, checkIsAuthorized } from './middleware/auth-middleware'
 
 // // Start writing Firebase Functions
@@ -9,18 +12,16 @@ import { checkAuth, checkIsAuthorized } from './middleware/auth-middleware'
 //   response.send("Hello from Firebase!");
 // });
 
-const express = require('express')
-require('dotenv').config()
-
 // Initialize express app
 const app = express()
+
 app.use(express.json())
+app.use(cors())
 
 // import routers
-const studentsRouter = require('./student/routes')
-const matchingRouter = require('./matching/routes')
-const courseRouter = require('./course/routes')
-// const { makeMatches } = require("./matching/functions");
+import studentsRouter from './student/routes'
+import matchingRouter from './matching/routes'
+import courseRouter from './course/routes'
 
 // auth middleware before router
 app.use('/student', studentsRouter)

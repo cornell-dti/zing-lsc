@@ -1,7 +1,8 @@
-const express = require('express')
-const { addStudentSurveyResponse, removeStudent } = require('./functions')
-const { checkAuth } = require('../middleware/auth-middleware')
-const router = express.Router()
+import { Router } from 'express'
+import { checkAuth } from '../middleware/auth-middleware'
+const router = Router()
+
+import { addStudentSurveyResponse, removeStudent } from './functions'
 
 router.post('/survey', (req, res) => {
   const {
@@ -41,4 +42,4 @@ router.delete('/', checkAuth, (req, res) => {
     })
 })
 
-module.exports = router
+export default router

@@ -1,10 +1,9 @@
-const express = require('express')
-const router = express.Router()
-const {
-  getCourseInfo,
-  getAllCourses,
-  getStudentsForCourse,
-} = require('./functions')
+import { Router } from 'express'
+import { config } from 'dotenv'
+import { getCourseInfo, getAllCourses, getStudentsForCourse } from './functions'
+
+const router = Router()
+config()
 
 router.get('/:courseId', (req, res) => {
   const courseId = req.params.courseId
@@ -18,12 +17,7 @@ router.get('/:courseId', (req, res) => {
 
 router.get('/', (_, res) => {
   getAllCourses()
-    .then((data) =>
-      res
-        .status(200)
-        .set('Access-Control-Allow-Origin', '*')
-        .send({ success: true, data })
-    )
+    .then((data) => res.status(200).send({ success: true, data }))
     .catch((err) => {
       console.log(err)
       res.status(400).send({ success: false, err: err.message })
@@ -40,4 +34,4 @@ router.get('/students/:courseId', (req, res) => {
     })
 })
 
-module.exports = router
+export default router

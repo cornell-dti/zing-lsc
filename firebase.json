@@ -1,17 +1,17 @@
 {
   "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
+    "rules": "backend/firestore.rules",
+    "indexes": "backend/firestore.indexes.json"
   },
   "functions": {
     "predeploy": [
       "npm --prefix \"$RESOURCE_DIR\" run lint",
       "npm --prefix \"$RESOURCE_DIR\" run build"
     ],
-    "source": "functions"
+    "source": "backend/functions"
   },
   "hosting": {
-    "public": "public",
+    "public": "frontend/build",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -19,8 +19,8 @@
     ],
     "rewrites": [
       {
-        "source": "/api/**",
-        "function": "api"
+        "source": "**",
+        "destination": "/index.html"
       }
     ]
   }

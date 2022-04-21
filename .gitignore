@@ -5,3 +5,9 @@
 
 # jetbrains thing
 .idea
+
+# Logs (Probably by Firebase)
+**.log
+
+# Firebase cache
+/.firebase
