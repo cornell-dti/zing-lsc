@@ -165,9 +165,13 @@ export const EditZing = () => {
       .post(`${API_ROOT}${MATCHING_API}/make`, { courseId: courseId })
       .then((response) => {
         let newGroups = studentGroups.concat(response.data.data.groups)
-        console.log(response.data.data.unmatched)
+        newGroups = newGroups.map((group: Group) => ({
+          ...group,
+          shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
+            ? new Date(group.shareMatchEmailTimestamp)
+            : null,
+        }))
         setUnmatchedStudents(response.data.data.unmatched)
-        console.log(newGroups)
         setStudentGroups(newGroups)
         setIsCurrentlyGrouping(false)
       })
@@ -202,6 +206,7 @@ export const EditZing = () => {
               key={index}
               studentList={studentGroup.memberData}
               groupNumber={studentGroup.groupNumber}
+              shareMatchEmailTimestamp={studentGroup.shareMatchEmailTimestamp}
               moveStudent={moveStudent}
             />
           ))}

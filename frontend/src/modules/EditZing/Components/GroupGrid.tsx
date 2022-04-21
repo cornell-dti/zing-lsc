@@ -9,12 +9,14 @@ import {
   StyledGroupTextWrapper,
   StyledGroupContainer,
 } from 'EditZing/Styles/StudentAndGroup.style'
+import { Box } from '@mui/material'
 
 /** the equivalent of Column */
 export const GroupGrid = ({
   studentList,
   groupNumber,
   moveStudent,
+  shareMatchEmailTimestamp,
 }: GroupGridProps) => {
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -33,7 +35,18 @@ export const GroupGrid = ({
         style={{ opacity: isOver ? '0.6' : '1' }}
       >
         <StyledGroupTextWrapper>
-          <StyledGroupText>{'Group ' + String(groupNumber)}</StyledGroupText>
+          <StyledGroupText>
+            {`Group ${groupNumber}`}
+            {shareMatchEmailTimestamp && (
+              <Box
+                component="span"
+                sx={{ color: 'primary.main', fontSize: 40 }}
+              >
+                {' '}
+                &middot;
+              </Box>
+            )}
+          </StyledGroupText>
         </StyledGroupTextWrapper>
         <Grid container spacing={2}>
           {studentList.map((student, index) => (

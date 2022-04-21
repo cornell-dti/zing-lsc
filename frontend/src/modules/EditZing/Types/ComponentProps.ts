@@ -14,6 +14,7 @@ export interface UnmatchedGridProps {
 export interface GroupGridProps {
   studentList: Student[]
   groupNumber: number
+  shareMatchEmailTimestamp: Date | null
   moveStudent: (
     studentToMove: Student,
     fromGroupNumber: number,

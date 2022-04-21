@@ -51,6 +51,9 @@ async function getStudentsForCourse(courseId: any) {
   const groupStudentData = groupStudentDataRaw.map((groupData, index) => ({
     memberData: groupData,
     groupNumber: data[index].groupNumber,
+    shareMatchEmailTimestamp: data[index].shareMatchEmailTimestamp
+      ? data[index].shareMatchEmailTimestamp.toDate()
+      : null,
   }))
 
   return {
