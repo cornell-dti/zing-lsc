@@ -14,6 +14,7 @@ import {
 } from 'Dashboard/Styles/GroupCard.style'
 import { Button, Typography } from '@mui/material'
 import { ReactComponent as NewlyMatchable } from '@assets/img/newlymatchable.svg'
+import { useHistory } from 'react-router'
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -26,7 +27,7 @@ export const GroupCard = ({
   newStudents,
   groupsFormed,
 }: GroupCardProps) => {
-  let history = useHistory()
+  const history = useHistory()
 
   const handleClickView = () => {
     history.push('/edit/' + id)
