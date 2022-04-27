@@ -16,8 +16,12 @@ import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
 import { useHistory } from 'react-router'
+import { DropdownSelect } from '@core/Components'
+import { SelectChangeEvent, Box } from '@mui/material'
+import { UnmatchedGrid } from 'EditZing/Components/UnmatchedGrid'
 
 export const Dashboard = () => {
+  const [status, setStatus] = useState('')
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const history = useHistory()
@@ -38,11 +42,77 @@ export const Dashboard = () => {
       setGroups(res.data.data)
     })
   }, [])
+  // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
+  function sorted(groups: CourseInfo[], menuValue: string) {
+    if (menuValue === 'newly-match-first') {
+      return [...groups].sort((a, _) => {
+        //-1 if a newly matchable and b isn't
+        if (a.lastGroupNumber === 0 && a.unmatched.length > 1) {
+          return -1
+        } else return 1
+      })
+    } else if (menuValue === 'unmatch-first') {
+      return [...groups].sort((a, _) => {
+        //-1 if a unmatchable and b isn't
+        if (a.lastGroupNumber === 0 && a.unmatched.length === 1) {
+          return -1
+        } else return 1
+      })
+    } else if (menuValue === 'match-first') {
+      return [...groups].sort((a, _) => {
+        //-1 if a matchable and b isn't
+        if (a.lastGroupNumber > 0 && a.unmatched.length > 0) {
+          return -1
+        } else return 1
+      })
+    } else if (menuValue === 'classesa-z') {
+      const sorted = [...groups].sort((a, b) => {
+        return a.names[0].localeCompare(b.names[0], undefined, {
+          numeric: true,
+        })
+      })
+      return sorted
+    } else if (menuValue === 'classesz-a') {
+      const sorted = [...groups].sort((a, b) => {
+        return b.names[0].localeCompare(a.names[0], undefined, {
+          numeric: true,
+        })
+      })
+      return sorted
+    } else return groups
+  }
+  const handleChange = (event: SelectChangeEvent) => {
+    setStatus(event.target.value)
+    setGroups(sorted(groups, event.target.value))
+  }
 
   return (
     <StyledContainer>
       <StyledHeaderMenu>
         <LogoImg />
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Box
+            sx={{ fontWeight: 'bold', color: '#5C5B6A', padding: 1, margin: 1 }}
+          >
+            Sort by:
+          </Box>
+          <DropdownSelect
+            value={status}
+            onChange={handleChange}
+            sx={{
+              padding: 0,
+              margin: 0,
+              fontWeight: 'bold',
+            }}
+          >
+            <MenuItem value="newest">Newest</MenuItem>
+            <MenuItem value="unmatch-first">Unmatchable first</MenuItem>
+            <MenuItem value="newly-match-first">Newly matchable first</MenuItem>
+            <MenuItem value="match-first">Matchable first</MenuItem>
+            <MenuItem value="classesa-z">Classes A-Z</MenuItem>
+            <MenuItem value="classesz-a">Classes Z-A</MenuItem>
+          </DropdownSelect>
+        </Box>
         <Button
           id="logout-button"
           aria-controls="logout-menu"
