@@ -1,8 +1,7 @@
-import React, { FunctionComponent, useState } from 'react'
+import React, { useState } from 'react'
 import {
   StyledContainer,
   StyledFullPanel,
-  StyledWrapper,
   StyledLogoWrapper,
   StyledLogo,
   StyledQuestionWrapper,

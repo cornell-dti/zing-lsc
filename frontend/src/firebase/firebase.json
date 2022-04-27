@@ -1,4 +1,9 @@
 {
-  "apiKey": "AIzaSyBuUKIjVd1CtXa4T5FR47mLx2ew-vj7780",
-  "authDomain": "zing-lsc-backend.firebaseapp.com"
+  "apiKey": "AIzaSyCCqgmWr_lDMFUXQH7gpedvVIo39qrVqiY",
+  "authDomain": "zing-lsc.firebaseapp.com",
+  "projectId": "zing-lsc",
+  "storageBucket": "zing-lsc.appspot.com",
+  "messagingSenderId": "208580018761",
+  "appId": "1:208580018761:web:e1b5d63a8eb1921afcb598",
+  "measurementId": "G-8KLER2VYHJ"
 }
