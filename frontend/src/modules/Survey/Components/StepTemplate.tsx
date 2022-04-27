@@ -49,7 +49,7 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
           style={{ height: '15%', color: '#815ed4', margin: '0% 2%' }}
         >
           <Box sx={{ textAlign: 'center' }}>
-            <IconButton className="prev" onClick={handlePrev} color="secondary">
+            <IconButton className="next" onClick={handlePrev} color="secondary">
               <ArrowBack />
             </IconButton>
             <br />
@@ -58,7 +58,7 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
 
           <Box sx={{ marginLeft: 'auto', textAlign: 'center' }}>
             <IconButton className="next" onClick={handleNext}>
-              {<ArrowForward />}
+              <ArrowForward />
             </IconButton>
             <br />
             Next
