@@ -4,7 +4,7 @@ export type Student = {
   year: number
   college: string
   preferredWorkingTime: number
-  submissionTime: Date | null
+  submissionTime: Date
   groups: GroupMembership[]
 }
 

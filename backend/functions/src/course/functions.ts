@@ -9,9 +9,7 @@ async function getStudent(email: string) {
   if (!snapshot.exists) throw new Error(`Student ${email} does not exist`)
   const result: any = snapshot.data()
   result.email = email
-  result.submissionTime = result.submissionTime
-    ? result.submissionTime.toDate()
-    : null
+  result.submissionTime = result.submissionTime.toDate()
   return result
 }
 
@@ -54,8 +52,8 @@ async function getStudentsForCourse(courseId: any) {
   const groupStudentData = groupStudentDataRaw.map((groupData, index) => ({
     memberData: groupData,
     groupNumber: data[index].groupNumber,
-    createTime: data[index].createTime ? data[index].createTime.toDate() : null,
-    updateTime: data[index].updateTime ? data[index].updateTime.toDate() : null,
+    createTime: data[index].createTime.toDate(),
+    updateTime: data[index].updateTime.toDate(),
   }))
 
   return {
