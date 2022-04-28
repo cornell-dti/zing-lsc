@@ -1,6 +1,5 @@
-import React, { useEffect, useState, FunctionComponent } from 'react'
-import { NameField, NumberField, colors } from '@core'
-import styled, { css } from 'styled-components'
+import React from 'react'
+import { NameField, NumberField } from '@core'
 import { QuestionProps } from '../Types/QuestionType'
 import {
   StyledQuestionContainer,
@@ -17,9 +16,6 @@ export const Question = ({
   isNumber,
   inputStyle,
 }: QuestionProps) => {
-  // useEffect( () =>
-  //   if ()
-  // )
   function onChangeNumber(e: React.ChangeEvent<HTMLInputElement>) {
     if (Number(e.target.value) < 0) {
       setAnswer('0')
@@ -27,7 +23,8 @@ export const Question = ({
       setAnswer(e.target.value)
     }
   }
-  if (isNumber)
+
+  if (isNumber) {
     return (
       <StyledQuestionContainer>
         <StyledText>{question}</StyledText>
@@ -41,7 +38,7 @@ export const Question = ({
         />
       </StyledQuestionContainer>
     )
-  else {
+  } else {
     return (
       <StyledQuestionContainer>
         <StyledText>{question}</StyledText>

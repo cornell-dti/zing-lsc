@@ -1,4 +1,7 @@
 import * as functions from 'firebase-functions'
+import 'dotenv/config'
+import express from 'express'
+import cors from 'cors'
 import { checkAuth } from './middleware/auth-middleware'
 
 // // Start writing Firebase Functions
@@ -9,13 +12,11 @@ import { checkAuth } from './middleware/auth-middleware'
 //   response.send("Hello from Firebase!");
 // });
 
-import express from 'express'
-import { config } from 'dotenv'
-config()
 // Initialize express app
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 // import routers
 import studentsRouter from './student/routes'

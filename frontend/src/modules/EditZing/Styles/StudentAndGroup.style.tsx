@@ -18,12 +18,6 @@ export const StyledGroupContainer = styled.div`
   margin: 0.25rem;
 `
 
-export const StyledGroupTextWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 1rem;
-`
-
 export const StyledGroupText = styled.text`
   ${h3};
   font-weight: 800;

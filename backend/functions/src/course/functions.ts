@@ -54,6 +54,9 @@ async function getStudentsForCourse(courseId: any) {
     groupNumber: data[index].groupNumber,
     createTime: data[index].createTime.toDate(),
     updateTime: data[index].updateTime.toDate(),
+    shareMatchEmailTimestamp: data[index].shareMatchEmailTimestamp
+      ? data[index].shareMatchEmailTimestamp.toDate()
+      : null,
   }))
 
   return {

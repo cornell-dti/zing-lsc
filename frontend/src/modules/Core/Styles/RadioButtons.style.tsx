@@ -1,7 +1,4 @@
-import React from 'react'
-
-import styled, { css } from 'styled-components'
-import { colors, h4 } from '@core'
+import styled from 'styled-components'
 
 export const StyledContainer = styled.div`
   display: flex;

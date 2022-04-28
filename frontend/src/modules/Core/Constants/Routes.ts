@@ -6,8 +6,12 @@ export const CREATE_ZING_PATH = '/createzing'
 export const EDIT_ZING_PATH = '/edit'
 export const DASHBOARD_PATH = '/dashboard'
 
-// replaced API_ROOT with '' and used proxy instead to get rid of CORS error
-export const API_ROOT = ''
+// NODE_ENV will be 'production' for yarn build, and 'development' for yarn start
+// See https://create-react-app.dev/docs/adding-custom-environment-variables/
+export const API_ROOT =
+  process.env.NODE_ENV === 'production'
+    ? 'https://us-central1-zing-lsc.cloudfunctions.net/api'
+    : 'http://localhost:5001/zing-lsc/us-central1/api'
 
 export const INSTRUCTOR_API = '/instructor'
 export const COURSE_API = '/course'

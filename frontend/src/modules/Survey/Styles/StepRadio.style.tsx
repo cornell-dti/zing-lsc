@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import errorIcon from '@assets/img/erroricon.svg'
 import { colors, h2, h4, StyledComponent } from '@core'
 

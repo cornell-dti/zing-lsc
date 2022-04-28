@@ -106,6 +106,7 @@ async function makeMatches(courseId: string, groupSize = 3) {
       memberData: nextGroup, // this is to keep things consistent
       createTime: new Date(),
       updateTime: new Date(),
+      shareMatchEmailTimestamp: null, // timestamp for option of "share matching results"
     })
     i += nextGroup.length
     groupCounter += 1
@@ -121,6 +122,7 @@ async function makeMatches(courseId: string, groupSize = 3) {
     members: group.memberData.map((member) => member.email),
     createTime: admin.firestore.FieldValue.serverTimestamp(),
     updateTime: admin.firestore.FieldValue.serverTimestamp(),
+    shareMatchEmailTimestamp: group.shareMatchEmailTimestamp,
   }))
 
   // lastly, update the collections to reflect this matching
