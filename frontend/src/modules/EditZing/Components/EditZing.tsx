@@ -49,7 +49,9 @@ export const EditZing = () => {
         setUnmatchedStudents(
           res.data.data.unmatched.map((student) => ({
             ...student,
-            submissionTime: new Date(student.submissionTime),
+            submissionTime: student.submissionTime
+              ? new Date(student.submissionTime)
+              : null,
           }))
         )
         setStudentGroups(
@@ -57,10 +59,12 @@ export const EditZing = () => {
             ...group,
             memberData: group.memberData.map((student) => ({
               ...student,
-              submissionTime: new Date(student.submissionTime),
+              submissionTime: student.submissionTime
+                ? new Date(student.submissionTime)
+                : null,
             })),
-            createTime: new Date(group.createTime),
-            updateTime: new Date(group.updateTime),
+            createTime: group.createTime ? new Date(group.createTime) : null,
+            updateTime: group.updateTime ? new Date(group.updateTime) : null,
           }))
         )
         setHasLoadedStudentData(true)
@@ -184,7 +188,9 @@ export const EditZing = () => {
         setUnmatchedStudents(
           response.data.data.unmatched.map((student: any) => ({
             ...student,
-            submissionTime: new Date(student.submissionTime),
+            submissionTime: student.submissionTime
+              ? new Date(student.submissionTime)
+              : null,
           }))
         )
         console.log(newGroups)
@@ -193,10 +199,12 @@ export const EditZing = () => {
             ...group,
             memberData: group.memberData.map((student) => ({
               ...student,
-              submissionTime: new Date(student.submissionTime),
+              submissionTime: student.submissionTime
+                ? new Date(student.submissionTime)
+                : null,
             })),
-            createTime: new Date(group.createTime),
-            updateTime: new Date(group.updateTime),
+            createTime: group.createTime ? new Date(group.createTime) : null,
+            updateTime: group.updateTime ? new Date(group.updateTime) : null,
           }))
         )
         setIsCurrentlyGrouping(false)

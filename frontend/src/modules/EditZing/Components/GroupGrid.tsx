@@ -36,18 +36,22 @@ export const GroupGrid = ({
         style={{ opacity: isOver ? '0.6' : '1' }}
       >
         <StyledGroupTextWrapper>
-          <Tooltip
-            disableFocusListener
-            disableTouchListener
-            title={
-              'Created on ' +
-              (createTime.getMonth() + 1) +
-              '/' +
-              createTime.getDate()
-            }
-          >
-            <StyledGroupText>{'Group ' + String(groupNumber)}</StyledGroupText>
-          </Tooltip>
+          {createTime && (
+            <Tooltip
+              disableFocusListener
+              disableTouchListener
+              title={
+                'Created on ' +
+                (createTime.getMonth() + 1) +
+                '/' +
+                createTime.getDate()
+              }
+            >
+              <StyledGroupText>
+                {'Group ' + String(groupNumber)}
+              </StyledGroupText>
+            </Tooltip>
+          )}
         </StyledGroupTextWrapper>
         <Grid container spacing={2}>
           {studentList.map((student, index) => (
