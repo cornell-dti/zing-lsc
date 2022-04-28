@@ -103,6 +103,8 @@ async function makeMatches(courseId: string, groupSize = 3) {
     groups.push({
       groupNumber: groupCounter + lastGroupNumber,
       memberData: nextGroup, // this is to keep things consistent
+      createTime: new Date(),
+      updateTime: new Date(),
     })
     i += nextGroup.length
     groupCounter += 1

@@ -70,20 +70,18 @@ export const StudentGrid = ({
     <StyledGrid item xs={xsSize}>
       <div ref={drag}>
         <Paper style={{ opacity: opacity }} className={classes.paper1}>
-          {submissionTime && (
-            <Tooltip
-              disableFocusListener
-              disableTouchListener
-              title={
-                'Requested study partner ' +
-                (submissionTime.getMonth() + 1) +
-                '/' +
-                submissionTime.getDate()
-              }
-            >
-              <StyledStudentText>{student.name}</StyledStudentText>
-            </Tooltip>
-          )}
+          <Tooltip
+            disableFocusListener
+            disableTouchListener
+            title={
+              'Requested study partner ' +
+              (submissionTime.getMonth() + 1) +
+              '/' +
+              submissionTime.getDate()
+            }
+          >
+            <StyledStudentText>{student.name}</StyledStudentText>
+          </Tooltip>
           <div className={classes.paper2}>
             {/* {genderSVG} {student.pronoun === 'a' ? 'Male' : 'Female'} */}
             <StyledStudentDetail>{student.email}</StyledStudentDetail>
