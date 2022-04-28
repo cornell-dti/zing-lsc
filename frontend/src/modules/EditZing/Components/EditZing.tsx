@@ -47,7 +47,15 @@ export const EditZing = () => {
       .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
       .then((res: AxiosResponse<CourseStudentDataResponse>) => {
         setUnmatchedStudents(res.data.data.unmatched)
-        setStudentGroups(res.data.data.groups)
+        const groups = res.data.data.groups.map((group: Group) => {
+          return {
+            ...group,
+            shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
+              ? new Date(group.shareMatchEmailTimestamp)
+              : null,
+          }
+        })
+        setStudentGroups(groups)
         setHasLoadedStudentData(true)
       })
       .catch((error) => {
@@ -164,11 +172,18 @@ export const EditZing = () => {
     axios
       .post(`${API_ROOT}${MATCHING_API}/make`, { courseId: courseId })
       .then((response) => {
-        let newGroups = studentGroups.concat(response.data.data.groups)
-        console.log(response.data.data.unmatched)
+        const groups = studentGroups.concat(
+          response.data.data.groups.map((group: Group) => {
+            return {
+              ...group,
+              shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
+                ? new Date(group.shareMatchEmailTimestamp)
+                : null,
+            }
+          })
+        )
         setUnmatchedStudents(response.data.data.unmatched)
-        console.log(newGroups)
-        setStudentGroups(newGroups)
+        setStudentGroups(groups)
         setIsCurrentlyGrouping(false)
       })
       .catch((err) => {
@@ -202,6 +217,7 @@ export const EditZing = () => {
               key={index}
               studentList={studentGroup.memberData}
               groupNumber={studentGroup.groupNumber}
+              shareMatchEmailTimestamp={studentGroup.shareMatchEmailTimestamp}
               moveStudent={moveStudent}
             />
           ))}
