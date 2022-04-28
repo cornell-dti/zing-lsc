@@ -77,6 +77,7 @@ async function makeMatches(courseId: string, groupSize = 3) {
             throw new Error(`Student ${studentEmail} does not exist`)
           const d: any = snapshot.data()
           d['email'] = snapshot.id
+          d['submissionTime'] = d.submissionTime.toDate()
           return d
         })
         .catch((err) => {
