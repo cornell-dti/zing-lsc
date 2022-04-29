@@ -1,6 +1,5 @@
 import React from 'react'
 import { StudentGrid } from 'EditZing/Components/StudentGrid'
-import Grid from '@mui/material/Grid'
 import { GroupGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrop } from 'react-dnd'
 import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
@@ -8,7 +7,7 @@ import {
   StyledGroupText,
   StyledGroupContainer,
 } from 'EditZing/Styles/StudentAndGroup.style'
-import { Box, Tooltip } from '@mui/material'
+import { Box, Tooltip, Grid } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 
 const ShareMatchEmailToolTip = ({
@@ -43,6 +42,8 @@ export const GroupGrid = ({
   studentList,
   groupNumber,
   moveStudent,
+  createTime,
+  updateTime,
   shareMatchEmailTimestamp,
 }: GroupGridProps) => {
   const [{ isOver }, drop] = useDrop({
@@ -62,7 +63,16 @@ export const GroupGrid = ({
         style={{ opacity: isOver ? '0.6' : '1' }}
       >
         <Box display="flex" alignItems="center" mb={2}>
-          <StyledGroupText>{`Group ${groupNumber}`}</StyledGroupText>
+          <Tooltip
+            title={
+              'Created on ' +
+              (createTime.getMonth() + 1) +
+              '/' +
+              createTime.getDate()
+            }
+          >
+            <StyledGroupText>{`Group ${groupNumber}`}</StyledGroupText>
+          </Tooltip>
           {shareMatchEmailTimestamp && (
             <ShareMatchEmailToolTip
               month={shareMatchEmailTimestamp.getMonth() + 1}
@@ -76,6 +86,7 @@ export const GroupGrid = ({
               key={index}
               groupNumber={groupNumber}
               student={student}
+              submissionTime={student.submissionTime}
             />
           ))}
         </Grid>

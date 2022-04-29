@@ -46,16 +46,26 @@ export const EditZing = () => {
     axios
       .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
       .then((res: AxiosResponse<CourseStudentDataResponse>) => {
-        setUnmatchedStudents(res.data.data.unmatched)
-        const groups = res.data.data.groups.map((group: Group) => {
-          return {
+        setUnmatchedStudents(
+          res.data.data.unmatched.map((student) => ({
+            ...student,
+            submissionTime: new Date(student.submissionTime),
+          }))
+        )
+        setStudentGroups(
+          res.data.data.groups.map((group) => ({
             ...group,
+            memberData: group.memberData.map((student) => ({
+              ...student,
+              submissionTime: new Date(student.submissionTime),
+            })),
+            createTime: new Date(group.createTime),
+            updateTime: new Date(group.updateTime),
             shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
               ? new Date(group.shareMatchEmailTimestamp)
               : null,
-          }
-        })
-        setStudentGroups(groups)
+          }))
+        )
         setHasLoadedStudentData(true)
       })
       .catch((error) => {
@@ -172,17 +182,26 @@ export const EditZing = () => {
     axios
       .post(`${API_ROOT}${MATCHING_API}/make`, { courseId: courseId })
       .then((response) => {
-        const groups = studentGroups.concat(
-          response.data.data.groups.map((group: Group) => {
-            return {
-              ...group,
-              shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
-                ? new Date(group.shareMatchEmailTimestamp)
-                : null,
-            }
-          })
+        setUnmatchedStudents(
+          response.data.data.unmatched.map((student: any) => ({
+            ...student,
+            submissionTime: new Date(student.submissionTime),
+          }))
         )
-        setUnmatchedStudents(response.data.data.unmatched)
+        const groups = studentGroups.concat(
+          response.data.data.groups.map((group: Group) => ({
+            ...group,
+            memberData: group.memberData.map((student) => ({
+              ...student,
+              submissionTime: new Date(student.submissionTime),
+            })),
+            createTime: new Date(group.createTime),
+            updateTime: new Date(group.updateTime),
+            shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
+              ? new Date(group.shareMatchEmailTimestamp)
+              : null,
+          }))
+        )
         setStudentGroups(groups)
         setIsCurrentlyGrouping(false)
       })
@@ -219,6 +238,8 @@ export const EditZing = () => {
               groupNumber={studentGroup.groupNumber}
               shareMatchEmailTimestamp={studentGroup.shareMatchEmailTimestamp}
               moveStudent={moveStudent}
+              createTime={studentGroup.createTime}
+              updateTime={studentGroup.updateTime}
             />
           ))}
         </Grid>

@@ -20,12 +20,15 @@ export interface GroupGridProps {
     fromGroupNumber: number,
     toGroupNumber: number
   ) => void
+  createTime: Date
+  updateTime: Date
 }
 
 export interface StudentGridProps {
   student: Student
   groupNumber: number
   xsSize?: GridSize
+  submissionTime: Date
 }
 
 export interface MatchLoadingProps {

@@ -8,6 +8,8 @@ export interface CourseInfo {
 export type Group = {
   groupNumber: number
   memberData: Student[]
+  createTime: Date
+  updateTime: Date
   shareMatchEmailTimestamp: Date | null
 }
 

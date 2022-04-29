@@ -77,6 +77,7 @@ async function makeMatches(courseId: string, groupSize = 3) {
             throw new Error(`Student ${studentEmail} does not exist`)
           const d: any = snapshot.data()
           d['email'] = snapshot.id
+          d['submissionTime'] = d.submissionTime.toDate()
           return d
         })
         .catch((err) => {
@@ -103,6 +104,8 @@ async function makeMatches(courseId: string, groupSize = 3) {
     groups.push({
       groupNumber: groupCounter + lastGroupNumber,
       memberData: nextGroup, // this is to keep things consistent
+      createTime: new Date(),
+      updateTime: new Date(),
       shareMatchEmailTimestamp: null, // timestamp for option of "share matching results"
     })
     i += nextGroup.length
