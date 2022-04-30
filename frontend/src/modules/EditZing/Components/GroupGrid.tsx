@@ -7,7 +7,7 @@ import {
   StyledGroupText,
   StyledGroupContainer,
 } from 'EditZing/Styles/StudentAndGroup.style'
-import { Box, Tooltip, Grid } from '@mui/material'
+import { Box, Tooltip, Grid, Checkbox } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 
 const ShareMatchEmailToolTip = ({
@@ -45,6 +45,8 @@ export const GroupGrid = ({
   createTime,
   updateTime,
   shareMatchEmailTimestamp,
+  selected,
+  handleChecked,
 }: GroupGridProps) => {
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -62,6 +64,7 @@ export const GroupGrid = ({
         ref={drop}
         style={{ opacity: isOver ? '0.6' : '1' }}
       >
+        <Checkbox checked={selected} onChange={handleChecked} />
         <Box display="flex" alignItems="center" mb={2}>
           <Tooltip
             title={

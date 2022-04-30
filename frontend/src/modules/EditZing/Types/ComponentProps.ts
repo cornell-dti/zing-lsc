@@ -22,6 +22,8 @@ export interface GroupGridProps {
   ) => void
   createTime: Date
   updateTime: Date
+  selected: boolean
+  handleChecked: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export interface StudentGridProps {

@@ -38,6 +38,16 @@ export const EditZing = () => {
         setShowError(true)
       })
   }, [courseId])
+  const [selectedGroups, setSelectedGroups] = useState<Group[]>([])
+
+  const editSelectedGroups = (group: Group, selected: boolean) => {
+    if (selected) {
+      setSelectedGroups([...selectedGroups, group])
+    } else {
+      setSelectedGroups(selectedGroups.filter((g) => g !== group))
+    }
+  }
+  console.log(selectedGroups)
 
   const [unmatchedStudents, setUnmatchedStudents] = useState<Student[]>([])
   const [studentGroups, setStudentGroups] = useState<Group[]>([])
@@ -240,6 +250,10 @@ export const EditZing = () => {
               moveStudent={moveStudent}
               createTime={studentGroup.createTime}
               updateTime={studentGroup.updateTime}
+              selected={selectedGroups.includes(studentGroup)}
+              handleChecked={(event) => {
+                editSelectedGroups(studentGroup, event.target.checked)
+              }}
             />
           ))}
         </Grid>
