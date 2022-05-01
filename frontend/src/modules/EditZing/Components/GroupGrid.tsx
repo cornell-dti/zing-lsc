@@ -62,9 +62,23 @@ export const GroupGrid = ({
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <StyledGroupContainer
         ref={drop}
-        style={{ opacity: isOver ? '0.6' : '1' }}
+        style={{
+          opacity: isOver ? '0.6' : '1',
+        }}
       >
-        <Checkbox checked={selected} onChange={handleChecked} />
+        <Checkbox
+          sx={{
+            color: '#898992',
+            '&.Mui-checked': {
+              color: '#898992',
+            },
+            float: 'right',
+            width: '5 % ',
+          }}
+          checked={selected}
+          onChange={handleChecked}
+        />
+
         <Box display="flex" alignItems="center" mb={2}>
           <Tooltip
             title={
