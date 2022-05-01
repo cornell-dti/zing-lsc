@@ -22,10 +22,12 @@ app.use(cors())
 import studentsRouter from './student/routes'
 import matchingRouter from './matching/routes'
 import courseRouter from './course/routes'
+import { router as graphRouter } from './middleware/graphSetup'
 
 // auth middleware before router
 app.use('/student', studentsRouter)
 app.use('/matching', checkAuth, matchingRouter)
 app.use('/course', checkAuth, courseRouter)
+app.use('/graph', graphRouter)
 
 exports.api = functions.https.onRequest(app)
