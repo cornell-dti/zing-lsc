@@ -37,33 +37,45 @@ const addStudentSurveyResponse = async (
   studentRef = studentR
 ) => {
   // First, update the [student] collection to include the data for the new student
-  const crseIds = await Promise.all(
-    courseCatalogNames.map((name: string) =>
-      mapCatalogNameToCrseId(name, 'FA21')
-    )
-  )
+  // Converts to set first to eliminate duplicates, then converts to list
+  const crseIds = [
+    ...new Set(
+      await Promise.all(
+        courseCatalogNames.map((name: string) =>
+          mapCatalogNameToCrseId(name, 'FA21')
+        )
+      )
+    ),
+  ]
 
-  const existingData = (await studentRef.doc(email).get()).data()
-  //studentCourses becomes courseIds of existingData.groups if available, otherwise []
-  const studentCrses = existingData ? existingData.groups : []
+  const existingData = (await studentRef.doc(email).get()).data() //gets all the existing data
+  //studentCrses becomes courseIds of existingData.groups if available, otherwise []
+  const studentCrses = existingData ? existingData.groups : [] //gets the existing courses
   const studentCrseIds = studentCrses.map(
+    //gets the IDs from the existing courses
     (crse: { courseId: any }) => crse.courseId
   )
-  const crsesToAdd: any[] = []
+  const allCrsesToAdd: any[] = [] // consists of map of {courseId: crse, group: -1}
   const crseCatalogsToUpdate: any[] = []
   crseIds.forEach((crse, index) => {
     if (!studentCrseIds.includes(crse)) {
-      crsesToAdd.push(crse)
+      //goes through submitted course IDs, check if already existing
+      allCrsesToAdd.push(crse)
       crseCatalogsToUpdate.push(courseCatalogNames[index])
     }
   })
-
-  crsesToAdd.forEach((crse) =>
+  //put inside if statement
+  //append to existing courses
+  allCrsesToAdd.forEach((crse) =>
     studentCrses.push({
       courseId: crse,
       groupNumber: -1,
     })
   )
+
+  let crsesToAdd = allCrsesToAdd.filter((element, index) => {
+    return allCrsesToAdd.indexOf(element) !== index
+  })
 
   const studentUpdate = studentRef
     .doc(email)
