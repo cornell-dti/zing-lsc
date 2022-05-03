@@ -38,15 +38,11 @@ const addStudentSurveyResponse = async (
 ) => {
   // First, update the [student] collection to include the data for the new student
   // Converts to set first to eliminate duplicates, then converts to list
-  const crseIds = [
-    ...new Set(
-      await Promise.all(
-        courseCatalogNames.map((name: string) =>
-          mapCatalogNameToCrseId(name, 'FA21')
-        )
-      )
-    ),
-  ]
+  const crseIds = await Promise.all(
+    courseCatalogNames.map((name: string) =>
+      mapCatalogNameToCrseId(name, 'FA21')
+    )
+  )
 
   const existingData = (await studentRef.doc(email).get()).data() //gets all the existing data
   //studentCrses becomes courseIds of existingData.groups if available, otherwise []
@@ -60,14 +56,19 @@ const addStudentSurveyResponse = async (
   crseIds.forEach((crse, index) => {
     if (!studentCrseIds.includes(crse)) {
       //goes through submitted course IDs, check if already existing
-      crsesToAdd.push(typeof crsesToAdd)
+      crsesToAdd.push(crse)
       crseCatalogsToUpdate.push(courseCatalogNames[index])
     }
+  })
+
+  crsesToAdd.filter((item, index) => crsesToAdd.indexOf(item) === index)
+
+  crsesToAdd.forEach((crse) =>
     studentCrses.push({
       courseId: crse,
       groupNumber: -1,
     })
-  })
+  )
 
   const studentUpdate = studentRef
     .doc(email)
