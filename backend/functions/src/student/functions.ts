@@ -61,7 +61,7 @@ const addStudentSurveyResponse = async (
     }
   })
 
-  crsesToAdd.filter((item, index) => crsesToAdd.indexOf(item) === index)
+  crsesToAdd = [...new Set(crsesToAdd)]
 
   crsesToAdd.forEach((crse) =>
     studentCrses.push({
