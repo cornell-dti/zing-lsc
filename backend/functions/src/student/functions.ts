@@ -38,15 +38,11 @@ const addStudentSurveyResponse = async (
 ) => {
   // First, update the [student] collection to include the data for the new student
   // Converts to set first to eliminate duplicates, then converts to list
-  const crseIds = [
-    ...new Set(
-      await Promise.all(
-        courseCatalogNames.map((name: string) =>
-          mapCatalogNameToCrseId(name, 'FA21')
-        )
-      )
-    ),
-  ]
+  const crseIds = await Promise.all(
+    courseCatalogNames.map((name: string) =>
+      mapCatalogNameToCrseId(name, 'FA21')
+    )
+  )
 
   const existingData = (await studentRef.doc(email).get()).data() //gets all the existing data
   //studentCrses becomes courseIds of existingData.groups if available, otherwise []
@@ -55,19 +51,33 @@ const addStudentSurveyResponse = async (
     //gets the IDs from the existing courses
     (crse: { courseId: any }) => crse.courseId
   )
-  const crsesToAdd: any[] = [] // consists of map of {courseId: crse, group: -1}
+  let crsesToAdd: any[] = [] // consists of map of {courseId: crse, group: -1}
   const crseCatalogsToUpdate: any[] = []
   crseIds.forEach((crse, index) => {
     if (!studentCrseIds.includes(crse)) {
       //goes through submitted course IDs, check if already existing
-      crsesToAdd.push(crse)
-      crseCatalogsToUpdate.push(courseCatalogNames[index])
+      if (crsesToAdd.indexOf(crse) == -1) {
+        crsesToAdd.push(typeof crsesToAdd)
+        crseCatalogsToUpdate.push(courseCatalogNames[index])
+      }
     }
     studentCrses.push({
       courseId: crse,
       groupNumber: -1,
     })
   })
+
+  // crsesToAdd.filter((item,index) => crsesToAdd.indexOf(item) === index)
+
+  // function removeDuplicates(item) {
+  //   for(const crse in crsesToAdd) {
+  //     if(item == crse) {
+  //       crsesToAdd.
+  //     }
+  //   }
+  // }
+
+  // crsesToAdd = crsesToAdd.filter(removeDuplicates)
 
   const studentUpdate = studentRef
     .doc(email)
