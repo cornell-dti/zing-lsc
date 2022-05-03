@@ -55,26 +55,18 @@ const addStudentSurveyResponse = async (
     //gets the IDs from the existing courses
     (crse: { courseId: any }) => crse.courseId
   )
-  const allCrsesToAdd: any[] = [] // consists of map of {courseId: crse, group: -1}
+  const crsesToAdd: any[] = [] // consists of map of {courseId: crse, group: -1}
   const crseCatalogsToUpdate: any[] = []
   crseIds.forEach((crse, index) => {
     if (!studentCrseIds.includes(crse)) {
       //goes through submitted course IDs, check if already existing
-      allCrsesToAdd.push(crse)
+      crsesToAdd.push(crse)
       crseCatalogsToUpdate.push(courseCatalogNames[index])
     }
-  })
-  //put inside if statement
-  //append to existing courses
-  allCrsesToAdd.forEach((crse) =>
     studentCrses.push({
       courseId: crse,
       groupNumber: -1,
     })
-  )
-
-  let crsesToAdd = allCrsesToAdd.filter((element, index) => {
-    return allCrsesToAdd.indexOf(element) !== index
   })
 
   const studentUpdate = studentRef
