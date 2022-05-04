@@ -43,43 +43,83 @@ export const Dashboard = () => {
   }, [])
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
   function sorted(groups: CourseInfo[], menuValue: string) {
-    if (menuValue === 'newly-match-first') {
-      return [...groups].sort((a, _) => {
-        //-1 if a newly matchable and b isn't
-        if (a.lastGroupNumber === 0 && a.unmatched.length > 1) {
-          return -1
-        } else return 1
-      })
-    } else if (menuValue === 'unmatch-first') {
-      return [...groups].sort((a, _) => {
-        //-1 if a unmatchable and b isn't
-        if (a.lastGroupNumber === 0 && a.unmatched.length === 1) {
-          return -1
-        } else return 1
-      })
-    } else if (menuValue === 'match-first') {
-      return [...groups].sort((a, _) => {
-        //-1 if a matchable and b isn't
-        if (a.lastGroupNumber > 0 && a.unmatched.length > 0) {
-          return -1
-        } else return 1
-      })
-    } else if (menuValue === 'classesa-z') {
-      const sorted = [...groups].sort((a, b) => {
-        return a.names[0].localeCompare(b.names[0], undefined, {
-          numeric: true,
+    switch (menuValue) {
+      case 'newly-match-first':
+        return [...groups].sort((a, _) => {
+          //-1 if a newly matchable and b isn't
+          if (a.lastGroupNumber === 0 && a.unmatched.length > 1) {
+            return -1
+          } else return 1
         })
-      })
-      return sorted
-    } else if (menuValue === 'classesz-a') {
-      const sorted = [...groups].sort((a, b) => {
-        return b.names[0].localeCompare(a.names[0], undefined, {
-          numeric: true,
+      case 'unmatch-first':
+        return [...groups].sort((a, _) => {
+          //-1 if a unmatchable and b isn't
+          if (a.lastGroupNumber === 0 && a.unmatched.length === 1) {
+            return -1
+          } else return 1
         })
-      })
-      return sorted
-    } else return groups
+      case 'match-first':
+        return [...groups].sort((a, _) => {
+          //-1 if a matchable and b isn't
+          if (a.lastGroupNumber > 0 && a.unmatched.length > 0) {
+            return -1
+          } else return 1
+        })
+      case 'classesa-z':
+        return [...groups].sort((a, b) => {
+          return a.names[0].localeCompare(b.names[0], undefined, {
+            numeric: true,
+          })
+        })
+      case 'classesz-a':
+        return [...groups].sort((a, b) => {
+          return b.names[0].localeCompare(a.names[0], undefined, {
+            numeric: true,
+          })
+        })
+      default:
+        return groups
+    }
   }
+
+  //   }
+  //   if (menuValue === 'newly-match-first') {
+  //     return [...groups].sort((a, _) => {
+  //       //-1 if a newly matchable and b isn't
+  //       if (a.lastGroupNumber === 0 && a.unmatched.length > 1) {
+  //         return -1
+  //       } else return 1
+  //     })
+  //   } else if (menuValue === 'unmatch-first') {
+  //     return [...groups].sort((a, _) => {
+  //       //-1 if a unmatchable and b isn't
+  //       if (a.lastGroupNumber === 0 && a.unmatched.length === 1) {
+  //         return -1
+  //       } else return 1
+  //     })
+  //   } else if (menuValue === 'match-first') {
+  //     return [...groups].sort((a, _) => {
+  //       //-1 if a matchable and b isn't
+  //       if (a.lastGroupNumber > 0 && a.unmatched.length > 0) {
+  //         return -1
+  //       } else return 1
+  //     })
+  //   } else if (menuValue === 'classesa-z') {
+  //     const sorted = [...groups].sort((a, b) => {
+  //       return a.names[0].localeCompare(b.names[0], undefined, {
+  //         numeric: true,
+  //       })
+  //     })
+  //     return sorted
+  //   } else if (menuValue === 'classesz-a') {
+  //     const sorted = [...groups].sort((a, b) => {
+  //       return b.names[0].localeCompare(a.names[0], undefined, {
+  //         numeric: true,
+  //       })
+  //     })
+  //     return sorted
+  //   } else return groups
+  // }
   const handleChange = (event: SelectChangeEvent) => {
     setStatus(event.target.value)
     setGroups(sorted(groups, event.target.value))
