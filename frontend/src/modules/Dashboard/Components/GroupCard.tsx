@@ -1,5 +1,4 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
 import { colors } from '@core'
@@ -15,6 +14,7 @@ import {
 } from 'Dashboard/Styles/GroupCard.style'
 import { Button, Typography } from '@mui/material'
 import { ReactComponent as NewlyMatchable } from '@assets/img/newlymatchable.svg'
+import { useHistory } from 'react-router'
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -22,11 +22,17 @@ function Alert(props: any) {
 
 export const GroupCard = ({
   key,
+  id,
   name,
   newStudents,
   groupsFormed,
 }: GroupCardProps) => {
-  // const history = useHistory()
+  const history = useHistory()
+
+  const handleClickView = () => {
+    history.push('/edit/' + id)
+  }
+
   const [open, setOpen] = React.useState(false)
 
   const handleClose = (
@@ -96,6 +102,7 @@ export const GroupCard = ({
       </StyledRows>
       <StyledButtons>
         <Button
+          onClick={handleClickView}
           sx={{
             width: 1 / 3,
             padding: 1,
