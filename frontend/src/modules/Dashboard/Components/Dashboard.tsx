@@ -61,7 +61,10 @@ export const Dashboard = () => {
       case 'match-first':
         return [...groups].sort((a, _) => {
           //-1 if a matchable and b isn't
-          if (a.lastGroupNumber > 0 && a.unmatched.length > 0) {
+          if (
+            (a.lastGroupNumber > 0 && a.unmatched.length > 0) ||
+            (a.lastGroupNumber === 0 && a.unmatched.length > 1)
+          ) {
             return -1
           } else return 1
         })
@@ -82,44 +85,6 @@ export const Dashboard = () => {
     }
   }
 
-  //   }
-  //   if (menuValue === 'newly-match-first') {
-  //     return [...groups].sort((a, _) => {
-  //       //-1 if a newly matchable and b isn't
-  //       if (a.lastGroupNumber === 0 && a.unmatched.length > 1) {
-  //         return -1
-  //       } else return 1
-  //     })
-  //   } else if (menuValue === 'unmatch-first') {
-  //     return [...groups].sort((a, _) => {
-  //       //-1 if a unmatchable and b isn't
-  //       if (a.lastGroupNumber === 0 && a.unmatched.length === 1) {
-  //         return -1
-  //       } else return 1
-  //     })
-  //   } else if (menuValue === 'match-first') {
-  //     return [...groups].sort((a, _) => {
-  //       //-1 if a matchable and b isn't
-  //       if (a.lastGroupNumber > 0 && a.unmatched.length > 0) {
-  //         return -1
-  //       } else return 1
-  //     })
-  //   } else if (menuValue === 'classesa-z') {
-  //     const sorted = [...groups].sort((a, b) => {
-  //       return a.names[0].localeCompare(b.names[0], undefined, {
-  //         numeric: true,
-  //       })
-  //     })
-  //     return sorted
-  //   } else if (menuValue === 'classesz-a') {
-  //     const sorted = [...groups].sort((a, b) => {
-  //       return b.names[0].localeCompare(a.names[0], undefined, {
-  //         numeric: true,
-  //       })
-  //     })
-  //     return sorted
-  //   } else return groups
-  // }
   const handleChange = (event: SelectChangeEvent) => {
     setStatus(event.target.value)
     setGroups(sorted(groups, event.target.value))
@@ -144,7 +109,7 @@ export const Dashboard = () => {
               fontWeight: 'bold',
             }}
           >
-            <MenuItem value="newest">Newest</MenuItem>
+            {/* <MenuItem value="newest">Newest</MenuItem> */}
             <MenuItem value="unmatch-first">Unmatchable first</MenuItem>
             <MenuItem value="newly-match-first">Newly matchable first</MenuItem>
             <MenuItem value="match-first">Matchable first</MenuItem>
