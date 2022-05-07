@@ -38,16 +38,19 @@ export const EditZing = () => {
         setShowError(true)
       })
   }, [courseId])
+
   const [selectedGroups, setSelectedGroups] = useState<Group[]>([])
 
   const editSelectedGroups = (group: Group, selected: boolean) => {
     if (selected) {
       setSelectedGroups([...selectedGroups, group])
     } else {
-      setSelectedGroups(selectedGroups.filter((g) => g !== group))
+      setSelectedGroups(
+        selectedGroups.filter((g) => g.groupNumber !== group.groupNumber)
+      )
     }
   }
-  console.log(selectedGroups)
+  console.log(selectedGroups) //for seeing selected groups in console
 
   const [unmatchedStudents, setUnmatchedStudents] = useState<Student[]>([])
   const [studentGroups, setStudentGroups] = useState<Group[]>([])
@@ -250,7 +253,9 @@ export const EditZing = () => {
               moveStudent={moveStudent}
               createTime={studentGroup.createTime}
               updateTime={studentGroup.updateTime}
-              selected={selectedGroups.includes(studentGroup)}
+              selected={selectedGroups.some(
+                (g) => g.groupNumber == studentGroup.groupNumber
+              )}
               handleChecked={(event) => {
                 editSelectedGroups(studentGroup, event.target.checked)
               }}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StudentGrid } from 'EditZing/Components/StudentGrid'
 import { GroupGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrop } from 'react-dnd'
@@ -58,28 +58,37 @@ export const GroupGrid = ({
     }),
   })
 
+  const [isHovering, setIsHovering] = useState(false)
+  const handleMouseOver = () => {
+    setIsHovering(true)
+  }
+
+  const handleMouseOut = () => {
+    setIsHovering(false)
+  }
+
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
-      <StyledGroupContainer
+      <Box
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
         ref={drop}
-        style={{
+        sx={{
+          padding: '2rem',
+          border: "0.5px solid 'purple.50'",
+          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.07)',
+          borderRadius: '20px',
+          margin: '0.25rem',
+          backgroundColor: selected ? 'rgba(129, 94, 212, 0.15);' : 'white',
           opacity: isOver ? '0.6' : '1',
         }}
       >
-        <Checkbox
-          sx={{
-            color: '#898992',
-            '&.Mui-checked': {
-              color: '#898992',
-            },
-            float: 'right',
-            width: '5 % ',
-          }}
-          checked={selected}
-          onChange={handleChecked}
-        />
-
-        <Box display="flex" alignItems="center" mb={2}>
+        <Box
+          display="flex"
+          flex-direction="row-reverse"
+          alignItems="center"
+          mb={2}
+        >
           <Tooltip
             title={
               'Created on ' +
@@ -96,6 +105,15 @@ export const GroupGrid = ({
               day={shareMatchEmailTimestamp.getDate()}
             />
           )}
+          {selected ||
+            (isHovering && (
+              <Checkbox
+                color="secondary"
+                align-self="flex-end"
+                checked={selected}
+                onChange={handleChecked}
+              />
+            ))}
         </Box>
         <Grid container spacing={2}>
           {studentList.map((student, index) => (
@@ -107,7 +125,7 @@ export const GroupGrid = ({
             />
           ))}
         </Grid>
-      </StyledGroupContainer>
+      </Box>
     </Grid>
   )
 }
