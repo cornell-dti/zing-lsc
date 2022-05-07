@@ -88,6 +88,7 @@ export const GroupGrid = ({
           flex-direction="row-reverse"
           alignItems="center"
           mb={2}
+          sx={{ width: '100%', height: '100%' }}
         >
           <Tooltip
             title={
@@ -105,15 +106,18 @@ export const GroupGrid = ({
               day={shareMatchEmailTimestamp.getDate()}
             />
           )}
-          {selected ||
-            (isHovering && (
-              <Checkbox
-                color="secondary"
-                align-self="flex-end"
-                checked={selected}
-                onChange={handleChecked}
-              />
-            ))}
+
+          <Checkbox
+            color="secondary"
+            align-self="flex-end"
+            checked={selected}
+            onChange={handleChecked}
+            sx={{
+              display: selected || isHovering ? 'block' : 'none',
+              padding: '0px',
+              ml: '45%',
+            }}
+          />
         </Box>
         <Grid container spacing={2}>
           {studentList.map((student, index) => (
