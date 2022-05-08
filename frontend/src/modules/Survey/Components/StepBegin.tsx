@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { IconButton, Box } from '@mui/material'
-import { ArrowBack, ArrowForward } from '@mui/icons-material'
+import { ArrowForward } from '@mui/icons-material'
 
-import { colors, EmailField, NameField, PrimaryGradientButton } from '@core'
+import { colors, EmailField, NameField } from '@core'
 import {
   StyledContainer,
   StyledLeftPanel,
