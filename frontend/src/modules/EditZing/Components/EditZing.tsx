@@ -21,6 +21,7 @@ import {
 import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
 import { MatchLoading } from './MatchLoading'
+import { Box, Button } from '@mui/material'
 
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
@@ -233,10 +234,22 @@ export const EditZing = () => {
         courseNames={courseInfo.names}
         setShowMatchLoading={setShowMatchLoading}
       />
-      <StyledLogoWrapper>
-        <StyledLogo />
-        <StyledText>{courseInfo.names.join(', ')}</StyledText>
-      </StyledLogoWrapper>
+
+      <Box
+        display="flex"
+        flex-direction="row"
+        align-items=" center"
+        justifyContent="space-between"
+      >
+        <StyledLogoWrapper>
+          <StyledLogo />
+          <StyledText>{courseInfo.names.join(', ')}</StyledText>
+        </StyledLogoWrapper>
+        s
+        <Button sx={{ height: '40px', mt: '10px' }}>
+          {selectedGroups.length == 0 ? 'Send Email To' : 'Email Selected'}
+        </Button>
+      </Box>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={1}>
           <UnmatchedGrid
