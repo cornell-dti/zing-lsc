@@ -247,7 +247,7 @@ export const EditZing = () => {
         </StyledLogoWrapper>
         s
         <Button sx={{ height: '40px', mt: '10px' }}>
-          {selectedGroups.length == 0 ? 'Send Email To' : 'Email Selected'}
+          {selectedGroups.length === 0 ? 'Send Email To' : 'Email Selected'}
         </Button>
       </Box>
       <DndProvider backend={HTML5Backend}>
@@ -267,7 +267,7 @@ export const EditZing = () => {
               createTime={studentGroup.createTime}
               updateTime={studentGroup.updateTime}
               selected={selectedGroups.some(
-                (g) => g.groupNumber == studentGroup.groupNumber
+                (g) => g.groupNumber === studentGroup.groupNumber
               )}
               handleChecked={(event) => {
                 editSelectedGroups(studentGroup, event.target.checked)

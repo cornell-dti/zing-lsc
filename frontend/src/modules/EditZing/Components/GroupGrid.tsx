@@ -3,10 +3,7 @@ import { StudentGrid } from 'EditZing/Components/StudentGrid'
 import { GroupGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrop } from 'react-dnd'
 import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
-import {
-  StyledGroupText,
-  StyledGroupContainer,
-} from 'EditZing/Styles/StudentAndGroup.style'
+import { StyledGroupText } from 'EditZing/Styles/StudentAndGroup.style'
 import { Box, Tooltip, Grid, Checkbox } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 
