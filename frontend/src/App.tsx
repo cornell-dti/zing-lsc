@@ -25,10 +25,6 @@ import axios from 'axios'
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [authState, setAuthState] = useState<AuthState>('loading')
-  const [isLoading, setIsLoading] = useState(true)
-
-  // make something for auth state
-  const [isAuthorized, setIsAuthorized] = useState(true)
   const axiosAuthInterceptor = useRef<number | null>(null)
 
   useEffect(() => {
@@ -53,27 +49,22 @@ const App = () => {
             }
 
             axios.get(`${API_ROOT}/getauthusers`).then((res) => {
-              setIsAuthorized(res.data.data.includes(user.email))
               setAuthState(
                 res.data.data.includes(user.email)
                   ? 'authorized'
                   : 'unauthorized'
               )
-              setIsLoading(false)
             })
           })
           .catch(() => {
             setAuthState('unauthenticated')
-            setIsLoading(false)
           })
       } else {
         if (axiosAuthInterceptor.current !== null) {
           axios.interceptors.request.eject(axiosAuthInterceptor.current)
           axiosAuthInterceptor.current = null
-          setIsAuthorized(true) // need to reset to initial value
         }
         setAuthState('unauthenticated')
-        setIsLoading(false)
       }
     })
   }, [])
@@ -83,9 +74,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <AuthProvider
-            value={{ user: currentUser, authState, isLoading, isAuthorized }}
-          >
+          <AuthProvider value={{ user: currentUser, authState }}>
             <Switch>
               <PublicRoute exact path={HOME_PATH} component={Home} />
               <Route exact path={SURVEY_PATH} component={Survey} />

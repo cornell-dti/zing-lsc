@@ -29,15 +29,4 @@ export const PublicRoute = ({
         />
       )
   }
-
-  // if (isLoading) return <RouteLoading isLoading />
-  //
-  // return (
-  //   <Route
-  //     {...routeProps}
-  //     render={(props) =>
-  //       user ? <Redirect to={DASHBOARD_PATH} /> : <Component {...props} />
-  //     }
-  //   />
-  // )
 }
