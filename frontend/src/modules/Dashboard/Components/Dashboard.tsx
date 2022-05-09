@@ -14,13 +14,11 @@ import { API_ROOT, COURSE_API } from '@core/Constants'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
-import { useHistory } from 'react-router'
 import { Box, CircularProgress } from '@mui/material'
 
 export const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
-  const history = useHistory()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -78,9 +76,7 @@ export const Dashboard = () => {
           <MenuItem
             onClick={() => {
               handleClose()
-              logOut().then(() => {
-                history.push('/')
-              })
+              logOut()
             }}
           >
             Log Out

@@ -17,5 +17,5 @@ export async function signInWithGoogle() {
 }
 
 export async function logOut() {
-  signOut(auth)
+  signOut(auth).then(() => {})
 }
