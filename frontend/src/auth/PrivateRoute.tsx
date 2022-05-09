@@ -39,7 +39,11 @@ export const PrivateRoute = ({
     <Route
       {...routeProps}
       render={(props) => {
-        return user ? <Component {...props} /> : <Redirect to={HOME_PATH} />
+        return user && isAuthorized ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={HOME_PATH} />
+        )
       }}
     />
   )

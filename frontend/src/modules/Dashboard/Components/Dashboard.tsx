@@ -11,11 +11,11 @@ import {
 import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
-
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
 import { useHistory } from 'react-router'
+import { Box, CircularProgress } from '@mui/material'
 
 export const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -29,14 +29,19 @@ export const Dashboard = () => {
     setAnchorEl(null)
   }
 
-  const [groups, setGroups] = useState<CourseInfo[]>([])
+  const [courses, setCourses] = useState<CourseInfo[]>([])
+  const [hasLoadedCourseData, setHasLoadedCourseData] = useState(false)
 
   const { user } = useAuthValue()
 
   useEffect(() => {
     axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
-      setGroups(res.data.data)
+      setCourses(res.data.data)
+      setHasLoadedCourseData(true)
     })
+    return () => {
+      setAnchorEl(null) // clean state for anchorEl on unmount
+    }
   }, [])
 
   return (
@@ -72,6 +77,7 @@ export const Dashboard = () => {
         >
           <MenuItem
             onClick={() => {
+              handleClose()
               logOut().then(() => {
                 history.push('/')
               })
@@ -81,7 +87,13 @@ export const Dashboard = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      <Groups groups={groups} />
+      {hasLoadedCourseData ? (
+        <Groups groups={courses} />
+      ) : (
+        <Box display="flex" justifyContent="center" padding={4}>
+          <CircularProgress size={50} />
+        </Box>
+      )}
     </StyledContainer>
   )
 }

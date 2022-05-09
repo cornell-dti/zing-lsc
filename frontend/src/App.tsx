@@ -7,6 +7,7 @@ import {
   CREATE_ZING_PATH,
   EDIT_ZING_PATH,
   DASHBOARD_PATH,
+  API_ROOT,
 } from '@core'
 import { Home } from 'Home'
 import { Survey } from 'Survey'
@@ -24,20 +25,10 @@ import axios from 'axios'
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+
+  // make something for auth state
   const [isAuthorized, setIsAuthorized] = useState(true)
   const axiosAuthInterceptor = useRef<number | null>(null)
-
-  // Response interceptor for 403 responses
-  axios.interceptors.response.use(
-    function (response) {
-      setIsAuthorized(true)
-      return response
-    },
-    function (error) {
-      setIsAuthorized(false)
-      return Promise.reject(error)
-    }
-  )
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -59,7 +50,10 @@ const App = () => {
                 }
               )
             }
-            setIsLoading(false)
+            axios.get(`${API_ROOT}/getauthusers`).then((res) => {
+              setIsAuthorized(res.data.data.includes(user.email))
+              setIsLoading(false)
+            })
           })
           .catch(() => {
             setIsLoading(false)
