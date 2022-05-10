@@ -33,7 +33,7 @@ const App = () => {
       // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
       if (user) {
         user
-          .getIdToken(false) // this must be false or first load will fail
+          .getIdToken(true)
           .then((idToken) => {
             if (axiosAuthInterceptor.current === null) {
               // interceptor so that every axios request will have this header
@@ -48,11 +48,9 @@ const App = () => {
               )
             }
 
-            axios.get(`${API_ROOT}/getauthusers`).then((res) => {
+            axios.get(`${API_ROOT}/getauth/${user.email}`).then((res) => {
               setAuthState(
-                res.data.data.includes(user.email)
-                  ? 'authorized'
-                  : 'unauthorized'
+                res.data.data.isAuthed ? 'authorized' : 'unauthorized'
               )
             })
           })

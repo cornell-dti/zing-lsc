@@ -42,6 +42,13 @@ export function checkAuth(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function checkIsAuthorizedHelper(idToken: string) {
+  const decodedToken = await admin.auth().verifyIdToken(idToken)
+  const uid = decodedToken.uid
+  const user = await admin.auth().getUser(uid)
+  return !!(user.email && allowedUsers.includes(user.email))
+}
+
 export function checkIsAuthorized(
   req: Request,
   res: Response,
@@ -49,21 +56,10 @@ export function checkIsAuthorized(
 ) {
   const idToken = req.headers?.authorization?.split('Bearer ')[1]
   if (idToken) {
-    admin
-      .auth()
-      .verifyIdToken(idToken)
-      .then((decodedToken) => {
-        const uid = decodedToken.uid
-        admin
-          .auth()
-          .getUser(uid)
-          .then((user) => {
-            if (user.email && allowedUsers.includes(user.email)) {
-              next()
-            } else {
-              res.status(403).send('Unauthorized: not correct permissions')
-            }
-          })
+    checkIsAuthorizedHelper(idToken)
+      .then((isAuth) => {
+        if (isAuth) next()
+        else res.status(403).send('Unauthorized: not correct permissions')
       })
       .catch(() => {
         res.status(401).send('Unauthorized: please sign in')

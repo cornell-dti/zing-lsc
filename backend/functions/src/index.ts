@@ -31,11 +31,14 @@ app.use('/student', studentsRouter)
 app.use('/matching', [checkAuth, checkIsAuthorized], matchingRouter)
 app.use('/course', [checkAuth, checkIsAuthorized], courseRouter)
 
-app.get('/getauthusers', (req, res) => {
+app.get('/getauth/:email', checkAuth, (req, res) => {
   const allowedUsersRef = db.collection('allowed_users')
   allowedUsersRef.get().then((r) => {
+    const email = req.params.email
     const data = r.docs.map((doc) => doc.data().email)
-    res.status(200).send({ success: true, data: data })
+    res
+      .status(200)
+      .send({ success: true, data: { isAuthed: data.includes(email) } })
   })
 })
 
