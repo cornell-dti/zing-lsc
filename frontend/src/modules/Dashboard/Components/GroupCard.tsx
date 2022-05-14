@@ -52,11 +52,11 @@ export const GroupCard = ({
       return { color: colors.white, new_match: 'no' }
     }
     //students are ready to be matched
-    else if (newStudents > 0 && groupsFormed > 0) {
+    else if (students > 0 && groups > 0) {
       return { color: colors.lightgreen, new_match: 'no' }
     }
     //NEWLY MATCHABLE
-    else if (newStudents > 1 && groupsFormed === 0) {
+    else if (students > 1 && groups === 0) {
       return { color: colors.lightgreen, new_match: 'yes' }
     }
     //only 1 student & 0 groups formed
