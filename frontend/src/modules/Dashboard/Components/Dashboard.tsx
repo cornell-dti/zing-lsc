@@ -20,7 +20,7 @@ import { DropdownSelect } from '@core/Components'
 import { SelectChangeEvent, Box } from '@mui/material'
 
 export const Dashboard = () => {
-  const [status, setStatus] = useState('')
+  const [sortedOrder, setSortedOrder] = useState('')
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const history = useHistory()
@@ -86,9 +86,11 @@ export const Dashboard = () => {
   }
 
   const handleChange = (event: SelectChangeEvent) => {
-    setStatus(event.target.value)
-    setGroups(sorted(groups, event.target.value))
+    setSortedOrder(event.target.value)
+    // setGroups(sorted(groups, event.target.value))
   }
+
+  const sortedGroups = sorted(groups, sortedOrder)
 
   return (
     <StyledContainer>
@@ -96,12 +98,17 @@ export const Dashboard = () => {
         <LogoImg />
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
           <Box
-            sx={{ fontWeight: 'bold', color: '#5C5B6A', padding: 1, margin: 1 }}
+            sx={{
+              fontWeight: 'bold',
+              color: 'essentials.75',
+              padding: 1,
+              margin: 1,
+            }}
           >
             Sort by:
           </Box>
           <DropdownSelect
-            value={status}
+            value={sortedOrder}
             onChange={handleChange}
             sx={{
               padding: 0,
@@ -155,7 +162,7 @@ export const Dashboard = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      <Groups groups={groups} />
+      <Groups groups={sortedGroups} />
     </StyledContainer>
   )
 }
