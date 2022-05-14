@@ -20,7 +20,6 @@ function Alert(props: any) {
 }
 
 export const GroupCard = ({
-  // key,
   name,
   newStudents,
   groupsFormed,
@@ -133,7 +132,6 @@ export const GroupCard = ({
 }
 
 interface GroupCardProps {
-  // key: number
   id: string
   name: string
   newStudents: number

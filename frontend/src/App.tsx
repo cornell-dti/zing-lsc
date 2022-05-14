@@ -48,7 +48,7 @@ const App = () => {
               )
             }
 
-            axios.get(`${API_ROOT}/getauth/${user.email}`).then((res) => {
+            axios.get(`${API_ROOT}/getauth`).then((res) => {
               setAuthState(
                 res.data.data.isAuthed ? 'authorized' : 'unauthorized'
               )

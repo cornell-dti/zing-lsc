@@ -2,8 +2,11 @@ import * as functions from 'firebase-functions'
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import { checkAuth, checkIsAuthorized } from './middleware/auth-middleware'
-import { db } from './config'
+import {
+  checkAuth,
+  checkIsAuthorized,
+  checkIsAuthorizedFromToken,
+} from './middleware/auth-middleware'
 
 require('dotenv').config({ path: '../.env' })
 
@@ -31,15 +34,21 @@ app.use('/student', studentsRouter)
 app.use('/matching', [checkAuth, checkIsAuthorized], matchingRouter)
 app.use('/course', [checkAuth, checkIsAuthorized], courseRouter)
 
-app.get('/getauth/:email', checkAuth, (req, res) => {
-  const allowedUsersRef = db.collection('allowed_users')
-  allowedUsersRef.get().then((r) => {
-    const email = req.params.email
-    const data = r.docs.map((doc) => doc.data().email)
-    res
-      .status(200)
-      .send({ success: true, data: { isAuthed: data.includes(email) } })
-  })
+app.get('/getauth', checkAuth, (req, res) => {
+  if (req.headers?.authorization?.startsWith('Bearer ')) {
+    const idToken = req.headers.authorization.split('Bearer ')[1]
+    checkIsAuthorizedFromToken(idToken).then((isAuthed) => {
+      res.status(200).send({
+        success: true,
+        data: { isAuthed: isAuthed },
+      })
+    })
+  } else {
+    res.status(200).send({
+      success: true,
+      data: { isAuthed: false },
+    })
+  }
 })
 
 exports.api = functions.https.onRequest(app)

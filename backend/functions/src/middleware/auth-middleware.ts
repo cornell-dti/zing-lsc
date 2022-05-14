@@ -5,6 +5,7 @@ import { firestore } from 'firebase-admin'
 import QuerySnapshot = firestore.QuerySnapshot
 
 // get data in global scope so this is shared across all function invocations:
+// retrieves the allowed users in the database
 function getAllowedUsers() {
   const users: string[] = []
   db.collection('allowed_users')
@@ -42,7 +43,7 @@ export function checkAuth(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function checkIsAuthorizedHelper(idToken: string) {
+export async function checkIsAuthorizedFromToken(idToken: string) {
   const decodedToken = await admin.auth().verifyIdToken(idToken)
   const uid = decodedToken.uid
   const user = await admin.auth().getUser(uid)
@@ -56,7 +57,7 @@ export function checkIsAuthorized(
 ) {
   const idToken = req.headers?.authorization?.split('Bearer ')[1]
   if (idToken) {
-    checkIsAuthorizedHelper(idToken)
+    checkIsAuthorizedFromToken(idToken)
       .then((isAuth) => {
         if (isAuth) next()
         else res.status(403).send('Unauthorized: not correct permissions')

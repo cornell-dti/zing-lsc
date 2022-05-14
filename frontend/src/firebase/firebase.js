@@ -16,6 +16,6 @@ export async function signInWithGoogle() {
   await signInWithPopup(auth, provider)
 }
 
-export async function logOut() {
-  signOut(auth).then(() => {})
+export function logOut() {
+  signOut(auth)
 }
