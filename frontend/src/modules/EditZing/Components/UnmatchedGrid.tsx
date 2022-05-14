@@ -47,6 +47,7 @@ export const UnmatchedGrid = ({
               groupNumber={-1}
               student={student}
               xsSize={xsSize}
+              submissionTime={student.submissionTime}
             />
           ))}
         </Grid>

@@ -1,17 +1,23 @@
 import React from 'react'
+import { IconButton, Box } from '@mui/material'
 
 // import { Image } from '@core/Components/Button'
 import { GoToButtonProps } from '@core/Types/FormFieldProps'
 
 export const GoNextPrevButton = ({
-  className,
-  src,
   onClick,
+  children,
+  caption,
 }: GoToButtonProps) => {
-  const containerStyle = {}
+  const containerStyle = { textAlign: 'center' }
+
   return (
-    <div className={className} style={containerStyle}>
-      <img src={src} alt="gonextprevbutton" onClick={onClick}></img>
-    </div>
+    <Box sx={containerStyle}>
+      <IconButton onClick={onClick} color="secondary">
+        {children}
+      </IconButton>
+      <br />
+      {caption}
+    </Box>
   )
 }

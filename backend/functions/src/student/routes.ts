@@ -5,23 +5,9 @@ const router = Router()
 import { addStudentSurveyResponse, removeStudent } from './functions'
 
 router.post('/survey', (req, res) => {
-  const {
-    name,
-    email,
-    preferredWorkingTime,
-    college,
-    year,
-    courseCatalogNames,
-  } = req.body
+  const { name, email, college, year, courseCatalogNames } = req.body
 
-  addStudentSurveyResponse(
-    name,
-    email,
-    preferredWorkingTime,
-    college,
-    year,
-    courseCatalogNames
-  )
+  addStudentSurveyResponse(name, email, college, year, courseCatalogNames)
     .then(() => res.status(200).json({ success: true }))
     .catch((err) => {
       if (err.name === 'processing_err') {

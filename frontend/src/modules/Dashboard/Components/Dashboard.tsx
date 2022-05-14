@@ -14,9 +14,11 @@ import { API_ROOT, COURSE_API } from '@core/Constants'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
-import { Box, CircularProgress } from '@mui/material'
+import { Box, CircularProgress, SelectChangeEvent } from '@mui/material'
+import { DropdownSelect } from '@core/Components'
 
 export const Dashboard = () => {
+  const [sortedOrder, setSortedOrder] = useState('')
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -42,10 +44,88 @@ export const Dashboard = () => {
     }
   }, [])
 
+  // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
+  function sorted(courseInfo: CourseInfo[], menuValue: string) {
+    switch (menuValue) {
+      case 'newly-match-first':
+        return [...courseInfo].sort((a, _) => {
+          //-1 if a newly matchable and b isn't
+          if (a.lastGroupNumber === 0 && a.unmatched.length > 1) {
+            return -1
+          } else return 1
+        })
+      case 'unmatch-first':
+        return [...courseInfo].sort((a, _) => {
+          //-1 if a unmatchable and b isn't
+          if (a.lastGroupNumber === 0 && a.unmatched.length === 1) {
+            return -1
+          } else return 1
+        })
+      case 'match-first':
+        return [...courseInfo].sort((a, _) => {
+          //-1 if a matchable and b isn't
+          if (
+            (a.lastGroupNumber > 0 && a.unmatched.length > 0) ||
+            (a.lastGroupNumber === 0 && a.unmatched.length > 1)
+          ) {
+            return -1
+          } else return 1
+        })
+      case 'classesa-z':
+        return [...courseInfo].sort((a, b) => {
+          return a.names[0].localeCompare(b.names[0], undefined, {
+            numeric: true,
+          })
+        })
+      case 'classesz-a':
+        return [...courseInfo].sort((a, b) => {
+          return b.names[0].localeCompare(a.names[0], undefined, {
+            numeric: true,
+          })
+        })
+      default:
+        return courseInfo
+    }
+  }
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setSortedOrder(event.target.value)
+  }
+
+  const sortedCourses = sorted(courses, sortedOrder)
+
   return (
     <StyledContainer>
       <StyledHeaderMenu>
         <LogoImg />
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Box
+            sx={{
+              fontWeight: 'bold',
+              color: 'essentials.75',
+              padding: 1,
+              margin: 1,
+            }}
+          >
+            Sort by:
+          </Box>
+          <DropdownSelect
+            value={sortedOrder}
+            onChange={handleChange}
+            sx={{
+              padding: 0,
+              margin: 0,
+              fontWeight: 'bold',
+            }}
+          >
+            {/* <MenuItem value="newest">Newest</MenuItem> */}
+            <MenuItem value="unmatch-first">Unmatchable first</MenuItem>
+            <MenuItem value="newly-match-first">Newly matchable first</MenuItem>
+            <MenuItem value="match-first">Matchable first</MenuItem>
+            <MenuItem value="classesa-z">Classes A-Z</MenuItem>
+            <MenuItem value="classesz-a">Classes Z-A</MenuItem>
+          </DropdownSelect>
+        </Box>
         <Button
           id="logout-button"
           aria-controls="logout-menu"
@@ -84,7 +164,7 @@ export const Dashboard = () => {
         </Menu>
       </StyledHeaderMenu>
       {hasLoadedCourseData ? (
-        <Groups groups={courses} />
+        <Groups groups={sortedCourses} />
       ) : (
         <Box display="flex" justifyContent="center" padding={4}>
           <CircularProgress size={50} />

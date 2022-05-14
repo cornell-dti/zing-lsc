@@ -14,17 +14,24 @@ import {
 } from 'Dashboard/Styles/GroupCard.style'
 import { Button, Typography } from '@mui/material'
 import { ReactComponent as NewlyMatchable } from '@assets/img/newlymatchable.svg'
+import { useHistory } from 'react-router'
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
 }
 
 export const GroupCard = ({
+  id,
   name,
   newStudents,
   groupsFormed,
 }: GroupCardProps) => {
-  // const history = useHistory()
+  const history = useHistory()
+
+  const handleClickView = () => {
+    history.push('/edit/' + id)
+  }
+
   const [open, setOpen] = React.useState(false)
 
   const handleClose = (
@@ -44,11 +51,11 @@ export const GroupCard = ({
       return { color: colors.white, new_match: 'no' }
     }
     //students are ready to be matched
-    else if (newStudents > 0 && groupsFormed > 0) {
+    else if (students > 0 && groups > 0) {
       return { color: colors.lightgreen, new_match: 'no' }
     }
     //NEWLY MATCHABLE
-    else if (newStudents > 1 && groupsFormed === 0) {
+    else if (students > 1 && groups === 0) {
       return { color: colors.lightgreen, new_match: 'yes' }
     }
     //only 1 student & 0 groups formed
@@ -94,6 +101,7 @@ export const GroupCard = ({
       </StyledRows>
       <StyledButtons>
         <Button
+          onClick={handleClickView}
           sx={{
             width: 1 / 3,
             padding: 1,

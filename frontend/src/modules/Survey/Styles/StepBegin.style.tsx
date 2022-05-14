@@ -38,19 +38,14 @@ const halfPanel = css`
 export const StyledLeftPanel = styled.div`
   ${halfPanel};
   align-items: center;
-  background: linear-gradient(
-    162.9deg,
-    #c794ee 0.78%,
-    #d9b6f6 27.99%,
-    #e8d6fb 55.75%,
-    #f6f3ff 101.78%
-  );
+  background: linear-gradient(296.38deg, #6d52af 5.53%, #d9cff2 96.38%);
 `
 
 export const StyledWhiteActionText = styled.text`
   ${h3};
   color: ${colors.white};
   text-align: center;
+  font-weight: 600;
   margin: 0 6rem;
 `
 

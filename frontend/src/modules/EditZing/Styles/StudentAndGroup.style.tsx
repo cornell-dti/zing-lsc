@@ -18,12 +18,6 @@ export const StyledGroupContainer = styled.div`
   margin: 0.25rem;
 `
 
-export const StyledGroupTextWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 1rem;
-`
-
 export const StyledGroupText = styled.text`
   ${h3};
   font-weight: 800;
@@ -56,6 +50,12 @@ export const StyledUnmatchedText = styled.text`
 
 export const StyledStudentDetail = styled.p`
   font-weight: 400;
+  margin: 0;
+  padding: 0;
+`
+
+export const StyledStudentText = styled.p`
+  font-weight: 800;
   margin: 0;
   padding: 0;
 `

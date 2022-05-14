@@ -1,20 +1,50 @@
 import React from 'react'
 import { StudentGrid } from 'EditZing/Components/StudentGrid'
-import Grid from '@mui/material/Grid'
 import { GroupGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrop } from 'react-dnd'
 import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
 import {
   StyledGroupText,
-  StyledGroupTextWrapper,
   StyledGroupContainer,
 } from 'EditZing/Styles/StudentAndGroup.style'
+import { Box, Tooltip, Grid } from '@mui/material'
+import CircleIcon from '@mui/icons-material/Circle'
+
+const ShareMatchEmailToolTip = ({
+  month,
+  day,
+}: {
+  month: number
+  day: number
+}) => {
+  return (
+    <Tooltip
+      title={`Share matching results: Sent on ${month}/${day}`}
+      placement="bottom-start"
+      componentsProps={{
+        tooltip: {
+          sx: {
+            bgcolor: 'essentials.main',
+            color: 'white',
+            fontWeight: 600,
+            borderRadius: '10px',
+          },
+        },
+      }}
+    >
+      <CircleIcon sx={{ fontSize: 10 }} color="primary" />
+    </Tooltip>
+  )
+}
 
 /** the equivalent of Column */
 export const GroupGrid = ({
   studentList,
   groupNumber,
   moveStudent,
+  createTime,
+  updateTime,
+  shareMatchEmailTimestamp,
 }: GroupGridProps) => {
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -32,15 +62,31 @@ export const GroupGrid = ({
         ref={drop}
         style={{ opacity: isOver ? '0.6' : '1' }}
       >
-        <StyledGroupTextWrapper>
-          <StyledGroupText>{'Group ' + String(groupNumber)}</StyledGroupText>
-        </StyledGroupTextWrapper>
+        <Box display="flex" alignItems="center" mb={2}>
+          <Tooltip
+            title={
+              'Created on ' +
+              (createTime.getMonth() + 1) +
+              '/' +
+              createTime.getDate()
+            }
+          >
+            <StyledGroupText>{`Group ${groupNumber}`}</StyledGroupText>
+          </Tooltip>
+          {shareMatchEmailTimestamp && (
+            <ShareMatchEmailToolTip
+              month={shareMatchEmailTimestamp.getMonth() + 1}
+              day={shareMatchEmailTimestamp.getDate()}
+            />
+          )}
+        </Box>
         <Grid container spacing={2}>
           {studentList.map((student, index) => (
             <StudentGrid
               key={index}
               groupNumber={groupNumber}
               student={student}
+              submissionTime={student.submissionTime}
             />
           ))}
         </Grid>

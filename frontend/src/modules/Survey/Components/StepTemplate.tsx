@@ -1,16 +1,12 @@
 import React, { FunctionComponent } from 'react'
 import { StepTemplateProps } from 'Survey/Types'
 import {
-  StyledContainer,
   StyledWrapper,
   StyledFullPanel,
-  StyledPrevButton,
-  StyledNextButton,
-  StyledFullPanelNoPadding,
 } from 'Survey/Styles/StepTemplate.style'
-import prev from '@assets/img/prev.svg'
-import next from '@assets/img/next.svg'
-import ProgressBar from './UIElements/ProgressBar'
+import { ProgressBar } from '@core/Components/index'
+import { IconButton, Box } from '@mui/material'
+import { ArrowBack, ArrowForward } from '@mui/icons-material'
 
 export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   isStepValid,
@@ -21,7 +17,6 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   children,
   setShowError,
 }) => {
-
   const handlePrev = () => {
     setShowError(false)
     gotoPrevStep()
@@ -37,25 +32,39 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   }
 
   return (
-    <StyledContainer>
-      <StyledFullPanelNoPadding>
-        <ProgressBar stepNumber={stepNumber} totalSteps={totalSteps} />
-        <StyledFullPanel>
-          <StyledWrapper style={{ height: '90%' }}>{children}</StyledWrapper>
-          <StyledWrapper style={{ height: '10%' }}>
-            <StyledPrevButton
-              className="prev"
-              src={prev}
-              onClick={handlePrev}
-            />
-            <StyledNextButton
-              className="next"
-              src={next}
-              onClick={handleNext}
-            />
-          </StyledWrapper>
-        </StyledFullPanel>
-      </StyledFullPanelNoPadding>
-    </StyledContainer>
+    <Box
+      sx={{
+        backgroundColor: 'white',
+        width: '80%',
+        height: '90%',
+      }}
+    >
+      <ProgressBar step={stepNumber} total={totalSteps} />
+      <StyledFullPanel>
+        <StyledWrapper style={{ height: '85%', overflow: 'scroll' }}>
+          {children}
+        </StyledWrapper>
+
+        <StyledWrapper
+          style={{ height: '15%', color: '#815ed4', margin: '0% 2%' }}
+        >
+          <Box sx={{ textAlign: 'center' }}>
+            <IconButton className="next" onClick={handlePrev} color="secondary">
+              <ArrowBack />
+            </IconButton>
+            <br />
+            Prev
+          </Box>
+
+          <Box sx={{ marginLeft: 'auto', textAlign: 'center' }}>
+            <IconButton className="next" onClick={handleNext}>
+              <ArrowForward />
+            </IconButton>
+            <br />
+            Next
+          </Box>
+        </StyledWrapper>
+      </StyledFullPanel>
+    </Box>
   )
 }
