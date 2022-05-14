@@ -9,15 +9,24 @@ export const PublicRoute = ({
   component: Component,
   ...routeProps
 }: RouteProps) => {
-  const { user, isLoading } = useAuthValue()
-  if (isLoading) return <RouteLoading isLoading />
+  const { authState } = useAuthValue()
 
-  return (
-    <Route
-      {...routeProps}
-      render={(props) =>
-        user ? <Redirect to={DASHBOARD_PATH} /> : <Component {...props} />
-      }
-    />
-  )
+  switch (authState) {
+    case 'loading':
+      return <RouteLoading isLoading />
+    // not logged in, go to this component
+    case 'unauthenticated':
+      return (
+        <Route {...routeProps} render={(props) => <Component {...props} />} />
+      )
+    // user has logged in, should redirect to the dashboard path
+    case 'authorized':
+    case 'unauthorized':
+      return (
+        <Route
+          {...routeProps}
+          render={() => <Redirect to={DASHBOARD_PATH} />}
+        />
+      )
+  }
 }

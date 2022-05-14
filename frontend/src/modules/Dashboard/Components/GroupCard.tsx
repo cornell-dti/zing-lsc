@@ -21,7 +21,6 @@ function Alert(props: any) {
 }
 
 export const GroupCard = ({
-  key,
   id,
   name,
   newStudents,
@@ -65,7 +64,7 @@ export const GroupCard = ({
   const styleMap = getColor(newStudents, groupsFormed)
 
   return (
-    <StyledContainer key={key}>
+    <StyledContainer>
       <StyledRows>
         {/*1 index tells whether array is newly matchable*/}
         {styleMap.new_match === 'yes' && <NewlyMatchable />}
@@ -141,7 +140,6 @@ export const GroupCard = ({
 }
 
 interface GroupCardProps {
-  key: number
   id: string
   name: string
   newStudents: number

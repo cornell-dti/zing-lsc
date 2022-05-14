@@ -27,19 +27,19 @@ export const Groups = ({ groups }: GroupsProps) => {
             placed into classes on this page!
           </StyledSmallText>
           <StyledClassesContainer>
-            {[...Array(8)].map(() => (
-              <StyledNoClasses />
+            {[...Array(8)].map((_, i) => (
+              <StyledNoClasses key={i} />
             ))}
           </StyledClassesContainer>
         </React.Fragment>
       )}
       <StyledGroupArea>
         <StyledGroupCardArea>
-          <Grid container xs={10.5}>
-            {groups.map((g, i) => (
-              <Grid item xs={3}>
+          <Grid container>
+            {groups.map((g) => (
+              <Grid key={g.courseId} item xs={3}>
                 <GroupCard
-                  key={i}
+                  key={g.courseId}
                   id={g.courseId}
                   name={g.names[0]}
                   newStudents={g.unmatched.length}

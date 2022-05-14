@@ -9,7 +9,7 @@
     "format": "prettier --write .",
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
-    "emulate": "npm run build && firebase emulators:start --only functions,firestore",
+    "emulate": "npm run build && firebase emulators:start --import=./emulator --only functions,firestore",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",

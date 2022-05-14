@@ -7,6 +7,7 @@ import {
   CREATE_ZING_PATH,
   EDIT_ZING_PATH,
   DASHBOARD_PATH,
+  API_ROOT,
 } from '@core'
 import { Home } from 'Home'
 import { Survey } from 'Survey'
@@ -15,41 +16,53 @@ import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
 import './App.css'
 import theme from '@core/Constants/Theme'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { User, onAuthStateChanged } from 'firebase/auth'
-import { AuthProvider, PrivateRoute, PublicRoute } from '@auth'
+import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
 import axios from 'axios'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [authState, setAuthState] = useState<AuthState>('loading')
+  const axiosAuthInterceptor = useRef<number | null>(null)
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
       // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
-      if (user)
+      if (user) {
         user
-          .getIdToken(false) // this must be false or first load will fail
+          .getIdToken(true)
           .then((idToken) => {
-            // interceptor so that every axios request will have this header
-            axios.interceptors.request.use(
-              (request) => {
-                request.headers.authorization = `Bearer ${idToken}`
-                return request
-              },
-              (error) => {
-                return Promise.reject(error)
-              }
-            )
-            setIsLoading(false)
+            if (axiosAuthInterceptor.current === null) {
+              // interceptor so that every axios request will have this header
+              axiosAuthInterceptor.current = axios.interceptors.request.use(
+                (request) => {
+                  request.headers.authorization = `Bearer ${idToken}`
+                  return request
+                },
+                (error) => {
+                  return Promise.reject(error)
+                }
+              )
+            }
+
+            axios.get(`${API_ROOT}/getauth`).then((res) => {
+              setAuthState(
+                res.data.data.isAuthed ? 'authorized' : 'unauthorized'
+              )
+            })
           })
           .catch(() => {
-            setIsLoading(false)
+            setAuthState('unauthenticated')
           })
-      else {
-        setIsLoading(false)
+      } else {
+        if (axiosAuthInterceptor.current !== null) {
+          axios.interceptors.request.eject(axiosAuthInterceptor.current)
+          axiosAuthInterceptor.current = null
+        }
+        setAuthState('unauthenticated')
       }
     })
   }, [])
@@ -59,7 +72,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <AuthProvider value={{ user: currentUser, isLoading }}>
+          <AuthProvider value={{ user: currentUser, authState }}>
             <Switch>
               <PublicRoute exact path={HOME_PATH} component={Home} />
               <Route exact path={SURVEY_PATH} component={Survey} />

@@ -11,19 +11,16 @@ import {
 import { Groups } from 'Dashboard/Components/Groups'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
 import { API_ROOT, COURSE_API } from '@core/Constants'
-
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
-import { useHistory } from 'react-router'
+import { Box, CircularProgress, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
-import { SelectChangeEvent, Box } from '@mui/material'
 
 export const Dashboard = () => {
   const [sortedOrder, setSortedOrder] = useState('')
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
-  const history = useHistory()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -32,34 +29,40 @@ export const Dashboard = () => {
     setAnchorEl(null)
   }
 
-  const [groups, setGroups] = useState<CourseInfo[]>([])
+  const [courses, setCourses] = useState<CourseInfo[]>([])
+  const [hasLoadedCourseData, setHasLoadedCourseData] = useState(false)
 
   const { user } = useAuthValue()
 
   useEffect(() => {
     axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
-      setGroups(res.data.data)
+      setCourses(res.data.data)
+      setHasLoadedCourseData(true)
     })
+    return () => {
+      setAnchorEl(null) // clean state for anchorEl on unmount
+    }
   }, [])
+
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
-  function sorted(groups: CourseInfo[], menuValue: string) {
+  function sorted(courseInfo: CourseInfo[], menuValue: string) {
     switch (menuValue) {
       case 'newly-match-first':
-        return [...groups].sort((a, _) => {
+        return [...courseInfo].sort((a, _) => {
           //-1 if a newly matchable and b isn't
           if (a.lastGroupNumber === 0 && a.unmatched.length > 1) {
             return -1
           } else return 1
         })
       case 'unmatch-first':
-        return [...groups].sort((a, _) => {
+        return [...courseInfo].sort((a, _) => {
           //-1 if a unmatchable and b isn't
           if (a.lastGroupNumber === 0 && a.unmatched.length === 1) {
             return -1
           } else return 1
         })
       case 'match-first':
-        return [...groups].sort((a, _) => {
+        return [...courseInfo].sort((a, _) => {
           //-1 if a matchable and b isn't
           if (
             (a.lastGroupNumber > 0 && a.unmatched.length > 0) ||
@@ -69,28 +72,27 @@ export const Dashboard = () => {
           } else return 1
         })
       case 'classesa-z':
-        return [...groups].sort((a, b) => {
+        return [...courseInfo].sort((a, b) => {
           return a.names[0].localeCompare(b.names[0], undefined, {
             numeric: true,
           })
         })
       case 'classesz-a':
-        return [...groups].sort((a, b) => {
+        return [...courseInfo].sort((a, b) => {
           return b.names[0].localeCompare(a.names[0], undefined, {
             numeric: true,
           })
         })
       default:
-        return groups
+        return courseInfo
     }
   }
 
   const handleChange = (event: SelectChangeEvent) => {
     setSortedOrder(event.target.value)
-    // setGroups(sorted(groups, event.target.value))
   }
 
-  const sortedGroups = sorted(groups, sortedOrder)
+  const sortedCourses = sorted(courses, sortedOrder)
 
   return (
     <StyledContainer>
@@ -153,16 +155,21 @@ export const Dashboard = () => {
         >
           <MenuItem
             onClick={() => {
-              logOut().then(() => {
-                history.push('/')
-              })
+              handleClose()
+              logOut()
             }}
           >
             Log Out
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      <Groups groups={sortedGroups} />
+      {hasLoadedCourseData ? (
+        <Groups groups={sortedCourses} />
+      ) : (
+        <Box display="flex" justifyContent="center" padding={4}>
+          <CircularProgress size={50} />
+        </Box>
+      )}
     </StyledContainer>
   )
 }
