@@ -1,13 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StudentGrid } from 'EditZing/Components/StudentGrid'
 import { GroupGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrop } from 'react-dnd'
 import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
-import {
-  StyledGroupText,
-  StyledGroupContainer,
-} from 'EditZing/Styles/StudentAndGroup.style'
-import { Box, Tooltip, Grid } from '@mui/material'
+import { StyledGroupText } from 'EditZing/Styles/StudentAndGroup.style'
+import { Box, Tooltip, Grid, Checkbox } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 
 const ShareMatchEmailToolTip = ({
@@ -45,6 +42,8 @@ export const GroupGrid = ({
   createTime,
   updateTime,
   shareMatchEmailTimestamp,
+  selected,
+  handleChecked,
 }: GroupGridProps) => {
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -56,13 +55,38 @@ export const GroupGrid = ({
     }),
   })
 
+  const [isHovering, setIsHovering] = useState(false)
+  const handleMouseOver = () => {
+    setIsHovering(true)
+  }
+
+  const handleMouseOut = () => {
+    setIsHovering(false)
+  }
+
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
-      <StyledGroupContainer
+      <Box
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
         ref={drop}
-        style={{ opacity: isOver ? '0.6' : '1' }}
+        sx={{
+          padding: '2rem',
+          border: "0.5px solid 'purple.50'",
+          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.07)',
+          borderRadius: '20px',
+          margin: '0.25rem',
+          backgroundColor: selected ? 'rgba(129, 94, 212, 0.15);' : 'white',
+          opacity: isOver ? '0.6' : '1',
+        }}
       >
-        <Box display="flex" alignItems="center" mb={2}>
+        <Box
+          display="flex"
+          flex-direction="row-reverse"
+          alignItems="center"
+          mb={2}
+          sx={{ width: '100%', height: '100%' }}
+        >
           <Tooltip
             title={
               'Created on ' +
@@ -79,6 +103,18 @@ export const GroupGrid = ({
               day={shareMatchEmailTimestamp.getDate()}
             />
           )}
+
+          <Checkbox
+            color="secondary"
+            align-self="flex-end"
+            checked={selected}
+            onChange={handleChecked}
+            sx={{
+              display: selected || isHovering ? 'block' : 'none',
+              padding: '0px',
+              ml: '45%',
+            }}
+          />
         </Box>
         <Grid container spacing={2}>
           {studentList.map((student, index) => (
@@ -90,7 +126,7 @@ export const GroupGrid = ({
             />
           ))}
         </Grid>
-      </StyledGroupContainer>
+      </Box>
     </Grid>
   )
 }
