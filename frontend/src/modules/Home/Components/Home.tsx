@@ -10,7 +10,7 @@ import {
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import Button from '@mui/material/Button'
-import { signInWithGoogle } from '@fire'
+import { signInWithGoogle, signInWithMicrosoft } from '@fire'
 import { ReactComponent as Google } from '@assets/img/googleicon.svg'
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
 import { Box } from '@mui/material'
@@ -53,6 +53,22 @@ export const Home = () => {
               }}
             >
               Log In with Google
+            </Button>
+          </Box>
+          <Box sx={{ zIndex: 2 }}>
+            <Button
+              startIcon={<GoogleIcon />}
+              sx={{
+                pl: 3,
+                background:
+                  'linear-gradient(288.93deg, #C693EE 2.66%, #7C5ED3 69.33%)',
+                fontSize: { sm: 14, md: 22 },
+              }}
+              onClick={() => {
+                signInWithMicrosoft().catch(() => {})
+              }}
+            >
+              Staff Login
             </Button>
           </Box>
         </StyledRightPanel>
