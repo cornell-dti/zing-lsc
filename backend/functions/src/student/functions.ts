@@ -38,7 +38,7 @@ const addStudentSurveyResponse = async (
   // First, update the [student] collection to include the data for the new student
   const crseIds = await Promise.all(
     courseCatalogNames.map((name: string) =>
-      mapCatalogNameToCrseId(name, 'FA21')
+      mapCatalogNameToCrseId(name, 'SP22')
     )
   )
 
