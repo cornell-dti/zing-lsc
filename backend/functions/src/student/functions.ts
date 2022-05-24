@@ -35,42 +35,57 @@ const addStudentSurveyResponse = async (
   courseRef = courseR,
   studentRef = studentR
 ) => {
-  // First, update the [student] collection to include the data for the new student
-  // Converts to set first to eliminate duplicates, then converts to list
-  const courseIds = await Promise.all(
-    courseCatalogNames.map((name) => mapCatalogNameToCourseId(name, 'SP22'))
+  // Find the courseId of all requested courses in survey
+  const courseIdsWithName = await Promise.all(
+    courseCatalogNames.map(async (name) => ({
+      catalogName: name,
+      courseId: await mapCatalogNameToCourseId(name, 'SP22'),
+    }))
   )
 
-  const existingData = (await studentRef.doc(email).get()).data() //gets all the existing data
-  //studentCrses becomes courseIds of existingData.groups if available, otherwise []
-  const existingCourses = existingData ? existingData.groups : [] //gets the existing courses
-  const existingCourseIds = existingCourses.map(
-    (crse: { courseId: string }) => crse.courseId
-  )
-  const crsesToAdd: any[] = [] // consists of map of {courseId: crse, group: -1}
-  const crseCatalogsToUpdate: any[] = []
-  courseIds.forEach((crse, index) => {
-    if (!existingCourseIds.includes(crse) && !crsesToAdd.includes(crse)) {
-      //goes through submitted course IDs, check if already existing
-      crsesToAdd.push(crse)
-      crseCatalogsToUpdate.push(courseCatalogNames[index])
+  // Make array of courseIds associated with their catalogNames (e.g. ['INFO 2040', 'CS 2850'])
+  const courseIdsWithNames: { courseId: string; catalogNames: string[] }[] = []
+  courseIdsWithName.forEach((course) => {
+    const existing = courseIdsWithNames.find(
+      (existing) => existing.courseId === course.courseId
+    )
+    if (existing) {
+      existing.catalogNames.push(course.catalogName)
+    } else {
+      courseIdsWithNames.push({
+        courseId: course.courseId,
+        catalogNames: [course.catalogName],
+      })
     }
   })
 
-  crsesToAdd.forEach((crse) =>
-    existingCourses.push({
-      courseId: crse,
-      groupNumber: -1,
-    })
+  // Find the existing courses this student is already in by checking group membership
+  const existingData = (await studentRef.doc(email).get()).data() //gets all the existing data
+  //studentCrses becomes courseIds of existingData.groups if available, otherwise []
+  const existingCourses = existingData ? existingData.groups : [] //gets the existing courses
+  const existingCourseIds: string[] = existingCourses.map(
+    (course: { courseId: string }) => course.courseId
   )
 
+  // Filter to the new courses to add
+  const newCourseIdsWithNames = courseIdsWithNames.filter(
+    (course) => !existingCourseIds.includes(course.courseId)
+  )
+
+  // Map to group membership objects for the student
+  const newCourses = newCourseIdsWithNames.map((course) => ({
+    courseId: course.courseId,
+    groupNumber: -1,
+  }))
+
+  // First, update the [student] collection to include the data for the new student
   const studentUpdate = studentRef
     .doc(email)
     .set({
       name,
       college,
       year,
-      groups: existingCourses,
+      groups: [...existingCourses, ...newCourses],
       submissionTime: admin.firestore.FieldValue.serverTimestamp(),
     })
     .catch((err) => {
@@ -81,9 +96,9 @@ const addStudentSurveyResponse = async (
     })
 
   // Next, update each course record to add this student
-  const courseUpdates = crseCatalogsToUpdate.map((courseCatalogName, index) =>
+  const courseUpdates = newCourseIdsWithNames.map((course) =>
     courseRef
-      .doc(crsesToAdd[index].toString()) // We want the courseID to allow for crosslisting
+      .doc(course.courseId) // We want the courseID to allow for crosslisting
       .get()
       .then((snapshot) => {
         // create a record for this course if it doesn't exist already.
@@ -91,14 +106,14 @@ const addStudentSurveyResponse = async (
           return snapshot.ref
             .set({
               unmatched: [],
-              names: [courseCatalogName],
+              names: course.catalogNames,
               lastGroupNumber: 0,
             })
             .then(() => snapshot.ref)
             .catch((err) => {
               console.log(err)
               const e = new Error(
-                `Error in creating course in courseUpdate for course ${courseCatalogName}`
+                `Error in creating course in courseUpdate for course ${course.catalogNames}`
               )
               e.name = 'processing_err'
               throw e
@@ -106,12 +121,14 @@ const addStudentSurveyResponse = async (
         } else {
           snapshot.ref
             .update({
-              names: admin.firestore.FieldValue.arrayUnion(courseCatalogName),
+              names: admin.firestore.FieldValue.arrayUnion(
+                ...course.catalogNames
+              ),
             })
             .catch((err) => {
               console.log(err)
               const e = new Error(
-                `Error in updating course in courseUpdate for course ${courseCatalogName}`
+                `Error in updating course in courseUpdate for course ${course.catalogNames}`
               )
               e.name = 'processing_err'
               throw e
@@ -127,7 +144,7 @@ const addStudentSurveyResponse = async (
           .catch((err) => {
             console.log(err)
             const e = new Error(
-              `Error in updating data for student ${email} in course ${courseCatalogName}`
+              `Error in updating data for student ${email} in course ${course.catalogNames}`
             )
             e.name = 'processing_err'
             throw e
