@@ -40,13 +40,7 @@ export const StyledCheck = styled(Check)`
 `
 
 export const StyledContainer = styled(Container)`
-  background: linear-gradient(
-    162.9deg,
-    #c794ee 0.78%,
-    #d9b6f6 27.99%,
-    #e8d6fb 55.75%,
-    #f6f3ff 101.78%
-  );
+  background: linear-gradient(296.38deg, #6d52af 5.53%, #d9cff2 96.38%);
 `
 
 const panel = css`
@@ -88,5 +82,5 @@ export const StyledContactWrapper = styled.div`
 export const StyledContactText = styled.text`
   ${h3};
   font-weight: 400;
-  color: rgba(172, 129, 206, 1);
+  color: #ffffff;
 `

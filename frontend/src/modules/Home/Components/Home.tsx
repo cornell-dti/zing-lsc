@@ -11,7 +11,6 @@ import {
 } from 'Home/Styles/Home.style'
 import Button from '@mui/material/Button'
 import { signInWithGoogle } from '@fire'
-import { useHistory } from 'react-router'
 import { ReactComponent as Google } from '@assets/img/googleicon.svg'
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
 import { Box } from '@mui/material'
@@ -22,8 +21,6 @@ function GoogleIcon(props: SvgIconProps) {
 }
 
 export const Home = () => {
-  const history = useHistory()
-
   return (
     <StyledBackground>
       <StyledContainer>
@@ -52,11 +49,7 @@ export const Home = () => {
                 fontSize: { sm: 14, md: 22 },
               }}
               onClick={() => {
-                signInWithGoogle()
-                  .then(() => {
-                    history.push('/dashboard')
-                  })
-                  .catch(() => {})
+                signInWithGoogle().catch(() => {})
               }}
             >
               Log In with Google

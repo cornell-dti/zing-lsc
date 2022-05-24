@@ -29,7 +29,6 @@ async function removeStudentFromCourse(
 const addStudentSurveyResponse = async (
   name: any,
   email: string,
-  preferredWorkingTime: any,
   college: any,
   year: any,
   courseCatalogNames: any[],
@@ -40,7 +39,7 @@ const addStudentSurveyResponse = async (
   // Converts to set first to eliminate duplicates, then converts to list
   const crseIds = await Promise.all(
     courseCatalogNames.map((name: string) =>
-      mapCatalogNameToCrseId(name, 'FA21')
+      mapCatalogNameToCrseId(name, 'SP22')
     )
   )
 
@@ -76,7 +75,6 @@ const addStudentSurveyResponse = async (
       name,
       college,
       year,
-      preferredWorkingTime,
       groups: studentCrses,
       submissionTime: admin.firestore.FieldValue.serverTimestamp(),
     })

@@ -28,7 +28,7 @@ export const StepFinal = () => {
         </StyledLogoWrapper>
         <StyledContactWrapper>
           <StyledContactText>
-            Contact ***@cornell.edu with any questions.
+            Contact lscstudypartners@cornell.edu with any questions.
           </StyledContactText>
         </StyledContactWrapper>
       </StyledFullPanel>

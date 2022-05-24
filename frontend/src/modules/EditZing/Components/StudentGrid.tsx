@@ -7,7 +7,11 @@ import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 // import { genderSVG } from 'EditZing/Styles/InlineSVGs'
 import { colors } from '@core'
 import { useDrag } from 'react-dnd'
-import { StyledStudentDetail } from 'EditZing/Styles/StudentAndGroup.style'
+import {
+  StyledStudentDetail,
+  StyledStudentText,
+} from 'EditZing/Styles/StudentAndGroup.style'
+import Tooltip from '@mui/material/Tooltip'
 
 const PREFIX = 'StudentGrid'
 
@@ -46,6 +50,7 @@ export const StudentGrid = ({
   student,
   groupNumber,
   xsSize = 6,
+  submissionTime,
 }: StudentGridProps) => {
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -65,7 +70,18 @@ export const StudentGrid = ({
     <StyledGrid item xs={xsSize}>
       <div ref={drag}>
         <Paper style={{ opacity: opacity }} className={classes.paper1}>
-          {student.name}
+          <Tooltip
+            disableFocusListener
+            disableTouchListener
+            title={
+              'Requested study partner ' +
+              (submissionTime.getMonth() + 1) +
+              '/' +
+              submissionTime.getDate()
+            }
+          >
+            <StyledStudentText>{student.name}</StyledStudentText>
+          </Tooltip>
           <div className={classes.paper2}>
             {/* {genderSVG} {student.pronoun === 'a' ? 'Male' : 'Female'} */}
             <StyledStudentDetail>{student.email}</StyledStudentDetail>

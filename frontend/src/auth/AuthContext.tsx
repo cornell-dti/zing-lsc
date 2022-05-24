@@ -1,9 +1,21 @@
 import React, { useContext } from 'react'
 import { User } from 'firebase/auth'
 
+/*
+ * 'loading' = state is currently loading (i.e. requests are currently being made, auth state currently unknown)
+ * 'unauthenticated' = you are not logged in
+ * 'unauthorized' = you are logged in but unauthorized/not in the allowed_users db
+ * 'authorized' = you are authorized/in the allowed_users db/have full access to the application
+ */
+export type AuthState =
+  | 'loading'
+  | 'unauthenticated'
+  | 'unauthorized'
+  | 'authorized'
+
 interface AuthContextType {
   user: User | null
-  isLoading: boolean
+  authState: AuthState
 }
 
 const AuthContext = React.createContext<AuthContextType>({} as AuthContextType)

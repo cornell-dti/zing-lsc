@@ -77,6 +77,7 @@ async function makeMatches(courseId: string, groupSize = 3) {
             throw new Error(`Student ${studentEmail} does not exist`)
           const d: any = snapshot.data()
           d['email'] = snapshot.id
+          d['submissionTime'] = d.submissionTime.toDate()
           return d
         })
         .catch((err) => {
@@ -84,9 +85,6 @@ async function makeMatches(courseId: string, groupSize = 3) {
           throw new Error(`Error in getting data for ${studentEmail}`)
         })
     )
-  )
-  studentData.sort(
-    (obj1, obj2) => obj1.preferredWorkingTime - obj2.preferredWorkingTime
   )
 
   // greedily form groups. THESE MAY NOT BE PERFECT.
@@ -103,6 +101,9 @@ async function makeMatches(courseId: string, groupSize = 3) {
     groups.push({
       groupNumber: groupCounter + lastGroupNumber,
       memberData: nextGroup, // this is to keep things consistent
+      createTime: new Date(),
+      updateTime: new Date(),
+      shareMatchEmailTimestamp: null, // timestamp for option of "share matching results"
     })
     i += nextGroup.length
     groupCounter += 1
@@ -118,6 +119,7 @@ async function makeMatches(courseId: string, groupSize = 3) {
     members: group.memberData.map((member) => member.email),
     createTime: admin.firestore.FieldValue.serverTimestamp(),
     updateTime: admin.firestore.FieldValue.serverTimestamp(),
+    shareMatchEmailTimestamp: group.shareMatchEmailTimestamp,
   }))
 
   // lastly, update the collections to reflect this matching

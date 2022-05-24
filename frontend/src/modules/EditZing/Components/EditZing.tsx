@@ -21,6 +21,7 @@ import {
 import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
 import { MatchLoading } from './MatchLoading'
+import { Box, Button } from '@mui/material'
 
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
@@ -39,6 +40,19 @@ export const EditZing = () => {
       })
   }, [courseId])
 
+  const [selectedGroups, setSelectedGroups] = useState<Group[]>([])
+
+  const editSelectedGroups = (group: Group, selected: boolean) => {
+    if (selected) {
+      setSelectedGroups([...selectedGroups, group])
+    } else {
+      setSelectedGroups(
+        selectedGroups.filter((g) => g.groupNumber !== group.groupNumber)
+      )
+    }
+  }
+  console.log(selectedGroups) //for seeing selected groups in console
+
   const [unmatchedStudents, setUnmatchedStudents] = useState<Student[]>([])
   const [studentGroups, setStudentGroups] = useState<Group[]>([])
   const [hasLoadedStudentData, setHasLoadedStudentData] = useState(false)
@@ -46,8 +60,26 @@ export const EditZing = () => {
     axios
       .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
       .then((res: AxiosResponse<CourseStudentDataResponse>) => {
-        setUnmatchedStudents(res.data.data.unmatched)
-        setStudentGroups(res.data.data.groups)
+        setUnmatchedStudents(
+          res.data.data.unmatched.map((student) => ({
+            ...student,
+            submissionTime: new Date(student.submissionTime),
+          }))
+        )
+        setStudentGroups(
+          res.data.data.groups.map((group) => ({
+            ...group,
+            memberData: group.memberData.map((student) => ({
+              ...student,
+              submissionTime: new Date(student.submissionTime),
+            })),
+            createTime: new Date(group.createTime),
+            updateTime: new Date(group.updateTime),
+            shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
+              ? new Date(group.shareMatchEmailTimestamp)
+              : null,
+          }))
+        )
         setHasLoadedStudentData(true)
       })
       .catch((error) => {
@@ -164,11 +196,27 @@ export const EditZing = () => {
     axios
       .post(`${API_ROOT}${MATCHING_API}/make`, { courseId: courseId })
       .then((response) => {
-        let newGroups = studentGroups.concat(response.data.data.groups)
-        console.log(response.data.data.unmatched)
-        setUnmatchedStudents(response.data.data.unmatched)
-        console.log(newGroups)
-        setStudentGroups(newGroups)
+        setUnmatchedStudents(
+          response.data.data.unmatched.map((student: any) => ({
+            ...student,
+            submissionTime: new Date(student.submissionTime),
+          }))
+        )
+        const groups = studentGroups.concat(
+          response.data.data.groups.map((group: Group) => ({
+            ...group,
+            memberData: group.memberData.map((student) => ({
+              ...student,
+              submissionTime: new Date(student.submissionTime),
+            })),
+            createTime: new Date(group.createTime),
+            updateTime: new Date(group.updateTime),
+            shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
+              ? new Date(group.shareMatchEmailTimestamp)
+              : null,
+          }))
+        )
+        setStudentGroups(groups)
         setIsCurrentlyGrouping(false)
       })
       .catch((err) => {
@@ -186,10 +234,22 @@ export const EditZing = () => {
         courseNames={courseInfo.names}
         setShowMatchLoading={setShowMatchLoading}
       />
-      <StyledLogoWrapper>
-        <StyledLogo />
-        <StyledText>{courseInfo.names.join(', ')}</StyledText>
-      </StyledLogoWrapper>
+
+      <Box
+        display="flex"
+        flex-direction="row"
+        align-items=" center"
+        justifyContent="space-between"
+      >
+        <StyledLogoWrapper>
+          <StyledLogo />
+          <StyledText>{courseInfo.names.join(', ')}</StyledText>
+        </StyledLogoWrapper>
+        s
+        <Button sx={{ height: '40px', mt: '10px' }}>
+          {selectedGroups.length === 0 ? 'Send Email To' : 'Email Selected'}
+        </Button>
+      </Box>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={1}>
           <UnmatchedGrid
@@ -202,7 +262,16 @@ export const EditZing = () => {
               key={index}
               studentList={studentGroup.memberData}
               groupNumber={studentGroup.groupNumber}
+              shareMatchEmailTimestamp={studentGroup.shareMatchEmailTimestamp}
               moveStudent={moveStudent}
+              createTime={studentGroup.createTime}
+              updateTime={studentGroup.updateTime}
+              selected={selectedGroups.some(
+                (g) => g.groupNumber === studentGroup.groupNumber
+              )}
+              handleChecked={(event) => {
+                editSelectedGroups(studentGroup, event.target.checked)
+              }}
             />
           ))}
         </Grid>

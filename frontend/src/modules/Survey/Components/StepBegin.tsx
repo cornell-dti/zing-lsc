@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import { IconButton, Box } from '@mui/material'
+import { ArrowForward } from '@mui/icons-material'
 
-import { colors, EmailField, NameField, PrimaryGradientButton } from '@core'
+import { colors, EmailField, NameField } from '@core'
 import {
   StyledContainer,
   StyledLeftPanel,
@@ -136,7 +138,13 @@ export const StepBegin = ({
             />
           </StyledTextFieldWrapper>
         </StyledFields>
-        <PrimaryGradientButton label="Get Connected" onClick={handleNext} />
+        <Box sx={{ marginLeft: 'auto', textAlign: 'center' }}>
+          <IconButton className="next" onClick={handleNext}>
+            <ArrowForward />
+          </IconButton>
+          <br />
+          Next
+        </Box>
       </StyledRightPanel>
     </StyledContainer>
   )
