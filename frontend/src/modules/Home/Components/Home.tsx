@@ -9,16 +9,16 @@ import {
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import Button from '@mui/material/Button'
-import { signInWithGoogle, signInWithMicrosoft } from '@fire'
-import { ReactComponent as Google } from '@assets/img/googleicon.svg'
+import { signInWithMicrosoft } from '@fire'
+// import { ReactComponent as Google } from '@assets/img/googleicon.svg'
 import { ReactComponent as Microsoft } from '@assets/img/microsofticon.svg'
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
 import { Box } from '@mui/material'
 import teacher from '@assets/img/teacher.svg'
 
-function GoogleIcon(props: SvgIconProps) {
-  return <SvgIcon inheritViewBox component={Google} {...props} />
-}
+// function GoogleIcon(props: SvgIconProps) {
+//   return <SvgIcon inheritViewBox component={Google} {...props} />
+// }
 
 function MicrosoftIcon(props: SvgIconProps) {
   return <SvgIcon inheritViewBox component={Microsoft} {...props} />
@@ -43,7 +43,7 @@ export const Home = () => {
               Let's form study partner groups!
             </StyledWelcomeText>
           </Box>
-          <Box sx={{ zIndex: 2 }}>
+          {/* <Box sx={{ zIndex: 2 }}>
             <Button
               startIcon={<GoogleIcon />}
               sx={{
@@ -58,7 +58,7 @@ export const Home = () => {
             >
               Log In with Google
             </Button>
-          </Box>
+          </Box> */}
           <Box sx={{ zIndex: 2 }}>
             <Button
               startIcon={<MicrosoftIcon />}
