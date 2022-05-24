@@ -28,10 +28,13 @@ const App = () => {
   const axiosAuthInterceptor = useRef<number | null>(null)
 
   useEffect(() => {
+    console.log('use effect on user change')
+
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
       // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
       if (user) {
+        console.log('passed if user ')
         user
           .getIdToken(true)
           .then((idToken) => {
@@ -49,12 +52,16 @@ const App = () => {
             }
 
             axios.get(`${API_ROOT}/getauth`).then((res) => {
+              console.log('calling /getauth')
+
               setAuthState(
                 res.data.data.isAuthed ? 'authorized' : 'unauthorized'
               )
             })
           })
           .catch(() => {
+            console.log('set to unauthed in catch')
+
             setAuthState('unauthenticated')
           })
       } else {
@@ -62,6 +69,8 @@ const App = () => {
           axios.interceptors.request.eject(axiosAuthInterceptor.current)
           axiosAuthInterceptor.current = null
         }
+        console.log('set to unauthed in else statement')
+
         setAuthState('unauthenticated')
       }
     })

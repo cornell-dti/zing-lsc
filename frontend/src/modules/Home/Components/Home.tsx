@@ -1,5 +1,4 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import {
   StyledBackground,
   StyledContainer,
@@ -26,7 +25,6 @@ function MicrosoftIcon(props: SvgIconProps) {
 }
 
 export const Home = () => {
-  const history = useHistory()
   return (
     <StyledBackground>
       <StyledContainer>
@@ -45,7 +43,7 @@ export const Home = () => {
               Let's form study partner groups!
             </StyledWelcomeText>
           </Box>
-          {/* <Box sx={{ zIndex: 2 }}>
+          <Box sx={{ zIndex: 2 }}>
             <Button
               startIcon={<GoogleIcon />}
               sx={{
@@ -55,29 +53,23 @@ export const Home = () => {
                 fontSize: { sm: 14, md: 22 },
               }}
               onClick={() => {
-                signInWithGoogle().then(() => {
-                    history.push('/dashboard')
-                  }).catch(() => {})
+                signInWithGoogle().catch(() => {})
               }}
             >
               Log In with Google
             </Button>
-          </Box> */}
+          </Box>
           <Box sx={{ zIndex: 2 }}>
             <Button
               startIcon={<MicrosoftIcon />}
               sx={{
-                px: 3,
+                pl: 3,
                 background:
                   'linear-gradient(288.93deg, #C693EE 2.66%, #7C5ED3 69.33%)',
                 fontSize: { sm: 14, md: 22 },
               }}
               onClick={() => {
-                signInWithMicrosoft()
-                  .then(() => {
-                    history.push('/dashboard')
-                  })
-                  .catch(() => {})
+                signInWithMicrosoft().catch(() => {})
               }}
             >
               Staff Login
