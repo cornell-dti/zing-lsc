@@ -31,6 +31,7 @@ export async function signInWithMicrosoft() {
       const idToken = credential.idToken
 
       console.log('access token: ' + accessToken)
+      console.log('id token: ' + idToken)
     })
     .catch((error) => {
       // handle error
