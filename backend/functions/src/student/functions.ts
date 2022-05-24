@@ -2,7 +2,7 @@ import { db } from '../config'
 import admin from 'firebase-admin'
 const courseR = db.collection('courses')
 const studentR = db.collection('students')
-import mapCatalogNameToCrseId from '../course/get_course_id'
+import mapCatalogNameToCourseId from '../course/get_course_id'
 
 async function removeStudentFromCourse(
   email: any,
@@ -27,43 +27,38 @@ async function removeStudentFromCourse(
 // Note: the error handling in this file is done the way it is so it is easier
 // to decide response codes based on error type.
 const addStudentSurveyResponse = async (
-  name: any,
+  name: string,
   email: string,
-  college: any,
-  year: any,
-  courseCatalogNames: any[],
+  college: string,
+  year: string,
+  courseCatalogNames: string[],
   courseRef = courseR,
   studentRef = studentR
 ) => {
   // First, update the [student] collection to include the data for the new student
   // Converts to set first to eliminate duplicates, then converts to list
-  const crseIds = await Promise.all(
-    courseCatalogNames.map((name: string) =>
-      mapCatalogNameToCrseId(name, 'SP22')
-    )
+  const courseIds = await Promise.all(
+    courseCatalogNames.map((name) => mapCatalogNameToCourseId(name, 'SP22'))
   )
 
   const existingData = (await studentRef.doc(email).get()).data() //gets all the existing data
   //studentCrses becomes courseIds of existingData.groups if available, otherwise []
-  const studentCrses = existingData ? existingData.groups : [] //gets the existing courses
-  const studentCrseIds = studentCrses.map(
-    //gets the IDs from the existing courses
-    (crse: { courseId: any }) => crse.courseId
+  const existingCourses = existingData ? existingData.groups : [] //gets the existing courses
+  const existingCourseIds = existingCourses.map(
+    (crse: { courseId: string }) => crse.courseId
   )
-  let crsesToAdd: any[] = [] // consists of map of {courseId: crse, group: -1}
+  const crsesToAdd: any[] = [] // consists of map of {courseId: crse, group: -1}
   const crseCatalogsToUpdate: any[] = []
-  crseIds.forEach((crse, index) => {
-    if (!studentCrseIds.includes(crse)) {
+  courseIds.forEach((crse, index) => {
+    if (!existingCourseIds.includes(crse) && !crsesToAdd.includes(crse)) {
       //goes through submitted course IDs, check if already existing
       crsesToAdd.push(crse)
       crseCatalogsToUpdate.push(courseCatalogNames[index])
     }
   })
 
-  crsesToAdd = [...new Set(crsesToAdd)]
-
   crsesToAdd.forEach((crse) =>
-    studentCrses.push({
+    existingCourses.push({
       courseId: crse,
       groupNumber: -1,
     })
@@ -75,7 +70,7 @@ const addStudentSurveyResponse = async (
       name,
       college,
       year,
-      groups: studentCrses,
+      groups: existingCourses,
       submissionTime: admin.firestore.FieldValue.serverTimestamp(),
     })
     .catch((err) => {
