@@ -103,7 +103,6 @@ export const GroupGrid = ({
               day={shareMatchEmailTimestamp.getDate()}
             />
           )}
-
           <Checkbox
             color="secondary"
             align-self="flex-end"

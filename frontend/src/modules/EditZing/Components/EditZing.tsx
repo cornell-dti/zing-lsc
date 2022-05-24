@@ -40,18 +40,17 @@ export const EditZing = () => {
       })
   }, [courseId])
 
-  const [selectedGroups, setSelectedGroups] = useState<Group[]>([])
+  const [selectedGroupNumbers, setSelectedGroupNumbers] = useState<number[]>([])
 
   const editSelectedGroups = (group: Group, selected: boolean) => {
     if (selected) {
-      setSelectedGroups([...selectedGroups, group])
+      setSelectedGroupNumbers([...selectedGroupNumbers, group.groupNumber])
     } else {
-      setSelectedGroups(
-        selectedGroups.filter((g) => g.groupNumber !== group.groupNumber)
+      setSelectedGroupNumbers(
+        selectedGroupNumbers.filter((g) => g !== group.groupNumber)
       )
     }
   }
-  console.log(selectedGroups) //for seeing selected groups in console
 
   const [unmatchedStudents, setUnmatchedStudents] = useState<Student[]>([])
   const [studentGroups, setStudentGroups] = useState<Group[]>([])
@@ -225,6 +224,11 @@ export const EditZing = () => {
       })
   }
 
+  const selectedGroups = studentGroups.filter((group) =>
+    selectedGroupNumbers.includes(group.groupNumber)
+  )
+  console.log(selectedGroups)
+
   return courseInfo && hasLoadedStudentData ? (
     <StyledContainer>
       <MatchLoading
@@ -245,11 +249,13 @@ export const EditZing = () => {
           <StyledLogo />
           <StyledText>{courseInfo.names.join(', ')}</StyledText>
         </StyledLogoWrapper>
-        s
         <Button sx={{ height: '40px', mt: '10px' }}>
-          {selectedGroups.length === 0 ? 'Send Email To' : 'Email Selected'}
+          {selectedGroupNumbers.length === 0
+            ? 'Send Email To'
+            : 'Email Selected'}
         </Button>
       </Box>
+
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={1}>
           <UnmatchedGrid
@@ -266,9 +272,7 @@ export const EditZing = () => {
               moveStudent={moveStudent}
               createTime={studentGroup.createTime}
               updateTime={studentGroup.updateTime}
-              selected={selectedGroups.some(
-                (g) => g.groupNumber === studentGroup.groupNumber
-              )}
+              selected={selectedGroupNumbers.includes(studentGroup.groupNumber)}
               handleChecked={(event) => {
                 editSelectedGroups(studentGroup, event.target.checked)
               }}
