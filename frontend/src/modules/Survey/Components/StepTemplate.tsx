@@ -6,7 +6,7 @@ import {
 } from 'Survey/Styles/StepTemplate.style'
 import { ProgressBar } from '@core/Components/index'
 import { IconButton, Box } from '@mui/material'
-import { ArrowBack, ArrowForward } from '@mui/icons-material'
+import { ArrowBack, ArrowForward, Check } from '@mui/icons-material'
 
 export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   isStepValid,
@@ -57,11 +57,15 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
           </Box>
 
           <Box sx={{ marginLeft: 'auto', textAlign: 'center' }}>
-            <IconButton className="next" onClick={handleNext}>
-              <ArrowForward />
+            <IconButton
+              className="next"
+              onClick={handleNext}
+              disabled={!isStepValid}
+            >
+              {stepNumber === totalSteps ? <Check /> : <ArrowForward />}
             </IconButton>
             <br />
-            Next
+            {stepNumber === totalSteps ? 'Finish!' : 'Next'}
           </Box>
         </StyledWrapper>
       </StyledFullPanel>
