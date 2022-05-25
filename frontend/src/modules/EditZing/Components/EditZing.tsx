@@ -242,7 +242,7 @@ export const EditZing = () => {
       <Box
         display="flex"
         flex-direction="row"
-        align-items=" center"
+        align-items="center"
         justifyContent="space-between"
       >
         <StyledLogoWrapper>
