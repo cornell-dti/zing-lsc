@@ -139,7 +139,11 @@ export const StepBegin = ({
           </StyledTextFieldWrapper>
         </StyledFields>
         <Box sx={{ marginLeft: 'auto', textAlign: 'center' }}>
-          <IconButton className="next" onClick={handleNext}>
+          <IconButton
+            className="next"
+            onClick={handleNext}
+            // disabled={error != errorEnum.NONE}
+          >
             <ArrowForward />
           </IconButton>
           <br />
