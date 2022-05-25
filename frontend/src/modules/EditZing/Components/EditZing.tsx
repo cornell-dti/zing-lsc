@@ -248,6 +248,15 @@ export const EditZing = () => {
     setAnchorEl(null)
   }
 
+  const handleSelectNewlyMatched = () => {
+    setSelectedGroupNumbers(
+      studentGroups
+        .filter((group) => group.shareMatchEmailTimestamp === null)
+        .map((group) => group.groupNumber)
+    )
+    handleMenuClose()
+  }
+
   return courseInfo && hasLoadedStudentData ? (
     <Box>
       <MatchLoading
@@ -296,11 +305,15 @@ export const EditZing = () => {
                 horizontal: 'right',
               }}
             >
-              <MenuItem>Newly Matched</MenuItem>
+              <MenuItem onClick={handleSelectNewlyMatched}>
+                Newly Matched
+              </MenuItem>
             </Menu>
           </>
         ) : (
-          <Button>Email Selected</Button>
+          <Button onClick={() => console.log('Open emailing modal')}>
+            Email selected
+          </Button>
         )}
       </Box>
 
