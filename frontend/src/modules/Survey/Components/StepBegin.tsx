@@ -39,7 +39,8 @@ export const StepBegin = ({
   }
 
   const nameTextInputStyle = {
-    fontWeight: '600',
+    fontWeight: '500',
+    fontSize: '24px',
     color:
       error === errorEnum.NAME || error === errorEnum.BOTH
         ? colors.red
@@ -47,7 +48,8 @@ export const StepBegin = ({
   }
 
   const emailTextInputStyle = {
-    fontWeight: '600',
+    fontWeight: '500',
+    fontSize: '24px',
     color:
       error === errorEnum.EMAIL || error === errorEnum.BOTH
         ? colors.red
