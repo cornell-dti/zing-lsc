@@ -30,7 +30,10 @@ function constructUrl(courseCatalogName: any, roster: any) {
   return url
 }
 
-async function getCourseId(courseCatalogNameRaw: string, roster: string) {
+async function getCourseId(
+  courseCatalogNameRaw: string,
+  roster: string
+): Promise<string> {
   const courseCatalogName = courseCatalogNameRaw.replace(/\s+/g, '')
   const url = constructUrl(courseCatalogName, roster)
   const response = await axios.get(url)
