@@ -1,16 +1,5 @@
-import { colors, h3, StyledComponent } from '@core'
+import { colors, h3 } from '@core'
 import styled from 'styled-components'
-import logo from '@assets/img/purplelogo.svg'
-
-export const StyledContainer = styled.div`
-  margin: 1rem;
-`
-
-const Logo = ({ className }: StyledComponent) => (
-  <div className={className}>
-    <img src={logo} alt="logo" />
-  </div>
-)
 
 export const StyledText = styled.div`
   ${h3};
@@ -19,12 +8,4 @@ export const StyledText = styled.div`
   text-align: center;
   color: ${colors.mediumviolet};
   padding: 1.5rem;
-`
-
-export const StyledLogo = styled(Logo)``
-
-export const StyledLogoWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 0.25rem;
 `

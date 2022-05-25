@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import axios, { AxiosResponse } from 'axios'
-import Grid from '@mui/material/Grid'
-import {
-  StyledContainer,
-  StyledLogo,
-  StyledLogoWrapper,
-  StyledText,
-} from 'EditZing/Styles/EditZing.style'
 import { GroupGrid } from 'EditZing/Components/GroupGrid'
 import { UnmatchedGrid } from './UnmatchedGrid'
 import { Student } from 'EditZing/Types/Student'
@@ -21,7 +14,19 @@ import {
 import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
 import { MatchLoading } from './MatchLoading'
-import { Box, Button } from '@mui/material'
+import {
+  Box,
+  Button,
+  Grid,
+  SvgIcon,
+  SvgIconProps,
+  Typography,
+} from '@mui/material'
+import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
+
+const LscIcon = (props: SvgIconProps) => {
+  return <SvgIcon inheritViewBox component={Lsc} {...props} />
+}
 
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
@@ -230,7 +235,7 @@ export const EditZing = () => {
   console.log(selectedGroups)
 
   return courseInfo && hasLoadedStudentData ? (
-    <StyledContainer>
+    <Box>
       <MatchLoading
         showMatchLoading={showMatchLoading}
         isCurrentlyGrouping={isCurrentlyGrouping}
@@ -240,54 +245,69 @@ export const EditZing = () => {
       />
 
       <Box
-        display="flex"
-        flex-direction="row"
-        align-items="center"
-        justifyContent="space-between"
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 3,
+          height: (theme) => theme.spacing(17),
+          p: 6,
+          pb: 4,
+          borderBottom: 1,
+          borderBottomColor: 'essentials.12',
+        }}
       >
-        <StyledLogoWrapper>
-          <StyledLogo />
-          <StyledText>{courseInfo.names.join(', ')}</StyledText>
-        </StyledLogoWrapper>
-        <Button sx={{ height: '40px', mt: '10px' }}>
+        <LscIcon sx={{ height: '50px', width: '50px' }} />
+        <Typography variant="h4" component="h1">
+          {courseInfo.names.join(', ')}
+        </Typography>
+        <Box flexGrow={2} />
+        <Button>
           {selectedGroupNumbers.length === 0
             ? 'Send Email To'
             : 'Email Selected'}
         </Button>
       </Box>
 
-      <DndProvider backend={HTML5Backend}>
-        <Grid container spacing={1}>
-          <UnmatchedGrid
-            unmatchedStudents={unmatchedStudents}
-            moveStudent={moveStudent}
-            matchStudents={matchStudents}
-          />
-          {studentGroups.map((studentGroup, index) => (
-            <GroupGrid
-              key={index}
-              studentList={studentGroup.memberData}
-              groupNumber={studentGroup.groupNumber}
-              shareMatchEmailTimestamp={studentGroup.shareMatchEmailTimestamp}
+      <Box m={6}>
+        <DndProvider backend={HTML5Backend}>
+          <Grid container spacing={1} padding={0}>
+            <UnmatchedGrid
+              unmatchedStudents={unmatchedStudents}
               moveStudent={moveStudent}
-              createTime={studentGroup.createTime}
-              updateTime={studentGroup.updateTime}
-              selected={selectedGroupNumbers.includes(studentGroup.groupNumber)}
-              handleChecked={(event) => {
-                editSelectedGroups(studentGroup, event.target.checked)
-              }}
+              matchStudents={matchStudents}
             />
-          ))}
-        </Grid>
-      </DndProvider>
-    </StyledContainer>
+            {studentGroups.map((studentGroup, index) => (
+              <GroupGrid
+                key={index}
+                studentList={studentGroup.memberData}
+                groupNumber={studentGroup.groupNumber}
+                shareMatchEmailTimestamp={studentGroup.shareMatchEmailTimestamp}
+                moveStudent={moveStudent}
+                createTime={studentGroup.createTime}
+                updateTime={studentGroup.updateTime}
+                selected={selectedGroupNumbers.includes(
+                  studentGroup.groupNumber
+                )}
+                handleChecked={(event) => {
+                  editSelectedGroups(studentGroup, event.target.checked)
+                }}
+              />
+            ))}
+          </Grid>
+        </DndProvider>
+      </Box>
+    </Box>
   ) : showError ? (
-    <StyledContainer>
-      <StyledText>Error: unable to edit course with id {courseId}</StyledText>
-    </StyledContainer>
+    <Box m={6}>
+      <Typography variant="h5" component="h1" align="center">
+        Error: unable to edit course with id {courseId}
+      </Typography>
+    </Box>
   ) : (
-    <StyledContainer>
-      <StyledText>Loading...</StyledText>
-    </StyledContainer>
+    <Box m={6}>
+      <Typography variant="h5" component="h1" align="center">
+        Loading...
+      </Typography>
+    </Box>
   )
 }
