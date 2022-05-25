@@ -18,7 +18,7 @@ export const StyledWarningText = styled.div`
   font-size: 24px;
   font-weight: 400;
   text-align: center;
-  margin: 0px 250px;
+  margin: 0px 20%;
   margin-bottom: 50px;
 `
 export const StyledCoursesWrapper = styled.div`
