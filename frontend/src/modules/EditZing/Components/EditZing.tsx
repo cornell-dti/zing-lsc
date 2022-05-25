@@ -20,6 +20,7 @@ import {
 } from 'EditZing/Types/CourseInfo'
 import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
+import { EmailModal } from 'EditZing/Components/EmailModal'
 import { MatchLoading } from './MatchLoading'
 import { Box, Button } from '@mui/material'
 
@@ -28,6 +29,7 @@ export const EditZing = () => {
   const [showError, setShowError] = useState(false)
 
   const [courseInfo, setCourseInfo] = useState<CourseInfo>()
+  const [isEmailing, setIsEmailing] = useState<boolean>(false)
   useEffect(() => {
     axios
       .get(`${API_ROOT}${COURSE_API}/${courseId}`)
@@ -227,6 +229,9 @@ export const EditZing = () => {
 
   return courseInfo && hasLoadedStudentData ? (
     <StyledContainer>
+      {isEmailing ? (
+        <EmailModal isEmailing={isEmailing} setIsEmailing={setIsEmailing} />
+      ) : null}
       <MatchLoading
         showMatchLoading={showMatchLoading}
         isCurrentlyGrouping={isCurrentlyGrouping}
@@ -245,8 +250,10 @@ export const EditZing = () => {
           <StyledLogo />
           <StyledText>{courseInfo.names.join(', ')}</StyledText>
         </StyledLogoWrapper>
-        s
-        <Button sx={{ height: '40px', mt: '10px' }}>
+        <Button
+          sx={{ height: '40px', mt: '10px' }}
+          onClick={() => setIsEmailing(!isEmailing)}
+        >
           {selectedGroups.length === 0 ? 'Send Email To' : 'Email Selected'}
         </Button>
       </Box>

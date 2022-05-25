@@ -12,10 +12,13 @@ export interface ZingModalProps {
   onClose: () => void
   children: React.ReactNode
   title?: string
+  titleFontSize?: string
   primaryButtonText?: string
   secondaryButtonText?: string
   primaryButtonProps?: ButtonProps // can take sx
   secondaryButtonProps?: ButtonProps // can take sx
+  containerWidth?: string
+  containerHeight?: string
   sx?: SxProps<Theme>
 }
 

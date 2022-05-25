@@ -40,3 +40,8 @@ export interface MatchLoadingProps {
   courseNames: string[]
   setShowMatchLoading: (arg: boolean) => void
 }
+
+export interface EmailModalProps {
+  isEmailing: boolean
+  setIsEmailing: (arg: boolean) => void
+}
