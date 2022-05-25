@@ -4,6 +4,7 @@ import {
   StyledContainer,
   StyledCoursesWrapper,
   StyledQuestionText,
+  StyledWarningText,
 } from 'Survey/Styles/StepCourse.style'
 import { InputField } from '@core/Components'
 import { colors } from '@core/Constants'
@@ -41,11 +42,11 @@ export const StepCourse = ({
     <StyledContainer>
       <StyledQuestionText>
         What course(s) would you like to find study partners for?
-        <div style={{ fontSize: '20px', margin: '50px 250px' }}>
-          * Please do not submit the cross-listed version of the same course
-          more than once
-        </div>
       </StyledQuestionText>
+      <StyledWarningText>
+        * Please do not submit the cross-listed version of the same course more
+        than once
+      </StyledWarningText>
 
       <StyledCoursesWrapper>
         {courses.map((course, index) => (
