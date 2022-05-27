@@ -16,6 +16,8 @@ export type AuthState =
 interface AuthContextType {
   user: User | null
   authState: AuthState
+  authToken: string
+  setAuthToken: React.Dispatch<React.SetStateAction<string>>
 }
 
 const AuthContext = React.createContext<AuthContextType>({} as AuthContextType)

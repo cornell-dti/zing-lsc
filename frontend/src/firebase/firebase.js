@@ -18,25 +18,37 @@ export async function signInWithGoogle() {
 }
 
 export async function signInWithMicrosoft() {
+  // const provider = new OAuthProvider('microsoft.com')
+  // provider.addScope('mail.send')
+  // await signInWithPopup(auth, provider)
+  //   .then((res) => {
+  //     // user is signed in
+  //     // IdP data available in result.additionalUserInfo.profile
+
+  //     // get OAuth access token and ID Token
+  //     const credential = OAuthProvider.credentialFromResult(res)
+  //     const accessToken = credential.accessToken
+  //     const idToken = credential.idToken
+
+  //     console.log('access token: ' + accessToken)
+  //     console.log('id token: ' + idToken)
+  //     return credential.accessToken
+  //   })
+  //   .catch((error) => {
+  //     // handle error
+  //     console.log('error in ms login' + error)
+  //   })
+  let accessToken
   const provider = new OAuthProvider('microsoft.com')
   provider.addScope('mail.send')
-  await signInWithPopup(auth, provider)
-    .then((result) => {
-      // user is signed in
-      // IdP data available in result.additionalUserInfo.profile
+  const result = await signInWithPopup(auth, provider)
+  // user is signed in
+  // IdP data available in result.additionalUserInfo.profile
 
-      // get OAuth access token and ID Token
-      const credential = OAuthProvider.credentialFromResult(result)
-      const accessToken = credential.accessToken
-      const idToken = credential.idToken
-
-      console.log('access token: ' + accessToken)
-      console.log('id token: ' + idToken)
-    })
-    .catch((error) => {
-      // handle error
-      console.log('error in ms login' + error)
-    })
+  // get OAuth access token and ID Token
+  const credential = OAuthProvider.credentialFromResult(result)
+  accessToken = credential?.accessToken
+  return accessToken
 }
 
 export function logOut() {

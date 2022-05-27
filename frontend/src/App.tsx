@@ -28,6 +28,7 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [authState, setAuthState] = useState<AuthState>('loading')
   const axiosAuthInterceptor = useRef<number | null>(null)
+  const [authToken, setAuthToken] = useState<string>('initial token value')
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -74,7 +75,9 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <AuthProvider value={{ user: currentUser, authState }}>
+          <AuthProvider
+            value={{ user: currentUser, authState, authToken, setAuthToken }}
+          >
             <Switch>
               <PublicRoute exact path={HOME_PATH} component={Home} />
               <Route exact path={SURVEY_PATH} component={Survey} />
