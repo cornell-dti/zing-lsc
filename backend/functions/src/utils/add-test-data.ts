@@ -15,6 +15,11 @@ const selectCollege = () => {
   return colleges[Math.floor(Math.random() * colleges.length)]
 }
 
+const selectYear = () => {
+  const years = ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Grad']
+  return years[Math.floor(Math.random() * years.length)]
+}
+
 const getRandomSample = (arr: string[], n: number) => {
   // taken from https://stackoverflow.com/questions/19269545/how-to-get-a-number-of-random-elements-from-an-array
   const result = new Array(n)
@@ -50,7 +55,7 @@ const addTestStudents = async () => {
         a,
         `${a}@gmail.com`,
         selectCollege(),
-        '2022',
+        selectYear(),
         selectClasses()
       )
         .then(() => {
