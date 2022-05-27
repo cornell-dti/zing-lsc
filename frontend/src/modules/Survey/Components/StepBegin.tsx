@@ -58,9 +58,9 @@ export const StepBegin = ({
 
   function calculatePadding(nameOrEmail: string): string {
     if (error === errorEnum.BOTH || error === nameOrEmail) {
-      return '0'
+      return '-1.4'
     } else {
-      return '1.4'
+      return '0'
     }
   }
 
@@ -108,6 +108,7 @@ export const StepBegin = ({
             <NameField
               containerStyle={textContainerStyle}
               inputStyle={nameTextInputStyle}
+              placeholder="First Name"
               value={name}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setName(e.target.value)
@@ -122,7 +123,28 @@ export const StepBegin = ({
           </StyledTextFieldWrapper>
           <StyledTextFieldWrapper
             style={{
-              marginBottom: calculatePadding(errorEnum.EMAIL) + 'rem',
+              marginBottom: calculatePadding(errorEnum.NAME) + 'rem',
+            }}
+          >
+            <NameField
+              containerStyle={textContainerStyle}
+              inputStyle={nameTextInputStyle}
+              placeholder="Last Name"
+              value={name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setName(e.target.value)
+              }
+              // TODO: add extra thing in conditional so that when they type something that is valid, the error goes away
+              error={
+                error === errorEnum.NAME || error === errorEnum.BOTH
+                  ? error
+                  : ''
+              }
+            />
+          </StyledTextFieldWrapper>
+          <StyledTextFieldWrapper
+            style={{
+              marginBottom: calculatePadding(errorEnum.NAME) + 'rem',
             }}
           >
             <EmailField
