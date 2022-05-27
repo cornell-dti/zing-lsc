@@ -24,57 +24,12 @@ export const StepBegin = ({
   setEmail,
   gotoNextStep,
 }: StepBeginProps) => {
-  /** Enums for the 4 types of validation errors that can occur on step 0 **/
-  const errorEnum = {
-    NONE: '',
-    NAME: 'Please enter your name',
-    EMAIL: 'Please enter your email',
-    BOTH: 'Please enter your name and email',
-  }
-  /** the current error encountered */
-  const [error, setError] = useState(errorEnum.NONE)
-
-  const textContainerStyle = {
-    margin: '0.75rem 0',
-  }
-
-  const nameTextInputStyle = {
-    fontWeight: '500',
-    fontSize: '24px',
-  }
-
-  const emailTextInputStyle = {
-    fontWeight: '500',
-    fontSize: '24px',
-  }
-
-  function calculatePadding(nameOrEmail: string): string {
-    if (error === errorEnum.BOTH || error === nameOrEmail) {
-      return '-1.4'
-    } else {
-      return '0'
-    }
+  const textInputStyle = {
+    marginBottom: '1rem',
+    input: { color: 'purple.120', fontSize: '24px', fontWeight: '500' },
   }
 
   function handleNext() {
-    // TODO: change this to some regex magic @Shi Chong
-    if (name === '' && email === '') {
-      console.log('setting both red')
-      setError(errorEnum.BOTH)
-      return
-    }
-    if (name === '') {
-      console.log('setting name red')
-      setError(errorEnum.NAME)
-      return
-    }
-    // TODO: change this to some regex magic @Shi Chong
-    if (email === '') {
-      console.log('setting email red')
-      setError(errorEnum.EMAIL)
-      return
-    }
-    setError(errorEnum.NONE)
     gotoNextStep()
   }
 
@@ -95,9 +50,8 @@ export const StepBegin = ({
           <TextField
             placeholder="First Name"
             variant="standard"
-            sx={{ marginBottom: '1rem', input: { color: 'purple.120' } }}
+            sx={textInputStyle}
             value={name}
-            inputProps={{ style: nameTextInputStyle }}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setName(e.target.value)
             }
@@ -106,8 +60,7 @@ export const StepBegin = ({
           <TextField
             placeholder="Last Name"
             value={name}
-            sx={{ marginBottom: '1rem', input: { color: 'purple.120' } }}
-            inputProps={{ style: nameTextInputStyle }}
+            sx={textInputStyle}
             variant="standard"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setName(e.target.value)
@@ -115,9 +68,8 @@ export const StepBegin = ({
             // TODO: add extra thing in conditional so that when they type something that is valid, the error goes away
           />
           <TextField
-            inputProps={{ style: emailTextInputStyle }}
             value={email}
-            sx={{ marginBottom: '1rem', input: { color: 'purple.120' } }}
+            sx={textInputStyle}
             variant="standard"
             placeholder="Cornell NetID"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
