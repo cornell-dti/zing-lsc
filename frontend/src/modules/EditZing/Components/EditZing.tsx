@@ -229,10 +229,11 @@ export const EditZing = () => {
       })
   }
 
+  // TODO: remove this eslint disable once selectedGroups is used
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const selectedGroups = studentGroups.filter((group) =>
     selectedGroupNumbers.includes(group.groupNumber)
   )
-  console.log(selectedGroups)
 
   return courseInfo && hasLoadedStudentData ? (
     <Box>
@@ -278,7 +279,7 @@ export const EditZing = () => {
             />
             {studentGroups.map((studentGroup, index) => (
               <GroupGrid
-                key={index}
+                key={studentGroup.groupNumber}
                 studentList={studentGroup.memberData}
                 groupNumber={studentGroup.groupNumber}
                 shareMatchEmailTimestamp={studentGroup.shareMatchEmailTimestamp}
