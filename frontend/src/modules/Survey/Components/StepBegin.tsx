@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { IconButton, Box } from '@mui/material'
 import { ArrowForward } from '@mui/icons-material'
 import { TextField } from '@mui/material'
-import { colors, EmailField, NameField } from '@core'
 import {
   StyledContainer,
   StyledLeftPanel,
@@ -13,7 +12,6 @@ import {
   StyledTitleWrapper,
   StyledHeaderText,
   StyledWelcomeText,
-  StyledTextFieldWrapper,
 } from 'Survey/Styles/StepBegin.style'
 import { StepBeginProps } from 'Survey/Types'
 
