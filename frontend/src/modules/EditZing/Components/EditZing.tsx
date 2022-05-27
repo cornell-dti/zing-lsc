@@ -230,7 +230,11 @@ export const EditZing = () => {
   return courseInfo && hasLoadedStudentData ? (
     <StyledContainer>
       {isEmailing ? (
-        <EmailModal isEmailing={isEmailing} setIsEmailing={setIsEmailing} />
+        <EmailModal
+          selectedGroups={selectedGroups}
+          isEmailing={isEmailing}
+          setIsEmailing={setIsEmailing}
+        />
       ) : null}
       <MatchLoading
         showMatchLoading={showMatchLoading}

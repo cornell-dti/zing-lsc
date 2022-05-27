@@ -1,5 +1,6 @@
 import { GridSize } from '@mui/material'
 import { Student } from './Student'
+import { Group } from './CourseInfo'
 
 export interface UnmatchedGridProps {
   unmatchedStudents: Student[]
@@ -42,6 +43,7 @@ export interface MatchLoadingProps {
 }
 
 export interface EmailModalProps {
+  selectedGroups: Group[]
   isEmailing: boolean
   setIsEmailing: (arg: boolean) => void
 }

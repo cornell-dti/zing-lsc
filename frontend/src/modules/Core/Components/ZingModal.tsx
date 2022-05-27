@@ -85,9 +85,8 @@ export const ZingModal = (props: ZingModalProps) => {
           '-webkit-tap-highlight-color': 'transparent',
         },
       }}
-      fullWidth
-      // imo the sx should go to the actual content container rather than the outermost div
-      // or we should just use a different, more descriptive prop name
+      // imo sx should go to DialogContent rather than the outermost container
+      // or we should just use a different, more descriptive prop name (in ref to the below line)
       // sx={props.sx}
     >
       <TempDialogTitle
