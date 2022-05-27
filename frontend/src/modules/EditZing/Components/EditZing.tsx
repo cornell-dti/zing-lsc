@@ -18,11 +18,14 @@ import {
   Box,
   Button,
   Grid,
+  Menu,
+  MenuItem,
   SvgIcon,
   SvgIconProps,
   Typography,
 } from '@mui/material'
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 
 const LscIcon = (props: SvgIconProps) => {
   return <SvgIcon inheritViewBox component={Lsc} {...props} />
@@ -235,6 +238,25 @@ export const EditZing = () => {
     selectedGroupNumbers.includes(group.groupNumber)
   )
 
+  // Open and close the 'Send email to' menu drop down
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const menuOpen = Boolean(anchorEl)
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleSelectNewlyMatched = () => {
+    setSelectedGroupNumbers(
+      studentGroups
+        .filter((group) => group.shareMatchEmailTimestamp === null)
+        .map((group) => group.groupNumber)
+    )
+    handleMenuClose()
+  }
+
   return courseInfo && hasLoadedStudentData ? (
     <Box>
       <MatchLoading
@@ -262,11 +284,37 @@ export const EditZing = () => {
           {courseInfo.names.join(', ')}
         </Typography>
         <Box flexGrow={2} />
-        <Button>
-          {selectedGroupNumbers.length === 0
-            ? 'Send Email To'
-            : 'Email Selected'}
-        </Button>
+        {selectedGroupNumbers.length === 0 ? (
+          <>
+            <Button
+              onClick={handleMenuOpen}
+              endIcon={menuOpen ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+            >
+              Send email to
+            </Button>
+            <Menu
+              anchorEl={anchorEl}
+              open={menuOpen}
+              onClose={handleMenuClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+            >
+              <MenuItem onClick={handleSelectNewlyMatched}>
+                Newly Matched
+              </MenuItem>
+            </Menu>
+          </>
+        ) : (
+          <Button onClick={() => console.log('Open emailing modal')}>
+            Email selected
+          </Button>
+        )}
       </Box>
 
       <Box m={6}>
