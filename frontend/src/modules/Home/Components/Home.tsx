@@ -16,6 +16,8 @@ import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
 import { Box } from '@mui/material'
 import teacher from '@assets/img/teacher.svg'
 
+import { useAuthValue } from '@auth'
+
 // function GoogleIcon(props: SvgIconProps) {
 //   return <SvgIcon inheritViewBox component={Google} {...props} />
 // }
@@ -25,6 +27,13 @@ function MicrosoftIcon(props: SvgIconProps) {
 }
 
 export const Home = () => {
+  const { authToken, setAuthToken } = useAuthValue()
+  const onLogIn = async () => {
+    await signInWithMicrosoft().then((res) => {
+      setAuthToken(res!)
+    })
+  }
+
   return (
     <StyledBackground>
       <StyledContainer>
@@ -69,7 +78,11 @@ export const Home = () => {
                 fontSize: { sm: 14, md: 22 },
               }}
               onClick={() => {
-                signInWithMicrosoft().catch(() => {})
+                onLogIn()
+                  .then(() => {
+                    console.log('context auth token is' + authToken)
+                  })
+                  .catch(() => {})
               }}
             >
               Staff Login

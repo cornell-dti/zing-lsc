@@ -10,13 +10,17 @@ import {
   StyledLogoWrapper,
   StyledText,
 } from 'Emailing/Styles/Emailing.style'
+import { useAuthValue } from '@auth'
 
 // external imports
 import { Box, Button } from '@mui/material'
 
 // /email route
 export const Emailing = () => {
+  const { authToken } = useAuthValue()
   let auth = getAuth()
+  let user = auth.currentUser
+  let email = user?.email
 
   const getAuthToken = async () => {
     let accessToken
@@ -33,13 +37,15 @@ export const Emailing = () => {
   }
 
   const sendEmail = async () => {
-    const msAuthToken = await getAuthToken()
+    const msAuthToken = authToken
     console.log('access tok is ' + msAuthToken)
+
     axios({
       method: 'post',
-      url: `${API_ROOT}/graph/sendmails`,
+      url: `${API_ROOT}/email/send`,
       data: {
         authToken: msAuthToken,
+        emailAddress: email,
       },
     }).then((res) => {
       console.log(res)
