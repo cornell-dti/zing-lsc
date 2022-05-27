@@ -1,24 +1,11 @@
 import React from 'react'
-import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar'
-import MuiAlert from '@mui/material/Alert'
-import { colors } from '@core'
-import {
-  StyledContainer,
-  StyledName,
-  StyledRows,
-  StyledRow,
-  StyledButtons,
-  StyledGroupsIcon,
-  StyledPlusIcon,
-  StyledWarningIcon,
-} from 'Dashboard/Styles/GroupCard.style'
-import { Button, Typography } from '@mui/material'
-import { ReactComponent as NewlyMatchable } from '@assets/img/newlymatchable.svg'
+import { colors, EDIT_ZING_PATH } from '@core'
+import { Box, Button, Typography } from '@mui/material'
+import { ReactComponent as NewlyMatchableIcon } from '@assets/img/newlymatchable.svg'
+import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
+import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
+import { ReactComponent as WarningIcon } from '@assets/img/warning.svg'
 import { useHistory } from 'react-router'
-
-function Alert(props: any) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />
-}
 
 export const GroupCard = ({
   id,
@@ -29,21 +16,9 @@ export const GroupCard = ({
   const history = useHistory()
 
   const handleClickView = () => {
-    history.push('/edit/' + id)
+    history.push(`${EDIT_ZING_PATH}/${id}`)
   }
 
-  const [open, setOpen] = React.useState(false)
-
-  const handleClose = (
-    // fixed type of event
-    event: React.SyntheticEvent<any> | Event,
-    reason: SnackbarCloseReason
-  ) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpen(false)
-  }
   // returns color of background, button, and if newly matchable
   function getColor(students: number, groups: number) {
     //all students are matched
@@ -64,78 +39,65 @@ export const GroupCard = ({
   const styleMap = getColor(newStudents, groupsFormed)
 
   return (
-    <StyledContainer>
-      <StyledRows>
-        {/*1 index tells whether array is newly matchable*/}
-        {styleMap.new_match === 'yes' && <NewlyMatchable />}
-      </StyledRows>
-      <StyledRows>
-        <StyledName>{name}</StyledName>
-      </StyledRows>
-      <StyledRows>
-        <Typography
-          sx={{
-            background: styleMap.color,
-            fontSize: 18,
-            width: 1,
-          }}
-        >
-          <StyledRow>
-            {newStudents === 1 ? <StyledWarningIcon /> : <StyledPlusIcon />}
-            {newStudents} {newStudents === 1 ? 'New Student' : 'New Students'}
-          </StyledRow>
-        </Typography>
+    <Box
+      sx={{
+        width: 300,
+        height: 300,
+        backgroundColor: 'white',
+        borderRadius: '10px',
+        boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 4,
+        position: 'relative', // Needed to use absolute positioning for Newly Matchable
+      }}
+    >
+      {styleMap.new_match === 'yes' && (
+        <Box sx={{ position: 'absolute', top: 24 }}>
+          <NewlyMatchableIcon />
+        </Box>
+      )}
+      <Typography variant="h4" fontWeight={600}>
+        {name}
+      </Typography>
 
-        <Typography
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box
           sx={{
-            fontSize: 18,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+            background: styleMap.color,
           }}
         >
-          <StyledRow>
-            <StyledGroupsIcon />
+          {newStudents === 1 ? <WarningIcon /> : <PlusIcon />}
+          <Typography>
+            {newStudents} {newStudents === 1 ? 'New Student' : 'New Students'}
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <GroupsIcon />
+          <Typography>
             {groupsFormed}{' '}
             {groupsFormed === 1 ? 'Group Formed' : 'Groups Formed'}
-          </StyledRow>
-        </Typography>
-        <StyledRow />
-      </StyledRows>
-      <StyledButtons>
+          </Typography>
+        </Box>
+      </Box>
+
+      <Box display="flex" gap={2}>
         <Button
           onClick={handleClickView}
-          sx={{
-            width: 1 / 3,
-            padding: 1,
-            boxShadow: 2,
-          }}
+          sx={{ boxShadow: 2 }}
           color="secondary"
           variant="outlined"
         >
           View
         </Button>
-        {newStudents > 1 && (
-          <Button
-            sx={{
-              width: 1 / 3,
-              padding: 1,
-              ml: -6,
-              boxShadow: 2,
-            }}
-          >
-            Match
-          </Button>
-        )}
-      </StyledButtons>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="success">
-          Link for {name} copied to clipboard!
-        </Alert>
-      </Snackbar>
-    </StyledContainer>
+        {newStudents > 1 && <Button>Match</Button>}
+      </Box>
+    </Box>
   )
 }
 
