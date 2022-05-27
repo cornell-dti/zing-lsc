@@ -14,7 +14,8 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "prepare": "cd ../.. && husky install backend/functions/.husky"
+    "prepare": "cd ../.. && husky install backend/functions/.husky",
+    "populate": "export FIRESTORE_EMULATOR_HOST=\"localhost:8080\" && npx ts-node src/utils/add-test-data.ts"
   },
   "dependencies": {
     "axios": "^0.21.1",
