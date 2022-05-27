@@ -41,19 +41,11 @@ export const StepBegin = ({
   const nameTextInputStyle = {
     fontWeight: '500',
     fontSize: '24px',
-    color:
-      error === errorEnum.NAME || error === errorEnum.BOTH
-        ? colors.red
-        : colors.darkpurple,
   }
 
   const emailTextInputStyle = {
     fontWeight: '500',
     fontSize: '24px',
-    color:
-      error === errorEnum.EMAIL || error === errorEnum.BOTH
-        ? colors.red
-        : colors.darkpurple,
   }
 
   function calculatePadding(nameOrEmail: string): string {
@@ -103,7 +95,7 @@ export const StepBegin = ({
           <TextField
             placeholder="First Name"
             variant="standard"
-            sx={{ marginBottom: '1rem' }}
+            sx={{ marginBottom: '1rem', input: { color: 'purple.120' } }}
             value={name}
             inputProps={{ style: nameTextInputStyle }}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -114,7 +106,7 @@ export const StepBegin = ({
           <TextField
             placeholder="Last Name"
             value={name}
-            sx={{ marginBottom: '1rem' }}
+            sx={{ marginBottom: '1rem', input: { color: 'purple.120' } }}
             inputProps={{ style: nameTextInputStyle }}
             variant="standard"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -125,7 +117,7 @@ export const StepBegin = ({
           <TextField
             inputProps={{ style: emailTextInputStyle }}
             value={email}
-            sx={{ marginBottom: '1rem' }}
+            sx={{ marginBottom: '1rem', input: { color: 'purple.120' } }}
             variant="standard"
             placeholder="Cornell NetID"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
