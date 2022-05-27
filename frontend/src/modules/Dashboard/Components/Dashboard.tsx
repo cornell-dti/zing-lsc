@@ -17,9 +17,19 @@ import { useAuthValue } from '@auth'
 import { Box, CircularProgress, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 
+type SortOrder =
+  | 'newest-requests-first'
+  | 'unmatchable-first'
+  | 'newly-matchable-first'
+  | 'matchable-first'
+  | 'classes-a-z'
+  | 'classes-z-a'
+
 export const Dashboard = () => {
-  const [sortedOrder, setSortedOrder] = useState('')
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [sortedOrder, setSortedOrder] = useState<SortOrder>(
+    'newest-requests-first'
+  )
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,7 +46,12 @@ export const Dashboard = () => {
 
   useEffect(() => {
     axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
-      setCourses(res.data.data)
+      setCourses(
+        res.data.data.map((course: any) => ({
+          ...course,
+          latestSubmissionTime: new Date(course.latestSubmissionTime),
+        }))
+      )
       setHasLoadedCourseData(true)
     })
     return () => {
@@ -45,23 +60,28 @@ export const Dashboard = () => {
   }, [])
 
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
-  function sorted(courseInfo: CourseInfo[], menuValue: string) {
+  function sorted(courseInfo: CourseInfo[], menuValue: SortOrder) {
     switch (menuValue) {
-      case 'newly-match-first':
-        return [...courseInfo].sort((a, _) => {
-          //-1 if a newly matchable and b isn't
-          if (a.lastGroupNumber === 0 && a.unmatched.length > 1) {
-            return -1
-          } else return 1
-        })
-      case 'unmatch-first':
+      case 'newest-requests-first':
+        return [...courseInfo].sort(
+          (a, b) =>
+            b.latestSubmissionTime.valueOf() - a.latestSubmissionTime.valueOf()
+        )
+      case 'unmatchable-first':
         return [...courseInfo].sort((a, _) => {
           //-1 if a unmatchable and b isn't
           if (a.lastGroupNumber === 0 && a.unmatched.length === 1) {
             return -1
           } else return 1
         })
-      case 'match-first':
+      case 'newly-matchable-first':
+        return [...courseInfo].sort((a, _) => {
+          //-1 if a newly matchable and b isn't
+          if (a.lastGroupNumber === 0 && a.unmatched.length > 1) {
+            return -1
+          } else return 1
+        })
+      case 'matchable-first':
         return [...courseInfo].sort((a, _) => {
           //-1 if a matchable and b isn't
           if (
@@ -71,13 +91,13 @@ export const Dashboard = () => {
             return -1
           } else return 1
         })
-      case 'classesa-z':
+      case 'classes-a-z':
         return [...courseInfo].sort((a, b) => {
           return a.names[0].localeCompare(b.names[0], undefined, {
             numeric: true,
           })
         })
-      case 'classesz-a':
+      case 'classes-z-a':
         return [...courseInfo].sort((a, b) => {
           return b.names[0].localeCompare(a.names[0], undefined, {
             numeric: true,
@@ -89,7 +109,7 @@ export const Dashboard = () => {
   }
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSortedOrder(event.target.value)
+    setSortedOrder(event.target.value as SortOrder)
   }
 
   const sortedCourses = sorted(courses, sortedOrder)
@@ -118,12 +138,16 @@ export const Dashboard = () => {
               fontWeight: 'bold',
             }}
           >
-            {/* <MenuItem value="newest">Newest</MenuItem> */}
-            <MenuItem value="unmatch-first">Unmatchable first</MenuItem>
-            <MenuItem value="newly-match-first">Newly matchable first</MenuItem>
-            <MenuItem value="match-first">Matchable first</MenuItem>
-            <MenuItem value="classesa-z">Classes A-Z</MenuItem>
-            <MenuItem value="classesz-a">Classes Z-A</MenuItem>
+            <MenuItem value="newest-requests-first">
+              Newest requests first
+            </MenuItem>
+            <MenuItem value="unmatchable-first">Unmatchable first</MenuItem>
+            <MenuItem value="newly-matchable-first">
+              Newly matchable first
+            </MenuItem>
+            <MenuItem value="matchable-first">Matchable first</MenuItem>
+            <MenuItem value="classes-a-z">Classes A-Z</MenuItem>
+            <MenuItem value="classes-z-a">Classes Z-A</MenuItem>
           </DropdownSelect>
         </Box>
         <Button

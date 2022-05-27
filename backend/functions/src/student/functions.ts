@@ -140,6 +140,7 @@ const addStudentSurveyResponse = async (
         snapshotRef
           .update({
             unmatched: admin.firestore.FieldValue.arrayUnion(email),
+            latestSubmissionTime: admin.firestore.FieldValue.serverTimestamp(),
           })
           .catch((err) => {
             console.log(err)
