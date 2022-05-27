@@ -166,7 +166,7 @@ export const StepBegin = ({
           <IconButton
             className="next"
             onClick={handleNext}
-            // disabled={error != errorEnum.NONE}
+            disabled={name === '' || email === ''}
           >
             <ArrowForward />
           </IconButton>
