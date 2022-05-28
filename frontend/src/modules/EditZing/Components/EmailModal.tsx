@@ -1,53 +1,22 @@
-import React from 'react'
+import { useState } from 'react'
 import { ZingModal } from '@core/Components'
 import { EmailModalProps } from '../Types/ComponentProps'
-import {
-  LabelText,
-  ModalContainer,
-  RecipientsContainer,
-  RecipientsText,
-} from '../Styles/EmailModal.style'
+import { EmailModalContent } from './EmailModalContent'
 
 export const EmailModal = ({
   selectedGroups,
   isEmailing,
   setIsEmailing,
 }: EmailModalProps) => {
-  const recipients = () => {
-    return (
-      <RecipientsContainer>
-        <LabelText>To:</LabelText>
-        {selectedGroups.map((group, index) =>
-          index === selectedGroups.length - 1 ? (
-            <RecipientsText key={group.groupNumber}>
-              {'Group ' + group.groupNumber}
-            </RecipientsText>
-          ) : (
-            <RecipientsText key={group.groupNumber}>
-              {'Group ' + group.groupNumber + ', '}
-            </RecipientsText>
-          )
-        )}
-      </RecipientsContainer>
-    )
-  }
-  const templateRadioButtons = () => {}
-
-  const contentComponent = () => {
-    return <ModalContainer>{recipients()}</ModalContainer>
-  }
-
   return (
+    // cannot use primarybutton props etc because of https://cornelldti.slack.com/archives/C03FG2U1V28/p1653692556464509
+    // instead handle modal screen step transitions + buttons inside of child component
     <ZingModal
-      title="Select email template"
-      titleFontSize="36px"
       open={isEmailing}
       onClose={() => setIsEmailing(!isEmailing)}
-      primaryButtonText="Send"
-      primaryButtonProps={{ onClick: () => alert('hi') }}
       containerWidth={'800px'}
-      containerHeight={'450px'}
-      children={contentComponent()}
+      containerHeight={'550px'}
+      children={<EmailModalContent selectedGroups={selectedGroups} />}
     />
   )
 }

@@ -1,11 +1,3 @@
-interface EmailTemplateType {
-  name: string
-  subject: string
-  body: string
-}
-
-type EmailTemplatesType = EmailTemplateType[]
-
 const matched = () => {
   return `Subject: Study Partners!
     <div> 
@@ -127,60 +119,61 @@ const lateAddStudent = () => {
     </div>`
 }
 
-const askJoinGroup = (newStudent: string, studentsRaw: string[]) => {
-  const parseNames = () => {
-    let res = ''
-    studentsRaw.forEach((e: string) => {
-      res += ', ' + e
-    })
+// // this one is hard, probably a v2 feature that requires more thought and designs
+// const askJoinGroup = (newStudent: string, studentsRaw: string[]) => {
+//   const parseNames = () => {
+//     let res = ''
+//     studentsRaw.forEach((e: string) => {
+//       res += ', ' + e
+//     })
 
-    return res
-  }
+//     return res
+//   }
 
-  const students = parseNames()
+//   const students = parseNames()
 
-  return ` 
-    <div> Dear students,  </div>
-    <br> 
-    <br> 
-    <div> 
-    We are writing to you because you have expressed interest in studying with 
-    other students. We are so glad you reached out! Studying with peers is 
-    known to be an effective learning tool, but whether you are learning online or
-    in-person it can be challenging, especially in large classes, to find study 
-    partners. 
-    </div>
-    <br> 
-    <div> 
-    <b> ${newStudent} </b>, within the past few days we tried to match
-    you with another student who requested a study partner for the same
-    class(es) you listed but haven’t had any luck. Fortunately, a small group that
-    we matched recently is happy to have another student join them in studying.
-    Thank you<b>${students}</b>!
-    </div>
-    <br>
-    <div>
-    (Due to privacy rules we are not able to disclose which classes the student(s)
-    receiving this email are taking, but you have been matched because you
-    expressed interest in finding study partners for the same course.)
-    </div>
-    <br>
-    <div>
-    Whether you will be studying together in -person or online, use the LSC’s tips
-    for setting your group’s agenda and making the most out of studying
-    together.Consider working together at a time when you can use course
-    office hours or LSC tutoring to answer questions that may arise!
-    </div>
-    <br>
-    <div>
-    If you’d like more info about studying together please contact LSC Study
-    Partners lscstudypartners@cornell.edu  We will be following up later in the
-    semester to find out how it’s going.
-    </div>
-    <br>
-    <br>
-    Happy studying!`
-}
+//   return `
+//     <div> Dear students,  </div>
+//     <br>
+//     <br>
+//     <div>
+//     We are writing to you because you have expressed interest in studying with
+//     other students. We are so glad you reached out! Studying with peers is
+//     known to be an effective learning tool, but whether you are learning online or
+//     in-person it can be challenging, especially in large classes, to find study
+//     partners.
+//     </div>
+//     <br>
+//     <div>
+//     <b> ${newStudent} </b>, within the past few days we tried to match
+//     you with another student who requested a study partner for the same
+//     class(es) you listed but haven’t had any luck. Fortunately, a small group that
+//     we matched recently is happy to have another student join them in studying.
+//     Thank you<b>${students}</b>!
+//     </div>
+//     <br>
+//     <div>
+//     (Due to privacy rules we are not able to disclose which classes the student(s)
+//     receiving this email are taking, but you have been matched because you
+//     expressed interest in finding study partners for the same course.)
+//     </div>
+//     <br>
+//     <div>
+//     Whether you will be studying together in -person or online, use the LSC’s tips
+//     for setting your group’s agenda and making the most out of studying
+//     together.Consider working together at a time when you can use course
+//     office hours or LSC tutoring to answer questions that may arise!
+//     </div>
+//     <br>
+//     <div>
+//     If you’d like more info about studying together please contact LSC Study
+//     Partners lscstudypartners@cornell.edu  We will be following up later in the
+//     semester to find out how it’s going.
+//     </div>
+//     <br>
+//     <br>
+//     Happy studying!`
+// }
 
 const checkIn = () => {
   return ` 
@@ -217,22 +210,43 @@ const checkIn = () => {
     `
 }
 
-const custom = (body: string) => {
-  return `<div> Dear Student(s), </div> 
-      <br> 
-      <br>  
-      
-      <div> 
-    ${body}
-    </div>`
+// const custom = (body: string) => {
+//   return `<div> Dear Student(s), </div>
+//       <br>
+//       <br>
+
+//       <div>
+//     ${body}
+//     </div>`
+// }
+
+export enum TemplateName {
+  MATCHED = 'Share matched results',
+  FIRST_NO_MATCH = 'First no match notification',
+  SECOND_NO_MATCH = 'Second no match notification',
+  ADD_STUDENT = 'Request to add student to group',
+  LATE_ADD_STUDENT = 'Request to add student to group (late)',
+  ASK_JOIN_GROUP = 'Ask to join group',
+  CHECK_IN = 'Check in with groups',
 }
-export {
-  matched,
-  firstNoMatch,
-  secondNoMatch,
-  addStudent,
-  lateAddStudent,
-  askJoinGroup,
-  checkIn,
-  custom,
+
+export const getBody = (templateName: string, className: string) => {
+  switch (templateName) {
+    case TemplateName.MATCHED:
+      return matched()
+    case TemplateName.FIRST_NO_MATCH:
+      return firstNoMatch(className)
+    case TemplateName.SECOND_NO_MATCH:
+      return secondNoMatch()
+    case TemplateName.ADD_STUDENT:
+      return addStudent()
+    case TemplateName.LATE_ADD_STUDENT:
+      return lateAddStudent()
+    case TemplateName.ASK_JOIN_GROUP:
+      throw new Error('Out of scope for v1')
+    case TemplateName.CHECK_IN:
+      return checkIn()
+    default:
+      throw new Error('Template not found')
+  }
 }
