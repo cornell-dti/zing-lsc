@@ -234,6 +234,7 @@ export const EditZing = () => {
           selectedGroups={selectedGroups}
           isEmailing={isEmailing}
           setIsEmailing={setIsEmailing}
+          courseNames={courseInfo.names}
         />
       ) : null}
       <MatchLoading

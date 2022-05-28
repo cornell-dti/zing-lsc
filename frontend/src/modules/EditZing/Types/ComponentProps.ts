@@ -47,6 +47,7 @@ export interface EmailModalProps {
   selectedGroups: Group[]
   isEmailing: boolean
   setIsEmailing: (arg: boolean) => void
+  courseNames: string[]
 }
 
 export interface TemplateRadioButtonsProps {
@@ -56,4 +57,10 @@ export interface TemplateRadioButtonsProps {
 
 export interface EmailModalContentProps {
   selectedGroups: Group[]
+  courseNames: string[]
+}
+
+export interface EmailPreviewProps {
+  templateName: TemplateName
+  courseNames: string[]
 }

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import { RadioButtons } from '@core/Components'
 import { TemplateName } from 'EditZing/utils/emailTemplates'
@@ -24,7 +23,7 @@ export const EmailTemplateButtons = ({
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        mt: '30px',
+        mt: '40px',
       }}
     >
       <Typography variant="h5" component="h5" fontWeight="800" mb="12px">

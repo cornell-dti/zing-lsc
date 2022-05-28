@@ -3,13 +3,15 @@ import { EmailModalContentProps } from '../Types/ComponentProps'
 import {
   ModalContainer,
   RecipientsContainer as InfoContainer,
-} from '../Styles/EmailModal.style'
+} from '../Styles/Email.style'
 import { EmailTemplateButtons } from './EmailTemplateButtons'
+import { EmailPreview } from './EmailPreview'
 import { Box, Button, Typography } from '@mui/material'
 import { TemplateName } from 'EditZing/utils/emailTemplates'
 
 export const EmailModalContent = ({
   selectedGroups,
+  courseNames,
 }: EmailModalContentProps) => {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(
     '' as TemplateName
@@ -24,12 +26,12 @@ export const EmailModalContent = ({
         </Typography>
         {selectedGroups.map((group, index) =>
           index === selectedGroups.length - 1 ? (
-            <Typography variant="h5" component="h5" fontWeight={'800'}>
+            <Typography variant="h5" component="h5" fontWeight={'900'}>
               {'Group ' + group.groupNumber}
             </Typography>
           ) : (
-            <Typography variant="h5" component="h5" fontWeight={'800'}>
-              {'Group ' + group.groupNumber + ', '}
+            <Typography variant="h5" component="h5" fontWeight={'900'}>
+              {'Group ' + group.groupNumber + ','}&nbsp;
             </Typography>
           )
         )}
@@ -39,7 +41,7 @@ export const EmailModalContent = ({
 
   const TemplateSelectedComponent = () => {
     return (
-      <InfoContainer style={{ marginTop: '45px' }}>
+      <InfoContainer style={{ marginTop: '40px' }}>
         <Typography variant="h5" component="h5" mr="0.5rem">
           Template:
         </Typography>
@@ -50,7 +52,7 @@ export const EmailModalContent = ({
     )
   }
 
-  const titleComponent = () => {
+  const createTitleComponent = () => {
     let title
     step === 1 ? (title = 'Select email template') : (title = 'Send emails')
     return (
@@ -66,7 +68,7 @@ export const EmailModalContent = ({
   if (step === 1) {
     return (
       <Box>
-        {titleComponent()}
+        {createTitleComponent()}
         <ModalContainer>
           <RecipientsComponent />
           <EmailTemplateButtons
@@ -88,10 +90,14 @@ export const EmailModalContent = ({
   } else {
     return (
       <Box>
-        {titleComponent()}
+        {createTitleComponent()}
         <ModalContainer>
           <RecipientsComponent />
           <TemplateSelectedComponent />
+          <EmailPreview
+            templateName={selectedTemplate}
+            courseNames={courseNames}
+          />
         </ModalContainer>
         <Button
           disabled={!selectedTemplate}
