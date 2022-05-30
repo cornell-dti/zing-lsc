@@ -80,9 +80,4 @@ router.post('/send', (req, res) => {
   })
 })
 
-/* Sample testing to check if graph route is working */
-router.post('/sample', (req, res) => {
-  res.json('hello')
-})
-
 export default router
