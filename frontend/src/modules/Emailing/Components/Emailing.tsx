@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import axios, { AxiosResponse } from 'axios'
-import { getAuth, OAuthProvider, signInWithPopup } from 'firebase/auth'
+import React from 'react'
+import axios from 'axios'
+import { getAuth } from 'firebase/auth'
 
 // zing imports
 import { API_ROOT } from '@core'
@@ -10,36 +10,23 @@ import {
   StyledLogoWrapper,
   StyledText,
 } from 'Emailing/Styles/Emailing.style'
-import { useAuthValue } from '@auth'
 
 // external imports
 import { Box, Button } from '@mui/material'
 
-// /email route
+// 'www.zing.com/email' route
 export const Emailing = () => {
-  const { authToken } = useAuthValue()
+  // 1. logged in user info
   let auth = getAuth()
   let user = auth.currentUser
   let email = user?.email
 
-  const getAuthToken = async () => {
-    let accessToken
-    const provider = new OAuthProvider('microsoft.com')
-    provider.addScope('mail.send')
-    const result = await signInWithPopup(auth, provider)
-    // user is signed in
-    // IdP data available in result.additionalUserInfo.profile
-
-    // get OAuth access token and ID Token
-    const credential = OAuthProvider.credentialFromResult(result)
-    accessToken = credential?.accessToken
-    return accessToken
-  }
-
   const sendEmail = async () => {
-    const msAuthToken = authToken
+    // 2. obtaining auth token from local storage
+    const msAuthToken = localStorage.getItem('authToken') || ' '
     console.log('access tok is ' + msAuthToken)
 
+    // 3. request to the backend to send mail
     axios({
       method: 'post',
       url: `${API_ROOT}/email/send`,
@@ -48,6 +35,7 @@ export const Emailing = () => {
         emailAddress: email,
       },
     }).then((res) => {
+      // 4. reading response for success or failure
       console.log(res)
     })
   }

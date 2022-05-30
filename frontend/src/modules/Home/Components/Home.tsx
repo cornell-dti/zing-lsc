@@ -9,7 +9,6 @@ import {
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import Button from '@mui/material/Button'
-import { signInWithMicrosoft } from '@fire'
 // import { ReactComponent as Google } from '@assets/img/googleicon.svg'
 import { ReactComponent as Microsoft } from '@assets/img/microsofticon.svg'
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
@@ -27,12 +26,7 @@ function MicrosoftIcon(props: SvgIconProps) {
 }
 
 export const Home = () => {
-  const { authToken, setAuthToken } = useAuthValue()
-  const onLogIn = async () => {
-    await signInWithMicrosoft().then((res) => {
-      setAuthToken(res!)
-    })
-  }
+  let { onLogIn } = useAuthValue()
 
   return (
     <StyledBackground>
@@ -78,11 +72,7 @@ export const Home = () => {
                 fontSize: { sm: 14, md: 22 },
               }}
               onClick={() => {
-                onLogIn()
-                  .then(() => {
-                    console.log('context auth token is' + authToken)
-                  })
-                  .catch(() => {})
+                onLogIn().catch(() => {})
               }}
             >
               Staff Login
