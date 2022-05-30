@@ -32,9 +32,24 @@ export const EmailPreview = ({
           fontWeight: '900',
         }}
       >
-        <Typography></Typography>
+        <Box display={'flex'} flexDirection={'row'}>
+          <Typography fontWeight={800}>Subject: </Typography>&nbsp;
+          <Typography>Study Partners!</Typography>
+        </Box>
       </Box>
-      <div dangerouslySetInnerHTML={{ __html: body }}></div>
+      <Box
+        sx={{
+          color: 'essentials.75',
+          backgroundColor: 'essentials.6',
+          borderBottom: '0.5px solid #898992;',
+          borderColor: 'essentials.50',
+          padding: '16px',
+          maxHeight: '250px',
+          overflow: 'scroll',
+        }}
+      >
+        <div dangerouslySetInnerHTML={{ __html: body }}></div>
+      </Box>
     </Box>
   )
 }

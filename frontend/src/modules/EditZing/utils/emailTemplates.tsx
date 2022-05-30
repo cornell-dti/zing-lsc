@@ -1,5 +1,5 @@
 const matched = () => {
-  return `Subject: Study Partners!
+  return `
     <div> 
       Dear students,  
     </div>

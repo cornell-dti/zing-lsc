@@ -41,7 +41,7 @@ export const EmailModalContent = ({
 
   const TemplateSelectedComponent = () => {
     return (
-      <InfoContainer style={{ marginTop: '40px' }}>
+      <InfoContainer style={{ marginTop: '0.25em', marginBottom: '0.5em' }}>
         <Typography variant="h5" component="h5" mr="0.5rem">
           Template:
         </Typography>
@@ -57,7 +57,7 @@ export const EmailModalContent = ({
     step === 1 ? (title = 'Select email template') : (title = 'Send emails')
     return (
       <Box display={'flex'} justifyContent={'center'} textAlign={'center'}>
-        <Typography variant="h4" component="h4" fontWeight={'700'} mb="12px">
+        <Typography variant="h4" component="h4" fontWeight={'700'}>
           {title}
         </Typography>
       </Box>
