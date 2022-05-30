@@ -20,7 +20,6 @@ export const Emailing = () => {
   // one state should be enough.
   const [emailSent, setEmailSent] = useState(false)
   const [sendError, setSendError] = useState(false)
-  const [retried, setRetried] = useState(false)
 
   // 1. logged in user info
   let auth = getAuth()
@@ -44,12 +43,6 @@ export const Emailing = () => {
     // 2. obtaining auth token from local storage
     const msAuthToken = localStorage.getItem('authToken') || ' '
     console.log('access tok is ' + msAuthToken)
-
-    // helper timeout function for pause for user to read email
-    // error message
-    function delay(time: number) {
-      return new Promise((resolve) => setTimeout(resolve, time))
-    }
 
     // 3. request to the backend to send mail
     axios({
@@ -161,12 +154,6 @@ export const sendEmail = async (
   // 2. obtaining auth token from local storage
   const msAuthToken = localStorage.getItem('authToken') || ' '
   console.log('access tok is ' + msAuthToken)
-
-  // helper timeout function for pause for user to read email
-  // error message
-  function delay(time: number) {
-    return new Promise((resolve) => setTimeout(resolve, time))
-  }
 
   // 3. request to the backend to send mail
   axios({
