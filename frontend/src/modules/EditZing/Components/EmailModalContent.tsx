@@ -23,22 +23,22 @@ export const EmailModalContent = ({
   const titles = ['Select email template', 'Send emails']
 
   const RecipientsComponent = () => {
+    let groupNames = ''
+    selectedGroups.forEach((group, index) => {
+      if (index !== selectedGroups.length - 1) {
+        groupNames += `Group ${group.groupNumber}, `
+      } else {
+        groupNames += `Group ${group.groupNumber}`
+      }
+    })
     return (
       <InfoContainer>
         <Typography variant="h5" component="h5" mr="0.5rem">
           To:
         </Typography>
-        {selectedGroups.map((group, index) =>
-          index === selectedGroups.length - 1 ? (
-            <Typography variant="h5" component="h5" fontWeight={'900'}>
-              {'Group ' + group.groupNumber}
-            </Typography>
-          ) : (
-            <Typography variant="h5" component="h5" fontWeight={'900'}>
-              {'Group ' + group.groupNumber + ','}&nbsp;
-            </Typography>
-          )
-        )}
+        <Typography variant="h5" component="h5" fontWeight={'900'}>
+          {groupNames}
+        </Typography>
       </InfoContainer>
     )
   }
