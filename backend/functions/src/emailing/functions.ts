@@ -2,6 +2,9 @@ import axios from 'axios'
 
 const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
+/* Add Recipients parses frontend data and adds to 
+    the 'toRecipients' key-value pair of 
+    the email request body sent to the MS Graph API */
 function addRecipients(messageBody: any, rcpts = []) {
   const cloned = Object.assign({}, messageBody)
   if (rcpts.length > 0) {
@@ -10,6 +13,8 @@ function addRecipients(messageBody: any, rcpts = []) {
   return cloned
 }
 
+/* Create Recipients parses the rcpts (string list of student emails) 
+    sent from the frontend. Called in addRecipients. */
 function createRecipients(rcpts: string[]) {
   return rcpts.map((rcpt) => {
     return {
@@ -20,6 +25,7 @@ function createRecipients(rcpts: string[]) {
   })
 }
 
+/* Create Email As JSON creates the main GRAPH API request body data.  */
 export const createEmailAsJson = (
   rcpts: any,
   subject: string,
@@ -45,6 +51,20 @@ export const createEmailAsJson = (
   return messageAsJson
 }
 
+/* Send Mails is takes the 
+    from: sender (admin's email)
+    message: graph api request body data
+    authToken: string that must match the [from] email and 
+      logged in user
+    
+    Sends a POST request to the GRAPH API. 
+    
+    Returns: 
+      202 (:number) if successfully sent. 
+      Other if email failed to send. 
+        - Bad AUTH or else. Frontend will then parse this response 
+        - Either relogin once (?) 
+      */
 export const sendMails = async (
   from: string,
   message: any,
