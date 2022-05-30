@@ -142,3 +142,72 @@ export const Emailing = () => {
     </StyledContainer>
   )
 }
+
+/* Returns 
+    SUCC -> 201 
+    FAIL -> 401  */
+export const sendEmail = async (
+  emailSubject: string,
+  emailRcpts: string[],
+  emailBody: any,
+  emailSent: boolean,
+  setEmailSent: (arg: boolean) => void,
+  retried: boolean,
+  setRetried: (arg: boolean) => void
+) => {
+  // 1. logged in user info
+  let auth = getAuth()
+  let user = auth.currentUser
+  let email = user?.email
+  // 2. obtaining auth token from local storage
+  const msAuthToken = localStorage.getItem('authToken') || ' '
+  console.log('access tok is ' + msAuthToken)
+
+  // helper timeout function for pause for user to read email
+  // error message
+  function delay(time: number) {
+    return new Promise((resolve) => setTimeout(resolve, time))
+  }
+
+  // 3. request to the backend to send mail
+  axios({
+    method: 'post',
+    url: `${API_ROOT}/email/send`,
+    data: {
+      authToken: msAuthToken,
+      emailAddress: email,
+      emailBody: emailBody,
+      emailSubject: emailSubject,
+      emailRcpts: emailRcpts,
+    },
+  }).then((res) => {
+    // 4. reading response for success or failure
+    console.log(res)
+    if (res.status === 201) {
+      setEmailSent(true)
+      return 201
+    } else {
+      // for 1.5 sec delay
+      // will automatically relog user back in and then try sending email again.
+      // only ONCE though.
+      // may cause errors tho ?
+      if (!retried) {
+        delay(1500).then(() => {
+          setRetried(true)
+          adminSignIn().then(() =>
+            sendEmail(
+              emailSubject,
+              emailRcpts,
+              emailBody,
+              emailSent,
+              setEmailSent,
+              retried,
+              setRetried
+            )
+          )
+        })
+      }
+      return 401
+    }
+  })
+}
