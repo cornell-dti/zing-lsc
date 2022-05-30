@@ -1,19 +1,16 @@
 import axios from 'axios'
-import express from 'express'
-
-const router = express()
 
 const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
-function addRecipients(messageBody, rcpts = []) {
-  let cloned = Object.assign({}, messageBody)
+function addRecipients(messageBody: any, rcpts = []) {
+  const cloned = Object.assign({}, messageBody)
   if (rcpts.length > 0) {
     cloned.message['toRecipients'] = createRecipients(rcpts)
   }
   return cloned
 }
 
-function createRecipients(rcpts) {
+function createRecipients(rcpts: string[]) {
   return rcpts.map((rcpt) => {
     return {
       emailAddress: {
@@ -23,7 +20,11 @@ function createRecipients(rcpts) {
   })
 }
 
-const createEmailAsJson = (rcpts, subject, body) => {
+export const createEmailAsJson = (
+  rcpts: any,
+  subject: string,
+  body: string
+) => {
   let messageAsJson = {
     message: {
       subject: subject,
@@ -44,7 +45,11 @@ const createEmailAsJson = (rcpts, subject, body) => {
   return messageAsJson
 }
 
-const sendMails = async (from, message, authToken) => {
+export const sendMails = async (
+  from: string,
+  message: any,
+  authToken: string
+) => {
   const access_token = authToken
   try {
     const response = await axios({
@@ -62,22 +67,3 @@ const sendMails = async (from, message, authToken) => {
     return error
   }
 }
-
-router.post('/send', (req, res) => {
-  const from = req.body.emailAddress
-  const authToken = req.body.authToken
-  const body = req.body.emailBody
-  const subject = req.body.emailSubject
-  const recipientAddresses = req.body.emailRcpts
-
-  const message = createEmailAsJson(recipientAddresses, subject, body)
-  console.log(JSON.stringify(message, null, '  '))
-
-  sendMails(from, message, authToken).then((result) => {
-    if (result === 202) {
-      res.json('Email send success')
-    } else res.json('Email send failure')
-  })
-})
-
-export default router
