@@ -33,9 +33,10 @@ export const EmailModalContent = ({
     })
     return (
       <InfoContainer>
-        <Typography variant="h5" component="h5" mr="0.5rem">
+        <Typography variant="h5" component="h5">
           To:
         </Typography>
+        &nbsp;&nbsp;
         <Typography variant="h5" component="h5" fontWeight={'900'}>
           {groupNames}
         </Typography>
@@ -46,9 +47,10 @@ export const EmailModalContent = ({
   const TemplateSelectedComponent = () => {
     return (
       <InfoContainer style={{ marginTop: '0.25em', marginBottom: '0.5em' }}>
-        <Typography variant="h5" component="h5" mr="0.5rem">
+        <Typography variant="h5" component="h5">
           Template:
         </Typography>
+        &nbsp;&nbsp;
         <Typography variant="h5" component="h5" fontWeight={'800'}>
           {selectedTemplate}
         </Typography>
