@@ -8,21 +8,20 @@ export const EmailPreview = ({
   templateName,
   courseNames,
 }: EmailPreviewProps) => {
-  const ContainerSx: SxProps = {
-    border: '0.5px solid #898992;',
-    borderColor: 'essentials.50',
-  }
   const TitleSx: SxProps = {
     color: 'essentials.6',
     backgroundColor: 'essentials.75',
     borderBottom: '0.5px solid #898992;',
+    border: '0.5px solid',
     borderColor: 'essentials.50',
     padding: '16px',
     fontWeight: '900',
+    borderRadius: '5px 5px 0px 0px;',
   }
   const BodyAndSubjectSx: SxProps = {
     color: 'essentials.75',
     backgroundColor: 'essentials.6',
+    border: '0.5px solid',
     borderBottom: '0.5px solid #898992;',
     borderColor: 'essentials.50',
     padding: '16px',
@@ -30,7 +29,7 @@ export const EmailPreview = ({
 
   const body = getBody(templateName, courseNames.join(', '))
   return (
-    <Box sx={ContainerSx}>
+    <Box>
       <Box sx={TitleSx}>Email Preview</Box>
       <Box
         sx={{
@@ -47,6 +46,7 @@ export const EmailPreview = ({
         sx={{
           maxHeight: '250px',
           overflow: 'scroll',
+          borderRadius: '0px 0px 5px 5px;',
           ...BodyAndSubjectSx,
         }}
       >

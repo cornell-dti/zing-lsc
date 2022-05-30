@@ -15,7 +15,7 @@ export const EmailModal = ({
       open={isEmailing}
       onClose={() => setIsEmailing(!isEmailing)}
       containerWidth={'800px'}
-      containerHeight={'550px'}
+      containerHeight={'580px'}
       children={
         <EmailModalContent
           selectedGroups={selectedGroups}

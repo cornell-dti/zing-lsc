@@ -115,7 +115,7 @@ export const EmailModalContent = ({
           endIcon={<SendIcon />}
           sx={{ position: 'absolute', bottom: '24px', right: '24px' }}
         >
-          Send Emails
+          Send {selectedGroups.length} Emails
         </Button>
       )
     }
