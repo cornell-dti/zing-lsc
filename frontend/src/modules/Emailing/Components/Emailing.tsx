@@ -12,7 +12,7 @@ import {
 import { adminSignIn } from '@fire'
 
 // external imports
-import { Box, Button } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 
 // 'www.zing.com/email' route
 export const Emailing = () => {
@@ -65,23 +65,13 @@ export const Emailing = () => {
     }).then((res) => {
       // 4. reading response for success or failure
       console.log(res)
-      if (res.data === 'Email send success') {
+      if (res.data === 'Email send success.') {
         setEmailSent(true)
         setSendError(false)
       } else {
         setEmailSent(false)
         setSendError(true)
-
-        // for 1.5 sec delay
-        // will automatically relog user back in and then try sending email again.
-        // only ONCE though.
-        // may cause errors tho ?
-        if (!retried) {
-          delay(1500).then(() => {
-            setRetried(true)
-            adminSignIn().then(() => sendEmail())
-          })
-        }
+        console.log('email send error')
       }
     })
   }
@@ -94,10 +84,10 @@ export const Emailing = () => {
         align-items=" center"
         justifyContent="space-between"
       >
-        <StyledText>
+        <Typography>
           {' '}
           {emailSent ? 'Email is sent' : 'Email not yet sent'}!{' '}
-        </StyledText>
+        </Typography>
       </Box>
     )
   }
@@ -110,13 +100,22 @@ export const Emailing = () => {
         align-items=" center"
         justifyContent="space-between"
       >
-        <StyledText>
+        <Typography>
           {' '}
           {sendError
             ? 'Email failed to send. Please log back in and reauthenticate to send email.'
             : 'No email send error'}{' '}
           !{' '}
-        </StyledText>
+          {sendError && (
+            <Button
+              onClick={() => {
+                adminSignIn().then(() => sendEmail())
+              }}
+            >
+              Try Again{' '}
+            </Button>
+          )}
+        </Typography>
       </Box>
     )
   }
@@ -143,7 +142,7 @@ export const Emailing = () => {
   )
 }
 
-/* Returns 
+/* Returns (number)
     SUCC -> 201 
     FAIL -> 401  */
 export const sendEmail = async (
@@ -180,18 +179,26 @@ export const sendEmail = async (
       emailSubject: emailSubject,
       emailRcpts: emailRcpts,
     },
-  }).then((res) => {
+  }).then(async (res) => {
     // 4. reading response for success or failure
     console.log(res)
-    if (res.status === 201) {
+    if (res.data === 'Email send success.') {
       setEmailSent(true)
       return 201
     } else {
-      // for 1.5 sec delay
-      // will automatically relog user back in and then try sending email again.
-      // only ONCE though.
-      // may cause errors tho ?
-      if (!retried) {
+      // handle error
+
+      console.log('please try again.')
+
+      /* firebase login requires user action (ie. press button) will throw error 
+          if we try to call it straight up.  */
+
+      /* for 1.5 sec delay
+          will automatically relog user back in and then try sending email again.
+          only ONCE though.
+          may cause errors tho ? */
+
+      /* if (!retried) {
         delay(1500).then(() => {
           setRetried(true)
           adminSignIn().then(() =>
@@ -206,7 +213,7 @@ export const sendEmail = async (
             )
           )
         })
-      }
+      } */
       return 401
     }
   })

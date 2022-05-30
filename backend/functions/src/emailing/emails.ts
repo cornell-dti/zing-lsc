@@ -16,8 +16,8 @@ const router = express()
       - emailRcpts (student email string list )
 
     Returns: 
-      SUCC -> res.status = 201 
-      FAIL -> res.status = 401 
+      SUCC -> res.data = 'Email send success.' 
+      FAIL -> res.data = 'Email send failure.' 
 
     */
 router.post('/send', (req, res) => {
@@ -33,10 +33,8 @@ router.post('/send', (req, res) => {
   sendMails(from, message, authToken).then((result) => {
     if (result === 202) {
       res.json('Email send success.')
-      res.status(201)
     } else {
       res.json('Email send failure.')
-      res.status(401)
     }
   })
 })
