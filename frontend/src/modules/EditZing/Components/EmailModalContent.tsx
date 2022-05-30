@@ -1,22 +1,26 @@
 import { useState } from 'react'
 import { EmailModalContentProps } from '../Types/ComponentProps'
 import {
-  ModalContainer,
+  ModalContainer as ContentContainer,
   RecipientsContainer as InfoContainer,
 } from '../Styles/Email.style'
 import { EmailTemplateButtons } from './EmailTemplateButtons'
 import { EmailPreview } from './EmailPreview'
 import { Box, Button, Typography } from '@mui/material'
 import { TemplateName } from 'EditZing/utils/emailTemplates'
+import SendIcon from '@mui/icons-material/Send'
 
 export const EmailModalContent = ({
   selectedGroups,
   courseNames,
+  isEmailing,
+  setIsEmailing,
 }: EmailModalContentProps) => {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(
     '' as TemplateName
   )
-  const [step, setStep] = useState<number>(1)
+  const [step, setStep] = useState<number>(0)
+  const titles = ['Select email template', 'Send emails']
 
   const RecipientsComponent = () => {
     return (
@@ -52,9 +56,8 @@ export const EmailModalContent = ({
     )
   }
 
-  const createTitleComponent = () => {
-    let title
-    step === 1 ? (title = 'Select email template') : (title = 'Send emails')
+  const TitleComponent = () => {
+    const title = titles[step]
     return (
       <Box display={'flex'} justifyContent={'center'} textAlign={'center'}>
         <Typography variant="h4" component="h4" fontWeight={'700'}>
@@ -64,57 +67,85 @@ export const EmailModalContent = ({
     )
   }
 
-  // TODO: refactor this when first draft is done to minimize code overlap (conditionals only on things that change)
-  if (step === 1) {
+  const Step0 = () => {
     return (
       <Box>
-        {createTitleComponent()}
-        <ModalContainer>
-          <RecipientsComponent />
-          <EmailTemplateButtons
-            selectedTemplate={selectedTemplate || ''}
-            setSelectedTemplate={setSelectedTemplate}
-          />
-        </ModalContainer>
+        <EmailTemplateButtons
+          selectedTemplate={selectedTemplate || ''}
+          setSelectedTemplate={setSelectedTemplate}
+        />
+      </Box>
+    )
+  }
+
+  const Step1 = () => {
+    return (
+      <Box>
+        <TemplateSelectedComponent />
+        <EmailPreview
+          templateName={selectedTemplate}
+          courseNames={courseNames}
+        />
+      </Box>
+    )
+  }
+
+  const ProceedButton = () => {
+    if (step === 0) {
+      return (
         <Button
           onClick={() => {
-            setStep(2)
+            setStep(1)
           }}
           disabled={!selectedTemplate}
           sx={{ position: 'absolute', bottom: '24px', right: '24px' }}
         >
           Next
         </Button>
-      </Box>
-    )
-  } else {
-    return (
-      <Box>
-        {createTitleComponent()}
-        <ModalContainer>
-          <RecipientsComponent />
-          <TemplateSelectedComponent />
-          <EmailPreview
-            templateName={selectedTemplate}
-            courseNames={courseNames}
-          />
-        </ModalContainer>
-        <Button
-          disabled={!selectedTemplate}
-          sx={{ position: 'absolute', bottom: '24px', right: '24px' }}
-        >
-          Send emails
-        </Button>
+      )
+    } else {
+      return (
         <Button
           onClick={() => {
-            setStep(1)
+            setIsEmailing(!isEmailing)
+            // add something else here that actually sends the emails and a pop-up message saying that it's in-progress then done/fail etc.
+          }}
+          endIcon={<SendIcon />}
+          sx={{ position: 'absolute', bottom: '24px', right: '24px' }}
+        >
+          Send Emails
+        </Button>
+      )
+    }
+  }
+
+  const BackButton = () => {
+    if (step === 1) {
+      return (
+        <Button
+          onClick={() => {
+            setStep(0)
           }}
           color="inherit"
           sx={{ position: 'absolute', bottom: '24px', left: '24px' }}
         >
           Back to templates
         </Button>
-      </Box>
-    )
+      )
+    } else {
+      return null
+    }
   }
+
+  return (
+    <Box>
+      <TitleComponent />
+      <ContentContainer>
+        <RecipientsComponent />
+        {step === 0 ? <Step0 /> : <Step1 />}
+      </ContentContainer>
+      <ProceedButton />
+      <BackButton />
+    </Box>
+  )
 }

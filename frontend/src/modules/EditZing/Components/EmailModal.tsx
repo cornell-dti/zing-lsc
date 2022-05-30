@@ -20,6 +20,8 @@ export const EmailModal = ({
         <EmailModalContent
           selectedGroups={selectedGroups}
           courseNames={courseNames}
+          isEmailing={isEmailing}
+          setIsEmailing={setIsEmailing}
         />
       }
     />

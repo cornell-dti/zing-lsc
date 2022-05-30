@@ -58,6 +58,8 @@ export interface TemplateRadioButtonsProps {
 export interface EmailModalContentProps {
   selectedGroups: Group[]
   courseNames: string[]
+  isEmailing: boolean
+  setIsEmailing: (arg: boolean) => void
 }
 
 export interface EmailPreviewProps {
