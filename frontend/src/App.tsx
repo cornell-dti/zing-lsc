@@ -21,27 +21,13 @@ import theme from '@core/Constants/Theme'
 import { useEffect, useRef, useState } from 'react'
 import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
-import { auth, signInWithMicrosoft } from '@fire'
+import { auth } from '@fire'
 import axios from 'axios'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [authState, setAuthState] = useState<AuthState>('loading')
   const axiosAuthInterceptor = useRef<number | null>(null)
-
-  // useEffect(() => {
-  //   setAuthToken(JSON.parse(window.localStorage.getItem('authToken')!));
-  // }, []);
-
-  // useEffect(() => {
-  //   window.localStorage.setItem('authToken', authToken!);
-  // }, [authToken]);
-
-  const onLogIn = async () => {
-    await signInWithMicrosoft().then((res) => {
-      window.localStorage.setItem('authToken', res!)
-    })
-  }
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -88,7 +74,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <AuthProvider value={{ user: currentUser, authState, onLogIn }}>
+          <AuthProvider value={{ user: currentUser, authState }}>
             <Switch>
               <PublicRoute exact path={HOME_PATH} component={Home} />
               <Route exact path={SURVEY_PATH} component={Survey} />

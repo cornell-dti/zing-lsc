@@ -16,7 +16,6 @@ export type AuthState =
 interface AuthContextType {
   user: User | null
   authState: AuthState
-  onLogIn: Function
 }
 
 const AuthContext = React.createContext<AuthContextType>({} as AuthContextType)

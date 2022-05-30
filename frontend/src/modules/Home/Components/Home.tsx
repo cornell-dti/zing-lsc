@@ -9,13 +9,12 @@ import {
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import Button from '@mui/material/Button'
+import { adminSignIn } from '@fire'
 // import { ReactComponent as Google } from '@assets/img/googleicon.svg'
 import { ReactComponent as Microsoft } from '@assets/img/microsofticon.svg'
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
 import { Box } from '@mui/material'
 import teacher from '@assets/img/teacher.svg'
-
-import { useAuthValue } from '@auth'
 
 // function GoogleIcon(props: SvgIconProps) {
 //   return <SvgIcon inheritViewBox component={Google} {...props} />
@@ -26,8 +25,6 @@ function MicrosoftIcon(props: SvgIconProps) {
 }
 
 export const Home = () => {
-  let { onLogIn } = useAuthValue()
-
   return (
     <StyledBackground>
       <StyledContainer>
@@ -72,7 +69,7 @@ export const Home = () => {
                 fontSize: { sm: 14, md: 22 },
               }}
               onClick={() => {
-                onLogIn().catch(() => {})
+                adminSignIn().catch(() => {})
               }}
             >
               Staff Login

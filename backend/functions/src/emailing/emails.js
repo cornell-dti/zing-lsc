@@ -1,35 +1,15 @@
-import 'dotenv/config'
 import axios from 'axios'
 import express from 'express'
 
 const router = express()
 
-const CLIENT_ID = process.env.MS_GRAPH_API_CLIENT_ID
-const CLIENT_SECRET = process.env.MS_GRAPH_API_CLIENT_SECRET_VALUE
-const TENANT_ID = process.env.MS_GRAPH_API_TENANT_ID
 const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
-const recipientAddresses = {
-  to: [{ address: 'zhanliam21@gmail.com', name: 'Will Zhang (gmail) To' }],
-  cc: [{ address: 'willzhang21@icloud.com', name: 'Will Zhang (icloud) CC' }],
-  bcc: [
-    {
-      address: 'lscstudypartners@cornell.edu',
-      name: 'Cornell LSC Study Partners Program',
-    },
-  ],
-}
-const subject = 'Graph API Subject Line' || ''
-
-function addRecipients(messageBody, rcpts = {}) {
+function addRecipients(messageBody, rcpts = []) {
   let cloned = Object.assign({}, messageBody)
-
-  Object.keys(rcpts).forEach((element) => {
-    if (rcpts[element].length > 0) {
-      cloned.message[element + 'Recipients'] = createRecipients(rcpts[element])
-    }
-  })
-
+  if (rcpts.length > 0) {
+    cloned.message['toRecipients'] = createRecipients(rcpts)
+  }
   return cloned
 }
 
@@ -37,8 +17,7 @@ function createRecipients(rcpts) {
   return rcpts.map((rcpt) => {
     return {
       emailAddress: {
-        address: rcpt.address,
-        name: rcpt.name || '',
+        address: rcpt,
       },
     }
   })
@@ -78,23 +57,27 @@ const sendMails = async (from, message, authToken) => {
       },
       data: JSON.stringify(message),
     })
-
-    console.log('sendNotification status', response.statusText)
+    return response.status
   } catch (error) {
-    console.log(error)
+    return error
   }
 }
 
 router.post('/send', (req, res) => {
-  const body = '<h1> Test from Will Z</h1> <p> HTML msg sent via MS graph!</p>'
+  const from = req.body.emailAddress
+  const authToken = req.body.authToken
+  const body = req.body.emailBody
+  const subject = req.body.emailSubject
+  const recipientAddresses = req.body.emailRcpts
+
   const message = createEmailAsJson(recipientAddresses, subject, body)
   console.log(JSON.stringify(message, null, '  '))
 
-  let from = req.body.emailAddress
-  let authToken = req.body.authToken
-
-  sendMails(from, message, authToken)
-  res.json('emails sent')
+  sendMails(from, message, authToken).then((result) => {
+    if (result === 202) {
+      res.json('Email send success')
+    } else res.json('Email send failure')
+  })
 })
 
 /* Sample testing to check if graph route is working */
