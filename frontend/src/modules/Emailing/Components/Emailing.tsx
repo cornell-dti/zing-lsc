@@ -62,10 +62,10 @@ export const Emailing = () => {
         emailSubject: emailSubject,
         emailRcpts: emailRcpts,
       },
-    }).then(async (res) => {
+    }).then((res) => {
       // 4. reading response for success or failure
       console.log(res)
-      if (res.data === 'Email sent success') {
+      if (res.data === 'Email send success') {
         setEmailSent(true)
         setSendError(false)
       } else {
