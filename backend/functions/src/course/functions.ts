@@ -20,7 +20,9 @@ async function getDataForStudents(emails: string[]) {
 async function getCourseInfo(courseId: any) {
   const snapshot = await courseRef.doc(courseId).get()
   if (!snapshot.exists) throw new Error("This course doesn't exist")
-  return snapshot.data()
+  const result: any = snapshot.data()
+  result.latestSubmissionTime = result.latestSubmissionTime.toDate()
+  return result
 }
 
 async function getAllCourses() {
@@ -28,6 +30,7 @@ async function getAllCourses() {
   return snapshot.docs.map((doc) => {
     const obj = doc.data()
     obj.courseId = doc.id
+    obj.latestSubmissionTime = obj.latestSubmissionTime.toDate()
     return obj
   })
 }
