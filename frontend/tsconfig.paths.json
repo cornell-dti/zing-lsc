@@ -24,7 +24,9 @@
       "EditZing": ["src/modules/EditZing/"],
       "EditZing/*": ["src/modules/EditZing/*"],
       "Dashboard": ["src/modules/Dashboard/"],
-      "Dashboard/*": ["src/modules/Dashboard/*"]
+      "Dashboard/*": ["src/modules/Dashboard/*"],
+      "Emailing": ["src/modules/Emailing/"],
+      "Emailing/*": ["src/modules/Emailing/*"]
     }
   }
 }

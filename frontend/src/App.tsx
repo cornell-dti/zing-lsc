@@ -7,6 +7,7 @@ import {
   CREATE_ZING_PATH,
   EDIT_ZING_PATH,
   DASHBOARD_PATH,
+  EMAIL_PATH,
   API_ROOT,
 } from '@core'
 import { Home } from 'Home'
@@ -14,6 +15,7 @@ import { Survey } from 'Survey'
 import { CreateZingForm } from 'CreateZing'
 import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
+import { Emailing } from 'Emailing'
 import './App.css'
 import theme from '@core/Constants/Theme'
 import { useEffect, useRef, useState } from 'react'
@@ -78,6 +80,7 @@ const App = () => {
               <Route exact path={SURVEY_PATH} component={Survey} />
               <Route exact path={CREATE_ZING_PATH} component={CreateZingForm} />
               <PrivateRoute exact path={DASHBOARD_PATH} component={Dashboard} />
+              <PrivateRoute exact path={EMAIL_PATH} component={Emailing} />
               <PrivateRoute
                 exact
                 path={`${EDIT_ZING_PATH}/:courseId`}

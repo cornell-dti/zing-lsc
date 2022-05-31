@@ -9,7 +9,7 @@ import {
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import Button from '@mui/material/Button'
-import { signInWithMicrosoft } from '@fire'
+import { adminSignIn } from '@fire'
 // import { ReactComponent as Google } from '@assets/img/googleicon.svg'
 import { ReactComponent as Microsoft } from '@assets/img/microsofticon.svg'
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
@@ -69,7 +69,7 @@ export const Home = () => {
                 fontSize: { sm: 14, md: 22 },
               }}
               onClick={() => {
-                signInWithMicrosoft().catch(() => {})
+                adminSignIn().catch(() => {})
               }}
             >
               Staff Login

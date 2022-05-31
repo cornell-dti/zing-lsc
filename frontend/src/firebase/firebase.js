@@ -20,23 +20,19 @@ export async function signInWithGoogle() {
 export async function signInWithMicrosoft() {
   const provider = new OAuthProvider('microsoft.com')
   provider.addScope('mail.send')
-  await signInWithPopup(auth, provider)
-    .then((result) => {
-      // user is signed in
-      // IdP data available in result.additionalUserInfo.profile
+  const result = await signInWithPopup(auth, provider)
+  // user is signed in
+  // IdP data available in result.additionalUserInfo.profile
 
-      // get OAuth access token and ID Token
-      const credential = OAuthProvider.credentialFromResult(result)
-      const accessToken = credential.accessToken
-      const idToken = credential.idToken
+  // get OAuth access token
+  const credential = OAuthProvider.credentialFromResult(result)
+  return credential?.accessToken
+}
 
-      console.log('access token: ' + accessToken)
-      console.log('id token: ' + idToken)
-    })
-    .catch((error) => {
-      // handle error
-      console.log('error in ms login' + error)
-    })
+export async function adminSignIn() {
+  await signInWithMicrosoft().then((res) => {
+    window.localStorage.setItem('authToken', res)
+  })
 }
 
 export function logOut() {

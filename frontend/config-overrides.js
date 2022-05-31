@@ -15,5 +15,6 @@ module.exports = override(
     ['Survey']: path.resolve(__dirname, './src/modules/Survey'),
     ['CreateZing']: path.resolve(__dirname, './src/modules/CreateZing'),
     ['Dashboard']: path.resolve(__dirname, './src/modules/Dashboard'),
+    ['Emailing']: path.resolve(__dirname, './src/modules/Emailing'),
   })
 )

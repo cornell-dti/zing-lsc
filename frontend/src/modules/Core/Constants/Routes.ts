@@ -3,6 +3,7 @@ export const SURVEY_PATH = '/survey'
 export const CREATE_ZING_PATH = '/createzing'
 export const EDIT_ZING_PATH = '/edit'
 export const DASHBOARD_PATH = '/dashboard'
+export const EMAIL_PATH = '/email'
 
 // NODE_ENV will be 'production' for yarn build, and 'development' for yarn start
 // See https://create-react-app.dev/docs/adding-custom-environment-variables/
