@@ -18,17 +18,15 @@ export async function signInWithGoogle() {
 }
 
 export async function signInWithMicrosoft() {
-  let accessToken
   const provider = new OAuthProvider('microsoft.com')
   provider.addScope('mail.send')
   const result = await signInWithPopup(auth, provider)
   // user is signed in
   // IdP data available in result.additionalUserInfo.profile
 
-  // get OAuth access token and ID Token
+  // get OAuth access token
   const credential = OAuthProvider.credentialFromResult(result)
-  accessToken = credential?.accessToken
-  return accessToken
+  return credential?.accessToken
 }
 
 export async function adminSignIn() {

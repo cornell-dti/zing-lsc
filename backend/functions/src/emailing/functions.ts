@@ -16,13 +16,7 @@ function addRecipients(messageBody: any, rcpts = []) {
 /* Create Recipients parses the rcpts (string list of student emails) 
     sent from the frontend. Called in addRecipients. */
 function createRecipients(rcpts: string[]) {
-  return rcpts.map((rcpt) => {
-    return {
-      emailAddress: {
-        address: rcpt,
-      },
-    }
-  })
+  return rcpts.map((rcpt) => ({ emailAddress: { address: rcpt } }))
 }
 
 /* Create Email As JSON creates the main GRAPH API request body data.  */
