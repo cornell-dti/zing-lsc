@@ -139,13 +139,8 @@ export const Emailing = () => {
     SUCC -> 201 
     FAIL -> 401  */
 export const sendEmail = async (
-  emailSubject: string,
-  emailRcpts: string[],
-  emailBody: any,
-  emailSent: boolean,
-  setEmailSent: (arg: boolean) => void,
-  retried: boolean,
-  setRetried: (arg: boolean) => void
+  emailItems: any,
+  setEmailSent: (arg: boolean) => void
 ) => {
   // 1. logged in user info
   let auth = getAuth()
@@ -154,6 +149,7 @@ export const sendEmail = async (
   // 2. obtaining auth token from local storage
   const msAuthToken = localStorage.getItem('authToken') || ' '
   console.log('access tok is ' + msAuthToken)
+  const { emailSubject, emailRcpts, emailBody } = emailItems
 
   // 3. request to the backend to send mail
   axios({
@@ -175,32 +171,15 @@ export const sendEmail = async (
     } else {
       // handle error
 
-      console.log('please try again.')
+      console.log('Email send error. Please try again.')
 
       /* firebase login requires user action (ie. press button) will throw error 
-          if we try to call it straight up.  */
+          if we try to call it straight up. 
+          
+          option1: 
+          set email send error to true 
+          frontend: if (err) { render try again button onClick => { adminLogin().then(sendEmail())} } */
 
-      /* for 1.5 sec delay
-          will automatically relog user back in and then try sending email again.
-          only ONCE though.
-          may cause errors tho ? */
-
-      /* if (!retried) {
-        delay(1500).then(() => {
-          setRetried(true)
-          adminSignIn().then(() =>
-            sendEmail(
-              emailSubject,
-              emailRcpts,
-              emailBody,
-              emailSent,
-              setEmailSent,
-              retried,
-              setRetried
-            )
-          )
-        })
-      } */
       return 401
     }
   })
