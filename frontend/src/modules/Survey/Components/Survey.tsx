@@ -48,7 +48,7 @@ export const Survey = () => {
     setCurrStep(currStep + 1)
   }
 
-  const multipleChoiceIndex = currStep - numSpecialQuestions - 1
+  const multipleChoiceIndex = currStep - numSpecialQuestions - 2
   const validCourseRe = /^[A-Z]{2,7} \d{4}$/
   const isStepValid =
     currStep === 2
@@ -65,7 +65,7 @@ export const Survey = () => {
         gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
       />
     </StyledContainer1>
-  ) : currStep === totalSteps ? ( // Form confirmation
+  ) : currStep === totalSteps + 1 ? ( // Form confirmation
     <StyledContainer2>
       <StepFinal />
     </StyledContainer2>
