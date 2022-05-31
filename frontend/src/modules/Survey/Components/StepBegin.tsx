@@ -47,24 +47,13 @@ export const StepBegin = ({
         </StyledTitleWrapper>
         <StyledFields>
           <TextField
-            placeholder="First Name"
+            placeholder="Name"
             variant="standard"
             sx={textInputStyle}
             value={name}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setName(e.target.value)
             }
-            // TODO: add extra thing in conditional so that when they type something that is valid, the error goes away
-          />
-          <TextField
-            placeholder="Last Name"
-            value={name}
-            sx={textInputStyle}
-            variant="standard"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setName(e.target.value)
-            }
-            // TODO: add extra thing in conditional so that when they type something that is valid, the error goes away
           />
           <TextField
             value={email}
