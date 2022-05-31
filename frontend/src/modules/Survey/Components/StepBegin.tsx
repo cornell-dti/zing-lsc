@@ -25,6 +25,7 @@ export const StepBegin = ({
   const textInputStyle = {
     marginBottom: '1rem',
     input: { color: 'purple.120', fontSize: '24px', fontWeight: '500' },
+    '& .MuiInput-underline:before': { borderBottomColor: 'purple.75' },
   }
 
   function handleNext() {
