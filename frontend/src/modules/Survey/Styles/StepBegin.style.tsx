@@ -59,7 +59,7 @@ export const StyledFields = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 4rem 0;
+  margin: 6rem 0;
 `
 
 export const StyledTitleWrapper = styled.div`
