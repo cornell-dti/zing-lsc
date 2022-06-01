@@ -65,11 +65,19 @@ export const StepBegin = ({
             }
           />
         </StyledFields>
-        <Box sx={{ marginLeft: 'auto', textAlign: 'center' }}>
+        <Box
+          sx={{
+            marginLeft: 'auto',
+            textAlign: 'center',
+            color: 'purple.100',
+            weight: 600,
+          }}
+        >
           <IconButton
             className="next"
             onClick={handleNext}
             disabled={name === '' || email === ''}
+            sx={{ boxShadow: 3 }}
           >
             <ArrowForward />
           </IconButton>
