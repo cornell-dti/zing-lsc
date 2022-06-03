@@ -14,7 +14,7 @@ require('dotenv').config({ path: '../.env' })
 import studentsRouter from './student/routes'
 import matchingRouter from './matching/routes'
 import courseRouter from './course/routes'
-import emailRouter from './emailing/emails'
+import emailRouter from './emailing/routes'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
