@@ -21,16 +21,13 @@ const router = express()
 
     */
 router.post('/send', (req, res) => {
-  const from = req.body.emailAddress
-  const authToken = req.body.authToken
-  const body = req.body.emailBody
-  const subject = req.body.emailSubject
-  const recipientAddresses = req.body.emailRcpts
+  const { emailAddress, authToken, emailBody, emailSubject, emailRcpts } =
+    req.body
 
-  const message = createEmailAsJson(recipientAddresses, subject, body)
+  const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
   console.log(JSON.stringify(message, null, '  '))
 
-  sendMails(from, message, authToken).then((result) => {
+  sendMails(emailAddress, message, authToken).then((result) => {
     if (result === 202) {
       res.json('Email send success.')
     } else {

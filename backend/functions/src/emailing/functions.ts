@@ -1,4 +1,5 @@
 import axios from 'axios'
+import functions from 'firebase-functions'
 
 const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
@@ -78,6 +79,11 @@ export const sendMails = async (
     })
     return response.status
   } catch (error) {
+    functions.logger.error(
+      from +
+        ' failed to send an email to matched students. Data sent: ' +
+        JSON.stringify(message)
+    )
     return error
   }
 }
