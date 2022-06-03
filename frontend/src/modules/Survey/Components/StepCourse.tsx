@@ -21,9 +21,17 @@ export const StepCourse = ({
     color: colors.darkpurple,
   }
 
+  const cleanInput = (courseName: string) => {
+    return courseName.toUpperCase().trim()
+  }
+
   const updateCourse = (index: number, newValue: string) => {
     if (newValue) {
-      setCourses(courses.map((course, i) => (index === i ? newValue : course)))
+      setCourses(
+        courses.map((course, i) =>
+          index === i ? cleanInput(newValue) : course
+        )
+      )
     } else {
       setCourses(courses.filter((_, i) => index !== i))
     }
@@ -31,7 +39,7 @@ export const StepCourse = ({
 
   const addCourse = (newValue: string) => {
     if (newValue) {
-      setCourses([...courses, newValue])
+      setCourses([...courses, cleanInput(newValue)])
     }
   }
 

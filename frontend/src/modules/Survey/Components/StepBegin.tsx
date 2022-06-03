@@ -59,7 +59,7 @@ export const StepBegin = ({
             value={email}
             sx={textInputStyle}
             variant="standard"
-            placeholder="Cornell NetID"
+            placeholder="Cornell Email"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setEmail(e.target.value)
             }
