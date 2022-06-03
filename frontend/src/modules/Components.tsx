@@ -180,11 +180,17 @@ const Components = () => {
         <Button onClick={handleModalOpen}>Modal</Button>
         <ZingModal
           open={modalOpen}
-          onClose={handleModalClose}
-          primaryButtonText="Button Text"
-          secondaryButtonText="Button Text"
+          containerWidth="400px"
+          containerHeight="300px"
         >
-          Modal text goes here!
+          <ZingModal.Title onClose={handleModalClose}>Title</ZingModal.Title>
+          <ZingModal.Body>Modal text goes here!</ZingModal.Body>
+          <ZingModal.Controls>
+            <Button color="secondary" variant="outlined">
+              Hello
+            </Button>
+            <Button>Hello</Button>
+          </ZingModal.Controls>
         </ZingModal>
       </Box>
       <Box my={3}>
