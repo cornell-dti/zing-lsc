@@ -53,7 +53,6 @@ export const EditZing = () => {
       )
     }
   }
-  console.log(selectedGroups) //for seeing selected groups in console
 
   const [unmatchedStudents, setUnmatchedStudents] = useState<Student[]>([])
   const [studentGroups, setStudentGroups] = useState<Group[]>([])

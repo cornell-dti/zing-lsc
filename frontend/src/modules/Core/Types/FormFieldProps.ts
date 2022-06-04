@@ -61,14 +61,12 @@ export interface RadioButtonProps extends Common {
   onClick: (e: React.ChangeEvent<HTMLInputElement>) => void
   value: string
   label: string
-  key: string
 }
 
 export interface RadioButtonsProps extends Common {
   currentAnswer: string
   values: string[]
   onClick: (e: React.ChangeEvent<HTMLInputElement>) => void // to set state of user information in index.tsx
-  key: string
 }
 
 export interface CheckboxProps extends Common {

@@ -8,19 +8,18 @@ import { StyledContainer } from '@core/Styles/RadioButtons.style'
 export const RadioButtons = ({
   values,
   onClick,
-  key,
   currentAnswer,
 }: RadioButtonsProps) => {
   return (
     <StyledContainer>
-      {values.map((value) => (
+      {values.map((value, i) => (
         <RadioButton
+          key={i}
           currentAnswer={currentAnswer}
           onClick={onClick}
           value={value}
           label={value}
           name="RadioButtons"
-          key={key}
           checked={value === currentAnswer}
         />
       ))}

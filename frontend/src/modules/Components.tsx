@@ -180,6 +180,7 @@ const Components = () => {
         <Button onClick={handleModalOpen}>Modal</Button>
         <ZingModal
           open={modalOpen}
+          onClose={handleModalClose}
           containerWidth="400px"
           containerHeight="300px"
         >

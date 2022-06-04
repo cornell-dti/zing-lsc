@@ -32,7 +32,6 @@ export const EmailTemplateButtons = ({
       <RadioButtons
         values={activeTemplates}
         onClick={handleChange}
-        key={'TemplateRadioButtons'}
         currentAnswer={selectedTemplate || ''}
       />
     </Box>

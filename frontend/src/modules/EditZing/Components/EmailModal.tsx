@@ -104,6 +104,7 @@ export const EmailModal = ({
   return (
     <ZingModal
       open={isEmailing}
+      onClose={() => setIsEmailing(!isEmailing)}
       containerWidth={'800px'}
       containerHeight={'630px'}
     >

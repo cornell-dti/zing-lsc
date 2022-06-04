@@ -9,6 +9,7 @@ import {
 // for the modal (dialog box)
 export interface ZingModalProps {
   open: boolean
+  onClose: () => void
   children: React.ReactNode
   containerWidth?: string
   containerHeight?: string
