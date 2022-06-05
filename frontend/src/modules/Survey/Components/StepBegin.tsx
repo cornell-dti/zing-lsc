@@ -28,10 +28,6 @@ export const StepBegin = ({
     '& .MuiInput-underline:before': { borderBottomColor: 'purple.75' },
   }
 
-  function handleNext() {
-    gotoNextStep()
-  }
-
   const [isValidEmail, setIsValidEmail] = React.useState(true)
   const validEmail = /^\w+@cornell.edu$/
 
@@ -82,8 +78,8 @@ export const StepBegin = ({
         >
           <IconButton
             className="next"
-            onClick={handleNext}
-            disabled={name === '' || !isValidEmail}
+            onClick={gotoNextStep}
+            disabled={name === '' || email === '' || !isValidEmail}
             sx={{ boxShadow: 3 }}
           >
             <ArrowForward />

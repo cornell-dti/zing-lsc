@@ -52,8 +52,8 @@ export const StepCourse = ({
         What course(s) would you like to find study partners for?
       </StyledQuestionText>
       <StyledWarningText>
-        * Please do not submit the cross-listed version of the same course more
-        than once
+        * You do not need to submit the cross-listed version of the same course
+        more than once
       </StyledWarningText>
 
       <StyledCoursesWrapper>
