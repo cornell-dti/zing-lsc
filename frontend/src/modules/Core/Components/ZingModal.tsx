@@ -1,44 +1,44 @@
 import {
-  Box,
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   IconButton,
   styled,
+  DialogTitleProps as MuiDialogTitleProps,
+  DialogContentProps,
+  DialogActionsProps,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
 import React from 'react'
 import { ZingModalProps } from '@core'
 
-const TempDialog = styled(Dialog)(({ theme }) => ({
-  '&.MuiDialog-root *': {
-    fontFamily: 'Montserrat',
-  },
-  '& .MuiDialogContent-root': {
-    minWidth: 500,
-    minHeight: 100,
-    padding: theme.spacing(1, 4),
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(2, 3, 3),
-  },
-}))
+// SUB COMPONENTS OF THE MODAL DEFINED HERE, MEANT TO BE USED iN MODAL
 
-interface DialogTitleProps {
+interface DialogTitleProps extends MuiDialogTitleProps {
   children?: React.ReactNode
   onClose: () => void
 }
 
-const TempDialogTitle = (props: DialogTitleProps) => {
-  const { children, onClose } = props
+const Title = (props: DialogTitleProps) => {
+  const { children, onClose, sx } = props
 
   return (
-    <DialogTitle sx={{ m: 0, pl: 3, pr: 2, pt: 2, pb: 1 }}>
+    <DialogTitle
+      sx={{
+        m: 0,
+        pl: 3,
+        pr: 2,
+        pt: 2,
+        pb: 1,
+        textAlign: 'center',
+        ...sx,
+      }}
+      {...props}
+    >
       {children}
-      {onClose ? (
+      {onClose && (
         <IconButton
           color="default"
           aria-label="close"
@@ -52,43 +52,73 @@ const TempDialogTitle = (props: DialogTitleProps) => {
         >
           <CloseIcon />
         </IconButton>
-      ) : null}
+      )}
     </DialogTitle>
   )
 }
 
-export const ZingModal = (props: ZingModalProps) => {
+const Body = (props: DialogContentProps) => {
+  const { sx, children } = props
+
   return (
-    <TempDialog
-      onClose={props.onClose}
-      open={props.open}
-      BackdropProps={{
-        sx: {
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
-          '-webkit-tap-highlight-color': 'transparent',
+    <DialogContent
+      sx={{
+        '& .MuiDialogContent-root': {
+          padding: (theme) => theme.spacing(1, 4),
+          minWidth: 'fit-content',
+          minHeight: '100px',
         },
+        ...sx,
       }}
-      sx={props.sx}
     >
-      <TempDialogTitle onClose={props.onClose}>{props.title}</TempDialogTitle>
-      <DialogContent>{props.children}</DialogContent>
-      <DialogActions sx={{ display: { md: 'flex' } }}>
-        {props.secondaryButtonText && (
-          <Button
-            color="secondary"
-            variant="outlined"
-            {...props.secondaryButtonProps}
-          >
-            {props.secondaryButtonText}
-          </Button>
-        )}
-        <Box flexGrow={1} />
-        {props.primaryButtonText && (
-          <Button {...props.primaryButtonProps}>
-            {props.primaryButtonText}
-          </Button>
-        )}
-      </DialogActions>
-    </TempDialog>
+      {children}
+    </DialogContent>
   )
 }
+
+const Controls = (props: DialogActionsProps) => {
+  const { sx, children } = props
+
+  return (
+    <DialogActions
+      sx={{
+        display: { md: 'flex' },
+        justifyContent: 'space-between',
+        padding: (theme) => theme.spacing(2, 3, 3),
+        ...sx,
+      }}
+    >
+      {children}
+    </DialogActions>
+  )
+}
+
+const TempDialog = styled(Dialog, {
+  shouldForwardProp: (prop) =>
+    prop !== 'containerWidth' && prop !== 'containerHeight',
+})<ZingModalProps>(({ containerHeight, containerWidth }) => ({
+  '&.MuiDialog-root *': {
+    fontFamily: 'Montserrat',
+  },
+  '& .MuiDialog-container': {
+    '& .MuiPaper-root': {
+      width: '100%',
+      minWidth: containerWidth || '200px',
+      minHeight: containerHeight || 'initial',
+    },
+  },
+}))
+
+// possible components to keep track of for styling: MuiPaper root
+
+const ZingModal = (props: ZingModalProps) => {
+  const { children } = props
+  return <TempDialog {...props}>{children}</TempDialog>
+}
+
+// define dot notation: https://stackoverflow.com/questions/60882627/using-dot-notation-with-functional-component
+ZingModal.Title = Title
+ZingModal.Body = Body
+ZingModal.Controls = Controls
+
+export default ZingModal

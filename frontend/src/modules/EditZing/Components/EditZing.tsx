@@ -13,6 +13,7 @@ import {
 } from 'EditZing/Types/CourseInfo'
 import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
+import { EmailModal } from 'EditZing/Components/EmailModal'
 import { MatchLoading } from './MatchLoading'
 import {
   Box,
@@ -36,6 +37,7 @@ export const EditZing = () => {
   const [showError, setShowError] = useState(false)
 
   const [courseInfo, setCourseInfo] = useState<CourseInfo>()
+  const [isEmailing, setIsEmailing] = useState<boolean>(false)
   useEffect(() => {
     axios
       .get(`${API_ROOT}${COURSE_API}/${courseId}`)
@@ -259,6 +261,14 @@ export const EditZing = () => {
 
   return courseInfo && hasLoadedStudentData ? (
     <Box>
+      {isEmailing && (
+        <EmailModal
+          selectedGroups={selectedGroups}
+          isEmailing={isEmailing}
+          setIsEmailing={setIsEmailing}
+          courseNames={courseInfo.names}
+        />
+      )}
       <MatchLoading
         showMatchLoading={showMatchLoading}
         isCurrentlyGrouping={isCurrentlyGrouping}
@@ -311,7 +321,7 @@ export const EditZing = () => {
             </Menu>
           </>
         ) : (
-          <Button onClick={() => console.log('Open emailing modal')}>
+          <Button onClick={() => setIsEmailing(!isEmailing)}>
             Email selected
           </Button>
         )}

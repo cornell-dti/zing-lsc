@@ -1,5 +1,7 @@
 import { GridSize } from '@mui/material'
 import { Student } from './Student'
+import { Group } from './CourseInfo'
+import { TemplateName } from 'EditZing/utils/emailTemplates'
 
 export interface UnmatchedGridProps {
   unmatchedStudents: Student[]
@@ -39,4 +41,28 @@ export interface MatchLoadingProps {
   numberGrouping: number
   courseNames: string[]
   setShowMatchLoading: (arg: boolean) => void
+}
+
+export interface EmailModalProps {
+  selectedGroups: Group[]
+  isEmailing: boolean
+  setIsEmailing: (arg: boolean) => void
+  courseNames: string[]
+}
+
+export interface TemplateRadioButtonsProps {
+  selectedTemplate: string
+  setSelectedTemplate: (value: TemplateName) => void
+}
+
+export interface EmailModalContentProps {
+  selectedGroups: Group[]
+  courseNames: string[]
+  isEmailing: boolean
+  setIsEmailing: (arg: boolean) => void
+}
+
+export interface EmailPreviewProps {
+  templateName: TemplateName
+  courseNames: string[]
 }
