@@ -157,6 +157,8 @@ export const Dashboard = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           endIcon={<KeyboardArrowDown />}
+          variant="text"
+          disableRipple
         >
           {user?.displayName}
         </Button>
@@ -170,11 +172,11 @@ export const Dashboard = () => {
           }}
           anchorOrigin={{
             vertical: 'bottom',
-            horizontal: 'center',
+            horizontal: 'right',
           }}
           transformOrigin={{
             vertical: 'top',
-            horizontal: 'center',
+            horizontal: 'right',
           }}
         >
           <MenuItem
