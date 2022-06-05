@@ -32,6 +32,9 @@ export const StepBegin = ({
     gotoNextStep()
   }
 
+  const [isValidEmail, setIsValidEmail] = React.useState(true)
+  const validEmail = /^\w+@cornell.edu$/
+
   return (
     <StyledContainer>
       <StyledLeftPanel>
@@ -59,10 +62,14 @@ export const StepBegin = ({
             value={email}
             sx={textInputStyle}
             variant="standard"
+            type="email"
+            onBlur={(e) => setIsValidEmail(validEmail.test(email))}
             placeholder="Cornell Email"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setEmail(e.target.value)
             }
+            error={!isValidEmail}
+            helperText={isValidEmail ? '' : 'Invalid Email'}
           />
         </StyledFields>
         <Box
