@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
 /* Add Recipients parses frontend data and adds to 
