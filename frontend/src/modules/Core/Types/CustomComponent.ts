@@ -1,4 +1,4 @@
-import { ButtonProps, SelectChangeEvent } from '@mui/material'
+import { SelectChangeEvent } from '@mui/material'
 import { SxProps, Theme } from '@mui/material/styles'
 import React, { ChangeEventHandler } from 'react'
 import {
@@ -11,12 +11,6 @@ export interface ZingModalProps {
   open: boolean
   onClose: () => void
   children: React.ReactNode
-  title?: string
-  titleFontSize?: string
-  primaryButtonText?: string
-  secondaryButtonText?: string
-  primaryButtonProps?: ButtonProps // can take sx
-  secondaryButtonProps?: ButtonProps // can take sx
   containerWidth?: string
   containerHeight?: string
   sx?: SxProps<Theme>
