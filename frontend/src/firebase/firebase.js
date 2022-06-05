@@ -7,11 +7,16 @@ import {
   signInWithPopup,
 } from 'firebase/auth'
 import { getAnalytics } from 'firebase/analytics'
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check'
 import { initializeApp } from 'firebase/app'
 
-initializeApp(firebaseConfig)
+const app = initializeApp(firebaseConfig)
 export const auth = getAuth()
 export const analytics = getAnalytics()
+export const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider('6LfNRkUgAAAAALo7-SlTkcXBZhbfPZhN44_pAkYv'),
+  isTokenAutoRefreshEnabled: true,
+})
 
 // function attempting to sign in with Google
 export async function signInWithGoogle() {

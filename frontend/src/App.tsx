@@ -26,8 +26,9 @@ import theme from '@core/Constants/Theme'
 import { useEffect, useRef, useState } from 'react'
 import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
-import { auth } from '@fire'
+import { appCheck, auth } from '@fire'
 import axios from 'axios'
+import { getToken } from 'firebase/app-check'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -77,6 +78,21 @@ const App = () => {
       }
     })
   }, [])
+
+  // Because we are calling backend through HTTP directly, it's like a custom resource:
+  // https://firebase.google.com/docs/app-check/web/custom-resource
+  useEffect(() => {
+    axios.interceptors.request.use(
+      async (request) => {
+        const appCheckTokenResponse = await getToken(appCheck, false)
+        request.headers['X-Firebase-AppCheck'] = appCheckTokenResponse.token
+        return request
+      },
+      (error) => {
+        return Promise.reject(error)
+      }
+    )
+  })
 
   return (
     <StyledEngineProvider injectFirst>

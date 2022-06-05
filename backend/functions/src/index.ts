@@ -15,6 +15,7 @@ import studentsRouter from './student/routes'
 import matchingRouter from './matching/routes'
 import courseRouter from './course/routes'
 import emailRouter from './emailing/routes'
+import { appCheckVerification } from './middleware/appcheck-middleware'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -31,10 +32,18 @@ app.use(express.json())
 app.use(cors())
 
 // auth middleware before router
-app.use('/student', studentsRouter)
-app.use('/matching', [checkAuth, checkIsAuthorized], matchingRouter)
-app.use('/course', [checkAuth, checkIsAuthorized], courseRouter)
-app.use('/email', emailRouter)
+app.use('/student', [appCheckVerification], studentsRouter)
+app.use(
+  '/matching',
+  [appCheckVerification, checkAuth, checkIsAuthorized],
+  matchingRouter
+)
+app.use(
+  '/course',
+  [appCheckVerification, checkAuth, checkIsAuthorized],
+  courseRouter
+)
+app.use('/email', [appCheckVerification], emailRouter)
 
 app.get('/getauth', checkAuth, (req, res) => {
   if (req.headers?.authorization?.startsWith('Bearer ')) {
