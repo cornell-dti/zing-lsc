@@ -49,10 +49,22 @@ router.post('/send', (req, res) => {
     )
 })
 
-router.post('/time', (req, res) => {
+// api root/email/timestamp
+router.post('/timestamp', (req, res) => {
   const { courseId, groups } = req.body
   updateEmailTimestamp(courseId, groups)
-  res.status(200).json('Email Time updated')
+    .then(() => {
+      logger.info(
+        `Email time updated for groups ${groups.toString()} in course ${courseId}.`
+      )
+      res.status(200).json('Email Time updated')
+    })
+    .catch(() => {
+      logger.warn(
+        `Email time failed to update for groups ${groups.toString()} in course ${courseId}.`
+      )
+      res.status(400).json('ERROR: email Time update failure')
+    })
 })
 
 export default router
