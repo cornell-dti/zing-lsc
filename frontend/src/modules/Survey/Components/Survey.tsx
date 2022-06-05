@@ -6,10 +6,7 @@ import { StepBegin } from 'Survey/Components/StepBegin'
 import { StepCourse } from 'Survey/Components/StepCourse'
 import { StepRadio } from 'Survey/Components/StepRadio'
 import { StepFinal } from 'Survey/Components/StepFinal'
-import {
-  sendSurveyData,
-  SurveyData,
-} from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
+import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { Question } from '@core/Types'
 import axios from 'axios'
 import { API_ROOT, STUDENT_API } from '@core/Constants'
