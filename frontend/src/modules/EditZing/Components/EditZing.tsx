@@ -261,6 +261,14 @@ export const EditZing = () => {
 
   return courseInfo && hasLoadedStudentData ? (
     <Box>
+      {isEmailing && (
+        <EmailModal
+          selectedGroups={selectedGroups}
+          isEmailing={isEmailing}
+          setIsEmailing={setIsEmailing}
+          courseNames={courseInfo.names}
+        />
+      )}
       <MatchLoading
         showMatchLoading={showMatchLoading}
         isCurrentlyGrouping={isCurrentlyGrouping}
@@ -313,7 +321,7 @@ export const EditZing = () => {
             </Menu>
           </>
         ) : (
-          <Button onClick={() => console.log('Open emailing modal')}>
+          <Button onClick={() => setIsEmailing(!isEmailing)}>
             Email selected
           </Button>
         )}
