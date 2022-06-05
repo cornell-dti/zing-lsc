@@ -63,13 +63,13 @@ export const StepBegin = ({
             sx={textInputStyle}
             variant="standard"
             type="email"
-            onBlur={(e) => setIsValidEmail(validEmail.test(email))}
+            onBlur={() => setIsValidEmail(validEmail.test(email))}
             placeholder="Cornell Email"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setEmail(e.target.value)
             }
             error={!isValidEmail}
-            helperText={isValidEmail ? '' : 'Invalid Email'}
+            helperText={isValidEmail ? ' ' : 'Invalid Email'}
           />
         </StyledFields>
         <Box
@@ -83,7 +83,7 @@ export const StepBegin = ({
           <IconButton
             className="next"
             onClick={handleNext}
-            disabled={name === '' || email === ''}
+            disabled={name === '' || !isValidEmail}
             sx={{ boxShadow: 3 }}
           >
             <ArrowForward />
