@@ -20,16 +20,13 @@ router.post('/make', (req, res) => {
   const { courseId, groupSize } = req.body
   ;(groupSize ? makeMatches(courseId, groupSize) : makeMatches(courseId))
     .then((data) => {
-      logger.info('Made matched for course: ' + courseId)
+      logger.info(`Made matched for course: ${courseId}`)
       res.status(200).json({ success: true, data })
     })
     .catch((err) => {
       logger.error(
-        'Failed to match for course: ' +
-          courseId +
-          '. Error message: \n  ' +
-          err +
-          ' \n ---- end of error. \n '
+        `Failed to make matches for course ${courseId}. Error: `,
+        err
       )
       console.log(err)
       res.status(400).json({ success: false, err: err.message })
@@ -40,11 +37,11 @@ router.get('/:courseId', (req, res) => {
   const courseId = req.params.courseId
   getGroups(courseId)
     .then((data) => {
-      logger.info('Successfully attempted to get course info for ' + courseId)
+      logger.info(`Successfully attempted to get course info for ${courseId}`)
       res.status(200).json(data)
     })
     .catch((err) => {
-      logger.error('Failed to attempt to get course info for ' + courseId)
+      logger.error(`Failed attempt to get course info for ${courseId}`)
       console.log(err)
       res.status(400).json({ success: false, err: err.message })
     })
@@ -55,23 +52,13 @@ router.post('/transfer/unmatched', (req, res) => {
   addUnmatchedStudentToGroup(courseId, groupNumber, studentEmail)
     .then(() => {
       logger.info(
-        'Added unmatched student ' +
-          studentEmail +
-          ' to group number ' +
-          groupNumber +
-          ' for course: ' +
-          courseId
+        `Added unmatched student ${studentEmail} in group number ${groupNumber} for course ${courseId}`
       )
       res.status(200).json({ success: true })
     })
     .catch((err) => {
       logger.error(
-        'Failed to add unmatched student ' +
-          studentEmail +
-          ' in group number ' +
-          groupNumber +
-          ' for course: ' +
-          courseId
+        `Failed to add unmatched student ${studentEmail} in group number ${groupNumber} for course ${courseId}`
       )
       console.log(err)
       res.status(400).json({ success: false, err: err.message })
@@ -83,27 +70,13 @@ router.post('/transfer/intergroup', (req, res) => {
   transferStudentBetweenGroups(courseId, group1, group2, studentEmail)
     .then(() => {
       logger.info(
-        'Transferred student ' +
-          studentEmail +
-          ' from group number ' +
-          group1 +
-          ' to ' +
-          group2 +
-          ' for course: ' +
-          courseId
+        `Transferred student ${studentEmail} from group number ${group1} to ${group2} for course ${courseId}`
       )
       res.status(200).json({ success: true })
     })
     .catch((err) => {
-      logger.info(
-        'Failed to transfer student ' +
-          studentEmail +
-          ' from group number ' +
-          group1 +
-          ' to ' +
-          group2 +
-          ' for course: ' +
-          courseId
+      logger.error(
+        `Failed to transfer student ${studentEmail} from group number ${group1} to ${group2} for course ${courseId}`
       )
       console.log(err)
       res.status(400).json({ success: false, err: err.message })

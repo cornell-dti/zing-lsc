@@ -32,28 +32,19 @@ router.post('/send', (req, res) => {
     .then((result) => {
       if (result === 202) {
         logger.info(
-          'Email sent successfully by ' +
-            emailAddress +
-            ' to ' +
-            emailRcpts.toString()
+          `Email sent successfully by ${emailAddress} to ${emailRcpts.toString()}`
         )
         res.json('Email send success.')
       } else {
         logger.error(
-          '** Likely auth error ** : Email failed to send by ' +
-            emailAddress +
-            ' to ' +
-            emailRcpts.toString()
+          `** Likely auth error ** : Email failed to send by  ${emailAddress} to ${emailRcpts.toString()}`
         )
         res.json('Email send failure.')
       }
     })
     .catch(() =>
       logger.error(
-        'Email send request failed from ' +
-          emailAddress +
-          ' to ' +
-          emailRcpts.toString()
+        `Email send request failed from ${emailAddress} to ${emailRcpts.toString()}`
       )
     )
 })
