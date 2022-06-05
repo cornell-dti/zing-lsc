@@ -230,7 +230,7 @@ export enum TemplateName {
   CHECK_IN = 'Check in with groups',
 }
 
-export const getBody = (templateName: string, className: string) => {
+export const getBody = (templateName: TemplateName, className: string) => {
   switch (templateName) {
     case TemplateName.MATCHED:
       return matched()
