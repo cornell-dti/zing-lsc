@@ -4,19 +4,18 @@ import { createEmailAsJson, sendMails, updateEmailTimestamp } from './functions'
 
 const router = express()
 
-/* 
+/**
 
-    /send endpoint in our backend server. 
+    @.com/email/send endpoint in our backend server. 
 
     POST Req.body needs: 
+      @param emailAddress (admin/user email)
+      @param authToken (must match admin email account)
+      @param emailBody 
+      @param emailSubject
+      @param emailRcpts (student email string list )
 
-      - emailAddress (admin/user email)
-      - authToken (must match admin email account)
-      - emailBody 
-      - emailSubject
-      - emailRcpts (student email string list )
-
-    Returns: 
+    @yields: 
       SUCC -> res.data = 'Email send success.' 
       FAIL -> res.data = 'Email send failure.' 
 
@@ -49,7 +48,13 @@ router.post('/send', (req, res) => {
     )
 })
 
-// api root/email/timestamp
+/** @.com/api root/email/timestamp
+ *
+ * @param courseId = string of 6-digit course code
+ * @param groups = string [] of groups to be sent emails
+ *
+ * @yeilds email sent timestamp update in database
+ */
 router.post('/timestamp', (req, res) => {
   const { courseId, groups } = req.body
   updateEmailTimestamp(courseId, groups)
