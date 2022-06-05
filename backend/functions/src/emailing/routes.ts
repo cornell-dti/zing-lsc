@@ -1,6 +1,6 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
-import { createEmailAsJson, sendMails } from './functions'
+import { createEmailAsJson, sendMails, updateEmailTimestamp } from './functions'
 
 const router = express()
 
@@ -47,6 +47,12 @@ router.post('/send', (req, res) => {
         `Email send request failed from ${emailAddress} to ${emailRcpts.toString()}`
       )
     )
+})
+
+router.post('/time', (req, res) => {
+  const { courseId, groups } = req.body
+  updateEmailTimestamp(courseId, groups)
+  res.status(200).json('Email Time updated')
 })
 
 export default router

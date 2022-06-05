@@ -1,4 +1,36 @@
 import axios from 'axios'
+
+// firebase imports
+import admin from 'firebase-admin'
+import { db } from '../config'
+const courseRef = db.collection('courses')
+
+/** Updating Email Sent Timestap: 
+ * @param courseId is the string courseId usually in the form of a six-digit number such as 358546. 
+ * @param groups is the groups for the given course that emails were sent to. 
+      Currently type-checked as a string [] but may be a number [] depending on how the frontend obtains group number. 
+ * @result updates database to have email sent timestamp to current time. 
+ *  */
+export const updateEmailTimestamp = async (
+  courseId: string,
+  groups: string[]
+) => {
+  const time = admin.firestore.FieldValue.serverTimestamp()
+
+  // either groups = [0, 1, 2] or ["0", "1", "2"]
+  // must be string format -> parse here or when calling function
+  await Promise.all([
+    groups.forEach((group: string) => {
+      courseRef
+        .doc(courseId)
+        .collection('groups')
+        .doc(group)
+        .update({ shareMatchEmailTimestamp: time })
+    }),
+  ])
+}
+
+/* ==== Emailing Helper Functions ==== */
 const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
 /* Add Recipients parses frontend data and adds to 
@@ -18,7 +50,13 @@ function createRecipients(rcpts: string[]) {
   return rcpts.map((rcpt) => ({ emailAddress: { address: rcpt } }))
 }
 
-/* Create Email As JSON creates the main GRAPH API request body data.  */
+/** Create Email As JSON creates the main GRAPH API request body data.
+ * @param rcpts is a list of student emails
+ * @param subject is the subject line. Usually "Study Partners!"
+ * @param body is the HTML body of the email
+ *
+ * @returns the request body data for the GRAPH API send mail call
+ */
 export const createEmailAsJson = (
   rcpts: any,
   subject: string,
@@ -44,20 +82,20 @@ export const createEmailAsJson = (
   return messageAsJson
 }
 
-/* Send Mails is takes the 
-    from: sender (admin's email)
-    message: graph api request body data
-    authToken: string that must match the [from] email and 
+/** Send Mails is takes the 
+    @param from: sender (admin's email)
+    @param message: graph api request body data
+    @param authToken: string that must match the [from] email and 
       logged in user
     
     Sends a POST request to the GRAPH API. 
     
-    Returns: 
+    @returns: 
       202 (:number) if successfully sent. 
       Other if email failed to send. 
         - Bad AUTH or else. Frontend will then parse this response 
-        - Either relogin once (?) 
-      */
+        and render "Try Again" button or equivalent => User logs in and calls function again. 
+       */
 export const sendMails = async (
   from: string,
   message: any,
