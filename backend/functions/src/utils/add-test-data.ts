@@ -1,27 +1,34 @@
+import { addStudentSurveyResponse } from '../student/functions'
 require('dotenv').config({ path: '../.env' })
-const { db } = require('../config')
-const { addStudentSurveyResponse } = require('../student/functions')
-const studentRef = db.collection('students_test')
-const courseRef = db.collection('courses_test')
-
-const selectPreferredWorkingTime = () => {
-  return Math.floor(Math.random() * 6)
-}
 
 const selectCollege = () => {
-  const colleges = ['engineering', 'a&s', 'cals', 'dyson']
+  const colleges = [
+    'Engineering',
+    'A&S',
+    'CALS',
+    'Dyson',
+    'ILR',
+    'HumEc',
+    'AAP',
+    'Hotel Admin',
+  ]
   return colleges[Math.floor(Math.random() * colleges.length)]
 }
 
-const getRandomSample = (arr, n) => {
+const selectYear = () => {
+  const years = ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Grad']
+  return years[Math.floor(Math.random() * years.length)]
+}
+
+const getRandomSample = (arr: string[], n: number) => {
   // taken from https://stackoverflow.com/questions/19269545/how-to-get-a-number-of-random-elements-from-an-array
-  var result = new Array(n),
-    len = arr.length,
-    taken = new Array(len)
+  const result = new Array(n)
+  let len = arr.length
+  const taken = new Array(len)
   if (n > len)
     throw new RangeError('getRandom: more elements taken than available')
   while (n--) {
-    var x = Math.floor(Math.random() * len)
+    const x = Math.floor(Math.random() * len)
     result[n] = arr[x in taken ? taken[x] : x]
     taken[x] = --len in taken ? taken[len] : len
   }
@@ -30,12 +37,12 @@ const getRandomSample = (arr, n) => {
 
 const selectClasses = (numClasses = 3) => {
   const classes = [
-    'CS1110',
-    'CS2110',
-    'INFO1300',
-    'ECON1110',
-    'MATH1920',
-    'PHYS2213',
+    'CS 1110',
+    'CS 2110',
+    'INFO 1300',
+    'ECON 1110',
+    'MATH 1920',
+    'PHYS 2213',
   ]
   return getRandomSample(classes, numClasses)
 }
@@ -47,13 +54,16 @@ const addTestStudents = async () => {
       addStudentSurveyResponse(
         a,
         `${a}@gmail.com`,
-        selectPreferredWorkingTime(),
         selectCollege(),
-        2022,
-        selectClasses(),
-        courseRef,
-        studentRef
+        selectYear(),
+        selectClasses()
       )
+        .then(() => {
+          console.log('added successfully!')
+        })
+        .catch((err) => {
+          console.log('error adding student', err)
+        })
     )
   )
 }

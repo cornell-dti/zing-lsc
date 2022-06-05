@@ -1,10 +1,6 @@
 import React from 'react'
-import Grid from '@mui/material/Grid'
 
 import {
-  StyledContainer,
-  StyledGroupArea,
-  StyledGroupCardArea,
   StyledTextBox,
   StyledSmallText,
   StyledClassesContainer,
@@ -13,12 +9,20 @@ import {
 
 import { GroupCard } from 'Dashboard/Components/GroupCard'
 import { CourseInfo } from 'Dashboard/Types/CourseInfo'
+import { Box } from '@mui/material'
 
 export const Groups = ({ groups }: GroupsProps) => {
   return (
-    <StyledContainer>
-      {groups.length === 0 && (
-        <React.Fragment>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        overflow: 'auto',
+      }}
+    >
+      {groups.length === 0 ? (
+        <>
           <StyledTextBox>
             <h2>No Classes to Show</h2>
           </StyledTextBox>
@@ -31,26 +35,31 @@ export const Groups = ({ groups }: GroupsProps) => {
               <StyledNoClasses key={i} />
             ))}
           </StyledClassesContainer>
-        </React.Fragment>
+        </>
+      ) : (
+        <Box
+          sx={{
+            width: '100%',
+            display: 'grid',
+            justifyContent: 'center',
+            gap: 4,
+            gridTemplateColumns: 'repeat(auto-fill, 300px)',
+            px: 10,
+            py: 4,
+          }}
+        >
+          {groups.map((g) => (
+            <GroupCard
+              key={g.courseId}
+              id={g.courseId}
+              name={g.names[0]}
+              newStudents={g.unmatched.length}
+              groupsFormed={g.lastGroupNumber}
+            />
+          ))}
+        </Box>
       )}
-      <StyledGroupArea>
-        <StyledGroupCardArea>
-          <Grid container>
-            {groups.map((g) => (
-              <Grid key={g.courseId} item xs={3}>
-                <GroupCard
-                  key={g.courseId}
-                  id={g.courseId}
-                  name={g.names[0]}
-                  newStudents={g.unmatched.length}
-                  groupsFormed={g.lastGroupNumber}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        </StyledGroupCardArea>
-      </StyledGroupArea>
-    </StyledContainer>
+    </Box>
   )
 }
 

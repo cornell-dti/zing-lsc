@@ -11,32 +11,9 @@ export const StyledNoClasses = styled(NoClassesIcon)`
   padding: 0px;
   margin: -20px;
 `
-export const StyledContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  overflow: auto;
-`
 
 export const StyledTitle = styled.div`
   ${h2};
-`
-
-export const StyledGroupArea = styled.div`
-  display: flex;
-  flex: 1;
-  width: 100%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
-
-export const StyledGroupCardArea = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
 `
 
 export const StyledText = styled.div`

@@ -42,13 +42,17 @@ export const DropdownSelect = ({
           MenuListProps: {
             dense: true,
             sx: {
-              borderRadius: '10px',
               '& .MuiMenuItem-root': {
                 fontFamily: 'Montserrat',
                 '&:hover': {
                   bgcolor: 'purple.16',
                 },
               },
+            },
+          },
+          PaperProps: {
+            sx: {
+              borderRadius: '10px',
             },
           },
         }}

@@ -3,4 +3,5 @@ export interface CourseInfo {
   lastGroupNumber: number
   names: string[]
   courseId: string
+  latestSubmissionTime: Date
 }

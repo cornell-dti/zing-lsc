@@ -72,21 +72,20 @@ export const GroupGrid = ({
         ref={drop}
         sx={{
           padding: '2rem',
-          border: "0.5px solid 'purple.50'",
-          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.07)',
+          border: 0.5,
+          borderColor: selected || isHovering ? 'purple.50' : 'purple.16',
+          boxShadow:
+            !selected && isHovering
+              ? '4px 4px 10px rgba(0, 0, 0, 0.3)'
+              : '0px 4px 10px rgba(0, 0, 0, 0.07)',
           borderRadius: '20px',
           margin: '0.25rem',
           backgroundColor: selected ? 'rgba(129, 94, 212, 0.15);' : 'white',
           opacity: isOver ? '0.6' : '1',
+          transition: 'box-shadow 0.1s',
         }}
       >
-        <Box
-          display="flex"
-          flex-direction="row-reverse"
-          alignItems="center"
-          mb={2}
-          sx={{ width: '100%', height: '100%' }}
-        >
+        <Box display="flex" alignItems="center" sx={{ mb: 2, height: '42px' }}>
           <Tooltip
             title={
               'Created on ' +
@@ -103,16 +102,13 @@ export const GroupGrid = ({
               day={shareMatchEmailTimestamp.getDate()}
             />
           )}
-
+          <Box flexGrow={2} />
           <Checkbox
             color="secondary"
-            align-self="flex-end"
             checked={selected}
             onChange={handleChecked}
             sx={{
-              display: selected || isHovering ? 'block' : 'none',
-              padding: '0px',
-              ml: '45%',
+              display: selected || isHovering ? 'flex' : 'none',
             }}
           />
         </Box>

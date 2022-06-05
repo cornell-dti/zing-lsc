@@ -258,6 +258,25 @@ theme = createTheme(theme, {
         },
       },
     },
+    MuiMenu: {
+      defaultProps: {
+        PaperProps: {
+          sx: { borderRadius: '10px' }, // For some reason this does not work in styleOverrides
+        },
+      },
+      styleOverrides: {
+        list: {
+          '& .MuiMenuItem-root': {
+            '&:hover': {
+              backgroundColor: theme.palette.purple[16],
+            },
+          },
+        },
+        paper: {
+          marginTop: '4px',
+        },
+      },
+    },
   },
 })
 
