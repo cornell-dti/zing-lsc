@@ -67,7 +67,7 @@ export const Survey = () => {
     </StyledContainer1>
   ) : currStep === totalSteps + 1 ? ( // Form confirmation
     <StyledContainer2>
-      <StepFinal />
+      <StepFinal success={false} />
     </StyledContainer2>
   ) : (
     <StyledContainer2>

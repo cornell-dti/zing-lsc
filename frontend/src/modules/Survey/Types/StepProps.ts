@@ -30,3 +30,12 @@ export interface StepCourseProps {
   courses: string[]
   setCourses: (arg: string[]) => void
 }
+
+export interface StepFinalProps {
+  success: boolean
+}
+
+export interface SuccessIcon {
+  className?: string
+  src: string
+}

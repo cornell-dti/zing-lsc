@@ -41,7 +41,7 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
     >
       <ProgressBar step={stepNumber} total={totalSteps} />
       <StyledFullPanel>
-        <StyledWrapper style={{ height: '85%', overflow: 'scroll' }}>
+        <StyledWrapper style={{ height: '85%', overflowY: 'scroll' }}>
           {children}
         </StyledWrapper>
 

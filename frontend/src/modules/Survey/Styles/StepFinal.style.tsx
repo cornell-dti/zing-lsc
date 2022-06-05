@@ -2,9 +2,9 @@ import styled, { css } from 'styled-components'
 
 import { h2, h3, StyledComponent } from '@core'
 import { StyledContainer as Container } from 'Survey/Styles/StepTemplate.style'
+import { SuccessIcon } from 'Survey/Types'
 
 import logo from '@assets/img/smallwhitelogo.svg'
-import check from '@assets/img/whitecheckmark.svg'
 
 const Logo = ({ className }: StyledComponent) => (
   <div className={className}>
@@ -12,9 +12,9 @@ const Logo = ({ className }: StyledComponent) => (
   </div>
 )
 
-const Check = ({ className }: StyledComponent) => (
+const Check = ({ className, src }: SuccessIcon) => (
   <div className={className}>
-    <img src={check} alt="check" />
+    <img src={src} alt="check" />
   </div>
 )
 
