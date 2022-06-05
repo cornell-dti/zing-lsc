@@ -9,8 +9,8 @@ export const EMAIL_PATH = '/email'
 // See https://create-react-app.dev/docs/adding-custom-environment-variables/
 export const API_ROOT =
   process.env.NODE_ENV === 'production'
-    ? 'https://us-central1-zing-lsc.cloudfunctions.net/api'
-    : 'http://localhost:5001/zing-lsc/us-central1/api'
+    ? 'https://us-central1-zing-lsc-prod.cloudfunctions.net/api'
+    : 'http://localhost:5001/zing-lsc-prod/us-central1/api'
 
 export const INSTRUCTOR_API = '/instructor'
 export const COURSE_API = '/course'

@@ -6,10 +6,12 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth'
+import { getAnalytics } from 'firebase/analytics'
 import { initializeApp } from 'firebase/app'
 
 initializeApp(firebaseConfig)
 export const auth = getAuth()
+export const analytics = getAnalytics()
 
 // function attempting to sign in with Google
 export async function signInWithGoogle() {

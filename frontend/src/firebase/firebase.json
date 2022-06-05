@@ -1,9 +1,9 @@
 {
-  "apiKey": "AIzaSyCCqgmWr_lDMFUXQH7gpedvVIo39qrVqiY",
-  "authDomain": "zing-lsc.firebaseapp.com",
-  "projectId": "zing-lsc",
-  "storageBucket": "zing-lsc.appspot.com",
-  "messagingSenderId": "208580018761",
-  "appId": "1:208580018761:web:e1b5d63a8eb1921afcb598",
-  "measurementId": "G-8KLER2VYHJ"
+  "apiKey": "AIzaSyA7swvWUgPRFy1ZJ5EaLiIxaVxSR6CD9rE",
+  "authDomain": "zing-lsc-prod.firebaseapp.com",
+  "projectId": "zing-lsc-prod",
+  "storageBucket": "zing-lsc-prod.appspot.com",
+  "messagingSenderId": "791420452887",
+  "appId": "1:791420452887:web:015948b2e5ba8433419c52",
+  "measurementId": "G-73X0E3MVGY"
 }

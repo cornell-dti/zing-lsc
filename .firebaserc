@@ -1,6 +1,7 @@
 {
   "projects": {
-    "default": "zing-lsc"
+    "default": "zing-lsc",
+    "prod": "zing-lsc-prod"
   },
   "targets": {}
 }
