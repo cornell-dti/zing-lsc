@@ -33,6 +33,7 @@ export interface StepCourseProps {
 
 export interface StepFinalProps {
   success: boolean
+  errorMsg?: string
 }
 
 export interface SuccessIcon {

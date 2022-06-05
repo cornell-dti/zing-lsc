@@ -61,7 +61,7 @@ export const StyledFullPanel = styled.div`
 export const StyledCongratulationsWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   width: 75%;
   margin-top: 10%;

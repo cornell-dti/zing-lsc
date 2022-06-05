@@ -15,7 +15,7 @@ import { StepFinalProps } from 'Survey/Types'
 import check from '@assets/img/whitecheckmark.svg'
 import xmark from '@assets/img/xbutton.svg'
 
-export const StepFinal = ({ success }: StepFinalProps) => {
+export const StepFinal = ({ success, errorMsg }: StepFinalProps) => {
   return (
     <StyledContainer>
       <StyledFullPanel>
@@ -31,8 +31,9 @@ export const StepFinal = ({ success }: StepFinalProps) => {
               </StyledCongratulationsText>
             ) : (
               <StyledCongratulationsText>
-                Something Went Wrong
-                <br /> Try again.
+                Something went wrong.
+                <br />
+                <StyledContactText>Error: {errorMsg}</StyledContactText>
               </StyledCongratulationsText>
             )}
           </StyledCongratulationsWrapper>

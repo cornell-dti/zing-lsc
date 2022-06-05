@@ -11,10 +11,15 @@ import {
   SurveyData,
 } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { Question } from '@core/Types'
+import axios from 'axios'
+import { API_ROOT, STUDENT_API } from '@core/Constants'
 
 export const Survey = () => {
   const [showError, setShowError] = useState(false)
   const [currStep, setCurrStep] = useState(1)
+  const [surveySuccess, setSurveySuccess] = useState(false)
+  const [surveyError, setSurveyError] = useState('')
+
   // If there are custom questions the below will be a network call perhaps
   const questions: Question[] = require('@core/Questions/Questions.json')
   const numSpecialQuestions = 1 // Course list
@@ -44,8 +49,19 @@ export const Survey = () => {
       ...mcData,
     }
     console.log('Finished survey', surveyData)
-    sendSurveyData(surveyData)
-    setCurrStep(currStep + 1)
+    axios.post(`${API_ROOT}${STUDENT_API}/survey`, surveyData).then(
+      (response: any) => {
+        console.log(response)
+        setSurveySuccess(true)
+        setCurrStep(currStep + 1)
+      },
+      (error: any) => {
+        console.log(error)
+        setSurveySuccess(false)
+        setSurveyError(error.message)
+        setCurrStep(currStep + 1)
+      }
+    )
   }
 
   const multipleChoiceIndex = currStep - numSpecialQuestions - 2
@@ -67,7 +83,7 @@ export const Survey = () => {
     </StyledContainer1>
   ) : currStep === totalSteps + 1 ? ( // Form confirmation
     <StyledContainer2>
-      <StepFinal success={false} />
+      <StepFinal success={surveySuccess} errorMsg={surveyError} />
     </StyledContainer2>
   ) : (
     <StyledContainer2>
