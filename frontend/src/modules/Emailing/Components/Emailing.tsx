@@ -147,6 +147,9 @@ export const sendEmail = async (emailItems: any) => {
   // 2. obtaining auth token from local storage
   const msAuthToken = localStorage.getItem('authToken') || ' '
   const { emailSubject, emailRcpts, emailBody } = emailItems
+  console.log(
+    `sub: ${emailSubject}. rcpts: ${emailRcpts.toString()}. body: ${emailBody}`
+  )
 
   // 3. request to the backend to send mail
   await axios({

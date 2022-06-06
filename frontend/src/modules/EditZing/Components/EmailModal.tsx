@@ -10,12 +10,16 @@ import { TemplateName } from 'EditZing/utils/emailTemplates'
 import { EmailTemplateButtons } from 'EditZing/Components/EmailTemplateButtons'
 import { EmailPreview } from 'EditZing/Components/EmailPreview'
 import { sendEmail } from 'Emailing/Components/Emailing'
+import { adminSignIn } from '@fire/firebase'
+import Snackbar from '@mui/material/Snackbar'
 
 export const EmailModal = ({
   selectedGroups,
   isEmailing,
   setIsEmailing,
   courseNames,
+  setEmailSent,
+  setEmailSentError,
 }: EmailModalProps) => {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(
     '' as TemplateName
@@ -26,24 +30,32 @@ export const EmailModal = ({
   const [sendError, setSendError] = useState<boolean | null>(null)
 
   // ======= Send Email Helper Functions =======
-  const sendEmails = async () => {
-    selectedGroups.forEach(async (group) => {
-      const rcpts: string[] = []
-      const members = group.memberData
-      members.forEach((mem) => {
-        rcpts.push(mem.email)
-      })
-      const emailBody = getBody(selectedTemplate, courseNames.join(', '))
-      const emailSubject = 'Study Partners!'
-      const emailItems = { emailSubject, rcpts, emailBody }
-      await sendEmail(emailItems).then((res) => {
-        console.log(`email send return is: ${res}`)
-        if (res === false) {
-          setSendError(true)
-        }
-      })
+
+  const groupEmails = async (group: any) => {
+    const rcpts: string[] = []
+    const members = group.memberData
+    await members.forEach((mem: any) => {
+      rcpts.push(mem.email)
     })
-    sendError ? setStep(2) : setStep(3)
+    return rcpts
+  }
+
+  const sendEmails = async () => {
+    try {
+      selectedGroups.forEach(async (group) => {
+        const emailRcpts = await groupEmails(group)
+        console.log(`rcpts r : ${emailRcpts}`)
+        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+        const emailSubject = 'Study Partners!'
+        const emailItems = { emailSubject, emailRcpts, emailBody }
+        const result = await sendEmail(emailItems)
+        if (result === false) setSendError(true)
+      })
+      sendError ? setEmailSentError(true) : setEmailSent(true)
+    } catch (e) {
+      console.log(`error was ${e}`)
+    }
+    setIsEmailing(false)
   }
 
   // const sendMail = async () => {
@@ -97,11 +109,23 @@ export const EmailModal = ({
    *  Close Button */
   const StepSent = () => {
     return (
-      <Box>
-        <Typography variant="h4" component="h4" fontWeight={'700'}>
-          Email Sent! All done.
+      <>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mt: '40px',
+          }}
+        >
+          <Typography variant="h5" fontWeight={'700'}>
+            Email Sent! All done.
+          </Typography>
+        </Box>
+
+        <Typography variant="body1" fontWeight={'700'}>
+          Emails were successfully sent to the groups.
         </Typography>
-      </Box>
+      </>
     )
   }
 
@@ -111,18 +135,14 @@ export const EmailModal = ({
   const StepFailure = () => {
     return (
       <Box>
-        <Typography variant="h4" component="h4" fontWeight={'700'}>
+        <Typography variant="h5" component="h5" fontWeight={'700'}>
           Uh oh... Something went wrong when trying to send the email. Try to
           sign in one more time.{' '}
           <em> Will automatically attempt to send the email one more time. </em>
         </Typography>
         <Button
           onClick={() => {
-            // adminSignIn().then(() => sendEmail())
-            /**
-             * TODO import adminSignIn and implement try again button
-             * TODO set next to next screen to either : sent YAY or : Failed again. Please attempt emailing manually. Sorry for the inconvience.
-             * */
+            adminSignIn().then(() => sendEmails())
           }}
         >
           Try Again{' '}
@@ -137,7 +157,7 @@ export const EmailModal = ({
   const StepFinalFailure = () => {
     return (
       <Box>
-        <Typography variant="h4" component="h4" fontWeight={'700'}>
+        <Typography variant="h5" component="h5" fontWeight={'700'}>
           Failed again. Please attempt emailing manually. Sorry for the
           inconvience.
         </Typography>
@@ -166,6 +186,17 @@ export const EmailModal = ({
           sx={{ position: 'absolute', bottom: '24px', right: '24px' }}
         >
           Next
+        </Button>
+      )
+    } else if (step === 2) {
+      return (
+        <Button
+          onClick={() => {
+            setIsEmailing(!isEmailing)
+          }}
+          sx={{ position: 'absolute', bottom: '24px', right: '24px' }}
+        >
+          Close
         </Button>
       )
     } else {
