@@ -20,6 +20,7 @@ const Check = ({ className, src }: SuccessIcon) => (
 
 export const StyledLogoWrapper = styled.div`
   display: flex;
+  margin-top: 10%;
   flex-direction: column;
   justify-content: center;
   align-items: center;

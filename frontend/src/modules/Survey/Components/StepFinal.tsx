@@ -20,7 +20,6 @@ export const StepFinal = ({ success, errorMsg }: StepFinalProps) => {
     <StyledContainer>
       <StyledFullPanel>
         <StyledLogoWrapper>
-          <StyledLogo />
           <StyledCongratulationsWrapper>
             <StyledCheck src={success ? check : xmark} />
             {success ? (
