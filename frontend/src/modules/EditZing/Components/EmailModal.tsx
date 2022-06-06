@@ -31,7 +31,6 @@ export const EmailModal = ({
     'Fatal Error',
   ]
   const title = titles[step]
-  const [sendError, setSendError] = useState<boolean>(false)
 
   // ======= Send Email Helper Functions =======
 
