@@ -111,7 +111,7 @@ export const EmailModal = ({
     )
   }
 
-  /** Step 3
+  /** Step 2
    *  Show email send failure screen
    *  Try Again Button */
   const StepFailure = () => {
@@ -120,13 +120,14 @@ export const EmailModal = ({
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          textAlign: 'center',
+          alignItems: 'center',
           paddingTop: '15%',
         }}
       >
         <Typography variant="h5" component="h5" fontWeight={'700'}>
           Uh oh... Something went wrong when trying to send the email. Try to
-          sign in one more time.{' '}
+          sign in one more time. <br></br>
+          <br></br>
           <em>
             {' '}
             This will automatically attempt to send the email one more time.{' '}
@@ -136,6 +137,7 @@ export const EmailModal = ({
           onClick={() => {
             adminSignIn().then(() => sendEmails())
           }}
+          sx={{ position: 'absolute', bottom: '25%' }}
         >
           Try Again{' '}
         </Button>
@@ -143,7 +145,7 @@ export const EmailModal = ({
     )
   }
 
-  /** Step 4
+  /** Step 3
    *  Show email send failure screen
    *  Try Again Button */
   const StepFinalFailure = () => {
