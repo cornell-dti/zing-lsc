@@ -29,7 +29,6 @@ import {
 } from '@mui/material'
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
-import { userInfo } from 'os'
 
 const LscIcon = (props: SvgIconProps) => {
   return <SvgIcon inheritViewBox component={Lsc} {...props} />
