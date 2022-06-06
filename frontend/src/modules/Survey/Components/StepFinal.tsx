@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
   StyledContainer,
-  StyledLogo,
   StyledCongratulationsWrapper,
   StyledLogoWrapper,
   StyledCongratulationsText,
