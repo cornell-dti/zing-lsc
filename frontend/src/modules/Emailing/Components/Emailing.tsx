@@ -135,9 +135,9 @@ export const Emailing = () => {
   )
 }
 
-/* Returns (number)
-    SUCC -> 201 
-    FAIL -> 401  */
+/** Returns (bool)
+    SUCC -> true 
+    FAIL -> false  */
 export const sendEmail = async (emailItems: any) => {
   let emailSent = false
   // 1. logged in user info
@@ -178,5 +178,6 @@ export const sendEmail = async (emailItems: any) => {
     }
   })
 
+  // bool true if succ false if fail
   return emailSent
 }
