@@ -29,6 +29,7 @@ import {
 } from '@mui/material'
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import { userInfo } from 'os'
 
 const LscIcon = (props: SvgIconProps) => {
   return <SvgIcon inheritViewBox component={Lsc} {...props} />
@@ -41,8 +42,26 @@ export const EditZing = () => {
   const [courseInfo, setCourseInfo] = useState<CourseInfo>()
   const [isEmailing, setIsEmailing] = useState<boolean>(false)
 
+  /*  Snackbars  */
   const [emailSent, setEmailSent] = useState<boolean>(false)
   const [emailSentError, setEmailSentError] = useState<boolean>(false)
+  const emailSentAction = (
+    <React.Fragment>
+      <Button
+        variant="text"
+        color="primary"
+        size="small"
+        onClick={() =>
+          window.open(
+            'https://outlook.office.com/mail/lscstudypartners@cornell.edu/',
+            '_blank'
+          )
+        }
+      >
+        View in Inbox
+      </Button>
+    </React.Fragment>
+  )
 
   useEffect(() => {
     axios
@@ -367,12 +386,10 @@ export const EditZing = () => {
         open={emailSent}
         autoHideDuration={6000}
         onClose={() => setEmailSent(false)}
-      >
-        <Alert variant="filled" severity="success">
-          {' '}
-          Emails Sent.{' '}
-        </Alert>
-      </Snackbar>
+        message="Emails delivered!"
+        action={emailSentAction}
+        // sx={{background: "#2F2E41", borderRadius: "25px"}}
+      />
       <Snackbar
         open={emailSentError}
         autoHideDuration={6000}
