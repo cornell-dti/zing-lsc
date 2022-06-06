@@ -40,7 +40,7 @@ export const EmailModal = ({
    * @returns the student emails for a given group in a string array.
    */
   const groupEmails = async (group: any) => {
-    const rcpts: string[] = []
+    const rcpts: string[] = ['lscstudypartners@cornell.edu']
     const members = group.memberData
     await members.forEach((mem: any) => {
       rcpts.push(mem.email)
