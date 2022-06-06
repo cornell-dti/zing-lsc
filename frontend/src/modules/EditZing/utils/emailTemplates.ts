@@ -4,7 +4,6 @@ const matched = () => {
       Dear students,  
     </div>
       <br> 
-      <br> 
     <div>
       We are writing to you because you have expressed interest in studying with 
       other students. We are so glad you reached out! Studying with peers is 
@@ -35,7 +34,7 @@ const matched = () => {
       <br>
       Whether you will be studying together 
       <a href = "http://lsc.cornell.edu/studying-together/studying-together-in-person/">
-      in -person </a>
+      in-person </a>
     or 
     <a href = "http://lsc.cornell.edu/studying-together/studying-together-online/" > online </a>,
       use the LSC’s tips
@@ -46,7 +45,7 @@ const matched = () => {
           <br>
           <br>
           If you’d like more info about studying together please contact LSC Study
-      Partners lscstudypartners @cornell.edu We will be following up later in the
+      Partners lscstudypartners@cornell.edu We will be following up later in the
       semester to find out how it’s going.
     </div>
       <br>
