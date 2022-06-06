@@ -11,7 +11,6 @@ import { EmailTemplateButtons } from 'EditZing/Components/EmailTemplateButtons'
 import { EmailPreview } from 'EditZing/Components/EmailPreview'
 import { sendEmail } from 'Emailing/Components/Emailing'
 import { adminSignIn } from '@fire/firebase'
-import Snackbar from '@mui/material/Snackbar'
 
 export const EmailModal = ({
   selectedGroups,
@@ -24,7 +23,7 @@ export const EmailModal = ({
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(
     '' as TemplateName
   )
-  const [step, setStep] = useState<number>(3)
+  const [step, setStep] = useState<number>(0)
   const titles = ['Select email template', 'Send emails']
   const title = titles[step]
   const [sendError, setSendError] = useState<boolean | null>(null)
@@ -40,48 +39,37 @@ export const EmailModal = ({
     return rcpts
   }
 
-  const sendEmails = async () => {
-    const sendToGroups = () => {
-      selectedGroups.forEach(async (group) => {
-        const emailRcpts = await groupEmails(group)
-        console.log(`rcpts r : ${emailRcpts}`)
-        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
-        const emailSubject = 'Study Partners!'
-        const emailItems = { emailSubject, emailRcpts, emailBody }
-        const result = await sendEmail(emailItems)
-        if (result === false) setSendError(true)
-      })
-    }
-    try {
-      // A. 1. First attempt to send email
-      if (sendError === false) {
-        sendToGroups()
+  const sendGroupEmails = async () => {
+    let failure = false
+    selectedGroups.forEach(async (group) => {
+      const emailRcpts = await groupEmails(group)
+      const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+      const emailSubject = 'Study Partners!'
+      const emailItems = { emailSubject, emailRcpts, emailBody }
+      await sendEmail(emailItems)
+        .then((result) => {
+          if (result === false) {
+            failure = true
+            setSendError(true)
+          }
+        })
+        .then((result) => {
+          console.log(
+            `Result from sending email: ${result}. \n Send Error is : ${sendError}`
+          )
+        })
+    })
+    return failure
+  }
 
-        // if sending to group resulted in an error:
-        if (sendError) {
-          // send error then display send error
-          // step 2 = try again dialogue
-          setEmailSentError(true)
-          setStep(2)
-        } else {
-          // 2. else will display snackbar and close modal
-          setEmailSent(true)
-          setIsEmailing(false)
-        }
-      } else {
-        // B. Second attempt to send email
-        sendToGroups()
-        if (sendError) {
-          // set send error to true and display final error step
-          // step 3 = final error screen
-          setEmailSentError(true)
-          setStep(3)
-        } else {
-          // 2. else will display snackbar and close modal
-          setEmailSent(true)
-          setIsEmailing(false)
-        }
-      }
+  const sendEmails = async () => {
+    try {
+      await sendGroupEmails().then((res) => {
+        console.log(`send group emails result: ${res}`)
+        setSendError(res)
+      })
+      console.log(`After sending group email, sendError is ${sendError}`)
+      setIsEmailing(false)
     } catch (e) {
       console.log(`error was ${e}`)
     }
@@ -128,7 +116,14 @@ export const EmailModal = ({
    *  Try Again Button */
   const StepFailure = () => {
     return (
-      <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          textAlign: 'center',
+          paddingTop: '15%',
+        }}
+      >
         <Typography variant="h5" component="h5" fontWeight={'700'}>
           Uh oh... Something went wrong when trying to send the email. Try to
           sign in one more time.{' '}
@@ -197,7 +192,9 @@ export const EmailModal = ({
         <Button
           onClick={() => {
             // setIsEmailing(!isEmailing)
-            sendEmails()
+            sendEmails().then(() =>
+              sendError === true ? setEmailSentError(true) : setEmailSent(true)
+            )
             console.log('sending email')
             // add something else here that actually sends the emails and a pop-up message saying that it's in-progress then done/fail etc.
           }}
