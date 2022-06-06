@@ -30,6 +30,11 @@ export const EmailModal = ({
 
   // ======= Send Email Helper Functions =======
 
+  /**
+   *
+   * @param group object
+   * @returns the student emails for a given group in a string array.
+   */
   const groupEmails = async (group: any) => {
     const rcpts: string[] = []
     const members = group.memberData
@@ -39,30 +44,48 @@ export const EmailModal = ({
     return rcpts
   }
 
+  /**
+   * promise that sends emails to each group.
+   *
+   * @returns true if there are any errors in sending the email OR false if no errors
+   */
   const sendGroupEmails = async () => {
     let failure = false
-    selectedGroups.forEach(async (group) => {
+    let groups = 0
+    for await (const group of selectedGroups) {
       const emailRcpts = await groupEmails(group)
       const emailBody = getBody(selectedTemplate, courseNames.join(', '))
       const emailSubject = 'Study Partners!'
       const emailItems = { emailSubject, emailRcpts, emailBody }
-      await sendEmail(emailItems)
-        .then((result) => {
-          if (result === false) {
-            failure = true
-            setSendError(true)
-          }
-        })
-        .then((result) => {
-          console.log(
-            `Result from sending email: ${result}. \n Send Error is : ${sendError}`
-          )
-        })
-    })
+      const emailingResult = await sendEmail(emailItems)
+      if (emailingResult === false) {
+        failure = true
+        console.log(`"made it here" : ${failure}`)
+        groups += 1
+      }
+      groups += 1
+    }
+    // selectedGroups.forEach(async(group) => {
+    //   const emailRcpts = await groupEmails(group)
+    //   const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+    //   const emailSubject = 'Study Partners!'
+    //   const emailItems = { emailSubject, emailRcpts, emailBody }
+    //   const emailingResult = await sendEmail(emailItems)
+    //   if (emailingResult === false) {
+    //     failure = true
+    //     console.log(`"made it here" : ${failure}`)
+    //     groups += 1
+    //   }
+    //   groups += 1
+    // })
+    console.log(groups)
     return failure
   }
 
-  const sendEmails = async () => {
+  /**
+   * Handles the emailing sending when clicked the send mail button.
+   */
+  const handleEmailSend = async () => {
     try {
       await sendGroupEmails().then((res) => {
         console.log(`send group emails result: ${res}`)
@@ -135,7 +158,7 @@ export const EmailModal = ({
         </Typography>
         <Button
           onClick={() => {
-            adminSignIn().then(() => sendEmails())
+            adminSignIn().then(() => handleEmailSend())
           }}
           sx={{ position: 'absolute', bottom: '25%' }}
         >
@@ -194,7 +217,7 @@ export const EmailModal = ({
         <Button
           onClick={() => {
             // setIsEmailing(!isEmailing)
-            sendEmails().then(() =>
+            handleEmailSend().then(() =>
               sendError === true ? setEmailSentError(true) : setEmailSent(true)
             )
             console.log('sending email')
