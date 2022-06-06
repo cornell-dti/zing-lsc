@@ -26,7 +26,7 @@ export const EmailModal = ({
   const [step, setStep] = useState<number>(0)
   const titles = ['Select email template', 'Send emails']
   const title = titles[step]
-  const [sendError, setSendError] = useState<boolean | null>(null)
+  const [sendError, setSendError] = useState<boolean>(false)
 
   // ======= Send Email Helper Functions =======
 
@@ -51,7 +51,6 @@ export const EmailModal = ({
    */
   const sendGroupEmails = async () => {
     let failure = false
-    let groups = 0
     for await (const group of selectedGroups) {
       const emailRcpts = await groupEmails(group)
       const emailBody = getBody(selectedTemplate, courseNames.join(', '))
@@ -61,24 +60,8 @@ export const EmailModal = ({
       if (emailingResult === false) {
         failure = true
         console.log(`"made it here" : ${failure}`)
-        groups += 1
       }
-      groups += 1
     }
-    // selectedGroups.forEach(async(group) => {
-    //   const emailRcpts = await groupEmails(group)
-    //   const emailBody = getBody(selectedTemplate, courseNames.join(', '))
-    //   const emailSubject = 'Study Partners!'
-    //   const emailItems = { emailSubject, emailRcpts, emailBody }
-    //   const emailingResult = await sendEmail(emailItems)
-    //   if (emailingResult === false) {
-    //     failure = true
-    //     console.log(`"made it here" : ${failure}`)
-    //     groups += 1
-    //   }
-    //   groups += 1
-    // })
-    console.log(groups)
     return failure
   }
 
@@ -87,12 +70,14 @@ export const EmailModal = ({
    */
   const handleEmailSend = async () => {
     try {
-      await sendGroupEmails().then((res) => {
-        console.log(`send group emails result: ${res}`)
-        setSendError(res)
-      })
-      console.log(`After sending group email, sendError is ${sendError}`)
-      setIsEmailing(false)
+      const failure = await sendGroupEmails()
+      if (failure) {
+        if (step === 2) setStep(step + 1)
+        setEmailSentError(true)
+      } else {
+        setEmailSent(true)
+        setIsEmailing(false)
+      }
     } catch (e) {
       console.log(`error was ${e}`)
     }
@@ -217,9 +202,9 @@ export const EmailModal = ({
         <Button
           onClick={() => {
             // setIsEmailing(!isEmailing)
-            handleEmailSend().then(() =>
-              sendError === true ? setEmailSentError(true) : setEmailSent(true)
-            )
+            handleEmailSend().then(() => {
+              console.log(`finish handle : ${sendError}`)
+            })
             console.log('sending email')
             // add something else here that actually sends the emails and a pop-up message saying that it's in-progress then done/fail etc.
           }}
