@@ -24,7 +24,12 @@ export const EmailModal = ({
     '' as TemplateName
   )
   const [step, setStep] = useState<number>(0)
-  const titles = ['Select email template', 'Send emails']
+  const titles = [
+    'Select email template',
+    'Send emails',
+    'Auth Error',
+    'Fatal Error',
+  ]
   const title = titles[step]
   const [sendError, setSendError] = useState<boolean>(false)
 
@@ -72,7 +77,7 @@ export const EmailModal = ({
     try {
       const failure = await sendGroupEmails()
       if (failure) {
-        if (step === 2) setStep(step + 1)
+        step === 2 ? setStep(3) : setStep(2)
         setEmailSentError(true)
       } else {
         setEmailSent(true)
@@ -129,23 +134,23 @@ export const EmailModal = ({
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          paddingTop: '15%',
+          paddingTop: '8%',
         }}
       >
-        <Typography variant="h5" component="h5" fontWeight={'700'}>
-          Uh oh... Something went wrong when trying to send the email. Try to
-          sign in one more time. <br></br>
+        <Typography variant="h5" component="h5" fontWeight={'400'}>
+          Uh oh... Something went wrong when trying to send the email. Try again
+          to reauthenticate. <br></br>
           <br></br>
           <em>
             {' '}
-            This will automatically attempt to send the email one more time.{' '}
+            *This will automatically attempt to send the email one more time.{' '}
           </em>
         </Typography>
         <Button
           onClick={() => {
             adminSignIn().then(() => handleEmailSend())
           }}
-          sx={{ position: 'absolute', bottom: '25%' }}
+          sx={{ position: 'absolute', bottom: '20%' }}
         >
           Try Again{' '}
         </Button>
@@ -158,14 +163,30 @@ export const EmailModal = ({
    *  Try Again Button */
   const StepFinalFailure = () => {
     return (
-      <Box>
-        <Typography variant="h5" component="h5" fontWeight={'700'}>
-          Uh oh ... looks like something went wrong. Please contact DTI.
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingTop: '8%',
+        }}
+      >
+        <Typography variant="h5" component="h5" fontWeight={'400'}>
+          Looks like something went wrong. Please contact DTI with the following
+          error reference for more information.
+          <br />
+          <br />
+          <Typography variant="h5" fontWeight="700">
+            {' '}
+            Error reference:{' '}
+          </Typography>
+          Email final auth failure step.
         </Typography>
         <Button
           onClick={() => {
             setIsEmailing(false)
           }}
+          sx={{ position: 'absolute', bottom: '20%' }}
         >
           Close{' '}
         </Button>
@@ -186,34 +207,18 @@ export const EmailModal = ({
           Next
         </Button>
       )
-    } else if (step === 2) {
+    } else if (step === 1) {
       return (
         <Button
           onClick={() => {
-            setIsEmailing(!isEmailing)
-          }}
-          sx={{ position: 'absolute', bottom: '24px', right: '24px' }}
-        >
-          Close
-        </Button>
-      )
-    } else {
-      return (
-        <Button
-          onClick={() => {
-            // setIsEmailing(!isEmailing)
-            handleEmailSend().then(() => {
-              console.log(`finish handle : ${sendError}`)
-            })
-            console.log('sending email')
-            // add something else here that actually sends the emails and a pop-up message saying that it's in-progress then done/fail etc.
+            handleEmailSend()
           }}
           endIcon={<SendIcon />}
         >
           Send {selectedGroups.length} Emails
         </Button>
       )
-    }
+    } else return null
   }
 
   const BackButton = () => {
@@ -263,7 +268,12 @@ export const EmailModal = ({
       containerHeight={'630px'}
     >
       <ZingModal.Title onClose={() => setIsEmailing(!isEmailing)}>
-        <Box display={'flex'} justifyContent={'center'} textAlign={'center'}>
+        <Box
+          display={'flex'}
+          justifyContent={'center'}
+          textAlign={'center'}
+          paddingTop="20px"
+        >
           <Typography variant="h4" component="h4" fontWeight={'700'}>
             {title}
           </Typography>

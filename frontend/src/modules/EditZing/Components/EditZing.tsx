@@ -365,7 +365,7 @@ export const EditZing = () => {
       </Box>
       <Snackbar
         open={emailSent}
-        autoHideDuration={2000}
+        autoHideDuration={6000}
         onClose={() => setEmailSent(false)}
       >
         <Alert variant="filled" severity="success">
