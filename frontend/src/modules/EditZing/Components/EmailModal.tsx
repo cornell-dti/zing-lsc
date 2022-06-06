@@ -24,7 +24,7 @@ export const EmailModal = ({
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(
     '' as TemplateName
   )
-  const [step, setStep] = useState<number>(0)
+  const [step, setStep] = useState<number>(3)
   const titles = ['Select email template', 'Send emails']
   const title = titles[step]
   const [sendError, setSendError] = useState<boolean | null>(null)
@@ -41,7 +41,7 @@ export const EmailModal = ({
   }
 
   const sendEmails = async () => {
-    try {
+    const sendToGroups = () => {
       selectedGroups.forEach(async (group) => {
         const emailRcpts = await groupEmails(group)
         console.log(`rcpts r : ${emailRcpts}`)
@@ -51,22 +51,41 @@ export const EmailModal = ({
         const result = await sendEmail(emailItems)
         if (result === false) setSendError(true)
       })
-      sendError ? setEmailSentError(true) : setEmailSent(true)
+    }
+    try {
+      // A. 1. First attempt to send email
+      if (sendError === false) {
+        sendToGroups()
+
+        // if sending to group resulted in an error:
+        if (sendError) {
+          // send error then display send error
+          // step 2 = try again dialogue
+          setEmailSentError(true)
+          setStep(2)
+        } else {
+          // 2. else will display snackbar and close modal
+          setEmailSent(true)
+          setIsEmailing(false)
+        }
+      } else {
+        // B. Second attempt to send email
+        sendToGroups()
+        if (sendError) {
+          // set send error to true and display final error step
+          // step 3 = final error screen
+          setEmailSentError(true)
+          setStep(3)
+        } else {
+          // 2. else will display snackbar and close modal
+          setEmailSent(true)
+          setIsEmailing(false)
+        }
+      }
     } catch (e) {
       console.log(`error was ${e}`)
     }
-    setIsEmailing(false)
   }
-
-  // const sendMail = async () => {
-  //   // console.log(emailItems())
-  //   // await sendEmail(emailItems()).then((res) => {
-  //   //   console.log(`email send return is: ${res}`)
-  //   //   if (res) {
-  //   //     setStep(2)
-  //   //   } else setStep(3)
-  //   // })
-  // }
 
   const TemplateSelectedComponent = () => {
     return (
@@ -104,31 +123,6 @@ export const EmailModal = ({
     )
   }
 
-  /** Step 2
-   *  Show email sent screen
-   *  Close Button */
-  const StepSent = () => {
-    return (
-      <>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            mt: '40px',
-          }}
-        >
-          <Typography variant="h5" fontWeight={'700'}>
-            Email Sent! All done.
-          </Typography>
-        </Box>
-
-        <Typography variant="body1" fontWeight={'700'}>
-          Emails were successfully sent to the groups.
-        </Typography>
-      </>
-    )
-  }
-
   /** Step 3
    *  Show email send failure screen
    *  Try Again Button */
@@ -138,7 +132,10 @@ export const EmailModal = ({
         <Typography variant="h5" component="h5" fontWeight={'700'}>
           Uh oh... Something went wrong when trying to send the email. Try to
           sign in one more time.{' '}
-          <em> Will automatically attempt to send the email one more time. </em>
+          <em>
+            {' '}
+            This will automatically attempt to send the email one more time.{' '}
+          </em>
         </Typography>
         <Button
           onClick={() => {
@@ -158,15 +155,11 @@ export const EmailModal = ({
     return (
       <Box>
         <Typography variant="h5" component="h5" fontWeight={'700'}>
-          Failed again. Please attempt emailing manually. Sorry for the
-          inconvience.
+          Uh oh ... looks like something went wrong. Please contact DTI.
         </Typography>
         <Button
           onClick={() => {
-            // adminSignIn().then(() => sendEmail())
-            /**
-             * TODO close button
-             * */
+            setIsEmailing(false)
           }}
         >
           Close{' '}
@@ -233,6 +226,28 @@ export const EmailModal = ({
     }
   }
 
+  const SelectTemplates = () => {
+    return (
+      <>
+        {' '}
+        <Typography
+          variant="h5"
+          component="h5"
+          sx={{ display: 'flex', gap: 1 }}
+        >
+          <Box component="span">To:</Box>
+          <Box component="span" sx={{ fontWeight: 900 }}>
+            {selectedGroups
+              .map(({ groupNumber }) => `Group ${groupNumber}`)
+              .join(', ')}
+          </Box>
+        </Typography>
+        {step === 0 && <Step0 />}
+        {step === 1 && <Step1 />}
+      </>
+    )
+  }
+
   return (
     <ZingModal
       open={isEmailing}
@@ -249,24 +264,13 @@ export const EmailModal = ({
       </ZingModal.Title>
       <ZingModal.Body>
         <Box sx={{ padding: '1rem 3.5rem 0 3.5rem' }}>
-          {' '}
-          <Typography
-            variant="h5"
-            component="h5"
-            sx={{ display: 'flex', gap: 1 }}
-          >
-            <Box component="span">To:</Box>
-            <Box component="span" sx={{ fontWeight: 900 }}>
-              {selectedGroups
-                .map(({ groupNumber }) => `Group ${groupNumber}`)
-                .join(', ')}
-            </Box>
-          </Typography>
-          {step === 0 && <Step0 />}
-          {step === 1 && <Step1 />}
-          {step === 2 && <StepSent />}
-          {step === 3 && <StepFailure />}
-          {step === 4 && <StepFinalFailure />}
+          {step === 2 ? (
+            <StepFailure />
+          ) : step === 3 ? (
+            <StepFinalFailure />
+          ) : (
+            <SelectTemplates />
+          )}
         </Box>
       </ZingModal.Body>
       <ZingModal.Controls>
