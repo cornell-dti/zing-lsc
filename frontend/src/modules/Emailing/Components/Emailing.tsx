@@ -138,21 +138,18 @@ export const Emailing = () => {
 /* Returns (number)
     SUCC -> 201 
     FAIL -> 401  */
-export const sendEmail = async (
-  emailItems: any,
-  setEmailSent: (arg: boolean) => void
-) => {
+export const sendEmail = async (emailItems: any) => {
+  let emailSent = false
   // 1. logged in user info
   let auth = getAuth()
   let user = auth.currentUser
   let email = user?.email
   // 2. obtaining auth token from local storage
   const msAuthToken = localStorage.getItem('authToken') || ' '
-  console.log('access tok is ' + msAuthToken)
   const { emailSubject, emailRcpts, emailBody } = emailItems
 
   // 3. request to the backend to send mail
-  axios({
+  await axios({
     method: 'post',
     url: `${API_ROOT}/email/send`,
     data: {
@@ -166,11 +163,10 @@ export const sendEmail = async (
     // 4. reading response for success or failure
     console.log(res)
     if (res.data === 'Email send success.') {
-      setEmailSent(true)
-      return 201
+      emailSent = true
     } else {
       // handle error
-
+      emailSent = false
       console.log('Email send error. Please try again.')
 
       /* firebase login requires user action (ie. press button) will throw error 
@@ -179,8 +175,8 @@ export const sendEmail = async (
           option1: 
           set email send error to true 
           frontend: if (err) { render try again button onClick => { adminLogin().then(sendEmail())} } */
-
-      return 401
     }
   })
+
+  return emailSent
 }
