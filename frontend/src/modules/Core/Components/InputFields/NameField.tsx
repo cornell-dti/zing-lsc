@@ -10,7 +10,7 @@ export const NameField = ({
   MuiColor = colors.darkpurple,
   containerStyle,
   inputStyle,
-  placeholder = 'Name',
+  placeholder,
   value,
   onChange,
   disabled,

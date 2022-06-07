@@ -25,7 +25,7 @@ export const StyledQuestionText = styled.div`
   font-weight: 500;
   line-height: 10px;
   text-align: center;
-  margin-bottom: 0.25rem;
+  margin-bottom: 2.5rem;
 `
 
 export const StyledErrorIcon = styled(ErrorIcon)``
