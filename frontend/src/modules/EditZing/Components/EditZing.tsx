@@ -26,6 +26,7 @@ import {
 } from '@mui/material'
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import { useAuthValue } from '@auth/AuthContext'
 
 const LscIcon = (props: SvgIconProps) => {
   return <SvgIcon inheritViewBox component={Lsc} {...props} />
@@ -34,6 +35,8 @@ const LscIcon = (props: SvgIconProps) => {
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
   const [showError, setShowError] = useState(false)
+
+  const { displayNetworkError } = useAuthValue()
 
   const [courseInfo, setCourseInfo] = useState<CourseInfo>()
   useEffect(() => {
@@ -119,7 +122,7 @@ export const EditZing = () => {
         studentEmail: student.email,
         groupNumber: toGroupNumber,
       })
-      .catch((err) => console.error(err))
+      .catch((error) => displayNetworkError(error.message))
   }
 
   /** Move a student already in a group back to unmatched */
@@ -146,7 +149,7 @@ export const EditZing = () => {
         studentEmail: student.email,
         groupNumber: fromGroupNumber,
       })
-      .catch((err) => console.error(err))
+      .catch((error) => displayNetworkError(error.message))
   }
 
   /** Transfer a student from a group to another group */
@@ -176,7 +179,7 @@ export const EditZing = () => {
         group1: fromGroupNumber,
         group2: toGroupNumber,
       })
-      .catch((err) => console.error(err))
+      .catch((error) => displayNetworkError(error.message))
   }
 
   /** Move a student from some group (existing/unmatched) to a group */
@@ -226,10 +229,7 @@ export const EditZing = () => {
         setStudentGroups(groups)
         setIsCurrentlyGrouping(false)
       })
-      .catch((err) => {
-        console.error(err)
-        setShowError(true)
-      })
+      .catch((error) => displayNetworkError(error.message))
   }
 
   // TODO: remove this eslint disable once selectedGroups is used

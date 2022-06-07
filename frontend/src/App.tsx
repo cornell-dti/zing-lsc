@@ -1,5 +1,10 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { StyledEngineProvider, ThemeProvider } from '@mui/material'
+import {
+  Alert,
+  Snackbar,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material'
 import { CssBaseline } from '@mui/material'
 import {
   HOME_PATH,
@@ -28,6 +33,7 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [authState, setAuthState] = useState<AuthState>('loading')
   const axiosAuthInterceptor = useRef<number | null>(null)
+  const [networkError, setNetworkError] = useState<string | null>(null)
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -50,11 +56,14 @@ const App = () => {
               )
             }
 
-            axios.get(`${API_ROOT}/getauth`).then((res) => {
-              setAuthState(
-                res.data.data.isAuthed ? 'authorized' : 'unauthorized'
-              )
-            })
+            axios.get(`${API_ROOT}/getauth`).then(
+              (res) => {
+                setAuthState(
+                  res.data.data.isAuthed ? 'authorized' : 'unauthorized'
+                )
+              },
+              (error) => setNetworkError(error.message)
+            )
           })
           .catch(() => {
             setAuthState('unauthenticated')
@@ -74,7 +83,13 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <AuthProvider value={{ user: currentUser, authState }}>
+          <AuthProvider
+            value={{
+              user: currentUser,
+              authState,
+              displayNetworkError: setNetworkError,
+            }}
+          >
             <Switch>
               <PublicRoute exact path={HOME_PATH} component={Home} />
               <Route exact path={SURVEY_PATH} component={Survey} />
@@ -89,6 +104,11 @@ const App = () => {
             </Switch>
           </AuthProvider>
         </Router>
+        <Snackbar open={networkError !== null}>
+          <Alert severity="error" variant="filled">
+            Could not perform request: {networkError}
+          </Alert>
+        </Snackbar>
       </ThemeProvider>
     </StyledEngineProvider>
   )
