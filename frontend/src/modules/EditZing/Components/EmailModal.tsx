@@ -39,13 +39,11 @@ export const EmailModal = ({
    * @param group object
    * @returns the student emails for a given group in a string array.
    */
-  const groupEmails = async (group: any) => {
-    const rcpts: string[] = ['lscstudypartners@cornell.edu']
-    const members = group.memberData
-    await members.forEach((mem: any) => {
-      rcpts.push(mem.email)
-    })
-    return rcpts
+  const groupEmails = (group: any) => {
+    return [
+      'lscstudypartners@cornell.edu',
+      ...group.memberData.map((mem: any) => mem.email),
+    ]
   }
 
   /**
@@ -55,18 +53,34 @@ export const EmailModal = ({
    */
   const sendGroupEmails = async () => {
     let failure = false
-    for await (const group of selectedGroups) {
-      const emailRcpts = await groupEmails(group)
-      const emailBody = getBody(selectedTemplate, courseNames.join(', '))
-      const emailSubject = 'Study Partners!'
-      const emailItems = { emailSubject, emailRcpts, emailBody }
-      const emailingResult = await sendEmail(emailItems)
-      if (emailingResult === false) {
-        failure = true
-        console.log(`"made it here" : ${failure}`)
-      }
-    }
+
+    await Promise.all(
+      selectedGroups.map((group) => {
+        const emailRcpts = groupEmails(group)
+        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+        const emailSubject = 'Study Partners!'
+        const emailItems = { emailSubject, emailRcpts, emailBody }
+        return sendEmail(emailItems).then((res) => {
+          if (res === false) failure = true
+        })
+      })
+    )
+
     return failure
+
+    // const promises: any [] = []
+
+    // selectedGroups.forEach((group) => {
+    //   const emailRcpts = groupEmails(group)
+    //   const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+    //   const emailSubject = 'Study Partners!'
+    //   const emailItems = { emailSubject, emailRcpts, emailBody }
+    //   promises.push(sendEmail(emailItems))
+    //   // if (emailingResult === false) {
+    //   //   failure = true
+    //   //   console.log(`"made it here" : ${failure}`)
+    //   // }
+    // })
   }
 
   /**
