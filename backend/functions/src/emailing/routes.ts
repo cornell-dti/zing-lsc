@@ -52,12 +52,13 @@ router.post('/send', (req, res) => {
  *
  * @param courseId = string of 6-digit course code
  * @param groups = string [] of groups to be sent emails
+ * @param template = is the name of the template of the email being sent. Matched emailTemplates.js names made by sean. Currently is the string value, may change to the variable value in future (less wordy).
  *
  * @yeilds email sent timestamp update in database
  */
 router.post('/timestamp', (req, res) => {
-  const { courseId, groups } = req.body
-  updateEmailTimestamp(courseId, groups)
+  const { courseId, groups, template } = req.body
+  updateEmailTimestamp(courseId, groups, template)
     .then(() => {
       logger.info(
         `Email time updated for groups ${groups.toString()} in course ${courseId}.`

@@ -5,17 +5,38 @@ import admin from 'firebase-admin'
 import { db } from '../config'
 const courseRef = db.collection('courses')
 
+// ==== Timestamp helper functions
+
+type timestampsType = { [key: string]: string }
+
+const timestamps: timestampsType = {
+  'Share matched results': 'shareMatchEmailTimestamp',
+  'First no match notification': 'checkInEmailTimestamp',
+  'Second no match notification': 'firstNoMatchEmailTimestamp',
+  'Request to add student to group': 'secondNoMatchEmailTimestamp',
+  'Request to add student to group (late)': 'addStudentEmailTimestamp',
+  'Ask to join group': 'lateAddStudentEmailTimestamp',
+  'Check in with groups': 'askJoinGroupEmailTimestamp',
+}
+
+const getTimestampField = (template: string) => {
+  return timestamps[template]
+}
+
 /** Updating Email Sent Timestap: 
  * @param courseId is the string courseId usually in the form of a six-digit number such as 358546. 
  * @param groups is the groups for the given course that emails were sent to. 
       Currently type-checked as a string [] but may be a number [] depending on how the frontend obtains group number. 
+ * @param template is the name of the template of the email being sent. Matched emailTemplates.js names made by sean. Currently is the string value, may change to the variable value in future (less wordy). 
  * @result updates database to have email sent timestamp to current time. 
  *  */
 export const updateEmailTimestamp = async (
   courseId: string,
-  groups: string[]
+  groups: string[],
+  template: string
 ) => {
   const time = admin.firestore.FieldValue.serverTimestamp()
+  const timestampField = getTimestampField(template)
 
   // either groups = [0, 1, 2] or ["0", "1", "2"]
   // must be string format -> parse here or when calling function
@@ -25,7 +46,7 @@ export const updateEmailTimestamp = async (
         .doc(courseId)
         .collection('groups')
         .doc(group)
-        .update({ shareMatchEmailTimestamp: time })
+        .update({ [timestampField]: time })
     }),
   ])
 }
