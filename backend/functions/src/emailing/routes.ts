@@ -19,7 +19,7 @@ const router = express()
       @param group group number 
       @param template string name
 
-    @yields: 
+    @returns: 
       SUCC -> res.data = 'Email send success.' 
       FAIL -> res.data = 'Email send failure.' 
 
