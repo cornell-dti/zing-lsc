@@ -119,7 +119,7 @@ export const sendMails = async (
   authToken: string,
   courseId: string,
   group: string,
-  template: string
+  template = 'Share matched results'
 ) => {
   const access_token = authToken
   try {
