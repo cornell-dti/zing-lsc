@@ -23,32 +23,25 @@ const getTimestampField = (template: string) => {
   return timestamps[template]
 }
 
-/** Updating Email Sent Timestap: 
- * @param courseId is the string courseId usually in the form of a six-digit number such as 358546. 
- * @param groups is the groups for the given course that emails were sent to. 
-      Currently type-checked as a string [] but may be a number [] depending on how the frontend obtains group number. 
- * @param template is the name of the template of the email being sent. Matched emailTemplates.js names made by sean. Currently is the string value, may change to the variable value in future (less wordy). 
- * @result updates database to have email sent timestamp to current time. 
+/** Updating Email Sent Timestap:
+ * @param courseId is the string courseId usually in the form of a six-digit number such as 358546.
+ * @param group is the group for the given course that emails were sent to.
+ * @param template is the name of the template of the email being sent. Matched emailTemplates.js names made by sean. Currently is the string value, may change to the variable value in future (less wordy).
+ * @result updates database to have email sent timestamp to current time.
  *  */
 export const updateEmailTimestamp = async (
   courseId: string,
-  groups: string[],
+  group: string,
   template: string
 ) => {
   const time = admin.firestore.FieldValue.serverTimestamp()
   const timestampField = getTimestampField(template)
-
-  // either groups = [0, 1, 2] or ["0", "1", "2"]
   // must be string format -> parse here or when calling function
-  await Promise.all([
-    groups.forEach((group: string) => {
-      courseRef
-        .doc(courseId)
-        .collection('groups')
-        .doc(group)
-        .update({ [timestampField]: time })
-    }),
-  ])
+  await courseRef
+    .doc(courseId)
+    .collection('groups')
+    .doc(group)
+    .update({ [timestampField]: time })
 }
 
 /* ==== Emailing Helper Functions ==== */
@@ -108,8 +101,11 @@ export const createEmailAsJson = (
     @param message: graph api request body data
     @param authToken: string that must match the [from] email and 
       logged in user
+    @param courseId: 6-digit course id 
+    @param group: group number that email is being sent to
+    @param template: string of template name
     
-    Sends a POST request to the GRAPH API. 
+    Sends a POST request to the GRAPH API and updates the database with the timestamp of when the email was sent. 
     
     @returns: 
       202 (:number) if successfully sent. 
@@ -120,7 +116,10 @@ export const createEmailAsJson = (
 export const sendMails = async (
   from: string,
   message: any,
-  authToken: string
+  authToken: string,
+  courseId: string,
+  group: string,
+  template: string
 ) => {
   const access_token = authToken
   try {
@@ -134,6 +133,9 @@ export const sendMails = async (
       },
       data: JSON.stringify(message),
     })
+    if (response.status === 202) {
+      await updateEmailTimestamp(courseId, group, template)
+    }
     return response.status
   } catch (error) {
     return error

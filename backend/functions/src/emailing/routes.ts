@@ -15,19 +15,31 @@ const router = express()
       @param emailSubject
       @param emailRcpts (student email string list )
 
+      @param couseId 6-digit course id
+      @param group group number 
+      @param template string name
+
     @yields: 
       SUCC -> res.data = 'Email send success.' 
       FAIL -> res.data = 'Email send failure.' 
 
     */
 router.post('/send', (req, res) => {
-  const { emailAddress, authToken, emailBody, emailSubject, emailRcpts } =
-    req.body
+  const {
+    emailAddress,
+    authToken,
+    emailBody,
+    emailSubject,
+    emailRcpts,
+    courseId,
+    group,
+    template,
+  } = req.body
 
   const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
   // console.log(JSON.stringify(message, null, '  '))
 
-  sendMails(emailAddress, message, authToken)
+  sendMails(emailAddress, message, authToken, courseId, group, template)
     .then((result) => {
       if (result === 202) {
         logger.info(
