@@ -11,12 +11,12 @@ type timestampsType = { [key: string]: string }
 
 const timestamps: timestampsType = {
   'Share matched results': 'shareMatchEmailTimestamp',
-  'First no match notification': 'checkInEmailTimestamp',
-  'Second no match notification': 'firstNoMatchEmailTimestamp',
-  'Request to add student to group': 'secondNoMatchEmailTimestamp',
-  'Request to add student to group (late)': 'addStudentEmailTimestamp',
-  'Ask to join group': 'lateAddStudentEmailTimestamp',
-  'Check in with groups': 'askJoinGroupEmailTimestamp',
+  'First no match notification': 'firstNoMatchEmailTimestamp',
+  'Second no match notification': 'secondNoMatchEmailTimestamp',
+  'Request to add student to group': 'addStudentEmailTimestamp',
+  'Request to add student to group (late)': 'lateAddStudentEmailTimestamp',
+  'Ask to join group': 'askJoinGroupEmailTimestamp',
+  'Check in with groups': 'checkInEmailTimestamp',
 }
 
 const getTimestampField = (template: string) => {
@@ -29,7 +29,7 @@ const getTimestampField = (template: string) => {
  * @param template is the name of the template of the email being sent. Matched emailTemplates.js names made by sean. Currently is the string value, may change to the variable value in future (less wordy).
  * @result updates database to have email sent timestamp to current time.
  *  */
-export const updateEmailTimestamp = async (
+export const updateEmailTimestamp = (
   courseId: string,
   group: string,
   template: string
@@ -37,7 +37,7 @@ export const updateEmailTimestamp = async (
   const time = admin.firestore.FieldValue.serverTimestamp()
   const timestampField = getTimestampField(template)
   // must be string format -> parse here or when calling function
-  await courseRef
+  return courseRef
     .doc(courseId)
     .collection('groups')
     .doc(group)
@@ -134,7 +134,7 @@ export const sendMails = async (
       data: JSON.stringify(message),
     })
     if (response.status === 202) {
-      await updateEmailTimestamp(courseId, group, template)
+      updateEmailTimestamp(courseId, group, template)
     }
     return response.status
   } catch (error) {
