@@ -26,12 +26,6 @@ export const EmailModal = ({
   )
 
   const { courseId } = useParams<{ courseId: string }>()
-
-  console.log(`Selected template name: ${selectedTemplate}`)
-  console.log(`courseId is ${courseId}`)
-  console.log(
-    `selected groups are ${JSON.stringify(selectedGroups[0].groupNumber)}`
-  )
   const [step, setStep] = useState<number>(0)
   const titles = [
     'Select email template',
@@ -68,8 +62,15 @@ export const EmailModal = ({
         const emailRcpts = groupEmails(group)
         const emailBody = getBody(selectedTemplate, courseNames.join(', '))
         const emailSubject = 'Study Partners!'
-        const emailItems = { emailSubject, emailRcpts, emailBody }
-        // const emailItems = { emailSubject, emailRcpts, emailBody, courseId, group.groupNumber.toString(), templateName }
+        const groupNum = group.groupNumber.toString()
+        const emailItems = {
+          emailSubject,
+          emailRcpts,
+          emailBody,
+          courseId,
+          groupNum,
+          selectedTemplate,
+        }
         return sendEmail(emailItems).then((res) => {
           if (res === false) failure = true
         })
@@ -77,20 +78,6 @@ export const EmailModal = ({
     )
 
     return failure
-
-    // const promises: any [] = []
-
-    // selectedGroups.forEach((group) => {
-    //   const emailRcpts = groupEmails(group)
-    //   const emailBody = getBody(selectedTemplate, courseNames.join(', '))
-    //   const emailSubject = 'Study Partners!'
-    //   const emailItems = { emailSubject, emailRcpts, emailBody }
-    //   promises.push(sendEmail(emailItems))
-    //   // if (emailingResult === false) {
-    //   //   failure = true
-    //   //   console.log(`"made it here" : ${failure}`)
-    //   // }
-    // })
   }
 
   /**

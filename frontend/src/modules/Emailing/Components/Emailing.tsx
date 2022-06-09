@@ -146,21 +146,28 @@ export const sendEmail = async (emailItems: any) => {
   let email = user?.email
   // 2. obtaining auth token from local storage
   const msAuthToken = localStorage.getItem('authToken') || ' '
-  const { emailSubject, emailRcpts, emailBody } = emailItems
-  console.log(
-    `sub: ${emailSubject}. rcpts: ${emailRcpts.toString()}. body: ${emailBody}`
-  )
+  const {
+    emailSubject,
+    emailRcpts,
+    emailBody,
+    courseId,
+    groupNum,
+    selectedTemplate,
+  } = emailItems
 
   // 3. request to the backend to send mail
   await axios({
     method: 'post',
     url: `${API_ROOT}/email/send`,
     data: {
-      authToken: msAuthToken,
       emailAddress: email,
       emailBody: emailBody,
       emailSubject: emailSubject,
       emailRcpts: emailRcpts,
+      courseId: courseId,
+      group: groupNum,
+      template: selectedTemplate,
+      authToken: msAuthToken,
     },
   }).then(async (res) => {
     // 4. reading response for success or failure
