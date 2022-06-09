@@ -6,51 +6,66 @@ import { StepBegin } from 'Survey/Components/StepBegin'
 import { StepCourse } from 'Survey/Components/StepCourse'
 import { StepRadio } from 'Survey/Components/StepRadio'
 import { StepFinal } from 'Survey/Components/StepFinal'
-import {
-  sendSurveyData,
-  SurveyData,
-} from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
+import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { Question } from '@core/Types'
+import axios from 'axios'
+import { API_ROOT, STUDENT_API } from '@core/Constants'
 
 export const Survey = () => {
   const [showError, setShowError] = useState(false)
-  const [currStep, setCurrStep] = useState(0)
+  const [currStep, setCurrStep] = useState(1)
+  const [surveyError, setSurveyError] = useState<string | null>(null)
+
   // If there are custom questions the below will be a network call perhaps
   const questions: Question[] = require('@core/Questions/Questions.json')
   const numSpecialQuestions = 1 // Course list
-  const totalSteps = questions.length + numSpecialQuestions
+  const totalSteps = questions.length + numSpecialQuestions + 1
 
   // Form answer props
   const [nameAnswer, setNameAnswer] = useState('')
   const [emailAnswer, setEmailAnswer] = useState('')
   const [courseList, setCourseList] = useState<string[]>([])
-  const [answers, setAnswers] = useState(Array<string>(questions.length).fill('')) // Will be in order of Qs
+  const [answers, setAnswers] = useState(
+    Array<string>(questions.length).fill('')
+  ) // Will be in order of Qs
 
   const changeAnswer = (i: number, v: string) => {
-    setAnswers(answers.map((value, index) => index === i ? v : value))
+    setAnswers(answers.map((value, index) => (index === i ? v : value)))
   }
 
   // last step's Next button handles sending data
   function finalNext() {
-    const mcData = Object.fromEntries(questions.map((question, index) => [question.questionId, answers[index]]))
+    const mcData = Object.fromEntries(
+      questions.map((question, index) => [question.questionId, answers[index]])
+    )
     const surveyData: SurveyData = {
       courseCatalogNames: courseList,
       name: nameAnswer,
       email: emailAnswer,
-      ...mcData
+      ...mcData,
     }
     console.log('Finished survey', surveyData)
-    sendSurveyData(surveyData)
-    setCurrStep(currStep + 1)
+    axios.post(`${API_ROOT}${STUDENT_API}/survey`, surveyData).then(
+      (response: any) => {
+        console.log(response)
+        setCurrStep(currStep + 1)
+      },
+      (error: any) => {
+        console.log(error)
+        setSurveyError(error.response.data.message)
+        setCurrStep(currStep + 1)
+      }
+    )
   }
 
-  const multipleChoiceIndex = currStep - numSpecialQuestions - 1
+  const multipleChoiceIndex = currStep - numSpecialQuestions - 2
   const validCourseRe = /^[A-Z]{2,7} \d{4}$/
-  const isStepValid = currStep === 1
-    ? courseList.length > 0 && courseList.every(c => validCourseRe.test(c))
-    : answers[multipleChoiceIndex] !== ''
+  const isStepValid =
+    currStep === 2
+      ? courseList.length > 0 && courseList.every((c) => validCourseRe.test(c))
+      : answers[multipleChoiceIndex] !== ''
 
-  return currStep === 0 ? ( // Form landing
+  return currStep === 1 ? ( // Form landing
     <StyledContainer1>
       <StepBegin
         name={nameAnswer}
@@ -62,7 +77,10 @@ export const Survey = () => {
     </StyledContainer1>
   ) : currStep === totalSteps + 1 ? ( // Form confirmation
     <StyledContainer2>
-      <StepFinal />
+      <StepFinal
+        success={surveyError === null}
+        errorMsg={surveyError != null ? surveyError : ''}
+      />
     </StyledContainer2>
   ) : (
     <StyledContainer2>
@@ -72,15 +90,20 @@ export const Survey = () => {
         stepNumber={currStep}
         totalSteps={totalSteps}
         gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={currStep === totalSteps ? finalNext : () => setCurrStep((currStep) => currStep + 1)}
+        gotoNextStep={
+          currStep === totalSteps
+            ? finalNext
+            : () => setCurrStep((currStep) => currStep + 1)
+        }
       >
-        {currStep === 1 ? ( // Course selection
+        {currStep === 2 ? ( // Course selection
           <StepCourse
             validCourseRe={validCourseRe}
             courses={courseList}
             setCourses={setCourseList}
           />
-        ) : ( // General multiple-choice
+        ) : (
+          // General multiple-choice
           <StepRadio
             showError={showError}
             currentAnswer={answers[multipleChoiceIndex]}

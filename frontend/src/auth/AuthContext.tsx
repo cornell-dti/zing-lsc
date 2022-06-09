@@ -16,6 +16,7 @@ export type AuthState =
 interface AuthContextType {
   user: User | null
   authState: AuthState
+  displayNetworkError: (error: string) => void
 }
 
 const AuthContext = React.createContext<AuthContextType>({} as AuthContextType)

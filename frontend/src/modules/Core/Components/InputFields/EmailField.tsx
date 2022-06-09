@@ -11,7 +11,7 @@ export const EmailField = ({
   MuiColor = colors.darkpurple,
   containerStyle,
   inputStyle,
-  placeholder = 'Email',
+  placeholder = 'Cornell NetID',
   value,
   onChange,
   disabled,

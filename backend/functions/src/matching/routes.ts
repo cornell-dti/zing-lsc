@@ -17,8 +17,8 @@ import {
 //     groups: groupStudentData,
 //   }; ?
 router.post('/make', (req, res) => {
-  const { courseId, groupSize } = req.body
-  ;(groupSize ? makeMatches(courseId, groupSize) : makeMatches(courseId))
+  const { courseId } = req.body
+  makeMatches(courseId)
     .then((data) => {
       logger.info(`Made matched for course: ${courseId}`)
       res.status(200).json({ success: true, data })

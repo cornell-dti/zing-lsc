@@ -84,7 +84,9 @@ export const StudentGrid = ({
           </Tooltip>
           <div className={classes.paper2}>
             {/* {genderSVG} {student.pronoun === 'a' ? 'Male' : 'Female'} */}
-            <StyledStudentDetail>{student.email}</StyledStudentDetail>
+            <StyledStudentDetail>
+              {student.email.replace('@cornell.edu', '')}
+            </StyledStudentDetail>
             <StyledStudentDetail>{student.year}</StyledStudentDetail>
           </div>
         </Paper>

@@ -108,6 +108,7 @@ export const InputField = ({
             placeholder={placeholder}
             type={type}
             disabled={disabled}
+            variant="standard"
             value={localValue}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setLocalValue(e.target.value)
@@ -127,6 +128,7 @@ export const InputField = ({
             fullWidth={fullWidth}
             key={key}
             helperText={error}
+            variant="standard"
             sx={Object.assign({}, defaultContainerStyle, containerStyle)}
             inputProps={{
               sx: Object.assign({}, defaultInputStyle, inputStyle),
