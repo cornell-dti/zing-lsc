@@ -48,21 +48,19 @@ export const EditZing = () => {
   const [emailSent, setEmailSent] = useState<boolean>(true)
   const [emailSentError, setEmailSentError] = useState<boolean>(false)
   const emailSentAction = (
-    <React.Fragment>
-      <Button
-        variant="text"
-        sx={{ color: 'purple.50' }}
-        size="small"
-        onClick={() =>
-          window.open(
-            'https://outlook.office.com/mail/lscstudypartners@cornell.edu/',
-            '_blank'
-          )
-        }
-      >
-        View in Inbox
-      </Button>
-    </React.Fragment>
+    <Button
+      variant="text"
+      sx={{ color: 'purple.50' }}
+      size="small"
+      onClick={() =>
+        window.open(
+          'https://outlook.office.com/mail/lscstudypartners@cornell.edu/',
+          '_blank'
+        )
+      }
+    >
+      View in Inbox
+    </Button>
   )
 
   useEffect(() => {

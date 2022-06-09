@@ -78,8 +78,7 @@ export const Emailing = () => {
         justifyContent="space-between"
       >
         <Typography>
-          {' '}
-          {emailSent ? 'Email is sent' : 'Email not yet sent'}!{' '}
+          {emailSent ? 'Email is sent' : 'Email not yet sent'}!
         </Typography>
       </Box>
     )
@@ -94,18 +93,17 @@ export const Emailing = () => {
         justifyContent="space-between"
       >
         <Typography>
-          {' '}
           {sendError
             ? 'Email failed to send. Please log back in and reauthenticate to send email.'
-            : 'No email send error'}{' '}
-          !{' '}
+            : 'No email send error'}
+          !
           {sendError && (
             <Button
               onClick={() => {
                 adminSignIn().then(() => sendEmail())
               }}
             >
-              Try Again{' '}
+              Try Again
             </Button>
           )}
         </Typography>

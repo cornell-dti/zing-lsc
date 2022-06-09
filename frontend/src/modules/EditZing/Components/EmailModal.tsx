@@ -102,7 +102,7 @@ export const EmailModal = ({
     return (
       <Box sx={{ marginTop: '0.25em', marginBottom: '0.5em' }}>
         <Typography variant="h5" component="h5">
-          Template:{' '}
+          Template:
           <Box component="span" sx={{ fontWeight: 800 }}>
             {selectedTemplate}
           </Box>
@@ -152,8 +152,7 @@ export const EmailModal = ({
           to reauthenticate. <br></br>
           <br></br>
           <em>
-            {' '}
-            *This will automatically attempt to send the email one more time.{' '}
+            *This will automatically attempt to send the email one more time.
           </em>
         </Typography>
         <Button
@@ -162,7 +161,7 @@ export const EmailModal = ({
           }}
           sx={{ position: 'absolute', bottom: '20%' }}
         >
-          Try Again{' '}
+          Try Again
         </Button>
       </Box>
     )
@@ -187,8 +186,7 @@ export const EmailModal = ({
           <br />
           <br />
           <Typography variant="h5" fontWeight="700">
-            {' '}
-            Error reference:{' '}
+            Error reference:
           </Typography>
           Email final auth failure step.
         </Typography>
@@ -198,7 +196,7 @@ export const EmailModal = ({
           }}
           sx={{ position: 'absolute', bottom: '20%' }}
         >
-          Close{' '}
+          Close
         </Button>
       </Box>
     )
@@ -251,7 +249,6 @@ export const EmailModal = ({
   const SelectTemplates = () => {
     return (
       <>
-        {' '}
         <Typography
           variant="h5"
           component="h5"
