@@ -134,7 +134,7 @@ export const sendMails = async (
       data: JSON.stringify(message),
     })
     if (response.status === 202) {
-      updateEmailTimestamp(courseId, group, template)
+      await updateEmailTimestamp(courseId, group, template)
     }
     return response.status
   } catch (error) {
