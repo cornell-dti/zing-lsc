@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
+import { useParams } from 'react-router-dom'
 // zing imports
 import { getBody } from '../utils/emailTemplates'
 import { ZingModal } from '@core/Components'
@@ -22,6 +23,14 @@ export const EmailModal = ({
 }: EmailModalProps) => {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(
     '' as TemplateName
+  )
+
+  const { courseId } = useParams<{ courseId: string }>()
+
+  console.log(`Selected template name: ${selectedTemplate}`)
+  console.log(`courseId is ${courseId}`)
+  console.log(
+    `selected groups are ${JSON.stringify(selectedGroups[0].groupNumber)}`
   )
   const [step, setStep] = useState<number>(0)
   const titles = [
@@ -60,6 +69,7 @@ export const EmailModal = ({
         const emailBody = getBody(selectedTemplate, courseNames.join(', '))
         const emailSubject = 'Study Partners!'
         const emailItems = { emailSubject, emailRcpts, emailBody }
+        // const emailItems = { emailSubject, emailRcpts, emailBody, courseId, group.groupNumber.toString(), templateName }
         return sendEmail(emailItems).then((res) => {
           if (res === false) failure = true
         })
