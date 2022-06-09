@@ -1,34 +1,45 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
-import { createEmailAsJson, sendMails } from './functions'
+import { createEmailAsJson, sendMails, updateEmailTimestamp } from './functions'
 
 const router = express()
 
-/* 
+/**
 
-    /send endpoint in our backend server. 
+    @.com/email/send endpoint in our backend server. 
 
     POST Req.body needs: 
+      @param emailAddress (admin/user email)
+      @param authToken (must match admin email account)
+      @param emailBody 
+      @param emailSubject
+      @param emailRcpts (student email string list )
 
-      - emailAddress (admin/user email)
-      - authToken (must match admin email account)
-      - emailBody 
-      - emailSubject
-      - emailRcpts (student email string list )
+      @param couseId 6-digit course id
+      @param group group number 
+      @param template string name
 
-    Returns: 
+    @returns: 
       SUCC -> res.data = 'Email send success.' 
       FAIL -> res.data = 'Email send failure.' 
 
     */
 router.post('/send', (req, res) => {
-  const { emailAddress, authToken, emailBody, emailSubject, emailRcpts } =
-    req.body
+  const {
+    emailAddress,
+    authToken,
+    emailBody,
+    emailSubject,
+    emailRcpts,
+    courseId,
+    group,
+    template,
+  } = req.body
 
   const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
   // console.log(JSON.stringify(message, null, '  '))
 
-  sendMails(emailAddress, message, authToken)
+  sendMails(emailAddress, message, authToken, courseId, group, template)
     .then((result) => {
       if (result === 202) {
         logger.info(
@@ -47,6 +58,31 @@ router.post('/send', (req, res) => {
         `Email send request failed from ${emailAddress} to ${emailRcpts.toString()}`
       )
     )
+})
+
+/** @.com/api root/email/timestamp
+ *
+ * @param courseId = string of 6-digit course code
+ * @param groups = string [] of groups to be sent emails
+ * @param template = is the name of the template of the email being sent. Matched emailTemplates.js names made by sean. Currently is the string value, may change to the variable value in future (less wordy).
+ *
+ * @yeilds email sent timestamp update in database
+ */
+router.post('/timestamp', (req, res) => {
+  const { courseId, groups, template } = req.body
+  updateEmailTimestamp(courseId, groups, template)
+    .then(() => {
+      logger.info(
+        `Email time updated for groups ${groups.toString()} in course ${courseId}.`
+      )
+      res.status(200).json('Email Time updated')
+    })
+    .catch(() => {
+      logger.warn(
+        `Email time failed to update for groups ${groups.toString()} in course ${courseId}.`
+      )
+      res.status(400).json('ERROR: email Time update failure')
+    })
 })
 
 export default router
