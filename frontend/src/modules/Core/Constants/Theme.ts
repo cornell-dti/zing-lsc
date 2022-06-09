@@ -209,9 +209,9 @@ theme = createTheme(theme, {
             borderColor: theme.palette.essentials[50],
           },
         },
-        textPrimary: {
-          color: theme.palette.purple[50],
-        },
+        // textPrimary: {
+        //   color: theme.palette.purple[50],
+        // },
       },
     },
     MuiIconButton: {

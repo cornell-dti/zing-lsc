@@ -45,13 +45,13 @@ export const EditZing = () => {
   const [isEmailing, setIsEmailing] = useState<boolean>(false)
 
   /*  Snackbars  */
-  const [emailSent, setEmailSent] = useState<boolean>(false)
+  const [emailSent, setEmailSent] = useState<boolean>(true)
   const [emailSentError, setEmailSentError] = useState<boolean>(false)
   const emailSentAction = (
     <React.Fragment>
       <Button
         variant="text"
-        color="primary"
+        sx={{ color: 'purple.50' }}
         size="small"
         onClick={() =>
           window.open(
@@ -383,10 +383,12 @@ export const EditZing = () => {
       </Box>
       <Snackbar
         open={emailSent}
-        autoHideDuration={6000}
+        // autoHideDuration={6000}
         onClose={() => setEmailSent(false)}
         message="Emails delivered!"
         action={emailSentAction}
+        color="purple[50]"
+        sx={{ color: '#C0AEEA' }}
         // sx={{background: "#2F2E41", borderRadius: "25px"}}
       />
       <Snackbar
