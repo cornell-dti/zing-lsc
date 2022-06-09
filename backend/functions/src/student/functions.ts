@@ -39,7 +39,7 @@ const addStudentSurveyResponse = async (
   const courseIdsWithName = await Promise.all(
     courseCatalogNames.map(async (name) => ({
       catalogName: name,
-      courseId: await mapCatalogNameToCourseId(name, 'SP22'),
+      courseId: await mapCatalogNameToCourseId(name, 'SU22'),
     }))
   )
 

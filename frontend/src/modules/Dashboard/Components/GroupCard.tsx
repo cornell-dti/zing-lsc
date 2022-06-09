@@ -95,7 +95,7 @@ export const GroupCard = ({
         >
           View
         </Button>
-        {newStudents > 1 && <Button>Match</Button>}
+        {/* {newStudents > 1 && <Button>Match</Button>} hidden for summer launch */}
       </Box>
     </Box>
   )

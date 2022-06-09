@@ -42,22 +42,25 @@ export const Dashboard = () => {
   const [courses, setCourses] = useState<CourseInfo[]>([])
   const [hasLoadedCourseData, setHasLoadedCourseData] = useState(false)
 
-  const { user } = useAuthValue()
+  const { user, displayNetworkError } = useAuthValue()
 
   useEffect(() => {
-    axios.get(`${API_ROOT}${COURSE_API}`).then((res) => {
-      setCourses(
-        res.data.data.map((course: any) => ({
-          ...course,
-          latestSubmissionTime: new Date(course.latestSubmissionTime),
-        }))
-      )
-      setHasLoadedCourseData(true)
-    })
+    axios.get(`${API_ROOT}${COURSE_API}`).then(
+      (res) => {
+        setCourses(
+          res.data.data.map((course: any) => ({
+            ...course,
+            latestSubmissionTime: new Date(course.latestSubmissionTime),
+          }))
+        )
+        setHasLoadedCourseData(true)
+      },
+      (error) => displayNetworkError(error.message)
+    )
     return () => {
       setAnchorEl(null) // clean state for anchorEl on unmount
     }
-  }, [])
+  }, [displayNetworkError])
 
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
   function sorted(courseInfo: CourseInfo[], menuValue: SortOrder) {
@@ -157,6 +160,8 @@ export const Dashboard = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           endIcon={<KeyboardArrowDown />}
+          variant="text"
+          disableRipple
         >
           {user?.displayName}
         </Button>
@@ -170,11 +175,11 @@ export const Dashboard = () => {
           }}
           anchorOrigin={{
             vertical: 'bottom',
-            horizontal: 'center',
+            horizontal: 'right',
           }}
           transformOrigin={{
             vertical: 'top',
-            horizontal: 'center',
+            horizontal: 'right',
           }}
         >
           <MenuItem
