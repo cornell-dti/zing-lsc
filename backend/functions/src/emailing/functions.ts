@@ -2,6 +2,7 @@ import axios from 'axios'
 
 // firebase imports
 import admin from 'firebase-admin'
+import { logger } from 'firebase-functions'
 import { db } from '../config'
 const courseRef = db.collection('courses')
 
@@ -121,20 +122,29 @@ export const sendMails = async (
   group: string,
   template = 'Share matched results'
 ) => {
-  const access_token = authToken
   try {
     const response = await axios({
       url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
       // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
       method: 'POST',
       headers: {
-        Authorization: 'Bearer ' + access_token,
+        Authorization: 'Bearer ' + authToken,
         'Content-Type': 'application/json',
       },
       data: JSON.stringify(message),
     })
     if (response.status === 202) {
       await updateEmailTimestamp(courseId, group, template)
+        .then(() =>
+          logger.info(
+            `Added timestamp for course ${courseId} for group ${group} with template ${template}`
+          )
+        )
+        .catch((err) =>
+          logger.error(
+            `Failed to update timestampfor course ${courseId} for group ${group} with template ${template}. Resulted in err: ${err.message} `
+          )
+        )
     }
     return response.status
   } catch (error) {

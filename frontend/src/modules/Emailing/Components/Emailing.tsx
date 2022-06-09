@@ -78,8 +78,7 @@ export const Emailing = () => {
         justifyContent="space-between"
       >
         <Typography>
-          {' '}
-          {emailSent ? 'Email is sent' : 'Email not yet sent'}!{' '}
+          {emailSent ? 'Email is sent' : 'Email not yet sent'}!
         </Typography>
       </Box>
     )
@@ -94,18 +93,17 @@ export const Emailing = () => {
         justifyContent="space-between"
       >
         <Typography>
-          {' '}
           {sendError
             ? 'Email failed to send. Please log back in and reauthenticate to send email.'
-            : 'No email send error'}{' '}
-          !{' '}
+            : 'No email send error'}
+          !
           {sendError && (
             <Button
               onClick={() => {
                 adminSignIn().then(() => sendEmail())
               }}
             >
-              Try Again{' '}
+              Try Again
             </Button>
           )}
         </Typography>
@@ -135,42 +133,48 @@ export const Emailing = () => {
   )
 }
 
-/* Returns (number)
-    SUCC -> 201 
-    FAIL -> 401  */
-export const sendEmail = async (
-  emailItems: any,
-  setEmailSent: (arg: boolean) => void
-) => {
+/** Returns (bool)
+    SUCC -> true 
+    FAIL -> false  */
+export const sendEmail = async (emailItems: any) => {
+  let emailSent = false
   // 1. logged in user info
   let auth = getAuth()
   let user = auth.currentUser
   let email = user?.email
   // 2. obtaining auth token from local storage
   const msAuthToken = localStorage.getItem('authToken') || ' '
-  console.log('access tok is ' + msAuthToken)
-  const { emailSubject, emailRcpts, emailBody } = emailItems
+  const {
+    emailSubject,
+    emailRcpts,
+    emailBody,
+    courseId,
+    groupNum,
+    selectedTemplate,
+  } = emailItems
 
   // 3. request to the backend to send mail
-  axios({
+  await axios({
     method: 'post',
     url: `${API_ROOT}/email/send`,
     data: {
-      authToken: msAuthToken,
       emailAddress: email,
       emailBody: emailBody,
       emailSubject: emailSubject,
       emailRcpts: emailRcpts,
+      courseId: courseId,
+      group: groupNum,
+      template: selectedTemplate,
+      authToken: msAuthToken,
     },
   }).then(async (res) => {
     // 4. reading response for success or failure
     console.log(res)
     if (res.data === 'Email send success.') {
-      setEmailSent(true)
-      return 201
+      emailSent = true
     } else {
       // handle error
-
+      emailSent = false
       console.log('Email send error. Please try again.')
 
       /* firebase login requires user action (ie. press button) will throw error 
@@ -179,8 +183,9 @@ export const sendEmail = async (
           option1: 
           set email send error to true 
           frontend: if (err) { render try again button onClick => { adminLogin().then(sendEmail())} } */
-
-      return 401
     }
   })
+
+  // bool true if succ false if fail
+  return emailSent
 }

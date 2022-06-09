@@ -48,6 +48,8 @@ export interface EmailModalProps {
   isEmailing: boolean
   setIsEmailing: (arg: boolean) => void
   courseNames: string[]
+  setEmailSent: (arg: boolean) => void
+  setEmailSentError: (arg: boolean) => void
 }
 
 export interface TemplateRadioButtonsProps {

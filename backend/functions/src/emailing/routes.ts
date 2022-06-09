@@ -35,9 +35,7 @@ router.post('/send', (req, res) => {
     group,
     template,
   } = req.body
-
   const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
-  // console.log(JSON.stringify(message, null, '  '))
 
   sendMails(emailAddress, message, authToken, courseId, group, template)
     .then((result) => {

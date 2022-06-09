@@ -24,6 +24,8 @@ import {
   SvgIcon,
   SvgIconProps,
   Typography,
+  Snackbar,
+  Alert,
 } from '@mui/material'
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
@@ -41,6 +43,26 @@ export const EditZing = () => {
 
   const [courseInfo, setCourseInfo] = useState<CourseInfo>()
   const [isEmailing, setIsEmailing] = useState<boolean>(false)
+
+  /*  Snackbars  */
+  const [emailSent, setEmailSent] = useState<boolean>(false)
+  const [emailSentError, setEmailSentError] = useState<boolean>(false)
+  const emailSentAction = (
+    <Button
+      variant="text"
+      sx={{ color: 'purple.50' }}
+      size="small"
+      onClick={() =>
+        window.open(
+          'https://outlook.office.com/mail/lscstudypartners@cornell.edu/',
+          '_blank'
+        )
+      }
+    >
+      View in Inbox
+    </Button>
+  )
+
   useEffect(() => {
     axios
       .get(`${API_ROOT}${COURSE_API}/${courseId}`)
@@ -266,6 +288,8 @@ export const EditZing = () => {
           selectedGroups={selectedGroups}
           isEmailing={isEmailing}
           setIsEmailing={setIsEmailing}
+          setEmailSent={setEmailSent}
+          setEmailSentError={setEmailSentError}
           courseNames={courseInfo.names}
         />
       )}
@@ -355,6 +379,22 @@ export const EditZing = () => {
           </Grid>
         </DndProvider>
       </Box>
+      <Snackbar
+        open={emailSent}
+        autoHideDuration={6000}
+        onClose={() => setEmailSent(false)}
+        message="Emails delivered!"
+        action={emailSentAction}
+      />
+      <Snackbar
+        open={emailSentError}
+        autoHideDuration={6000}
+        onClose={() => setEmailSentError(false)}
+      >
+        <Alert variant="filled" severity="error">
+          Emails Failed to send. Please relogin and try again.
+        </Alert>
+      </Snackbar>
     </Box>
   ) : showError ? (
     <Box m={6}>
