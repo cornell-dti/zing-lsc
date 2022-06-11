@@ -119,7 +119,9 @@ async function makeMatches(courseId: string) {
       memberData: newGroup,
       createTime: new Date(),
       updateTime: new Date(),
-      shareMatchEmailTimestamp: null, // timestamp for option of "share matching results"
+      shareMatchEmailTimestamp: null,
+      checkInEmailTimestamp: null,
+      addStudentEmailTimestamp: null, // timestamp for option of "share matching results"
     })
   }
   for (let i = 0; i < studentDataDoubles.length; i += 2) {
@@ -130,7 +132,9 @@ async function makeMatches(courseId: string) {
       memberData: newGroup,
       createTime: new Date(),
       updateTime: new Date(),
-      shareMatchEmailTimestamp: null, // timestamp for option of "share matching results"
+      shareMatchEmailTimestamp: null,
+      checkInEmailTimestamp: null,
+      addStudentEmailTimestamp: null, // timestamp for option of "share matching results"
     })
   }
 
@@ -141,6 +145,8 @@ async function makeMatches(courseId: string) {
     createTime: admin.firestore.FieldValue.serverTimestamp(),
     updateTime: admin.firestore.FieldValue.serverTimestamp(),
     shareMatchEmailTimestamp: group.shareMatchEmailTimestamp,
+    checkInEmailTimestamp: group.checkInEmailTimestamp,
+    addStudentEmailTimestamp: group.addStudentEmailTimestamp,
   }))
 
   // lastly, update the collections to reflect this matching
