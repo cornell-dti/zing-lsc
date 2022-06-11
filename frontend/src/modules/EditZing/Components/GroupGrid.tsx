@@ -16,7 +16,7 @@ const ShareMatchEmailToolTip = ({
 }) => {
   return (
     <Tooltip
-      title={`Share matching results: Sent on ${month}/${day}`}
+      title={`Shared matching results: ${month}/${day}`}
       placement="bottom-start"
       componentsProps={{
         tooltip: {
@@ -43,7 +43,7 @@ const CheckInEmailToolTip = ({
 }) => {
   return (
     <Tooltip
-      title={`Check In Email: Sent on ${month}/${day}`}
+      title={`Checked In: ${month}/${day}`}
       placement="bottom-start"
       componentsProps={{
         tooltip: {
@@ -70,7 +70,7 @@ const AddStudentEmailToolTip = ({
 }) => {
   return (
     <Tooltip
-      title={`Request to Add Student Email: Sent on ${month}/${day}`}
+      title={`Requested to Add Student: ${month}/${day}`}
       placement="bottom-start"
       componentsProps={{
         tooltip: {
