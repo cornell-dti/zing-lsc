@@ -22,7 +22,15 @@ async function getCourseId(
   }
 
   const url = constructUrl(courseCatalogName, roster)
-  const response = await axios.get(url)
+  const response = await axios.get(url).catch((error) => {
+    if (error.response.status === 404) {
+      throw new Error(
+        `Could not find course ${courseCatalogName} in roster ${roster}`
+      )
+    } else {
+      throw error
+    }
+  })
 
   //first .data just gets the response data from the request, while the second
   // .data gets the "data" field in the API response.
@@ -33,7 +41,9 @@ async function getCourseId(
   )
 
   if (!classData) {
-    throw new Error(`Could not find course data for class ${courseCatalogName}`)
+    throw new Error(
+      `Could not find course ${courseCatalogName} in roster ${roster}`
+    )
   }
 
   return classData.crseId.toString()
