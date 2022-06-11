@@ -17,6 +17,8 @@ export interface GroupGridProps {
   studentList: Student[]
   groupNumber: number
   shareMatchEmailTimestamp: Date | null
+  checkInEmailTimestamp: Date | null
+  addStudentEmailTimestamp: Date | null
   moveStudent: (
     studentToMove: Student,
     fromGroupNumber: number,

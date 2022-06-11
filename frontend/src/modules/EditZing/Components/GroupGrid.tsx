@@ -34,6 +34,60 @@ const ShareMatchEmailToolTip = ({
   )
 }
 
+const CheckInEmailToolTip = ({
+  month,
+  day,
+}: {
+  month: number
+  day: number
+}) => {
+  return (
+    <Tooltip
+      title={`Check In Email: Sent on ${month}/${day}`}
+      placement="bottom-start"
+      componentsProps={{
+        tooltip: {
+          sx: {
+            bgcolor: 'essentials.main',
+            color: 'white',
+            fontWeight: 600,
+            borderRadius: '10px',
+          },
+        },
+      }}
+    >
+      <CircleIcon sx={{ fontSize: 10 }} color="primary" />
+    </Tooltip>
+  )
+}
+
+const AddStudentEmailToolTip = ({
+  month,
+  day,
+}: {
+  month: number
+  day: number
+}) => {
+  return (
+    <Tooltip
+      title={`Request to Add Student Email: Sent on ${month}/${day}`}
+      placement="bottom-start"
+      componentsProps={{
+        tooltip: {
+          sx: {
+            bgcolor: 'essentials.main',
+            color: 'white',
+            fontWeight: 600,
+            borderRadius: '10px',
+          },
+        },
+      }}
+    >
+      <CircleIcon sx={{ fontSize: 10 }} color="primary" />
+    </Tooltip>
+  )
+}
+
 /** the equivalent of Column */
 export const GroupGrid = ({
   studentList,
@@ -42,6 +96,8 @@ export const GroupGrid = ({
   createTime,
   updateTime,
   shareMatchEmailTimestamp,
+  checkInEmailTimestamp,
+  addStudentEmailTimestamp,
   selected,
   handleChecked,
 }: GroupGridProps) => {
@@ -100,6 +156,18 @@ export const GroupGrid = ({
             <ShareMatchEmailToolTip
               month={shareMatchEmailTimestamp.getMonth() + 1}
               day={shareMatchEmailTimestamp.getDate()}
+            />
+          )}
+          {checkInEmailTimestamp && (
+            <CheckInEmailToolTip
+              month={checkInEmailTimestamp.getMonth() + 1}
+              day={checkInEmailTimestamp.getDate()}
+            />
+          )}
+          {addStudentEmailTimestamp && (
+            <AddStudentEmailToolTip
+              month={addStudentEmailTimestamp.getMonth() + 1}
+              day={addStudentEmailTimestamp.getDate()}
             />
           )}
           <Box flexGrow={2} />

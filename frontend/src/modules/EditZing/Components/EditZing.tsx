@@ -112,6 +112,12 @@ export const EditZing = () => {
             shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
               ? new Date(group.shareMatchEmailTimestamp)
               : null,
+            checkInEmailTimestamp: group.checkInEmailTimestamp
+              ? new Date(group.checkInEmailTimestamp)
+              : null,
+            addStudentEmailTimestamp: group.addStudentEmailTimestamp
+              ? new Date(group.addStudentEmailTimestamp)
+              : null,
           }))
         )
         setHasLoadedStudentData(true)
@@ -248,6 +254,12 @@ export const EditZing = () => {
             shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
               ? new Date(group.shareMatchEmailTimestamp)
               : null,
+            checkInEmailTimestamp: group.checkInEmailTimestamp
+              ? new Date(group.checkInEmailTimestamp)
+              : null,
+            addStudentEmailTimestamp: group.addStudentEmailTimestamp
+              ? new Date(group.addStudentEmailTimestamp)
+              : null,
           }))
         )
         setStudentGroups(groups)
@@ -365,6 +377,8 @@ export const EditZing = () => {
                 studentList={studentGroup.memberData}
                 groupNumber={studentGroup.groupNumber}
                 shareMatchEmailTimestamp={studentGroup.shareMatchEmailTimestamp}
+                checkInEmailTimestamp={studentGroup.checkInEmailTimestamp}
+                addStudentEmailTimestamp={studentGroup.addStudentEmailTimestamp}
                 moveStudent={moveStudent}
                 createTime={studentGroup.createTime}
                 updateTime={studentGroup.updateTime}
