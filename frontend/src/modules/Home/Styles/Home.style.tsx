@@ -44,7 +44,7 @@ export const StyledContainer = styled.div`
 
 export const StyledLeftPanel = styled.div`
   ${halfPanel};
-  align-items: center;
+  align-items: left;
   background: radial-gradient(
     112.68% 110.04% at -4.77% -2.25%,
     #795cd2 21.53%,
@@ -56,7 +56,7 @@ export const StyledLeftPanel = styled.div`
 export const StyledWhiteActionText = styled(Typography)`
   ${h3};
   color: ${colors.white};
-  text-align: center;
+  text-align: left;
   z-index: 1;
 `
 

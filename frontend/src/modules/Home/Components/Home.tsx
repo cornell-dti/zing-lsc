@@ -31,33 +31,33 @@ export const Home = () => {
         <StyledLeftPanel>
           <StyledWhiteActionText>
             Connect students, create groups
-            <Button
-              color="secondary"
-              variant="outlined"
-              sx={{
-                width: 300,
-                fontSize: { sm: 14, md: 22 },
-              }}
-              onClick={() => {
-                adminSignIn().catch(() => {})
-              }}
-            >
-              LSC Admin Login
-            </Button>
-            <Button
-              color="primary"
-              variant="outlined"
-              sx={{
-                width: 300,
-                fontSize: { sm: 14, md: 22 },
-              }}
-              onClick={() => {
-                adminSignIn().catch(() => {})
-              }}
-            >
-              Student Login
-            </Button>
           </StyledWhiteActionText>
+          <Button
+            color="secondary"
+            variant="outlined"
+            sx={{
+              width: 300,
+              fontSize: { sm: 14, md: 22 },
+            }}
+            onClick={() => {
+              adminSignIn().catch(() => {})
+            }}
+          >
+            LSC Admin Login
+          </Button>
+          <Button
+            color="primary"
+            variant="outlined"
+            sx={{
+              width: 300,
+              fontSize: { sm: 14, md: 22 },
+            }}
+            onClick={() => {
+              adminSignIn().catch(() => {})
+            }}
+          >
+            Student Login
+          </Button>
         </StyledLeftPanel>
         <StyledRightPanel>
           <Box display="flex" flexDirection="column" mt={-10} zIndex={1}></Box>
