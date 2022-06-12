@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { colors, device, h1, h2, h3 } from '@core'
 
-import bg from '@assets/img/homebg.svg'
+import bg from '@assets/img/landingbg.svg'
 import bg2 from '@assets/img/blobhomebg2.svg'
 import { Typography } from '@mui/material'
 
@@ -20,27 +20,13 @@ const halfPanel = css`
 
 export const StyledBackground = styled.div`
   background-image: url(${bg});
-  background-position: center;
+  background-position: top left;
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-size: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  // blob overlay
-  &:before {
-    content: '';
-    background: url(${bg2}) no-repeat bottom;
-    background-size: 100% auto;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    object-fit: contain;
-  }
 `
 
 export const StyledContainer = styled.div`
