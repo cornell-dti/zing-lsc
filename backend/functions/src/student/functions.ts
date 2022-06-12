@@ -35,11 +35,13 @@ const addStudentSurveyResponse = async (
   courseRef = courseR,
   studentRef = studentR
 ) => {
+  const roster = 'SU22' // Summer 2022 for LSC launch
+
   // Find the courseId of all requested courses in survey
   const courseIdsWithName = await Promise.all(
     courseCatalogNames.map(async (name) => ({
       catalogName: name,
-      courseId: await mapCatalogNameToCourseId(name, 'SU22'), // May throw error
+      courseId: await mapCatalogNameToCourseId(name, roster), // May throw error
     }))
   )
 
@@ -157,6 +159,7 @@ const addStudentSurveyResponse = async (
   await Promise.all(allUpdates)
 }
 
+// This has not been used in a very long long time
 async function removeStudent(email: string) {
   const studentDocRef = studentR.doc(email)
   const data = (await studentDocRef.get()).data()

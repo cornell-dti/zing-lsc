@@ -1,15 +1,14 @@
 export type Student = {
   name: string
   email: string
-  year: number
+  year: string
   college: string
-  preferredWorkingTime: number
   submissionTime: Date
   groups: GroupMembership[]
 }
 
 export type GroupMembership = {
-  courseId: number
+  courseId: string
   groupNumber: number
 }
 

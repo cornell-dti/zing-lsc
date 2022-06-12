@@ -25,7 +25,7 @@ const getTimestampField = (template: string) => {
 }
 
 /** Updating Email Sent Timestap:
- * @param courseId is the string courseId usually in the form of a six-digit number such as 358546.
+ * @param courseId is the string courseId usually in the form of a roster and six-digit number such as SU22-358546.
  * @param group is the group for the given course that emails were sent to.
  * @param template is the name of the template of the email being sent. Matched emailTemplates.js names made by sean. Currently is the string value, may change to the variable value in future (less wordy).
  * @result updates database to have email sent timestamp to current time.
@@ -102,7 +102,7 @@ export const createEmailAsJson = (
     @param message: graph api request body data
     @param authToken: string that must match the [from] email and 
       logged in user
-    @param courseId: 6-digit course id 
+    @param courseId: roster and 6-digit course id 
     @param group: group number that email is being sent to
     @param template: string of template name
     
