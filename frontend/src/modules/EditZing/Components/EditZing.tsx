@@ -112,6 +112,12 @@ export const EditZing = () => {
             shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
               ? new Date(group.shareMatchEmailTimestamp)
               : null,
+            checkInEmailTimestamp: group.checkInEmailTimestamp
+              ? new Date(group.checkInEmailTimestamp)
+              : null,
+            addStudentEmailTimestamp: group.addStudentEmailTimestamp
+              ? new Date(group.addStudentEmailTimestamp)
+              : null,
           }))
         )
         setHasLoadedStudentData(true)
@@ -248,10 +254,51 @@ export const EditZing = () => {
             shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
               ? new Date(group.shareMatchEmailTimestamp)
               : null,
+            checkInEmailTimestamp: group.checkInEmailTimestamp
+              ? new Date(group.checkInEmailTimestamp)
+              : null,
+            addStudentEmailTimestamp: group.addStudentEmailTimestamp
+              ? new Date(group.addStudentEmailTimestamp)
+              : null,
           }))
         )
         setStudentGroups(groups)
         setIsCurrentlyGrouping(false)
+      })
+      .catch((error) => displayNetworkError(error.message))
+  }
+
+  /** Handles updating the groups state when we send an email so timestamp shows directly after email is sent without requiring page refresh. */
+  const handleEmailTimestamp = () => {
+    axios
+      .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
+      .then((res: AxiosResponse<CourseStudentDataResponse>) => {
+        setUnmatchedStudents(
+          res.data.data.unmatched.map((student) => ({
+            ...student,
+            submissionTime: new Date(student.submissionTime),
+          }))
+        )
+        setStudentGroups(
+          res.data.data.groups.map((group) => ({
+            ...group,
+            memberData: group.memberData.map((student) => ({
+              ...student,
+              submissionTime: new Date(student.submissionTime),
+            })),
+            createTime: new Date(group.createTime),
+            updateTime: new Date(group.updateTime),
+            shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
+              ? new Date(group.shareMatchEmailTimestamp)
+              : null,
+            checkInEmailTimestamp: group.checkInEmailTimestamp
+              ? new Date(group.checkInEmailTimestamp)
+              : null,
+            addStudentEmailTimestamp: group.addStudentEmailTimestamp
+              ? new Date(group.addStudentEmailTimestamp)
+              : null,
+          }))
+        )
       })
       .catch((error) => displayNetworkError(error.message))
   }
@@ -291,6 +338,7 @@ export const EditZing = () => {
           setEmailSent={setEmailSent}
           setEmailSentError={setEmailSentError}
           courseNames={courseInfo.names}
+          handleEmailTimestamp={handleEmailTimestamp}
         />
       )}
       <MatchLoading
@@ -365,6 +413,8 @@ export const EditZing = () => {
                 studentList={studentGroup.memberData}
                 groupNumber={studentGroup.groupNumber}
                 shareMatchEmailTimestamp={studentGroup.shareMatchEmailTimestamp}
+                checkInEmailTimestamp={studentGroup.checkInEmailTimestamp}
+                addStudentEmailTimestamp={studentGroup.addStudentEmailTimestamp}
                 moveStudent={moveStudent}
                 createTime={studentGroup.createTime}
                 updateTime={studentGroup.updateTime}

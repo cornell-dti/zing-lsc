@@ -11,6 +11,8 @@ export type Group = {
   createTime: Date
   updateTime: Date
   shareMatchEmailTimestamp: Date | null
+  checkInEmailTimestamp: Date | null
+  addStudentEmailTimestamp: Date | null
 }
 
 export interface CourseInfoResponse {

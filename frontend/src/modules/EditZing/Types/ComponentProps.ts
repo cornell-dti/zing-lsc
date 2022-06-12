@@ -17,6 +17,8 @@ export interface GroupGridProps {
   studentList: Student[]
   groupNumber: number
   shareMatchEmailTimestamp: Date | null
+  checkInEmailTimestamp: Date | null
+  addStudentEmailTimestamp: Date | null
   moveStudent: (
     studentToMove: Student,
     fromGroupNumber: number,
@@ -50,6 +52,7 @@ export interface EmailModalProps {
   courseNames: string[]
   setEmailSent: (arg: boolean) => void
   setEmailSentError: (arg: boolean) => void
+  handleEmailTimestamp: () => void
 }
 
 export interface TemplateRadioButtonsProps {

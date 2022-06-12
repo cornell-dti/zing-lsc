@@ -20,6 +20,7 @@ export const EmailModal = ({
   courseNames,
   setEmailSent,
   setEmailSentError,
+  handleEmailTimestamp,
 }: EmailModalProps) => {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(
     '' as TemplateName
@@ -92,6 +93,7 @@ export const EmailModal = ({
       } else {
         setEmailSent(true)
         setIsEmailing(false)
+        handleEmailTimestamp()
       }
     } catch (e) {
       console.log(`error was ${e}`)

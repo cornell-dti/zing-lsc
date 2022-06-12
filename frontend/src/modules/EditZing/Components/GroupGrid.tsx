@@ -7,33 +7,6 @@ import { StyledGroupText } from 'EditZing/Styles/StudentAndGroup.style'
 import { Box, Tooltip, Grid, Checkbox } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 
-const ShareMatchEmailToolTip = ({
-  month,
-  day,
-}: {
-  month: number
-  day: number
-}) => {
-  return (
-    <Tooltip
-      title={`Share matching results: Sent on ${month}/${day}`}
-      placement="bottom-start"
-      componentsProps={{
-        tooltip: {
-          sx: {
-            bgcolor: 'essentials.main',
-            color: 'white',
-            fontWeight: 600,
-            borderRadius: '10px',
-          },
-        },
-      }}
-    >
-      <CircleIcon sx={{ fontSize: 10 }} color="primary" />
-    </Tooltip>
-  )
-}
-
 /** the equivalent of Column */
 export const GroupGrid = ({
   studentList,
@@ -42,9 +15,26 @@ export const GroupGrid = ({
   createTime,
   updateTime,
   shareMatchEmailTimestamp,
+  checkInEmailTimestamp,
+  addStudentEmailTimestamp,
   selected,
   handleChecked,
 }: GroupGridProps) => {
+  const tooltips = [
+    {
+      type: shareMatchEmailTimestamp,
+      text: 'Shared match results: ',
+    },
+    {
+      type: checkInEmailTimestamp,
+      text: 'Checked in: ',
+    },
+    {
+      type: addStudentEmailTimestamp,
+      text: 'Requested student add: ',
+    },
+  ]
+
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
     drop: (item: DnDStudentTransferType) => {
@@ -96,12 +86,32 @@ export const GroupGrid = ({
           >
             <StyledGroupText>{`Group ${groupNumber}`}</StyledGroupText>
           </Tooltip>
-          {shareMatchEmailTimestamp && (
-            <ShareMatchEmailToolTip
-              month={shareMatchEmailTimestamp.getMonth() + 1}
-              day={shareMatchEmailTimestamp.getDate()}
-            />
-          )}
+          {tooltips.map((timestamp, index) => {
+            if (timestamp.type) {
+              const month = timestamp.type.getMonth() + 1
+              const day = timestamp.type.getDate()
+              return (
+                <Tooltip
+                  key={index}
+                  title={`${timestamp.text + month}/${day}`}
+                  placement="bottom-start"
+                  componentsProps={{
+                    tooltip: {
+                      sx: {
+                        bgcolor: 'essentials.main',
+                        color: 'white',
+                        fontWeight: 600,
+                        borderRadius: '10px',
+                      },
+                    },
+                  }}
+                >
+                  <CircleIcon sx={{ fontSize: 10 }} color="primary" />
+                </Tooltip>
+              )
+            }
+            return null
+          })}
           <Box flexGrow={2} />
           <Checkbox
             color="secondary"

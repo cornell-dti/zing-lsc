@@ -60,6 +60,12 @@ async function getStudentsForCourse(courseId: any) {
     shareMatchEmailTimestamp: data[index].shareMatchEmailTimestamp
       ? data[index].shareMatchEmailTimestamp.toDate()
       : null,
+    checkInEmailTimestamp: data[index].checkInEmailTimestamp
+      ? data[index].checkInEmailTimestamp.toDate()
+      : null,
+    addStudentEmailTimestamp: data[index].addStudentEmailTimestamp
+      ? data[index].addStudentEmailTimestamp.toDate()
+      : null,
   }))
 
   return {
