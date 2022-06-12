@@ -107,6 +107,8 @@ const addStudentSurveyResponse = async (
         if (!snapshot.exists) {
           return snapshot.ref
             .set({
+              roster,
+              courseNumber: course.courseId.replace(`${roster}-`, ''),
               unmatched: [],
               names: course.catalogNames,
               lastGroupNumber: 0,
