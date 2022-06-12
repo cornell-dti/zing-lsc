@@ -22,7 +22,7 @@ export const StyledBackground = styled.div`
   background-image: url(${bg});
   background-position: top left;
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: cover;
   height: 100%;
   display: flex;
   justify-content: center;
