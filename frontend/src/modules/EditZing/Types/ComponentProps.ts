@@ -52,6 +52,7 @@ export interface EmailModalProps {
   courseNames: string[]
   setEmailSent: (arg: boolean) => void
   setEmailSentError: (arg: boolean) => void
+  handleEmailTimestamp: () => void
 }
 
 export interface TemplateRadioButtonsProps {

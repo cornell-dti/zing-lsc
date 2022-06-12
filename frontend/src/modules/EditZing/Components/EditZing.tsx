@@ -268,6 +268,40 @@ export const EditZing = () => {
       .catch((error) => displayNetworkError(error.message))
   }
 
+  const handleEmailTimestamp = () => {
+    axios
+      .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
+      .then((res: AxiosResponse<CourseStudentDataResponse>) => {
+        setUnmatchedStudents(
+          res.data.data.unmatched.map((student) => ({
+            ...student,
+            submissionTime: new Date(student.submissionTime),
+          }))
+        )
+        setStudentGroups(
+          res.data.data.groups.map((group) => ({
+            ...group,
+            memberData: group.memberData.map((student) => ({
+              ...student,
+              submissionTime: new Date(student.submissionTime),
+            })),
+            createTime: new Date(group.createTime),
+            updateTime: new Date(group.updateTime),
+            shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
+              ? new Date(group.shareMatchEmailTimestamp)
+              : null,
+            checkInEmailTimestamp: group.checkInEmailTimestamp
+              ? new Date(group.checkInEmailTimestamp)
+              : null,
+            addStudentEmailTimestamp: group.addStudentEmailTimestamp
+              ? new Date(group.addStudentEmailTimestamp)
+              : null,
+          }))
+        )
+      })
+      .catch((error) => displayNetworkError(error.message))
+  }
+
   // TODO: remove this eslint disable once selectedGroups is used
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const selectedGroups = studentGroups.filter((group) =>
@@ -303,6 +337,7 @@ export const EditZing = () => {
           setEmailSent={setEmailSent}
           setEmailSentError={setEmailSentError}
           courseNames={courseInfo.names}
+          handleEmailTimestamp={handleEmailTimestamp}
         />
       )}
       <MatchLoading

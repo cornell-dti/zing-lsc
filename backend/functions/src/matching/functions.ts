@@ -121,7 +121,7 @@ async function makeMatches(courseId: string) {
       updateTime: new Date(),
       shareMatchEmailTimestamp: null,
       checkInEmailTimestamp: null,
-      addStudentEmailTimestamp: null, // timestamp for option of "share matching results"
+      addStudentEmailTimestamp: null,
     })
   }
   for (let i = 0; i < studentDataDoubles.length; i += 2) {
@@ -134,7 +134,7 @@ async function makeMatches(courseId: string) {
       updateTime: new Date(),
       shareMatchEmailTimestamp: null,
       checkInEmailTimestamp: null,
-      addStudentEmailTimestamp: null, // timestamp for option of "share matching results"
+      addStudentEmailTimestamp: null,
     })
   }
 
