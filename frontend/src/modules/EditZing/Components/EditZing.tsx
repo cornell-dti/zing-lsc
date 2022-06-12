@@ -268,6 +268,7 @@ export const EditZing = () => {
       .catch((error) => displayNetworkError(error.message))
   }
 
+  /** Handles updating the groups state when we send an email so timestamp shows directly after email is sent without requiring page refresh. */
   const handleEmailTimestamp = () => {
     axios
       .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
