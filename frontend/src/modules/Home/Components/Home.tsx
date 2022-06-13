@@ -29,7 +29,7 @@ export const Home = () => {
       <StyledContainer>
         <StyledLeftPanel>
           <StyledWhiteActionText>
-            <Typography variant="h2" component="h2" fontWeight={'600'}>
+            <Typography variant="h2" fontWeight={'600'}>
               Connect students. <br />
               Create groups.
             </Typography>
@@ -38,7 +38,7 @@ export const Home = () => {
             color="secondary"
             variant="outlined"
             sx={{
-              width: '20rem',
+              width: '15em',
               fontSize: { sm: 14, md: 22 },
             }}
             onClick={() => {
@@ -51,7 +51,7 @@ export const Home = () => {
             color="primary"
             variant="outlined"
             sx={{
-              width: '20rem',
+              width: '15em',
               fontSize: { sm: 14, md: 22 },
             }}
             onClick={() => {
@@ -63,7 +63,7 @@ export const Home = () => {
         </StyledLeftPanel>
         <StyledRightPanel>
           <Box sx={{ maxWidth: '100%', mt: 8 }}>
-            <img src={matchimg} alt="matching" width="70%" />
+            <img src={matchimg} alt="matching" width="60%" />
           </Box>
         </StyledRightPanel>
       </StyledContainer>
