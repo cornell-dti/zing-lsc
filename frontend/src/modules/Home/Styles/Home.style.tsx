@@ -30,31 +30,21 @@ export const StyledBackground = styled.div`
 `
 
 export const StyledContainer = styled.div`
-  height: 86.5%;
-  width: 80%;
-  // make this more proportional with larger screens/standardize with design
-  @media screen and ${device.laptopL} {
-    width: 1175px;
-  }
-  background-color: ${colors.white};
-  box-shadow: -10px -10px 150px rgba(0, 0, 0, 0.1),
-    10px 10px 150px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  width: 100%;
+  background-color: none;
   display: flex;
 `
 
 export const StyledLeftPanel = styled.div`
   ${halfPanel};
   align-items: left;
-  background: radial-gradient(
-    112.68% 110.04% at -4.77% -2.25%,
-    #795cd2 21.53%,
-    #8d6ad9 54.63%,
-    #795cd2 99.43%
-  );
+  margin-left: 5rem;
 `
 
 export const StyledWhiteActionText = styled(Typography)`
   ${h3};
+  margin-bottom: 3rem;
   color: ${colors.white};
   text-align: left;
   z-index: 1;
@@ -63,8 +53,9 @@ export const StyledWhiteActionText = styled(Typography)`
 export const StyledRightPanel = styled.div`
   ${halfPanel};
   box-sizing: border-box;
-  padding: 0 6rem;
-  gap: 3rem;
+  padding-top: 5rem;
+  box-shadow: -10px -10px 150px rgba(0, 0, 0, 0.1),
+    10px 10px 150px rgba(0, 0, 0, 0.1);
 `
 
 export const StyledHeaderText = styled(Typography)`

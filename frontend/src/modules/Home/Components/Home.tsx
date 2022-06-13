@@ -8,13 +8,12 @@ import {
   StyledWelcomeText,
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
-import Button from '@mui/material/Button'
 import { adminSignIn } from '@fire'
 // import { ReactComponent as Google } from '@assets/img/googleicon.svg'
 import { ReactComponent as Microsoft } from '@assets/img/microsofticon.svg'
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
-import { Box } from '@mui/material'
-import teacher from '@assets/img/teacher.svg'
+import { Box, Button, Typography } from '@mui/material'
+import matchimg from '@assets/img/matching.svg'
 
 // function GoogleIcon(props: SvgIconProps) {
 //   return <SvgIcon inheritViewBox component={Google} {...props} />
@@ -30,13 +29,16 @@ export const Home = () => {
       <StyledContainer>
         <StyledLeftPanel>
           <StyledWhiteActionText>
-            Connect students, create groups
+            <Typography variant="h2" component="h2" fontWeight={'600'}>
+              Connect students. <br />
+              Create groups.
+            </Typography>
           </StyledWhiteActionText>
           <Button
             color="secondary"
             variant="outlined"
             sx={{
-              width: 300,
+              width: '20rem',
               fontSize: { sm: 14, md: 22 },
             }}
             onClick={() => {
@@ -49,7 +51,7 @@ export const Home = () => {
             color="primary"
             variant="outlined"
             sx={{
-              width: 300,
+              width: '20rem',
               fontSize: { sm: 14, md: 22 },
             }}
             onClick={() => {
@@ -60,7 +62,9 @@ export const Home = () => {
           </Button>
         </StyledLeftPanel>
         <StyledRightPanel>
-          <Box display="flex" flexDirection="column" mt={-10} zIndex={1}></Box>
+          <Box sx={{ maxWidth: '100%', mt: 8 }}>
+            <img src={matchimg} alt="matching" width="70%" />
+          </Box>
         </StyledRightPanel>
       </StyledContainer>
     </StyledBackground>
