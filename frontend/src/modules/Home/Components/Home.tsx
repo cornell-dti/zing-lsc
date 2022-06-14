@@ -38,13 +38,11 @@ export const Home = () => {
             LSC Admin Login
           </Button>
           <Button
-            color="primary"
             variant="outlined"
+            color="primary"
             sx={{
               width: '14em',
               fontSize: { sm: 14, md: 22 },
-              borderColor: 'white',
-              color: 'white',
             }}
             onClick={() => {
               adminSignIn().catch(() => {})

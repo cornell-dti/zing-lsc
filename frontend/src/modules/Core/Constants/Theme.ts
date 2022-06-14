@@ -195,6 +195,15 @@ theme = createTheme(theme, {
             backgroundColor: theme.palette.essentials[25],
           },
         },
+        outlinedPrimary: {
+          borderColor: theme.palette.common.white,
+          backgroundColor: theme.palette.purple.main,
+          color: theme.palette.common.white,
+          '&:hover': {
+            borderColor: theme.palette.common.white,
+            backgroundColor: theme.palette.purple[120],
+          },
+        },
         outlinedSecondary: {
           borderColor: theme.palette.purple[100],
           backgroundColor: theme.palette.common.white,
