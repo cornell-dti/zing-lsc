@@ -49,8 +49,8 @@ export const Home = () => {
           </Button>
         </StyledLeftPanel>
         <StyledRightPanel>
-          <Box sx={{ mt: '12rem', ml: 5 }}>
-            <img src={matchimg} alt="matching" width="60%" />
+          <Box sx={{ mt: '12rem' }}>
+            <img src={matchimg} alt="matching" width="65%" />
           </Box>
         </StyledRightPanel>
       </StyledContainer>
