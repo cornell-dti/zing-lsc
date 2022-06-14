@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { colors, h1, h2, h3 } from '@core'
+import { colors, h1 } from '@core'
 
 import bg from '@assets/img/landingbg.svg'
 import { Typography } from '@mui/material'

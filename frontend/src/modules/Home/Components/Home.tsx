@@ -2,7 +2,6 @@ import {
   StyledBackground,
   StyledLeftPanel,
   StyledRightPanel,
-  StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import { adminSignIn } from '@fire'
 import { Box, Button, Typography } from '@mui/material'
