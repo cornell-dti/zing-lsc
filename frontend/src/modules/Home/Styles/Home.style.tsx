@@ -54,8 +54,6 @@ export const StyledWhiteActionText = styled(Typography)`
 export const StyledRightPanel = styled.div`
   ${halfPanel};
   box-sizing: border-box;
-  padding-top: 5rem;
-
   width: 55%;
 `
 

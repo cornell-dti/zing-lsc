@@ -2,26 +2,15 @@ import React from 'react'
 import {
   StyledBackground,
   StyledContainer,
-  StyledHeaderText,
   StyledLeftPanel,
   StyledRightPanel,
-  StyledWelcomeText,
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import { adminSignIn } from '@fire'
-// import { ReactComponent as Google } from '@assets/img/googleicon.svg'
 import { ReactComponent as Microsoft } from '@assets/img/microsofticon.svg'
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
 import { Box, Button, Typography } from '@mui/material'
 import matchimg from '@assets/img/matching.svg'
-
-// function GoogleIcon(props: SvgIconProps) {
-//   return <SvgIcon inheritViewBox component={Google} {...props} />
-// }
-
-function MicrosoftIcon(props: SvgIconProps) {
-  return <SvgIcon inheritViewBox component={Microsoft} {...props} />
-}
 
 export const Home = () => {
   return (
@@ -38,8 +27,9 @@ export const Home = () => {
             color="secondary"
             variant="outlined"
             sx={{
-              width: '15em',
+              width: '14em',
               fontSize: { sm: 14, md: 22 },
+              mb: '1em',
             }}
             onClick={() => {
               adminSignIn().catch(() => {})
@@ -51,18 +41,20 @@ export const Home = () => {
             color="primary"
             variant="outlined"
             sx={{
-              width: '15em',
+              width: '14em',
               fontSize: { sm: 14, md: 22 },
+              borderColor: 'white',
+              color: 'white',
             }}
             onClick={() => {
               adminSignIn().catch(() => {})
             }}
           >
-            Student Login
+            I'm a Student
           </Button>
         </StyledLeftPanel>
         <StyledRightPanel>
-          <Box sx={{ maxWidth: '100%', mt: 8 }}>
+          <Box sx={{ mt: '12rem', ml: 5 }}>
             <img src={matchimg} alt="matching" width="60%" />
           </Box>
         </StyledRightPanel>
