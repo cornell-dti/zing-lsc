@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   StyledBackground,
   StyledContainer,
@@ -7,8 +6,6 @@ import {
   StyledWhiteActionText,
 } from 'Home/Styles/Home.style'
 import { adminSignIn } from '@fire'
-import { ReactComponent as Microsoft } from '@assets/img/microsofticon.svg'
-import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
 import { Box, Button, Typography } from '@mui/material'
 import matchimg from '@assets/img/matching.svg'
 import { Link } from 'react-router-dom'

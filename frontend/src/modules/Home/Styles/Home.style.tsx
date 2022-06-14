@@ -1,9 +1,8 @@
 import styled, { css } from 'styled-components'
 
-import { colors, device, h1, h2, h3 } from '@core'
+import { colors, h1, h2, h3 } from '@core'
 
 import bg from '@assets/img/landingbg.svg'
-import bg2 from '@assets/img/blobhomebg2.svg'
 import { Typography } from '@mui/material'
 
 const panel = css`
