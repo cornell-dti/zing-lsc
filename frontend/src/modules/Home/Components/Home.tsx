@@ -7,6 +7,7 @@ import { adminSignIn } from '@fire'
 import { Box, Button, Typography } from '@mui/material'
 import matchimg from '@assets/img/matching.svg'
 import { Link } from 'react-router-dom'
+import { SURVEY_PATH } from '@core/Constants'
 
 export const Home = () => {
   return (
@@ -38,7 +39,7 @@ export const Home = () => {
         <Button
           variant="outlined"
           component={Link}
-          to="/survey"
+          to={SURVEY_PATH}
           color="primary"
           sx={{
             width: '14em',
