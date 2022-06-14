@@ -11,6 +11,7 @@ import { ReactComponent as Microsoft } from '@assets/img/microsofticon.svg'
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon'
 import { Box, Button, Typography } from '@mui/material'
 import matchimg from '@assets/img/matching.svg'
+import { Link } from 'react-router-dom'
 
 export const Home = () => {
   return (
@@ -39,13 +40,12 @@ export const Home = () => {
           </Button>
           <Button
             variant="outlined"
+            component={Link}
+            to="/survey"
             color="primary"
             sx={{
               width: '14em',
               fontSize: { sm: 14, md: 22 },
-            }}
-            onClick={() => {
-              adminSignIn().catch(() => {})
             }}
           >
             I'm a Student
