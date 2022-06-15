@@ -17,7 +17,7 @@ export const Home = () => {
           variant="h2"
           fontWeight={'600'}
           component="h1"
-          sx={{ textAlign: 'left', mb: '3rem', color: 'white' }}
+          sx={{ mb: '3rem', color: 'white' }}
         >
           Connect students. <br />
           Create groups.
@@ -28,7 +28,7 @@ export const Home = () => {
           sx={{
             width: '14em',
             fontSize: { sm: 14, md: 22 },
-            mb: '1em',
+            mb: '1.25em',
           }}
           onClick={() => {
             adminSignIn().catch(() => {})

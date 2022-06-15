@@ -1,9 +1,5 @@
 import styled, { css } from 'styled-components'
-
-import { colors, h1 } from '@core'
-
 import bg from '@assets/img/landingbg.svg'
-import { Typography } from '@mui/material'
 
 const panel = css`
   display: flex;
@@ -28,14 +24,6 @@ export const StyledLeftPanel = styled.div`
   ${panel};
   align-items: left;
   margin-left: 5rem;
-`
-
-export const StyledWhiteActionText = styled(Typography)`
-  ${h1};
-  font-weight: 600;
-  margin-bottom: 3rem;
-  color: ${colors.white};
-  text-align: left;
 `
 
 export const StyledRightPanel = styled.div`
