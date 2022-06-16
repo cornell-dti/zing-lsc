@@ -9,6 +9,7 @@ import {
 import { InputField } from '@core/Components'
 import { colors } from '@core/Constants'
 import { StepCourseProps } from 'Survey/Types'
+import { InputLabel } from '@mui/material'
 
 export const StepCourse = ({
   validCourseRe,
@@ -48,9 +49,11 @@ export const StepCourse = ({
 
   return (
     <StyledContainer>
-      <StyledQuestionText>
-        What course(s) would you like to find study partners for?
-      </StyledQuestionText>
+      <h1>
+        <StyledQuestionText>
+          What course(s) would you like to find study partners for?
+        </StyledQuestionText>
+      </h1>
       <StyledWarningText>
         * You do not need to submit the cross-listed version of the same course
         more than once
@@ -70,7 +73,9 @@ export const StepCourse = ({
             }
           />
         ))}
+        <InputLabel htmlFor="course name field"> Course Name: </InputLabel>
         <InputField
+          id="course name field"
           inputStyle={textInputStyle}
           key={Math.random().toString()}
           placeholder={placeholder}

@@ -18,6 +18,7 @@ export const Survey = () => {
 
   // If there are custom questions the below will be a network call perhaps
   const questions: Question[] = require('@core/Questions/Questions.json')
+  // import questions from '@core/Questions/Questions.json'
   const numSpecialQuestions = 1 // Course list
   const totalSteps = questions.length + numSpecialQuestions + 1
 
