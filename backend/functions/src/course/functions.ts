@@ -17,7 +17,7 @@ async function getDataForStudents(emails: string[]) {
   return Promise.all(emails.map((email) => getStudent(email)))
 }
 
-async function getCourseInfo(courseId: any) {
+async function getCourseInfo(courseId: string) {
   const snapshot = await courseRef.doc(courseId).get()
   if (!snapshot.exists) throw new Error("This course doesn't exist")
   const result: any = snapshot.data()
@@ -35,7 +35,7 @@ async function getAllCourses() {
   })
 }
 
-async function getStudentsForCourse(courseId: any) {
+async function getStudentsForCourse(courseId: string) {
   const courseSnapshot = await courseRef.doc(courseId).get()
   if (!courseSnapshot.exists)
     throw new Error(`Course ${courseId} does not exist`)

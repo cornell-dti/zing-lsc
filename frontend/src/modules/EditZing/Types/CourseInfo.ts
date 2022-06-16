@@ -1,6 +1,8 @@
 import { Student } from './Student'
 
+// This interface does not contain all of the fields that are returned
 export interface CourseInfo {
+  roster: string
   names: string[]
   unmatched: string[]
 }

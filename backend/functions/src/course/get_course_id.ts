@@ -46,7 +46,7 @@ async function getCourseId(
     )
   }
 
-  return classData.crseId.toString()
+  return `${roster}-${classData.crseId}`
 }
 
 export default getCourseId

@@ -15,7 +15,7 @@ const router = express()
       @param emailSubject
       @param emailRcpts (student email string list )
 
-      @param couseId 6-digit course id
+      @param courseId roster and 6-digit course id
       @param group group number 
       @param template string name
 

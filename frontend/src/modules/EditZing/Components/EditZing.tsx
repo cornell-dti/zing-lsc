@@ -363,7 +363,7 @@ export const EditZing = () => {
       >
         <LscIcon sx={{ height: '50px', width: '50px' }} />
         <Typography variant="h4" component="h1">
-          {courseInfo.names.join(', ')}
+          {courseInfo.names.join(', ')} ({courseInfo.roster})
         </Typography>
         <Box flexGrow={2} />
         {selectedGroupNumbers.length === 0 ? (
