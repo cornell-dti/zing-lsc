@@ -42,6 +42,8 @@ export const StyledCheck = styled(Check)`
 
 export const StyledContainer = styled(Container)`
   background: linear-gradient(296.38deg, #6d52af 5.53%, #d9cff2 96.38%);
+  display: flex;
+  flex-flow: row wrap;
 `
 
 const panel = css`

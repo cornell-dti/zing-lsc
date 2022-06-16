@@ -31,7 +31,6 @@ const panel = css`
 
 const halfPanel = css`
   ${panel};
-  height: 100%;
   width: 50%;
 `
 
@@ -39,6 +38,9 @@ export const StyledLeftPanel = styled.div`
   ${halfPanel};
   align-items: center;
   background: linear-gradient(296.38deg, #6d52af 5.53%, #d9cff2 96.38%);
+  @media (max-width: 900px) {
+    display: none;
+  }
 `
 
 export const StyledWhiteActionText = styled.text`
@@ -53,6 +55,9 @@ export const StyledRightPanel = styled.div`
   ${halfPanel};
   box-sizing: border-box;
   padding: 0 6rem;
+  @media (max-width: 900px) {
+    width: 100%;
+  }
 `
 
 export const StyledFields = styled.div`
