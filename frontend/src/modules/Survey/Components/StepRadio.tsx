@@ -10,7 +10,6 @@ import { RadioButton } from '@core'
 import { StepProps } from 'Survey/Types/StepProps'
 
 export const StepRadio = ({
-  showError,
   currentAnswer,
   setAnswer,
   question,
@@ -22,11 +21,7 @@ export const StepRadio = ({
         <StyledRadioButtonsWrapper>
           <StyledContainer>
             <StyledFieldSet>
-              <legend>
-                {/**
-                 * TODO
-                 * do we want a legend here or no?  */}
-              </legend>
+              <legend></legend>
               {Object.entries(question.answers).map(
                 ([value, fullDescription]) => (
                   <RadioButton

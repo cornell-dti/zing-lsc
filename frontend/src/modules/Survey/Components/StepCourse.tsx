@@ -11,7 +11,7 @@ import { StyledLabelText } from 'Survey/Styles/Survey.style'
 import { InputField } from '@core/Components'
 import { colors } from '@core/Constants'
 import { StepCourseProps } from 'Survey/Types'
-import { InputLabel } from '@mui/material'
+import { InputLabel, TextField, FormControl } from '@mui/material'
 
 export const StepCourse = ({
   validCourseRe,
@@ -22,6 +22,12 @@ export const StepCourse = ({
     fontSize: '24px',
     fontWeight: '600',
     color: colors.darkpurple,
+  }
+
+  const textFieldStyle = {
+    marginBottom: '1rem',
+    input: { color: 'purple.120', fontSize: '24px', fontWeight: '500' },
+    '& .MuiInput-underline:before': { borderBottomColor: 'purple.75' },
   }
 
   const cleanInput = (courseName: string) => {
@@ -60,27 +66,47 @@ export const StepCourse = ({
           * You do not need to submit the cross-listed version of the same
           course more than once
         </StyledWarningText>
-
         <StyledCoursesWrapper>
           {courses.map((course, index) => (
-            <InputField
-              inputStyle={textInputStyle}
+            <TextField
+              id={`course ${index} name field`}
               key={String(index)}
+              placeholder={placeholder}
               value={course}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 updateCourse(index, e.target.value)
               }
-              error={
+              helperText={
                 !validCourseRe.test(course)
                   ? 'Must be of the form ABC 1100'
                   : ''
               }
+              variant="standard"
+              sx={textFieldStyle}
+              FormHelperTextProps={{
+                style: {
+                  color: '#f52c54',
+                },
+              }}
             />
+            // <InputField
+            //   inputStyle={textInputStyle}
+            //   key={String(index)}
+            //   value={course}
+            //   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            //     updateCourse(index, e.target.value)
+            //   }
+            //   error={
+            //     !validCourseRe.test(course)
+            //       ? 'Must be of the form ABC 1100'
+            //       : ''
+            //   }
+            // />
           ))}
           <InputLabel htmlFor="course name field">
             <StyledLabelText> Course Name: </StyledLabelText>
           </InputLabel>
-          <InputField
+          {/* <InputField
             id="course name field"
             inputStyle={textInputStyle}
             key={Math.random().toString()}
@@ -89,6 +115,22 @@ export const StepCourse = ({
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               addCourse(e.target.value)
             }
+          /> */}
+          <TextField
+            id="course name field"
+            key={Math.random().toString()}
+            placeholder={placeholder}
+            value={''}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              addCourse(e.target.value)
+            }
+            variant="standard"
+            sx={textFieldStyle}
+            FormHelperTextProps={{
+              style: {
+                color: 'red',
+              },
+            }}
           />
         </StyledCoursesWrapper>
       </main>
