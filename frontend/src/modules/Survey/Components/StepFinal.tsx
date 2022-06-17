@@ -23,7 +23,6 @@ export const StepFinal = ({ success, errorMsg }: StepFinalProps) => {
             <StyledCheck src={success ? check : xmark} />
             {success ? (
               <StyledCongratulationsText>
-                {' '}
                 Congratulations on completing the form! You should receive an
                 email with your team members shortly.
               </StyledCongratulationsText>

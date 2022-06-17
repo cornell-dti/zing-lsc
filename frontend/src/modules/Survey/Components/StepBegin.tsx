@@ -5,6 +5,7 @@ import {
   TextField,
   InputLabel,
   FormHelperText,
+  Typography,
 } from '@mui/material'
 import { ArrowForward } from '@mui/icons-material'
 import {
@@ -54,14 +55,13 @@ export const StepBegin = ({
           </StyledTitleWrapper>
 
           <StyledFields>
-            <InputLabel htmlFor="user name">
-              {' '}
-              <StyledLabelText> Name: </StyledLabelText>{' '}
+            <InputLabel id="Name:" htmlFor="user name">
+              <StyledLabelText> Name: </StyledLabelText>
             </InputLabel>
             <TextField
               id="user name"
               variant="standard"
-              aria-label="user name"
+              aria-labelledby="Name:"
               placeholder="Martha E. Pollack"
               // variant="standard"
               sx={textInputStyle}
@@ -70,14 +70,13 @@ export const StepBegin = ({
                 setName(e.target.value)
               }
             />
-            <InputLabel htmlFor="user email">
-              {' '}
-              <StyledLabelText> Email: </StyledLabelText>{' '}
+            <InputLabel id="Email:" htmlFor="user email">
+              <StyledLabelText> Email: </StyledLabelText>
             </InputLabel>
             <TextField
               id="user email"
               variant="standard"
-              aria-label="user email"
+              aria-labelledby="Email:"
               value={email}
               sx={textInputStyle}
               type="email"
@@ -88,8 +87,7 @@ export const StepBegin = ({
               }
               error={!isValidEmail}
             />
-            <FormHelperText id="email-helper-text" sx={{ fontColor: 'red' }}>
-              {' '}
+            <FormHelperText id="email-helper-text">
               <StyledErrorText>
                 {isValidEmail ? ' ' : 'Invalid Email'}
               </StyledErrorText>
@@ -108,12 +106,11 @@ export const StepBegin = ({
               onClick={gotoNextStep}
               disabled={name === '' || email === '' || !isValidEmail}
               sx={{ boxShadow: 3 }}
-              aria-label="Next button"
+              aria-labelledby="Next"
             >
               <ArrowForward />
             </IconButton>
-            <br />
-            Next
+            <Typography id="Next"> Next </Typography>
           </Box>
         </main>
       </StyledRightPanel>

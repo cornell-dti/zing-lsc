@@ -78,7 +78,6 @@ export const StepCourse = ({
             />
           ))}
           <InputLabel htmlFor="course name field">
-            {' '}
             <StyledLabelText> Course Name: </StyledLabelText>
           </InputLabel>
           <InputField
