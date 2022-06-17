@@ -94,7 +94,7 @@ export const StyledErrorWrapper = styled.div`
 
 export const StyledErrorText = styled.text`
   ${h4};
-  color: #f52c54;
+  color: #d41e42;
   padding-left: 0.5rem;
   font-weight: 600;
   position: relative;
