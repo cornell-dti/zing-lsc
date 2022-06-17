@@ -4,9 +4,6 @@ import {
   StyledContainer,
   StyledQuestionText,
   StyledRadioButtonsWrapper,
-  StyledErrorWrapper,
-  StyledErrorIcon,
-  StyledErrorText,
   StyledFieldSet,
 } from 'Survey/Styles/StepRadio.style'
 import { RadioButton } from '@core'
@@ -23,14 +20,6 @@ export const StepRadio = ({
       <main>
         <StyledQuestionText>{question.question}</StyledQuestionText>
         <StyledRadioButtonsWrapper>
-          {showError ? (
-            <StyledErrorWrapper>
-              <StyledErrorIcon />
-              <StyledErrorText>
-                Please select an item to continue
-              </StyledErrorText>
-            </StyledErrorWrapper>
-          ) : null}
           <StyledContainer>
             <StyledFieldSet>
               <legend>

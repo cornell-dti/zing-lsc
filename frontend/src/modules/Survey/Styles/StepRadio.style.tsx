@@ -1,12 +1,5 @@
 import styled from 'styled-components'
-import errorIcon from '@assets/img/erroricon.svg'
-import { colors, h2, h4, StyledComponent } from '@core'
-
-const ErrorIcon = ({ className }: StyledComponent) => (
-  <div className={className}>
-    <img src={errorIcon} alt="errorIcon" />
-  </div>
-)
+import { h2 } from '@core'
 
 export const StyledContainer = styled.div`
   margin: auto;
@@ -26,23 +19,6 @@ export const StyledQuestionText = styled.h1`
   line-height: 10px;
   text-align: center;
   margin-bottom: 2.5rem;
-`
-
-export const StyledErrorIcon = styled(ErrorIcon)``
-
-export const StyledErrorWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  margin-bottom: 0.25rem;
-`
-
-export const StyledErrorText = styled.text`
-  ${h4};
-  color: ${colors.red};
-  padding-left: 0.5rem;
-  font-weight: 500;
-  position: relative;
 `
 
 export const StyledFieldSet = styled.fieldset`
