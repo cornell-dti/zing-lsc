@@ -7,6 +7,7 @@ import {
   FormControl,
   Input,
   FormHelperText,
+  Typography,
 } from '@mui/material'
 import { ArrowForward } from '@mui/icons-material'
 import {
@@ -21,6 +22,7 @@ import {
   StyledWelcomeText,
   StyledErrorText,
 } from 'Survey/Styles/StepBegin.style'
+import { StyledLabelText } from 'Survey/Styles/Survey.style'
 import { StepBeginProps } from 'Survey/Types'
 
 export const StepBegin = ({
@@ -48,67 +50,75 @@ export const StepBegin = ({
         <StyledTeamPic />
       </StyledLeftPanel>
       <StyledRightPanel>
-        <StyledTitleWrapper>
-          <StyledHeaderText>Hi,</StyledHeaderText>
-          <StyledWelcomeText>Find study partners!</StyledWelcomeText>
-        </StyledTitleWrapper>
+        <main>
+          <StyledTitleWrapper>
+            <StyledHeaderText>Hi,</StyledHeaderText>
+            <StyledWelcomeText>Find study partners!</StyledWelcomeText>
+          </StyledTitleWrapper>
 
-        <StyledFields>
-          <InputLabel htmlFor="user name"> Name: </InputLabel>
-          <TextField
-            id="user name"
-            variant="standard"
-            aria-label="user name"
-            placeholder="Martha E. Pollack"
-            // variant="standard"
-            sx={textInputStyle}
-            value={name}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setName(e.target.value)
-            }
-          />
-          <InputLabel htmlFor="user email"> Email: </InputLabel>
-          <TextField
-            id="user email"
-            variant="standard"
-            aria-label="user email"
-            value={email}
-            sx={textInputStyle}
-            type="email"
-            onBlur={() => setIsValidEmail(validEmail.test(email))}
-            placeholder="mep22@cornell.edu"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
-            error={!isValidEmail}
-          />
-          <FormHelperText id="email-helper-text" sx={{ fontColor: 'red' }}>
-            {' '}
-            <StyledErrorText>
-              {isValidEmail ? ' ' : 'Invalid Email'}
-            </StyledErrorText>
-          </FormHelperText>
-        </StyledFields>
-        <Box
-          sx={{
-            marginLeft: 'auto',
-            textAlign: 'center',
-            color: 'purple.100',
-            weight: 600,
-          }}
-        >
-          <IconButton
-            className="next"
-            onClick={gotoNextStep}
-            disabled={name === '' || email === '' || !isValidEmail}
-            sx={{ boxShadow: 3 }}
-            aria-label="Next button"
+          <StyledFields>
+            <InputLabel htmlFor="user name">
+              {' '}
+              <StyledLabelText> Name: </StyledLabelText>{' '}
+            </InputLabel>
+            <TextField
+              id="user name"
+              variant="standard"
+              aria-label="user name"
+              placeholder="Martha E. Pollack"
+              // variant="standard"
+              sx={textInputStyle}
+              value={name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setName(e.target.value)
+              }
+            />
+            <InputLabel htmlFor="user email">
+              {' '}
+              <StyledLabelText> Email: </StyledLabelText>{' '}
+            </InputLabel>
+            <TextField
+              id="user email"
+              variant="standard"
+              aria-label="user email"
+              value={email}
+              sx={textInputStyle}
+              type="email"
+              onBlur={() => setIsValidEmail(validEmail.test(email))}
+              placeholder="mep22@cornell.edu"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
+              error={!isValidEmail}
+            />
+            <FormHelperText id="email-helper-text" sx={{ fontColor: 'red' }}>
+              {' '}
+              <StyledErrorText>
+                {isValidEmail ? ' ' : 'Invalid Email'}
+              </StyledErrorText>
+            </FormHelperText>
+          </StyledFields>
+          <Box
+            sx={{
+              marginLeft: 'auto',
+              textAlign: 'center',
+              color: 'purple.100',
+              weight: 600,
+            }}
           >
-            <ArrowForward />
-          </IconButton>
-          <br />
-          Next
-        </Box>
+            <IconButton
+              className="next"
+              onClick={gotoNextStep}
+              disabled={name === '' || email === '' || !isValidEmail}
+              sx={{ boxShadow: 3 }}
+              aria-label="Next button"
+            >
+              <ArrowForward />
+            </IconButton>
+            <br />
+            Next
+          </Box>
+        </main>
       </StyledRightPanel>
     </StyledContainer>
   )

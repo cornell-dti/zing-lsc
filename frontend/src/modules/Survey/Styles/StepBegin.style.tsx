@@ -37,13 +37,13 @@ const halfPanel = css`
 export const StyledLeftPanel = styled.div`
   ${halfPanel};
   align-items: center;
-  background: linear-gradient(296.38deg, #6d52af 5.53%, #d9cff2 96.38%);
+  background: #815ed4;
   @media (max-width: 900px) {
     display: none;
   }
 `
 
-export const StyledWhiteActionText = styled.text`
+export const StyledWhiteActionText = styled.h1`
   ${h3};
   color: ${colors.white};
   text-align: center;
@@ -96,7 +96,7 @@ export const StyledErrorText = styled.text`
   ${h4};
   color: ${colors.red};
   padding-left: 0.5rem;
-  font-weight: 500;
+  font-weight: 700;
   position: relative;
 `
 

@@ -6,6 +6,8 @@ import {
   StyledQuestionText,
   StyledWarningText,
 } from 'Survey/Styles/StepCourse.style'
+import { StyledLabelText } from 'Survey/Styles/Survey.style'
+
 import { InputField } from '@core/Components'
 import { colors } from '@core/Constants'
 import { StepCourseProps } from 'Survey/Types'
@@ -49,42 +51,48 @@ export const StepCourse = ({
 
   return (
     <StyledContainer>
-      <h1>
+      <main>
         <StyledQuestionText>
           What course(s) would you like to find study partners for?
         </StyledQuestionText>
-      </h1>
-      <StyledWarningText>
-        * You do not need to submit the cross-listed version of the same course
-        more than once
-      </StyledWarningText>
 
-      <StyledCoursesWrapper>
-        {courses.map((course, index) => (
+        <StyledWarningText>
+          * You do not need to submit the cross-listed version of the same
+          course more than once
+        </StyledWarningText>
+
+        <StyledCoursesWrapper>
+          {courses.map((course, index) => (
+            <InputField
+              inputStyle={textInputStyle}
+              key={String(index)}
+              value={course}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                updateCourse(index, e.target.value)
+              }
+              error={
+                !validCourseRe.test(course)
+                  ? 'Must be of the form ABC 1100'
+                  : ''
+              }
+            />
+          ))}
+          <InputLabel htmlFor="course name field">
+            {' '}
+            <StyledLabelText> Course Name: </StyledLabelText>
+          </InputLabel>
           <InputField
+            id="course name field"
             inputStyle={textInputStyle}
-            key={String(index)}
-            value={course}
+            key={Math.random().toString()}
+            placeholder={placeholder}
+            value={''}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              updateCourse(index, e.target.value)
-            }
-            error={
-              !validCourseRe.test(course) ? 'Must be of the form ABC 1100' : ''
+              addCourse(e.target.value)
             }
           />
-        ))}
-        <InputLabel htmlFor="course name field"> Course Name: </InputLabel>
-        <InputField
-          id="course name field"
-          inputStyle={textInputStyle}
-          key={Math.random().toString()}
-          placeholder={placeholder}
-          value={''}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            addCourse(e.target.value)
-          }
-        />
-      </StyledCoursesWrapper>
+        </StyledCoursesWrapper>
+      </main>
     </StyledContainer>
   )
 }
