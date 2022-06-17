@@ -20,7 +20,7 @@ export const StyledRadioButtonsWrapper = styled.div`
   align-items: center;
 `
 
-export const StyledQuestionText = styled.div`
+export const StyledQuestionText = styled.h1`
   ${h2};
   font-weight: 500;
   line-height: 10px;
@@ -43,4 +43,9 @@ export const StyledErrorText = styled.text`
   padding-left: 0.5rem;
   font-weight: 500;
   position: relative;
+`
+
+export const StyledFieldSet = styled.fieldset`
+  border-style: none;
+  border-color: #ffffff;
 `
