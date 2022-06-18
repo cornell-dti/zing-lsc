@@ -3,15 +3,8 @@ import styled, { css } from 'styled-components'
 import { colors, h1, h2, h3, h4, StyledComponent } from '@core'
 
 import teamPic from '@assets/img/teamwork.svg'
-import errorIcon from '@assets/img/erroricon.svg'
 
 export { StyledContainer } from 'Survey/Styles/StepTemplate.style'
-
-const ErrorIcon = ({ className }: StyledComponent) => (
-  <div className={className}>
-    <img src={errorIcon} alt="errorIcon" />
-  </div>
-)
 
 const TeamPic = ({ className }: StyledComponent) => (
   <div className={className}>
@@ -31,17 +24,19 @@ const panel = css`
 
 const halfPanel = css`
   ${panel};
-  height: 100%;
   width: 50%;
 `
 
 export const StyledLeftPanel = styled.div`
   ${halfPanel};
   align-items: center;
-  background: linear-gradient(296.38deg, #6d52af 5.53%, #d9cff2 96.38%);
+  background: #815ed4;
+  @media (max-width: 900px) {
+    display: none;
+  }
 `
 
-export const StyledWhiteActionText = styled.text`
+export const StyledWhiteActionText = styled.h1`
   ${h3};
   color: ${colors.white};
   text-align: center;
@@ -53,6 +48,9 @@ export const StyledRightPanel = styled.div`
   ${halfPanel};
   box-sizing: border-box;
   padding: 0 6rem;
+  @media (max-width: 900px) {
+    width: 100%;
+  }
 `
 
 export const StyledFields = styled.div`
@@ -78,20 +76,11 @@ export const StyledWelcomeText = styled.text`
   color: ${colors.black};
 `
 
-export const StyledErrorIcon = styled(ErrorIcon)`
-  padding-top: 1rem;
-`
-
-export const StyledErrorWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-`
-
 export const StyledErrorText = styled.text`
   ${h4};
-  color: ${colors.red};
+  color: #d41e42;
   padding-left: 0.5rem;
-  font-weight: 500;
+  font-weight: 600;
   position: relative;
 `
 

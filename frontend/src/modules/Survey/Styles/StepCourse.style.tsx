@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 import { h2, h4 } from '@core'
 
-export const StyledContainer = styled.div`
+export const StyledContainer = styled.main`
   margin: auto;
 `
 
-export const StyledQuestionText = styled.div`
+export const StyledQuestionText = styled.h1`
   ${h2};
   font-weight: 500;
   line-height: 10px;

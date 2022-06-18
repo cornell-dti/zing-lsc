@@ -41,7 +41,9 @@ export const StyledCheck = styled(Check)`
 `
 
 export const StyledContainer = styled(Container)`
-  background: linear-gradient(296.38deg, #6d52af 5.53%, #d9cff2 96.38%);
+  background: #815ed4;
+  display: flex;
+  flex-flow: row wrap;
 `
 
 const panel = css`
@@ -67,7 +69,7 @@ export const StyledCongratulationsWrapper = styled.div`
   width: 75%;
   margin-top: 10%;
 `
-export const StyledCongratulationsText = styled.text`
+export const StyledCongratulationsText = styled.h1`
   ${h2};
   font-weight: 500;
   color: white;

@@ -52,6 +52,7 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
               onClick={handlePrev}
               color="secondary"
               sx={{ boxShadow: 3 }}
+              aria-label="previous button"
             >
               <ArrowBack />
             </IconButton>
@@ -71,6 +72,7 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
               onClick={handleNext}
               disabled={!isStepValid}
               sx={{ boxShadow: 3 }}
+              aria-label="next button"
             >
               {stepNumber === totalSteps ? <Check /> : <ArrowForward />}
             </IconButton>

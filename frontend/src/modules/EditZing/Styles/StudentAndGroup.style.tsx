@@ -1,7 +1,7 @@
 import { colors, h3 } from '@core'
 import styled from 'styled-components'
 
-export const StyledContainer = styled.div`
+export const StyledContainer = styled.main`
   height: 100%;
   display: flex;
   justify-content: center;

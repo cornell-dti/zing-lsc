@@ -34,7 +34,7 @@ export const StyledFullPanelNoPadding = styled.div`
   ${fullPanel}
 `
 
-export const StyledContainer = styled.div`
+export const StyledContainer = styled.main`
   height: 86%;
   width: 80%;
   background-color: ${colors.white};

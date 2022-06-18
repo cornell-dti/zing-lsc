@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { BsChevronDown } from 'react-icons/bs'
 import { colors, h4 } from '@core'
 
-export const StyledContainer = styled.div`
+export const StyledContainer = styled.main`
   height: 100%;
   width: 100%;
   background-color: ${colors.white};

@@ -32,13 +32,12 @@ export const StyledFullPanelNoPadding = styled.div`
   ${fullPanel}
 `
 
-export const StyledContainer = styled.div`
+export const StyledContainer = styled.main`
   height: 86.5%;
   width: 80%;
   background-color: ${colors.white};
   box-shadow: -10px -10px 150px rgba(0, 0, 0, 0.1),
     10px 10px 150px rgba(0, 0, 0, 0.1);
-
   display: flex;
 `
 
