@@ -19,6 +19,14 @@ export const StepCourse = ({
     '& .MuiInput-underline:before': { borderBottomColor: 'purple.75' },
   }
 
+  const helperTextStyle = {
+    style: {
+      color: '#d41e42',
+      fontSize: '1rem',
+      fontWeight: 600,
+    },
+  }
+
   const [nextCourse, setNextCourse] = useState('')
 
   const validCourseName = (name: string) => !name || validCourseRe.test(name)
@@ -87,6 +95,7 @@ export const StepCourse = ({
             helperText={helperText(course)}
             variant="standard"
             sx={textFieldStyle}
+            FormHelperTextProps={helperTextStyle}
           />
         ))}
         <TextField
@@ -99,6 +108,7 @@ export const StepCourse = ({
           helperText={helperText(nextCourse)}
           variant="standard"
           sx={textFieldStyle}
+          FormHelperTextProps={helperTextStyle}
         />
       </StyledCoursesWrapper>
     </StyledContainer>
