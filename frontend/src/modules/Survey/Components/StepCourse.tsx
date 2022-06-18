@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   StyledContainer,
@@ -6,39 +6,41 @@ import {
   StyledQuestionText,
   StyledWarningText,
 } from 'Survey/Styles/StepCourse.style'
-import { StyledLabelText } from 'Survey/Styles/Survey.style'
-
-import { InputField } from '@core/Components'
-import { colors } from '@core/Constants'
 import { StepCourseProps } from 'Survey/Types'
-import { InputLabel, TextField, FormControl } from '@mui/material'
+import { TextField } from '@mui/material'
 
 export const StepCourse = ({
   validCourseRe,
   courses,
   setCourses,
 }: StepCourseProps) => {
-  const textInputStyle = {
-    fontSize: '24px',
-    fontWeight: '600',
-    color: colors.darkpurple,
-  }
+  const [nextCourse, setNextCourse] = useState('')
 
   const textFieldStyle = {
-    marginBottom: '1rem',
     input: { color: 'purple.120', fontSize: '24px', fontWeight: '500' },
     '& .MuiInput-underline:before': { borderBottomColor: 'purple.75' },
   }
 
-  const cleanInput = (courseName: string) => {
-    return courseName.toUpperCase().trim()
+  const validCourseName = (name: string) => !name || validCourseRe.test(name)
+
+  const helperText = (name: string) =>
+    !validCourseName(name) ? 'Must be of the form ABC 1100' : ''
+
+  // Update an existing course and auto-capitalize
+  const updateCourse = (index: number, newValue: string) => {
+    setCourses(
+      courses.map((course, i) =>
+        index === i ? newValue.toUpperCase() : course
+      )
+    )
   }
 
-  const updateCourse = (index: number, newValue: string) => {
+  // Called on blur, update existing course and trim or removes course if empty
+  const finishUpdateCourse = (index: number, newValue: string) => {
     if (newValue) {
       setCourses(
         courses.map((course, i) =>
-          index === i ? cleanInput(newValue) : course
+          index === i ? newValue.toUpperCase().trim() : course
         )
       )
     } else {
@@ -46,9 +48,16 @@ export const StepCourse = ({
     }
   }
 
-  const addCourse = (newValue: string) => {
+  // Update the next course field and auto-capitalize as typing
+  const updateNextCourse = (newValue: string) => {
+    setNextCourse(newValue.toUpperCase())
+  }
+
+  // Called on blur, add next course if it's not empty and trims
+  const finishNextCourse = (newValue: string) => {
     if (newValue) {
-      setCourses([...courses, cleanInput(newValue)])
+      setCourses([...courses, newValue.toUpperCase().trim()])
+      setNextCourse('')
     }
   }
 
@@ -69,68 +78,27 @@ export const StepCourse = ({
         <StyledCoursesWrapper>
           {courses.map((course, index) => (
             <TextField
-              id={`course ${index} name field`}
+              inputProps={{ title: `course ${index} name field` }}
               key={String(index)}
-              placeholder={placeholder}
               value={course}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                updateCourse(index, e.target.value)
-              }
-              helperText={
-                !validCourseRe.test(course)
-                  ? 'Must be of the form ABC 1100'
-                  : ''
-              }
+              onChange={(e) => updateCourse(index, e.target.value)}
+              onBlur={(e) => finishUpdateCourse(index, e.target.value)}
+              error={!validCourseName(course)}
+              helperText={helperText(course)}
               variant="standard"
               sx={textFieldStyle}
-              FormHelperTextProps={{
-                style: {
-                  color: '#f52c54',
-                },
-              }}
             />
-            // <InputField
-            //   inputStyle={textInputStyle}
-            //   key={String(index)}
-            //   value={course}
-            //   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            //     updateCourse(index, e.target.value)
-            //   }
-            //   error={
-            //     !validCourseRe.test(course)
-            //       ? 'Must be of the form ABC 1100'
-            //       : ''
-            //   }
-            // />
           ))}
-          <InputLabel htmlFor="course name field">
-            <StyledLabelText> Course Name: </StyledLabelText>
-          </InputLabel>
-          {/* <InputField
-            id="course name field"
-            inputStyle={textInputStyle}
-            key={Math.random().toString()}
-            placeholder={placeholder}
-            value={''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              addCourse(e.target.value)
-            }
-          /> */}
           <TextField
-            id="course name field"
-            key={Math.random().toString()}
+            inputProps={{ title: `course ${courses.length} name field` }}
             placeholder={placeholder}
-            value={''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              addCourse(e.target.value)
-            }
+            value={nextCourse}
+            onChange={(e) => updateNextCourse(e.target.value)}
+            onBlur={(e) => finishNextCourse(e.target.value)}
+            error={!validCourseName(nextCourse)}
+            helperText={helperText(nextCourse)}
             variant="standard"
             sx={textFieldStyle}
-            FormHelperTextProps={{
-              style: {
-                color: 'red',
-              },
-            }}
           />
         </StyledCoursesWrapper>
       </main>
