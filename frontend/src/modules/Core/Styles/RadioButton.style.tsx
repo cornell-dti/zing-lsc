@@ -11,7 +11,7 @@ const defaultContainerStyle = css`
   cursor: pointer;
 `
 
-export const StyledContainer = styled.div`
+export const StyledContainer = styled.main`
   ${defaultContainerStyle}
   display: flex;
   justify-content: flex-start;

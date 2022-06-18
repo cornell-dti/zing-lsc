@@ -17,34 +17,32 @@ export const StepRadio = ({
 }: StepProps) => {
   return (
     <StyledContainer>
-      <main>
-        <StyledQuestionText>{question.question}</StyledQuestionText>
-        <StyledRadioButtonsWrapper>
-          <StyledContainer>
-            <StyledFieldSet>
-              <legend>
-                {/**
-                 * TODO
-                 * do we want a legend here or no?  */}
-              </legend>
-              {Object.entries(question.answers).map(
-                ([value, fullDescription]) => (
-                  <RadioButton
-                    currentAnswer={currentAnswer}
-                    onClick={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setAnswer(e.target.value)
-                    }
-                    value={value}
-                    label={fullDescription}
-                    name="RadioButtons"
-                    key={value}
-                  />
-                )
-              )}
-            </StyledFieldSet>
-          </StyledContainer>
-        </StyledRadioButtonsWrapper>
-      </main>
+      <StyledQuestionText>{question.question}</StyledQuestionText>
+      <StyledRadioButtonsWrapper>
+        <StyledContainer>
+          <StyledFieldSet>
+            <legend>
+              {/**
+               * TODO
+               * do we want a legend here or no?  */}
+            </legend>
+            {Object.entries(question.answers).map(
+              ([value, fullDescription]) => (
+                <RadioButton
+                  currentAnswer={currentAnswer}
+                  onClick={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setAnswer(e.target.value)
+                  }
+                  value={value}
+                  label={fullDescription}
+                  name="RadioButtons"
+                  key={value}
+                />
+              )
+            )}
+          </StyledFieldSet>
+        </StyledContainer>
+      </StyledRadioButtonsWrapper>
     </StyledContainer>
   )
 }

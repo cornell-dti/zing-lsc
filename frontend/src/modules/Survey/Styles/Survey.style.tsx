@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import bg from '@assets/img/homebg.svg'
 import bg2 from '@assets/img/blobhomebg2.svg'
 
-export const StyledContainer1 = styled.div`
+export const StyledContainer1 = styled.main`
   background-image: url(${bg});
   background-position: center;
   background-repeat: no-repeat;
@@ -25,8 +25,9 @@ export const StyledContainer1 = styled.div`
     left: 0;
     z-index: 0;
     object-fit: contain;
+  }
 `
-export const StyledContainer2 = styled.div`
+export const StyledContainer2 = styled.main`
   height: 100%;
   background-image: url(${bg2});
   background-size: cover;

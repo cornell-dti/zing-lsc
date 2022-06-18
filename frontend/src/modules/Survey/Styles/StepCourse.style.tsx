@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { h2, h4 } from '@core'
 
-export const StyledContainer = styled.div`
+export const StyledContainer = styled.main`
   margin: auto;
 `
 

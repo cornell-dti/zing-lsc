@@ -85,43 +85,41 @@ export const StepCourse = ({
 
   return (
     <StyledContainer>
-      <main>
-        <StyledQuestionText>
-          What course(s) would you like to find study partners for?
-        </StyledQuestionText>
+      <StyledQuestionText>
+        What course(s) would you like to find study partners for?
+      </StyledQuestionText>
 
-        <StyledWarningText>
-          * You do not need to submit the cross-listed version of the same
-          course more than once
-        </StyledWarningText>
+      <StyledWarningText>
+        * You do not need to submit the cross-listed version of the same course
+        more than once
+      </StyledWarningText>
 
-        <StyledCoursesWrapper>
-          {courses.map((course, index) => (
-            <TextField
-              inputProps={{ title: `course ${index} name field` }}
-              key={String(index)}
-              value={course}
-              onChange={(e) => updateCourse(index, e.target.value)}
-              onBlur={(e) => finishUpdateCourse(index, e.target.value)}
-              error={!validCourseName(course)}
-              helperText={helperText(course)}
-              variant="standard"
-              sx={textFieldStyle}
-            />
-          ))}
+      <StyledCoursesWrapper>
+        {courses.map((course, index) => (
           <TextField
-            inputProps={{ title: `course ${courses.length} name field` }}
-            placeholder={placeholder}
-            value={nextCourse}
-            onChange={(e) => updateNextCourse(e.target.value)}
-            onBlur={(e) => finishNextCourse(e.target.value)}
-            error={!validCourseName(nextCourse)}
-            helperText={helperText(nextCourse)}
+            inputProps={{ title: `course ${index} name field` }}
+            key={String(index)}
+            value={course}
+            onChange={(e) => updateCourse(index, e.target.value)}
+            onBlur={(e) => finishUpdateCourse(index, e.target.value)}
+            error={!validCourseName(course)}
+            helperText={helperText(course)}
             variant="standard"
             sx={textFieldStyle}
           />
-        </StyledCoursesWrapper>
-      </main>
+        ))}
+        <TextField
+          inputProps={{ title: `course ${courses.length} name field` }}
+          placeholder={placeholder}
+          value={nextCourse}
+          onChange={(e) => updateNextCourse(e.target.value)}
+          onBlur={(e) => finishNextCourse(e.target.value)}
+          error={!validCourseName(nextCourse)}
+          helperText={helperText(nextCourse)}
+          variant="standard"
+          sx={textFieldStyle}
+        />
+      </StyledCoursesWrapper>
     </StyledContainer>
   )
 }

@@ -48,71 +48,69 @@ export const StepBegin = ({
         <StyledTeamPic />
       </StyledLeftPanel>
       <StyledRightPanel>
-        <main>
-          <StyledTitleWrapper>
-            <StyledHeaderText>Hi,</StyledHeaderText>
-            <StyledWelcomeText>Find study partners!</StyledWelcomeText>
-          </StyledTitleWrapper>
+        <StyledTitleWrapper>
+          <StyledHeaderText>Hi,</StyledHeaderText>
+          <StyledWelcomeText>Find study partners!</StyledWelcomeText>
+        </StyledTitleWrapper>
 
-          <StyledFields>
-            <InputLabel id="Name:" htmlFor="user name">
-              <StyledLabelText> Name: </StyledLabelText>
-            </InputLabel>
-            <TextField
-              id="user name"
-              variant="standard"
-              aria-labelledby="Name:"
-              placeholder="Martha E. Pollack"
-              // variant="standard"
-              sx={textInputStyle}
-              value={name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setName(e.target.value)
-              }
-            />
-            <InputLabel id="Email:" htmlFor="user email">
-              <StyledLabelText> Email: </StyledLabelText>
-            </InputLabel>
-            <TextField
-              id="user email"
-              variant="standard"
-              aria-labelledby="Email:"
-              value={email}
-              sx={textInputStyle}
-              type="email"
-              onBlur={() => setIsValidEmail(validEmail.test(email))}
-              placeholder="mep22@cornell.edu"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
-              error={!isValidEmail}
-            />
-            <FormHelperText id="email-helper-text">
-              <StyledErrorText>
-                {isValidEmail ? ' ' : 'Invalid Email'}
-              </StyledErrorText>
-            </FormHelperText>
-          </StyledFields>
-          <Box
-            sx={{
-              marginLeft: 'auto',
-              textAlign: 'center',
-              color: 'purple.100',
-              weight: 600,
-            }}
+        <StyledFields>
+          <InputLabel id="Name:" htmlFor="user name">
+            <StyledLabelText> Name: </StyledLabelText>
+          </InputLabel>
+          <TextField
+            id="user name"
+            variant="standard"
+            aria-labelledby="Name:"
+            placeholder="Martha E. Pollack"
+            // variant="standard"
+            sx={textInputStyle}
+            value={name}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setName(e.target.value)
+            }
+          />
+          <InputLabel id="Email:" htmlFor="user email">
+            <StyledLabelText> Email: </StyledLabelText>
+          </InputLabel>
+          <TextField
+            id="user email"
+            variant="standard"
+            aria-labelledby="Email:"
+            value={email}
+            sx={textInputStyle}
+            type="email"
+            onBlur={() => setIsValidEmail(validEmail.test(email))}
+            placeholder="mep22@cornell.edu"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
+            error={!isValidEmail}
+          />
+          <FormHelperText id="email-helper-text">
+            <StyledErrorText>
+              {isValidEmail ? ' ' : 'Invalid Email'}
+            </StyledErrorText>
+          </FormHelperText>
+        </StyledFields>
+        <Box
+          sx={{
+            marginLeft: 'auto',
+            textAlign: 'center',
+            color: 'purple.100',
+            weight: 600,
+          }}
+        >
+          <IconButton
+            className="next"
+            onClick={gotoNextStep}
+            disabled={name === '' || email === '' || !isValidEmail}
+            sx={{ boxShadow: 3 }}
+            aria-labelledby="Next"
           >
-            <IconButton
-              className="next"
-              onClick={gotoNextStep}
-              disabled={name === '' || email === '' || !isValidEmail}
-              sx={{ boxShadow: 3 }}
-              aria-labelledby="Next"
-            >
-              <ArrowForward />
-            </IconButton>
-            <Typography id="Next"> Next </Typography>
-          </Box>
-        </main>
+            <ArrowForward />
+          </IconButton>
+          <Typography id="Next"> Next </Typography>
+        </Box>
       </StyledRightPanel>
     </StyledContainer>
   )
