@@ -6,24 +6,14 @@ import {
   StyledQuestionText,
   StyledWarningText,
 } from 'Survey/Styles/StepCourse.style'
-import { StyledLabelText } from 'Survey/Styles/Survey.style'
-
-import { InputField } from '@core/Components'
-import { colors } from '@core/Constants'
 import { StepCourseProps } from 'Survey/Types'
-import { InputLabel, TextField } from '@mui/material'
+import { TextField } from '@mui/material'
 
 export const StepCourse = ({
   validCourseRe,
   courses,
   setCourses,
 }: StepCourseProps) => {
-  const textInputStyle = {
-    fontSize: '24px',
-    fontWeight: '600',
-    color: colors.darkpurple,
-  }
-
   const textFieldStyle = {
     input: { color: 'purple.120', fontSize: '24px', fontWeight: '500' },
     '& .MuiInput-underline:before': { borderBottomColor: 'purple.75' },
@@ -36,9 +26,6 @@ export const StepCourse = ({
   const helperText = (name: string) =>
     !validCourseName(name) ? 'Must be of the form ABC 1100' : ''
 
-  const cleanInput = (courseName: string) => {
-    return courseName.toUpperCase().trim()
-  }
   // Update an existing course and auto-capitalize
   const updateCourse = (index: number, newValue: string) => {
     setCourses(
@@ -71,12 +58,6 @@ export const StepCourse = ({
     if (newValue) {
       setCourses([...courses, newValue.toUpperCase().trim()])
       setNextCourse('')
-    }
-  }
-
-  const addCourse = (newValue: string) => {
-    if (newValue) {
-      setCourses([...courses, cleanInput(newValue)])
     }
   }
 
