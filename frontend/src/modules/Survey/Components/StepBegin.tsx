@@ -61,8 +61,7 @@ export const StepBegin = ({
             id="user name"
             variant="standard"
             aria-labelledby="Name:"
-            placeholder="Martha E. Pollack"
-            // variant="standard"
+            placeholder="Student Name"
             sx={textInputStyle}
             value={name}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -80,7 +79,7 @@ export const StepBegin = ({
             sx={textInputStyle}
             type="email"
             onBlur={() => setIsValidEmail(validEmail.test(email))}
-            placeholder="mep22@cornell.edu"
+            placeholder="abc123@cornell.edu"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setEmail(e.target.value)
             }
