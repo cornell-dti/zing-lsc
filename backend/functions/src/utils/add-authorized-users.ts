@@ -16,8 +16,12 @@ const allowedUsers = [
   'gsh68@cornell.edu',
   'jjw255@cornell.edu',
   'wz282@cornell.edu',
+  'pak226@cornell.edu',
+  'bh449@cornell.edu',
+  'ml953@cornell.edu',
   'cal18@cornell.edu',
   'jcb13@cornell.edu',
+  'ama36@cornell.edu',
 ]
 
 const addUsers = async () => {
