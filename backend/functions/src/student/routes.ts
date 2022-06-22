@@ -4,7 +4,11 @@ import { logger } from 'firebase-functions'
 import { checkAuth } from '../middleware/auth-middleware'
 const router = Router()
 
-import { addStudentSurveyResponse, removeStudent } from './functions'
+import {
+  validateEmail,
+  addStudentSurveyResponse,
+  removeStudent,
+} from './functions'
 
 router.post('/survey', (req, res) => {
   const { name, email, college, year, courseCatalogNames } = req.body
@@ -12,18 +16,29 @@ router.post('/survey', (req, res) => {
   logger.info(
     `Student [${name}] submitted survey using ${email} on agent ${userAgent}`
   )
+  const surveryErrLog = (err: Error) =>
+    logger.error(
+      `ERROR in Student [${name}] submitted survey using ${email} on agent ${userAgent}`,
+      err.message
+    )
 
-  addStudentSurveyResponse(name, email, college, year, courseCatalogNames)
-    .then(() => res.status(200).json({ success: true }))
+  validateEmail(email)
+    .then(() =>
+      addStudentSurveyResponse(name, email, college, year, courseCatalogNames)
+        .then(() => res.status(200).json({ success: true }))
+        .catch((err) => {
+          surveryErrLog(err)
+          if (err.name === 'processing_err') {
+            return res
+              .status(500)
+              .send({ success: false, message: err.message })
+          }
+          return res.status(400).send({ success: false, message: err.message })
+        })
+    )
     .catch((err) => {
-      logger.error(
-        `ERROR in Student [${name}] submitted survey using ${email} on agent ${userAgent}`,
-        err.message
-      )
-      if (err.name === 'processing_err') {
-        return res.status(500).send({ success: false, message: err.message })
-      }
-      return res.status(400).send({ success: false, message: err.message })
+      surveryErrLog(err)
+      return res.status(500).send({ success: false, message: err.message })
     })
 })
 
