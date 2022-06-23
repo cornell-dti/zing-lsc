@@ -8,9 +8,20 @@
       "A&S": "College of Arts and Sciences",
       "Hotel Admin": "Dyson School of Applied Economics and Management: SC Johnson College of Business",
       "Dyson": "Nolan School of Hotel Administration: SC Johnson College of Business",
+      "Computing": "Cornell Ann S. Bowers College of Computing and Information Science",
       "Engineering": "College of Engineering",
       "ILR": "School of Industrial and Labor Relations (ILR)",
-      "HumEc": "College of Human Ecology"
+      "Public Policy": "Cornell Jeb E. Brooks School of Public Policy",
+      "HumEc": "College of Human Ecology",
+      "SC Johnson": "Cornell SC Johnson College of Business",
+      "CTech": "Cornell Tech",
+      "Law": "Cornell Law School",
+      "Vet": "College of Veterinary Medicine",
+      "Grad School": "Graduate School",
+      "Weill NYC": "Weill Cornell Medicine (New York City)",
+      "Weill Qatar": "Weill Cornell Medicine-Qatar (Doha, Qatar)",
+      "Weill Grad": "Weill Cornell Graduate School of Medical Sciences (New York City)",
+      "SCE": "School of Continuing Education and Summer Sessions"
     }
   },
   {
