@@ -28,8 +28,8 @@ export const RadioButton = ({
   const containerStyle = {
     display: 'flex',
     justifyContent: 'flex-start',
-    padding: '0rem',
-    paddingRight: '10rem',
+    padding: '0.5rem',
+    width: '35rem',
     background: '#FFFFFF',
     boxShadow: '2px 2px 8px rgba(0, 0, 0, 0.15)',
     borderRadius: '11px',
