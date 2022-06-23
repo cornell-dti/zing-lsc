@@ -1,8 +1,12 @@
 import { db } from '../config'
 import admin from 'firebase-admin'
+import { logger } from 'firebase-functions'
 const courseR = db.collection('courses')
 const studentR = db.collection('students')
-import mapCatalogNameToCourseId from '../course/get_course_id'
+import {
+  mapCatalogNameToCourseId,
+  MissingCourseError,
+} from '../course/get_course_id'
 
 async function removeStudentFromCourse(
   email: any,
@@ -26,6 +30,7 @@ async function removeStudentFromCourse(
 
 // Note: the error handling in this file is done the way it is so it is easier
 // to decide response codes based on error type.
+// NOTE: this function WILL succeed even if no classes could be found.
 const addStudentSurveyResponse = async (
   name: string,
   email: string,
@@ -38,12 +43,32 @@ const addStudentSurveyResponse = async (
   const roster = 'SU22' // Summer 2022 for LSC launch
 
   // Find the courseId of all requested courses in survey
-  const courseIdsWithName = await Promise.all(
+  const courseSettledPromises = await Promise.allSettled(
     courseCatalogNames.map(async (name) => ({
       catalogName: name,
-      courseId: await mapCatalogNameToCourseId(name, roster), // May throw error
+      courseId: await mapCatalogNameToCourseId(name, roster),
     }))
   )
+
+  // These courses were found successfully
+  const courseIdsWithName = courseSettledPromises
+    .filter((result) => result.status === 'fulfilled')
+    .map(
+      (
+        result // This looks complicated but it's just Prettier aggressively formatting
+      ) =>
+        (
+          result as PromiseFulfilledResult<{
+            courseId: string
+            catalogName: string
+          }>
+        ).value
+    )
+
+  // If there were errors finding courses, this is not empty
+  const missingCourseErrors: MissingCourseError[] = courseSettledPromises
+    .filter((result) => result.status === 'rejected')
+    .map((result) => (result as PromiseRejectedResult).reason)
 
   // Make array of courseIds associated with their catalogNames (e.g. ['INFO 2040', 'CS 2850'])
   const courseIdsWithNames: { courseId: string; catalogNames: string[] }[] = []
@@ -159,6 +184,19 @@ const addStudentSurveyResponse = async (
 
   const allUpdates = [...courseUpdates, studentUpdate]
   await Promise.all(allUpdates)
+
+  // Return which course names were added and which weren't (couldn't be found)
+  const added = newCourseIdsWithNames.map((course) =>
+    course.catalogNames.join('/')
+  )
+  const failed = missingCourseErrors.map((error) => error.courseCatalogName)
+  logger.info(
+    `Added student [${email}] to [${added.join(
+      ', '
+    )}]. Missing courses: [${failed.join(', ')}] in ${roster}`
+  )
+
+  return { added, failed, roster }
 }
 
 // This has not been used in a very long long time
