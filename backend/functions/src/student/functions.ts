@@ -66,9 +66,17 @@ const addStudentSurveyResponse = async (
     )
 
   // If there were errors finding courses, this is not empty
-  const missingCourseErrors: MissingCourseError[] = courseSettledPromises
+  const settledErrors: Error[] = courseSettledPromises
     .filter((result) => result.status === 'rejected')
     .map((result) => (result as PromiseRejectedResult).reason)
+  // Re-throw error if it is not related to being unable to find a course
+  const unexpectedError = settledErrors.find(
+    (error) => error.name !== 'MissingCourseError'
+  )
+  if (unexpectedError) {
+    throw unexpectedError
+  }
+  const missingCourseErrors = settledErrors as MissingCourseError[]
 
   // Make array of courseIds associated with their catalogNames (e.g. ['INFO 2040', 'CS 2850'])
   const courseIdsWithNames: { courseId: string; catalogNames: string[] }[] = []
