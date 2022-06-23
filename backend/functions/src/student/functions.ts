@@ -24,7 +24,7 @@ async function removeStudentFromCourse(
   }
 }
 
-const validateEmail = async (email: string) => {
+const validateEmail = (email: string) => {
   const emailRegex = /^\w+@cornell.edu$/
   // if true => valid email. if false => invalid email.
   const validEmail = emailRegex.test(email)
@@ -90,6 +90,16 @@ const addStudentSurveyResponse = async (
     courseId: course.courseId,
     groupNumber: -1,
   }))
+
+  const emailRegex = /^\w+@cornell.edu$/
+  // if true => valid email. if false => invalid email.
+  const validEmail = emailRegex.test(email)
+  console.log(validEmail)
+  if (!validEmail) {
+    const e = new Error('Invalid Email Form')
+    e.name = 'processing_err'
+    throw e
+  }
 
   // First, update the [student] collection to include the data for the new student
   const studentUpdate = studentRef
