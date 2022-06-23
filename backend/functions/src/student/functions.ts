@@ -24,17 +24,6 @@ async function removeStudentFromCourse(
   }
 }
 
-const validateEmail = (email: string) => {
-  const emailRegex = /^\w+@cornell.edu$/
-  // if true => valid email. if false => invalid email.
-  const validEmail = emailRegex.test(email)
-  console.log(validEmail)
-  if (validEmail === false) {
-    throw new Error('Invalid Email Form')
-  }
-  return true
-}
-
 // Note: the error handling in this file is done the way it is so it is easier
 // to decide response codes based on error type.
 const addStudentSurveyResponse = async (
@@ -91,10 +80,10 @@ const addStudentSurveyResponse = async (
     groupNumber: -1,
   }))
 
+  // 0. Check if email is valid cornell.edu email.
   const emailRegex = /^\w+@cornell.edu$/
   // if true => valid email. if false => invalid email.
   const validEmail = emailRegex.test(email)
-  console.log(validEmail)
   if (!validEmail) {
     const e = new Error('Invalid Email Form')
     e.name = 'processing_err'
@@ -196,4 +185,4 @@ async function removeStudent(email: string) {
   await Promise.all([courseUpdates, studentDocRef.delete()].flat())
 }
 
-export { validateEmail, addStudentSurveyResponse, removeStudent }
+export { addStudentSurveyResponse, removeStudent }
