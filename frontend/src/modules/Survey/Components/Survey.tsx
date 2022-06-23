@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 
+import axios from 'axios'
+import { Question } from '@core/Types'
+import { API_ROOT, STUDENT_API } from '@core/Constants'
 import { StyledContainer1, StyledContainer2 } from 'Survey/Styles/Survey.style'
 import { StepTemplate } from 'Survey/Components/StepTemplate'
 import { StepBegin } from 'Survey/Components/StepBegin'
@@ -7,13 +10,16 @@ import { StepCourse } from 'Survey/Components/StepCourse'
 import { StepRadio } from 'Survey/Components/StepRadio'
 import { StepFinal } from 'Survey/Components/StepFinal'
 import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
-import { Question } from '@core/Types'
-import axios from 'axios'
-import { API_ROOT, STUDENT_API } from '@core/Constants'
+import { SurveySubmissionResponse } from 'Survey/Types'
 
 export const Survey = () => {
   const [showError, setShowError] = useState(false)
   const [currStep, setCurrStep] = useState(1)
+
+  // Final step data
+  const [surveySubmissionResponse, setSurveySubmissionResponse] = useState<
+    SurveySubmissionResponse | undefined
+  >()
   const [surveyError, setSurveyError] = useState<string | null>(null)
 
   // If there are custom questions the below will be a network call perhaps
@@ -49,6 +55,7 @@ export const Survey = () => {
     axios.post(`${API_ROOT}${STUDENT_API}/survey`, surveyData).then(
       (response: any) => {
         console.log(response)
+        setSurveySubmissionResponse(response.data.data)
         setCurrStep(currStep + 1)
       },
       (error: any) => {
@@ -80,6 +87,7 @@ export const Survey = () => {
     <StyledContainer2>
       <StepFinal
         success={surveyError === null}
+        submissionResponse={surveySubmissionResponse!}
         errorMsg={surveyError != null ? surveyError : ''}
       />
     </StyledContainer2>
