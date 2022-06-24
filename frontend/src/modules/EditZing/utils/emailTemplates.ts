@@ -1,57 +1,46 @@
-const matched = () => {
-  return `
-    <div> 
-      Dear students,  
-    </div>
-      <br> 
-    <div>
-      We are writing to you because you have expressed interest in studying with 
-      other students. We are so glad you reached out! Studying with peers is 
-      known to be an <a href="http://lsc.cornell.edu/studying-together/">
-      effective learning tool </a>, but whether you are learning online or
-      in-person it can be challenging, especially in large classes, to find study
-      partners.
-        <br>
-        <br>
-      Study partners should take it from here and get in touch with each other
-      about when and how to study together. You can just hit “reply all” to get
-      connected with each other. Based on student feedback from last semester-
-      this semester we are offering study partners the opportunity to meet with
-      LSC peer study skills tutors to help facilitate introductions and get you
-      launched. 
-      <a href="https://canvas.cornell.edu/enroll/PWR8F9"> Self-enroll </a>
-      in the study skills tutors’ Canvas site to see when drop-in hours are held,
-      you can show up any time that works for your group.You
-      can also drop in to see the study skills tutors if you have questions about
-      getting started with your group.
-        <br>
-      <br>
-      Due to privacy rules we are not able to disclose which classes the student(s)
-      receiving this email are taking, but you have been matched because you
-      expressed interest in finding study partners for the same course.So, your
-      first group assignment will be to figure it out!
-      <br>
-      <br>
-      Whether you will be studying together 
-      <a href = "http://lsc.cornell.edu/studying-together/studying-together-in-person/">
-      in-person </a>
-    or 
-    <a href = "http://lsc.cornell.edu/studying-together/studying-together-online/" > online </a>,
-      use the LSC’s tips
-    for setting your group’s agenda and making the most out of studying
-    together.Consider working together at a time when you can use course
-      <a href = "http://lsc.cornell.edu/how-to-study/office-hours/"> office hours </a> or
-        <a href = "http://lsc.cornell.edu/tutoring/schedule/"> LSC tutoring </a> to answer questions that may arise!
-          <br>
-          <br>
-          If you’d like more info about studying together please contact LSC Study
-      Partners lscstudypartners@cornell.edu We will be following up later in the
-      semester to find out how it’s going.
-    </div>
-      <br>
-      <br>
-      Happy studying!`
-}
+const matched = `
+<p>Dear Students,</p>
+<p>
+  We are writing to you because you have expressed interest in studying with
+  other students. We are so glad you reached out!
+</p>
+<p>
+  <strong>THE NEXT STEP IS UP TO YOU:</strong> You need to “reply all” to get
+  connected with each other and make plans for when and how to study together.
+  <strong><em>Partners need to get in touch with each other by using “reply all”
+  to this email to get your study group launched.</em></strong>
+</p>
+<p>
+  Due to privacy rules we are not able to disclose which classes the student(s)
+  receiving this email are taking, but you have been matched because you
+  expressed interest in finding study partners for the same course. Although
+  it’s a little strange, your first group assignment will be to figure out what
+  course you’ve been matched on.
+</p>
+<p>
+  Whether you will be
+  <a href="https://lsc.cornell.edu/studying-together/">studying together in-person or online</a>,
+  use the LSC’s tips for setting your group’s agenda and making the most out of
+  studying together. Consider working together at a time when you can use
+  instructor or TA
+  <a href="http://lsc.cornell.edu/how-to-study/office-hours/">office hours</a>
+  to answer questions that may arise.
+</p>
+<p>
+  It is the responsibility of you and your study partners to understand and
+  adhere to your instructor's expectations regarding group work. If you are not
+  sure, ask! See
+  <a href="https://provost.cornell.edu/leadership/vp-undergrad-ed/academic-integrity/"
+  >https://provost.cornell.edu/leadership/vp-undergrad-ed/academic-integrity/</a>
+  for more info.
+</p>
+<p>
+  If you’d like more info about studying together please contact LSC Study Partners
+  <a href="mailto:lscstudypartners@cornell.edu">lscstudypartners@cornell.edu</a>.
+  We will be following up later in the semester to find out how it’s going.
+</p>
+<p>Happy studying!</p>
+`
 
 const firstNoMatch = (className: string) => {
   return `< div > Dear Student, </>
@@ -232,7 +221,7 @@ export enum TemplateName {
 export const getBody = (templateName: TemplateName, className: string) => {
   switch (templateName) {
     case TemplateName.MATCHED:
-      return matched()
+      return matched
     case TemplateName.FIRST_NO_MATCH:
       return firstNoMatch(className)
     case TemplateName.SECOND_NO_MATCH:
