@@ -45,7 +45,7 @@ export const EmailPreview = ({
       <Box
         sx={{
           maxHeight: '250px',
-          overflow: 'scroll',
+          overflowY: 'scroll',
           borderRadius: '0px 0px 5px 5px;',
           ...BodyAndSubjectSx,
         }}
