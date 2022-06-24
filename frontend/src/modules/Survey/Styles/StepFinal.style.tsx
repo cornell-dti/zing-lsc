@@ -18,21 +18,6 @@ const Check = ({ className, src }: SuccessIcon) => (
   </div>
 )
 
-export const StyledLogoWrapper = styled.div`
-  display: flex;
-  margin-top: 10%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
-
-export const StyledLogo = styled(Logo)`
-  margin-top: 8.4%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
-
 export const StyledCheck = styled(Check)`
   margin-right: 6%;
   flex-direction: column;
@@ -55,6 +40,9 @@ const fullPanel = css`
   ${panel};
   height: 100%;
   width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin: 2% 15%;
 `
 
 export const StyledFullPanel = styled.div`
@@ -64,10 +52,8 @@ export const StyledFullPanel = styled.div`
 export const StyledCongratulationsWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: left;
+  justify-content: center;
   align-items: center;
-  width: 75%;
-  margin-top: 10%;
 `
 export const StyledCongratulationsText = styled.h1`
   ${h2};
