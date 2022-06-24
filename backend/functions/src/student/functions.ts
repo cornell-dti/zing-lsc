@@ -37,6 +37,14 @@ const addStudentSurveyResponse = async (
 ) => {
   const roster = 'SU22' // Summer 2022 for LSC launch
 
+  // 0. Check if email is valid cornell.edu email.
+  const emailRegex = /^\w+@cornell.edu$/
+  // if true => valid email. if false => invalid email.
+  const validEmail = emailRegex.test(email)
+  if (!validEmail) {
+    throw new Error('Invalid Email Form')
+  }
+
   // Find the courseId of all requested courses in survey
   const courseIdsWithName = await Promise.all(
     courseCatalogNames.map(async (name) => ({
@@ -79,16 +87,6 @@ const addStudentSurveyResponse = async (
     courseId: course.courseId,
     groupNumber: -1,
   }))
-
-  // 0. Check if email is valid cornell.edu email.
-  const emailRegex = /^\w+@cornell.edu$/
-  // if true => valid email. if false => invalid email.
-  const validEmail = emailRegex.test(email)
-  if (!validEmail) {
-    const e = new Error('Invalid Email Form')
-    e.name = 'processing_err'
-    throw e
-  }
 
   // First, update the [student] collection to include the data for the new student
   const studentUpdate = studentRef
