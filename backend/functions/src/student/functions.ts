@@ -42,6 +42,14 @@ const addStudentSurveyResponse = async (
 ) => {
   const roster = 'SU22' // Summer 2022 for LSC launch
 
+  // 0. Check if email is valid cornell.edu email.
+  const emailRegex = /^\w+@cornell.edu$/
+  // if true => valid email. if false => invalid email.
+  const validEmail = emailRegex.test(email)
+  if (!validEmail) {
+    throw new Error('Invalid Email Form')
+  }
+
   // Find the courseId of all requested courses in survey
   const courseSettledPromises = await Promise.allSettled(
     courseCatalogNames.map(async (name) => ({
