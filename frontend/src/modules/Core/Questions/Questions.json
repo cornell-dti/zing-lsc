@@ -4,20 +4,15 @@
     "questionId": "college",
     "answers": {
       "CALS": "College of Agriculture and Life Sciences",
-      "AAP": "College of Architecture, Art and Planning",
+      "AAP": "College of Architecture, Art, and Planning",
       "A&S": "College of Arts and Sciences",
-      "Hotel Admin": "Dyson School of Applied Economics and Management: SC Johnson College of Business",
-      "Dyson": "Nolan School of Hotel Administration: SC Johnson College of Business",
-      "Computing": "Cornell Ann S. Bowers College of Computing and Information Science",
       "Engineering": "College of Engineering",
-      "ILR": "School of Industrial and Labor Relations (ILR)",
-      "Public Policy": "Cornell Jeb E. Brooks School of Public Policy",
       "HumEc": "College of Human Ecology",
-      "SC Johnson": "Cornell SC Johnson College of Business",
-      "Law": "Cornell Law School",
-      "Vet": "College of Veterinary Medicine",
-      "Grad School": "Graduate School",
-      "SCE": "School of Continuing Education and Summer Sessions"
+      "Hotel Admin": "Dyson School of Applied Economics and Management (SC Johnson College of Business)",
+      "Dyson": "Nolan School of Hotel Administration (SC Johnson College of Business)",
+      "ILR": "School of Industrial and Labor Relations",
+      "SCE": "School of Continuing Education & Summer Sessions",
+      "Grad School": "Graduate/Professional School"
     }
   },
   {
