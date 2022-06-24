@@ -43,7 +43,8 @@ export const StepBegin = ({
     <StyledContainer>
       <StyledLeftPanel>
         <StyledWhiteActionText>
-          LSC can help match you with study partners for your classes!
+          Cornell’s Learning Strategies Center can help match Cornell students
+          with study partners!
         </StyledWhiteActionText>
         <StyledTeamPic />
       </StyledLeftPanel>
