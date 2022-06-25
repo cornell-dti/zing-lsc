@@ -1,16 +1,8 @@
 import styled, { css } from 'styled-components'
 
-import { h2, h3, StyledComponent } from '@core'
+import { h2, h3 } from '@core'
 import { StyledContainer as Container } from 'Survey/Styles/StepTemplate.style'
 import { SuccessIcon } from 'Survey/Types'
-
-import logo from '@assets/img/smallwhitelogo.svg'
-
-const Logo = ({ className }: StyledComponent) => (
-  <div className={className}>
-    <img src={logo} alt="logo" />
-  </div>
-)
 
 const Check = ({ className, src }: SuccessIcon) => (
   <div className={className}>
