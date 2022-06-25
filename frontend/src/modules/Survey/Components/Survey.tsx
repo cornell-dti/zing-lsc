@@ -3,7 +3,10 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { Question } from '@core/Types'
 import { API_ROOT, STUDENT_API } from '@core/Constants'
-import { StyledContainer1, StyledContainer2 } from 'Survey/Styles/Survey.style'
+import {
+  StyledContainer1 as SplashBackground,
+  StyledContainer2 as QuestionBackground,
+} from 'Survey/Styles/Survey.style'
 import { StepTemplate } from 'Survey/Components/StepTemplate'
 import { StepBegin } from 'Survey/Components/StepBegin'
 import { StepCourse } from 'Survey/Components/StepCourse'
@@ -74,7 +77,7 @@ export const Survey = () => {
       : answers[multipleChoiceIndex] !== ''
 
   return currStep === 1 ? ( // Form landing
-    <StyledContainer1>
+    <SplashBackground>
       <StepBegin
         name={nameAnswer}
         email={emailAnswer}
@@ -82,17 +85,18 @@ export const Survey = () => {
         setEmail={(arg: string) => setEmailAnswer(arg)}
         gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
       />
-    </StyledContainer1>
-  ) : currStep === totalSteps + 1 ? ( // Form confirmation
-    <StyledContainer2>
+    </SplashBackground>
+  ) : currStep === totalSteps + 1 ? (
+    // Form confirmation
+    <QuestionBackground>
       <StepFinal
         success={surveyError === null}
         submissionResponse={surveySubmissionResponse!}
         errorMsg={surveyError != null ? surveyError : ''}
       />
-    </StyledContainer2>
+    </QuestionBackground>
   ) : (
-    <StyledContainer2>
+    <QuestionBackground>
       <StepTemplate
         setShowError={setShowError}
         isStepValid={isStepValid}
@@ -122,6 +126,6 @@ export const Survey = () => {
           />
         )}
       </StepTemplate>
-    </StyledContainer2>
+    </QuestionBackground>
   )
 }

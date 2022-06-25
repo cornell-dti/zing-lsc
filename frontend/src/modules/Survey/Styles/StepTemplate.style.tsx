@@ -39,6 +39,10 @@ export const StyledContainer = styled.main`
   box-shadow: -10px -10px 150px rgba(0, 0, 0, 0.1),
     10px 10px 150px rgba(0, 0, 0, 0.1);
   display: flex;
+  @media (max-width: 900px) {
+    width: 100%;
+    height: 100%;
+  }
 `
 
 export const StyledWrapper = styled.div`
