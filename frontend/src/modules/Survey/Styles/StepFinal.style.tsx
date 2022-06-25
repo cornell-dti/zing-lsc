@@ -63,16 +63,20 @@ export const StyledFullPanel = styled.div`
 
 export const StyledCongratulationsWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   justify-content: left;
   align-items: center;
-  width: 75%;
+  width: 80%;
   margin-top: 10%;
 `
 export const StyledCongratulationsText = styled.h1`
   ${h2};
   font-weight: 500;
   color: white;
+  width: 73%;
+  @media (max-width: 900px) {
+    width: 100%;
+  }
 `
 export const StyledContactWrapper = styled.div`
   display: flex;
@@ -80,6 +84,7 @@ export const StyledContactWrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 10%;
+  margin: 10% 5%;
 `
 
 export const StyledContactText = styled.text`
