@@ -2,7 +2,11 @@ import React, { FunctionComponent } from 'react'
 import { StepTemplateProps } from 'Survey/Types'
 import {
   StyledWrapper,
+  ButtonsContainer,
+  BackButton,
+  NextButton,
   StyledFullPanel,
+  QuestionContainer,
 } from 'Survey/Styles/StepTemplate.style'
 import { ProgressBar } from '@core/Components/index'
 import { IconButton, Box } from '@mui/material'
@@ -32,21 +36,13 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   }
 
   return (
-    <Box
-      sx={{
-        backgroundColor: 'white',
-        width: '80%',
-        height: '90%',
-      }}
-    >
+    <QuestionContainer>
       <ProgressBar step={stepNumber} total={totalSteps} />
       <StyledFullPanel>
-        <StyledWrapper style={{ height: '85%', overflowY: 'scroll' }}>
-          {children}
-        </StyledWrapper>
+        <StyledWrapper style={{}}>{children}</StyledWrapper>
 
-        <StyledWrapper style={{ height: '15%', margin: '0% 2%' }}>
-          <Box sx={{ textAlign: 'center', color: 'purple.100' }}>
+        <ButtonsContainer>
+          <BackButton>
             <IconButton
               className="next"
               onClick={handlePrev}
@@ -56,17 +52,10 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
             >
               <ArrowBack />
             </IconButton>
-            <br />
-            Prev
-          </Box>
+            <div>Prev</div>
+          </BackButton>
 
-          <Box
-            sx={{
-              marginLeft: 'auto',
-              textAlign: 'center',
-              color: 'purple.100',
-            }}
-          >
+          <NextButton>
             <IconButton
               className="next"
               onClick={handleNext}
@@ -76,11 +65,10 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
             >
               {stepNumber === totalSteps ? <Check /> : <ArrowForward />}
             </IconButton>
-            <br />
-            {stepNumber === totalSteps ? 'Finish!' : 'Next'}
-          </Box>
-        </StyledWrapper>
+            <div>{stepNumber === totalSteps ? 'Finish!' : 'Next'}</div>
+          </NextButton>
+        </ButtonsContainer>
       </StyledFullPanel>
-    </Box>
+    </QuestionContainer>
   )
 }

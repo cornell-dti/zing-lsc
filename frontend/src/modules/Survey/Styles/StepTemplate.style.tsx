@@ -45,8 +45,43 @@ export const StyledContainer = styled.main`
   }
 `
 
+/** Wrapper for the entire Question Component */
+export const QuestionContainer = styled.div`
+  background-color: ${colors.white};
+  width: 80%;
+  height: 90%;
+  max-width: 900px;
+  @media (max-width: 900px) {
+    width: 100%;
+    height: 100%;
+  }
+`
+
 export const StyledWrapper = styled.div`
   display: flex;
+`
+
+export const ButtonsContainer = styled.div`
+  display: flex;
+  position: relative;
+  width: 100%;
+  min-height: 15vh;
+  padding: 40px 0px;
+
+  & > * {
+    position: absolute;
+    bottom: 10%;
+    text-align: center;
+    color: #815ed4;
+  }
+`
+
+// button color should be: #815ED4
+export const BackButton = styled.div`
+  left: 5%;
+`
+export const NextButton = styled.div`
+  right: 5%;
 `
 
 export const StyledPrevButton = styled(GoNextPrevButton)`
