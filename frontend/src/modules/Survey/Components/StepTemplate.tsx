@@ -15,22 +15,7 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   gotoPrevStep,
   gotoNextStep,
   children,
-  setShowError,
 }) => {
-  const handlePrev = () => {
-    setShowError(false)
-    gotoPrevStep()
-  }
-
-  const handleNext = () => {
-    if (isStepValid) {
-      setShowError(false)
-      gotoNextStep()
-    } else {
-      setShowError(true)
-    }
-  }
-
   return (
     <Box
       sx={{
@@ -49,7 +34,7 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
           <Box sx={{ textAlign: 'center', color: 'purple.100' }}>
             <IconButton
               className="next"
-              onClick={handlePrev}
+              onClick={gotoPrevStep}
               color="secondary"
               sx={{ boxShadow: 3 }}
               aria-label="previous button"
@@ -69,7 +54,7 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
           >
             <IconButton
               className="next"
-              onClick={handleNext}
+              onClick={gotoNextStep}
               disabled={!isStepValid}
               sx={{ boxShadow: 3 }}
               aria-label="next button"

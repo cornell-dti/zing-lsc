@@ -13,7 +13,6 @@ import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
 
 export const Survey = () => {
-  const [showError, setShowError] = useState(false)
   const [currStep, setCurrStep] = useState(1)
 
   // Final step data
@@ -94,7 +93,6 @@ export const Survey = () => {
   ) : (
     <StyledContainer2>
       <StepTemplate
-        setShowError={setShowError}
         isStepValid={isStepValid}
         stepNumber={currStep}
         totalSteps={totalSteps}
@@ -114,7 +112,6 @@ export const Survey = () => {
         ) : (
           // General multiple-choice
           <StepRadio
-            showError={showError}
             currentAnswer={answers[multipleChoiceIndex]}
             question={questions[multipleChoiceIndex]}
             setAnswer={(arg) => changeAnswer(multipleChoiceIndex, arg)}
