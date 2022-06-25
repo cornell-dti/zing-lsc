@@ -14,7 +14,7 @@ router.post('/survey', (req, res) => {
   )
 
   addStudentSurveyResponse(name, email, college, year, courseCatalogNames)
-    .then(() => res.status(200).json({ success: true }))
+    .then((data) => res.status(200).json({ success: true, data }))
     .catch((err) => {
       logger.error(
         `ERROR in Student [${name}] submitted survey using ${email} on agent ${userAgent}`,

@@ -1,5 +1,11 @@
 import { Question } from '@core/Types'
 
+export interface SurveySubmissionResponse {
+  added: string[]
+  failed: string[]
+  roster: string
+}
+
 export interface StepTemplateProps {
   gotoPrevStep: () => void
   gotoNextStep: () => void
@@ -33,6 +39,7 @@ export interface StepCourseProps {
 
 export interface StepFinalProps {
   success: boolean
+  submissionResponse: SurveySubmissionResponse
   errorMsg?: string
 }
 

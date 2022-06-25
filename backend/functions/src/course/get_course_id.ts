@@ -1,4 +1,17 @@
 import axios from 'axios'
+import { logger } from 'firebase-functions'
+
+class MissingCourseError extends Error {
+  courseCatalogName: string
+  roster: string
+
+  constructor(courseCatalogName: string, roster: string) {
+    super(`Could not find course ${courseCatalogName} in roster ${roster}`)
+    this.name = this.constructor.name
+    this.courseCatalogName = courseCatalogName
+    this.roster = roster
+  }
+}
 
 function constructUrl(courseCatalogName: string, roster: string) {
   let url = 'https://classes.cornell.edu/api/2.0/search/classes.json?'
@@ -12,21 +25,20 @@ function constructUrl(courseCatalogName: string, roster: string) {
   return url
 }
 
-async function getCourseId(
+async function mapCatalogNameToCourseId(
   courseCatalogName: string,
   roster: string
 ): Promise<string> {
   const validCourseRe = /^[A-Z]{2,7} \d{4}$/
   if (!validCourseRe.test(courseCatalogName)) {
-    throw new Error(`Invalid course catalog name: ${courseCatalogName}`)
+    logger.error(`Invalid course catalog name: ${courseCatalogName}`) // Log as error because client-side validation should have caught this!
+    throw new MissingCourseError(courseCatalogName, roster) // Invalid course names never exist
   }
 
   const url = constructUrl(courseCatalogName, roster)
   const response = await axios.get(url).catch((error) => {
     if (error.response.status === 404) {
-      throw new Error(
-        `Could not find course ${courseCatalogName} in roster ${roster}`
-      )
+      throw new MissingCourseError(courseCatalogName, roster)
     } else {
       throw error
     }
@@ -41,12 +53,10 @@ async function getCourseId(
   )
 
   if (!classData) {
-    throw new Error(
-      `Could not find course ${courseCatalogName} in roster ${roster}`
-    )
+    throw new MissingCourseError(courseCatalogName, roster)
   }
 
   return `${roster}-${classData.crseId}`
 }
 
-export default getCourseId
+export { mapCatalogNameToCourseId, MissingCourseError }
