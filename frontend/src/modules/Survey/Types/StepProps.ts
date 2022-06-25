@@ -12,7 +12,7 @@ export interface StepTemplateProps {
   stepNumber: number
   totalSteps: number
   isStepValid: boolean
-  setShowError: (b: boolean) => void
+  isSubmittingSurvey: boolean
 }
 
 export interface StepProps {
@@ -20,7 +20,6 @@ export interface StepProps {
   setAnswer: (arg: string) => void
   key?: string
   currentAnswer: string
-  showError: boolean
 }
 
 export interface StepBeginProps {
