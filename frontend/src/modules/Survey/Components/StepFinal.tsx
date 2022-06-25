@@ -39,9 +39,10 @@ export const StepFinal = ({ success, errorMsg }: StepFinalProps) => {
             width: '14em',
             fontSize: { sm: 14, md: 22 },
             mt: '1.25em',
+            boxShadow: 1,
           }}
         >
-          Back to Home
+          Back to home
         </Button>
         <StyledContactWrapper>
           <StyledContactText>
