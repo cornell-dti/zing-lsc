@@ -68,12 +68,19 @@ export const StyledTitleWrapper = styled.div`
 export const StyledHeaderText = styled.text`
   ${h1};
   color: ${colors.black};
+  @media (max-width: 900px) {
+    font-size: 4rem;
+    margin-bottom: 10px;
+  }
 `
 
 export const StyledWelcomeText = styled.text`
   ${h2};
   font-weight: 300;
   color: ${colors.black};
+  @media (max-width: 900px) {
+    font-size: 2rem;
+  }
 `
 
 export const StyledErrorText = styled.text`

@@ -38,6 +38,7 @@ export const StyledContainer1 = styled.main`
 /** Survey page background for the questions. */
 export const StyledContainer2 = styled.main`
   height: 100%;
+  width: 100%;
   background-image: url(${bg2});
   background-size: cover;
 
