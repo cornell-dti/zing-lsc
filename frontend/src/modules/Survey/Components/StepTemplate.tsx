@@ -5,7 +5,7 @@ import {
   StyledFullPanel,
 } from 'Survey/Styles/StepTemplate.style'
 import { ProgressBar } from '@core/Components/index'
-import { IconButton, Box, Typography } from '@mui/material'
+import { IconButton, Box, Typography, CircularProgress } from '@mui/material'
 import { ArrowBack, ArrowForward, Check } from '@mui/icons-material'
 
 export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
@@ -14,6 +14,7 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   totalSteps,
   gotoPrevStep,
   gotoNextStep,
+  isSubmittingSurvey,
   children,
 }) => {
   const showFinish = stepNumber === totalSteps
@@ -54,11 +55,17 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
           >
             <IconButton
               onClick={gotoNextStep}
-              disabled={!isStepValid}
+              disabled={!isStepValid || isSubmittingSurvey}
               sx={{ boxShadow: 3 }}
               aria-labelledby="next"
             >
-              {showFinish ? <Check /> : <ArrowForward />}
+              {isSubmittingSurvey ? (
+                <CircularProgress size={24} />
+              ) : showFinish ? (
+                <Check />
+              ) : (
+                <ArrowForward />
+              )}
             </IconButton>
             <Typography id="next">{showFinish ? 'Finish!' : 'Next'}</Typography>
           </Box>

@@ -12,6 +12,7 @@ export interface StepTemplateProps {
   stepNumber: number
   totalSteps: number
   isStepValid: boolean
+  isSubmittingSurvey: boolean
 }
 
 export interface StepProps {
