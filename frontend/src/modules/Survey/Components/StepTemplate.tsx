@@ -6,10 +6,10 @@ import {
   BackButton,
   NextButton,
   StyledFullPanel,
-  QuestionContainer,
+  StepContainer,
 } from 'Survey/Styles/StepTemplate.style'
 import { ProgressBar } from '@core/Components/index'
-import { IconButton, Box } from '@mui/material'
+import { IconButton } from '@mui/material'
 import { ArrowBack, ArrowForward, Check } from '@mui/icons-material'
 
 export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
@@ -36,10 +36,10 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   }
 
   return (
-    <QuestionContainer>
+    <StepContainer>
       <ProgressBar step={stepNumber} total={totalSteps} />
       <StyledFullPanel>
-        <StyledWrapper style={{}}>{children}</StyledWrapper>
+        <StyledWrapper>{children}</StyledWrapper>
 
         <ButtonsContainer>
           <BackButton>
@@ -69,6 +69,6 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
           </NextButton>
         </ButtonsContainer>
       </StyledFullPanel>
-    </QuestionContainer>
+    </StepContainer>
   )
 }

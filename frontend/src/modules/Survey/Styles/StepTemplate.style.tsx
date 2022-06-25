@@ -24,8 +24,12 @@ export const fullPanel = css`
 export const StyledFullPanel = styled.div`
   ${fullPanel}
   box-sizing: border-box;
-  padding: 1.5rem;
   position: relative;
+  width: 100%;
+
+  @media (min-width: 901px) {
+    padding: 1.5rem;
+  }
 `
 
 export const StyledFullPanelNoPadding = styled.div`
@@ -46,7 +50,7 @@ export const StyledContainer = styled.main`
 `
 
 /** Wrapper for the entire Question Component */
-export const QuestionContainer = styled.div`
+export const StepContainer = styled.div`
   background-color: ${colors.white};
   width: 80%;
   height: 90%;
@@ -59,6 +63,7 @@ export const QuestionContainer = styled.div`
 
 export const StyledWrapper = styled.div`
   display: flex;
+  width: 100%;
 `
 
 export const ButtonsContainer = styled.div`
@@ -78,10 +83,10 @@ export const ButtonsContainer = styled.div`
 
 // button color should be: #815ED4
 export const BackButton = styled.div`
-  left: 5%;
+  left: 10%;
 `
 export const NextButton = styled.div`
-  right: 5%;
+  right: 10%;
 `
 
 export const StyledPrevButton = styled(GoNextPrevButton)`

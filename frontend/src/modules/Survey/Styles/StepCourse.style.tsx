@@ -2,7 +2,9 @@ import styled from 'styled-components'
 import { h2, h4 } from '@core'
 
 export const StyledContainer = styled.main`
+  width: 100%;
   margin: auto;
+  padding: 15% 5%;
 `
 
 export const StyledQuestionText = styled.h1`
