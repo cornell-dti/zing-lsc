@@ -5,11 +5,10 @@ import {
   ButtonsContainer,
   BackButton,
   NextButton,
-  StyledFullPanel,
   StepContainer,
 } from 'Survey/Styles/StepTemplate.style'
 import { ProgressBar } from '@core/Components/index'
-import { IconButton, Box, Typography, CircularProgress } from '@mui/material'
+import { IconButton, Typography, CircularProgress } from '@mui/material'
 import { ArrowBack, ArrowForward, Check } from '@mui/icons-material'
 
 export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
