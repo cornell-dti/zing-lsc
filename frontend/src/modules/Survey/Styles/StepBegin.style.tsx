@@ -50,6 +50,7 @@ export const StyledRightPanel = styled.div`
   padding: 0 6rem;
   @media (max-width: 900px) {
     width: 100%;
+    padding: 5% 5%;
   }
 `
 
@@ -63,6 +64,7 @@ export const StyledFields = styled.div`
 export const StyledTitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100;
 `
 
 export const StyledHeaderText = styled.text`

@@ -45,6 +45,10 @@ export const StyledContainer2 = styled.main`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (min-width: 901px) {
+    overflow-y: hidden;
+  }
 `
 
 export const StyledLabelText = styled.text`

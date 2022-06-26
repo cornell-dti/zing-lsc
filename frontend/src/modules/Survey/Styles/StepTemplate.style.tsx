@@ -24,12 +24,13 @@ export const fullPanel = css`
 export const StyledFullPanel = styled.div`
   ${fullPanel}
   box-sizing: border-box;
-  position: relative;
   width: 100%;
 
   @media (min-width: 901px) {
     padding: 1.5rem;
+    position: relative;
   }
+  background: red;
 `
 
 export const StyledFullPanelNoPadding = styled.div`
@@ -54,39 +55,59 @@ export const StepContainer = styled.div`
   background-color: ${colors.white};
   width: 80%;
   height: 90%;
-  max-width: 900px;
+  max-width: 1440px;
   @media (max-width: 900px) {
     width: 100%;
     height: 100%;
   }
+  position: relative;
+  // background: grey;
 `
 
 export const StyledWrapper = styled.div`
   display: flex;
+  flex-flow: column;
   width: 100%;
+  padding: 0 5%;
+
+  @media (min-width: 901px) {
+    overflow-y: scroll;
+    height: 80%;
+  }
 `
 
 export const ButtonsContainer = styled.div`
   display: flex;
-  position: relative;
   width: 100%;
-  min-height: 15vh;
-  padding: 40px 0px;
-
+  padding-bottom: 20%;
+  padding-top: 50px;
   & > * {
     position: absolute;
-    bottom: 10%;
+
     text-align: center;
     color: #815ed4;
   }
+  @media (min-width: 900px) {
+    & > * {
+      position: static;
+    }
+  }
+
+  // background: pink;
 `
 
 // button color should be: #815ED4
 export const BackButton = styled.div`
   left: 10%;
+  margin-left: 15%;
 `
 export const NextButton = styled.div`
   right: 10%;
+  margin-right: 15%;
+
+  @media (min-width: 900px) {
+    margin-left: auto;
+  }
 `
 
 export const StyledPrevButton = styled(GoNextPrevButton)`
