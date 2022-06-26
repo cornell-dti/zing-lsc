@@ -4,7 +4,6 @@ import {
   Box,
   TextField,
   InputLabel,
-  FormHelperText,
   Typography,
 } from '@mui/material'
 import { ArrowForward } from '@mui/icons-material'
@@ -18,9 +17,7 @@ import {
   StyledTitleWrapper,
   StyledHeaderText,
   StyledWelcomeText,
-  StyledErrorText,
 } from 'Survey/Styles/StepBegin.style'
-import { StyledLabelText } from 'Survey/Styles/Survey.style'
 import { StepBeginProps } from 'Survey/Types'
 
 export const StepBegin = ({
@@ -34,6 +31,14 @@ export const StepBegin = ({
     marginBottom: '1rem',
     input: { color: 'purple.120', fontSize: '24px', fontWeight: '500' },
     '& .MuiInput-underline:before': { borderBottomColor: 'purple.75' },
+  }
+
+  const helperTextStyle = {
+    style: {
+      color: '#d41e42',
+      fontSize: '1rem',
+      fontWeight: 600,
+    },
   }
 
   const [isValidEmail, setIsValidEmail] = React.useState(true)
@@ -54,13 +59,12 @@ export const StepBegin = ({
         </StyledTitleWrapper>
 
         <StyledFields>
-          <InputLabel id="Name:" htmlFor="user name">
-            <StyledLabelText> Name: </StyledLabelText>
+          <InputLabel htmlFor="name">
+            <Typography fontWeight="medium">Name:</Typography>
           </InputLabel>
           <TextField
-            id="user name"
+            id="name"
             variant="standard"
-            aria-labelledby="Name:"
             placeholder="Student Name"
             sx={textInputStyle}
             value={name}
@@ -68,13 +72,12 @@ export const StepBegin = ({
               setName(e.target.value)
             }
           />
-          <InputLabel id="Email:" htmlFor="user email">
-            <StyledLabelText> Email: </StyledLabelText>
+          <InputLabel htmlFor="email">
+            <Typography fontWeight="medium">Email:</Typography>
           </InputLabel>
           <TextField
-            id="user email"
+            id="email"
             variant="standard"
-            aria-labelledby="Email:"
             value={email}
             sx={textInputStyle}
             type="email"
@@ -84,12 +87,9 @@ export const StepBegin = ({
               setEmail(e.target.value)
             }
             error={!isValidEmail}
+            helperText={!isValidEmail && 'Invalid Email'}
+            FormHelperTextProps={helperTextStyle}
           />
-          <FormHelperText id="email-helper-text">
-            <StyledErrorText>
-              {isValidEmail ? ' ' : 'Invalid Email'}
-            </StyledErrorText>
-          </FormHelperText>
         </StyledFields>
         <Box
           sx={{
@@ -100,15 +100,14 @@ export const StepBegin = ({
           }}
         >
           <IconButton
-            className="next"
             onClick={gotoNextStep}
             disabled={name === '' || email === '' || !isValidEmail}
             sx={{ boxShadow: 3 }}
-            aria-labelledby="Next"
+            aria-labelledby="next"
           >
             <ArrowForward />
           </IconButton>
-          <Typography id="Next"> Next </Typography>
+          <Typography id="next">Next</Typography>
         </Box>
       </StyledRightPanel>
     </StyledContainer>

@@ -16,7 +16,6 @@ import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
 
 export const Survey = () => {
-  const [showError, setShowError] = useState(false)
   const [currStep, setCurrStep] = useState(1)
 
   // Final step data
@@ -24,6 +23,9 @@ export const Survey = () => {
     SurveySubmissionResponse | undefined
   >()
   const [surveyError, setSurveyError] = useState<string | null>(null)
+
+  // For the progress spinner on the submission button
+  const [isSubmittingSurvey, setIsSubmittingSurvey] = useState(false)
 
   // If there are custom questions the below will be a network call perhaps
   const questions: Question[] = require('@core/Questions/Questions.json')
@@ -45,6 +47,7 @@ export const Survey = () => {
 
   // last step's Next button handles sending data
   function finalNext() {
+    setIsSubmittingSurvey(true)
     const mcData = Object.fromEntries(
       questions.map((question, index) => [question.questionId, answers[index]])
     )
@@ -57,11 +60,13 @@ export const Survey = () => {
     console.log('Finished survey', surveyData)
     axios.post(`${API_ROOT}${STUDENT_API}/survey`, surveyData).then(
       (response: any) => {
+        setIsSubmittingSurvey(false)
         console.log(response)
         setSurveySubmissionResponse(response.data.data)
         setCurrStep(currStep + 1)
       },
       (error: any) => {
+        setIsSubmittingSurvey(false)
         console.log(error)
         setSurveyError(error.response.data.message)
         setCurrStep(currStep + 1)
@@ -98,8 +103,8 @@ export const Survey = () => {
   ) : (
     <QuestionBackground>
       <StepTemplate
-        setShowError={setShowError}
         isStepValid={isStepValid}
+        isSubmittingSurvey={isSubmittingSurvey}
         stepNumber={currStep}
         totalSteps={totalSteps}
         gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
@@ -118,7 +123,6 @@ export const Survey = () => {
         ) : (
           // General multiple-choice
           <StepRadio
-            showError={showError}
             currentAnswer={answers[multipleChoiceIndex]}
             question={questions[multipleChoiceIndex]}
             setAnswer={(arg) => changeAnswer(multipleChoiceIndex, arg)}

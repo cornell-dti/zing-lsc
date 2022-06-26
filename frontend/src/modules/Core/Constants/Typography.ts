@@ -1,3 +1,5 @@
+/** @deprecated do not use these! Prefer MUI Typography instead */
+
 import { css } from 'styled-components'
 import Montserrat from '@assets/fonts/Montserrat-Regular.ttf'
 import { device } from '@core/Constants/Media'

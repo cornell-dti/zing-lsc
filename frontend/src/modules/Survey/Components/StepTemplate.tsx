@@ -9,7 +9,7 @@ import {
   StepContainer,
 } from 'Survey/Styles/StepTemplate.style'
 import { ProgressBar } from '@core/Components/index'
-import { IconButton } from '@mui/material'
+import { IconButton, Box, Typography, CircularProgress } from '@mui/material'
 import { ArrowBack, ArrowForward, Check } from '@mui/icons-material'
 
 export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
@@ -18,22 +18,10 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   totalSteps,
   gotoPrevStep,
   gotoNextStep,
+  isSubmittingSurvey,
   children,
-  setShowError,
 }) => {
-  const handlePrev = () => {
-    setShowError(false)
-    gotoPrevStep()
-  }
-
-  const handleNext = () => {
-    if (isStepValid) {
-      setShowError(false)
-      gotoNextStep()
-    } else {
-      setShowError(true)
-    }
-  }
+  const showFinish = stepNumber === totalSteps
 
   return (
     <StepContainer>
@@ -43,27 +31,32 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
         <BackButton>
           <IconButton
             className="next"
-            onClick={handlePrev}
+            onClick={gotoPrevStep}
             color="secondary"
             sx={{ boxShadow: 3 }}
             aria-label="previous button"
           >
             <ArrowBack />
           </IconButton>
-          <div>Prev</div>
+          <Typography id="previous">Prev</Typography>
         </BackButton>
 
         <NextButton>
           <IconButton
-            className="next"
-            onClick={handleNext}
-            disabled={!isStepValid}
+            onClick={gotoNextStep}
+            disabled={!isStepValid || isSubmittingSurvey}
             sx={{ boxShadow: 3 }}
-            aria-label="next button"
+            aria-labelledby="next"
           >
-            {stepNumber === totalSteps ? <Check /> : <ArrowForward />}
+            {isSubmittingSurvey ? (
+              <CircularProgress size={24} />
+            ) : showFinish ? (
+              <Check />
+            ) : (
+              <ArrowForward />
+            )}
           </IconButton>
-          <div>{stepNumber === totalSteps ? 'Finish!' : 'Next'}</div>
+          <Typography id="next">{showFinish ? 'Finish!' : 'Next'}</Typography>
         </NextButton>
       </ButtonsContainer>
     </StepContainer>

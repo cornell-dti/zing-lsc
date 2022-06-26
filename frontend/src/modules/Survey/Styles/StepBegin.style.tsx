@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { colors, h1, h2, h3, h4, StyledComponent } from '@core'
+import { colors, h1, h2, h3, StyledComponent } from '@core'
 
 import teamPic from '@assets/img/teamwork.svg'
 
@@ -83,14 +83,6 @@ export const StyledWelcomeText = styled.text`
   @media (max-width: 900px) {
     font-size: 2rem;
   }
-`
-
-export const StyledErrorText = styled.text`
-  ${h4};
-  color: #d41e42;
-  padding-left: 0.5rem;
-  font-weight: 600;
-  position: relative;
 `
 
 export const StyledTextFieldWrapper = styled.div``
