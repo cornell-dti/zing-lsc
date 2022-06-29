@@ -115,10 +115,15 @@ const addStudentSurveyResponse = async (
     (course) => !existingCourseIds.includes(course.courseId)
   )
 
+  // Can't use serverTimestamp in arrays (error), but want to have same timestamp for everything here
+  const surveyTimestamp = admin.firestore.Timestamp.now()
+
   // Map to group membership objects for the student
   const newCourses = newCourseIdsWithNames.map((course) => ({
     courseId: course.courseId,
     groupNumber: -1,
+    notes: '',
+    notesModifyTime: surveyTimestamp, // Can't use serverTimestamp in arrays...
   }))
 
   // First, update the [student] collection to include the data for the new student
@@ -129,7 +134,7 @@ const addStudentSurveyResponse = async (
       college,
       year,
       groups: [...existingCourses, ...newCourses],
-      submissionTime: admin.firestore.FieldValue.serverTimestamp(),
+      submissionTime: surveyTimestamp,
     })
     .catch((err) => {
       console.log(err)
