@@ -27,6 +27,11 @@ router.post('/survey', (req, res) => {
     })
 })
 
+router.post('/notes', (req, res) => {
+  logger.log('notes')
+  res.sendStatus(418)
+})
+
 router.delete('/', checkAuth, (req, res) => {
   const email = req.body.studentEmail
   logger.info(`Student [${email}] deleted.`)
