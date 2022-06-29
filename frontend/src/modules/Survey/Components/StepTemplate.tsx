@@ -5,7 +5,7 @@ import {
   StyledFullPanel,
 } from 'Survey/Styles/StepTemplate.style'
 import { ProgressBar } from '@core/Components/index'
-import { IconButton, Box } from '@mui/material'
+import { IconButton, Box, Typography, CircularProgress } from '@mui/material'
 import { ArrowBack, ArrowForward, Check } from '@mui/icons-material'
 
 export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
@@ -14,22 +14,10 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   totalSteps,
   gotoPrevStep,
   gotoNextStep,
+  isSubmittingSurvey,
   children,
-  setShowError,
 }) => {
-  const handlePrev = () => {
-    setShowError(false)
-    gotoPrevStep()
-  }
-
-  const handleNext = () => {
-    if (isStepValid) {
-      setShowError(false)
-      gotoNextStep()
-    } else {
-      setShowError(true)
-    }
-  }
+  const showFinish = stepNumber === totalSteps
 
   return (
     <Box
@@ -48,16 +36,14 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
         <StyledWrapper style={{ height: '15%', margin: '0% 2%' }}>
           <Box sx={{ textAlign: 'center', color: 'purple.100' }}>
             <IconButton
-              className="next"
-              onClick={handlePrev}
+              onClick={gotoPrevStep}
               color="secondary"
               sx={{ boxShadow: 3 }}
-              aria-label="previous button"
+              aria-labelledby="previous"
             >
               <ArrowBack />
             </IconButton>
-            <br />
-            Prev
+            <Typography id="previous">Prev</Typography>
           </Box>
 
           <Box
@@ -68,16 +54,20 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
             }}
           >
             <IconButton
-              className="next"
-              onClick={handleNext}
-              disabled={!isStepValid}
+              onClick={gotoNextStep}
+              disabled={!isStepValid || isSubmittingSurvey}
               sx={{ boxShadow: 3 }}
-              aria-label="next button"
+              aria-labelledby="next"
             >
-              {stepNumber === totalSteps ? <Check /> : <ArrowForward />}
+              {isSubmittingSurvey ? (
+                <CircularProgress size={24} />
+              ) : showFinish ? (
+                <Check />
+              ) : (
+                <ArrowForward />
+              )}
             </IconButton>
-            <br />
-            {stepNumber === totalSteps ? 'Finish!' : 'Next'}
+            <Typography id="next">{showFinish ? 'Finish!' : 'Next'}</Typography>
           </Box>
         </StyledWrapper>
       </StyledFullPanel>
