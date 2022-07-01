@@ -20,7 +20,7 @@ async function removeStudentFromCourse(
   const data: any = (await ref.get()).data()
   if (data.members.length === 1 && data.members.includes(email)) {
     //second condition is a sanity check
-    return ref.delete()
+    return ref.delete() // Fix this if we ever use this function, I don't think they want groups to ever be deleted fully
   } else {
     return ref.update({
       members: admin.firestore.FieldValue.arrayRemove(email),
@@ -190,7 +190,7 @@ const addStudentSurveyResponse = async (
         snapshotRef
           .update({
             unmatched: admin.firestore.FieldValue.arrayUnion(email),
-            latestSubmissionTime: admin.firestore.FieldValue.serverTimestamp(),
+            latestSubmissionTime: surveyTimestamp,
           })
           .catch((err) => {
             console.log(err)
@@ -234,4 +234,35 @@ async function removeStudent(email: string) {
   await Promise.all([courseUpdates, studentDocRef.delete()].flat())
 }
 
-export { addStudentSurveyResponse, removeStudent }
+/** Update student notes for a specific course */
+const updateStudentNotes = async (
+  email: string,
+  courseId: string,
+  notes: string
+) => {
+  const studentDoc = studentR.doc(email)
+  const studentData = (await studentDoc.get()).data()
+  if (!studentData) {
+    throw new Error(`Student document for ${email} does not exist`)
+  }
+
+  const groups: {
+    courseId: string
+    notes: string
+    notesModifyTime: admin.firestore.Timestamp
+  }[] = studentData.groups
+  const groupMembership = groups.find((group) => group.courseId === courseId)
+  if (!groupMembership) {
+    throw new Error(`Student ${email} does not have membership in ${courseId}`)
+  }
+
+  groupMembership.notes = notes
+  groupMembership.notesModifyTime = admin.firestore.Timestamp.now()
+
+  await studentDoc.update({ groups })
+  logger.info(
+    `Updated notes for [${courseId}] in student [${email}] to [${notes}]`
+  )
+}
+
+export { addStudentSurveyResponse, removeStudent, updateStudentNotes }
