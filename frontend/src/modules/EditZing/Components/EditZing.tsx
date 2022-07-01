@@ -309,6 +309,15 @@ export const EditZing = () => {
     selectedGroupNumbers.includes(group.groupNumber)
   )
 
+  const [selectedStudents, setSelectedStudents] = useState<string[]>([])
+  const handleAddStudent = (student: string, selected: boolean) => {
+    if (selected) {
+      setSelectedStudents((arr) => [...arr, student])
+    } else {
+      setSelectedStudents(selectedStudents.filter((item) => item !== student))
+    }
+  }
+
   // Open and close the 'Send email to' menu drop down
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const menuOpen = Boolean(anchorEl)
@@ -328,11 +337,16 @@ export const EditZing = () => {
     handleMenuClose()
   }
 
+  const handleSelectStudents = () => {
+    setIsEmailing(true)
+  }
+
   return courseInfo && hasLoadedStudentData ? (
     <Box>
       {isEmailing && (
         <EmailModal
           selectedGroups={selectedGroups}
+          selectedStudents={selectedStudents}
           isEmailing={isEmailing}
           setIsEmailing={setIsEmailing}
           setEmailSent={setEmailSent}
@@ -390,6 +404,9 @@ export const EditZing = () => {
               <MenuItem onClick={handleSelectNewlyMatched}>
                 Newly Matched
               </MenuItem>
+              <MenuItem onClick={handleSelectStudents}>
+                Selected Students
+              </MenuItem>
             </Menu>
           </>
         ) : (
@@ -402,10 +419,19 @@ export const EditZing = () => {
       <Box m={6}>
         <DndProvider backend={HTML5Backend}>
           <Grid container spacing={1} padding={0}>
+            <Button
+              onClick={() =>
+                console.log(`Selected students: ${selectedStudents}`)
+              }
+            >
+              {' '}
+              Students{' '}
+            </Button>
             <UnmatchedGrid
               unmatchedStudents={unmatchedStudents}
               moveStudent={moveStudent}
               matchStudents={matchStudents}
+              handleAddStudent={handleAddStudent}
             />
             {studentGroups.map((studentGroup, index) => (
               <GroupGrid
@@ -424,6 +450,7 @@ export const EditZing = () => {
                 handleChecked={(event) => {
                   editSelectedGroups(studentGroup, event.target.checked)
                 }}
+                handleAddStudent={handleAddStudent}
               />
             ))}
           </Grid>

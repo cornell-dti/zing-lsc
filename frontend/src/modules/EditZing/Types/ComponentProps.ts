@@ -11,6 +11,7 @@ export interface UnmatchedGridProps {
     toGroupNumber: number
   ) => void
   matchStudents: () => void
+  handleAddStudent: (student: string, selected: boolean) => void
 }
 
 export interface GroupGridProps {
@@ -28,6 +29,7 @@ export interface GroupGridProps {
   updateTime: Date
   selected: boolean
   handleChecked: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleAddStudent: (student: string, selected: boolean) => void
 }
 
 export interface StudentGridProps {
@@ -35,6 +37,7 @@ export interface StudentGridProps {
   groupNumber: number
   xsSize?: GridSize
   submissionTime: Date
+  handleAddStudent: (student: string, selected: boolean) => void
 }
 
 export interface MatchLoadingProps {
@@ -46,6 +49,7 @@ export interface MatchLoadingProps {
 }
 
 export interface EmailModalProps {
+  selectedStudents: string[]
   selectedGroups: Group[]
   isEmailing: boolean
   setIsEmailing: (arg: boolean) => void

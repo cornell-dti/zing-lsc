@@ -19,6 +19,7 @@ export const GroupGrid = ({
   addStudentEmailTimestamp,
   selected,
   handleChecked,
+  handleAddStudent,
 }: GroupGridProps) => {
   const tooltips = [
     {
@@ -129,6 +130,7 @@ export const GroupGrid = ({
               groupNumber={groupNumber}
               student={student}
               submissionTime={student.submissionTime}
+              handleAddStudent={handleAddStudent}
             />
           ))}
         </Grid>

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
@@ -12,7 +12,7 @@ import {
   StyledStudentText,
 } from 'EditZing/Styles/StudentAndGroup.style'
 import Tooltip from '@mui/material/Tooltip'
-
+import { Checkbox } from '@mui/material'
 const PREFIX = 'StudentGrid'
 
 const classes = {
@@ -51,6 +51,7 @@ export const StudentGrid = ({
   groupNumber,
   xsSize = 6,
   submissionTime,
+  handleAddStudent,
 }: StudentGridProps) => {
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -64,12 +65,32 @@ export const StudentGrid = ({
     }),
   })
 
+  const [isHovering, setIsHovering] = useState(false)
+  const [selected, setSelected] = useState(false)
+  const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleAddStudent(student.email, e.target.checked)
+    setSelected(!selected)
+  }
+
   const opacity = isDragging ? '0' : '1.0'
 
   return (
     <StyledGrid item xs={xsSize}>
       <div ref={drag}>
-        <Paper style={{ opacity: opacity }} className={classes.paper1}>
+        <Paper
+          onMouseOver={() => setIsHovering(true)}
+          onMouseOut={() => setIsHovering(false)}
+          style={{ opacity: opacity }}
+          className={classes.paper1}
+        >
+          <Checkbox
+            color="secondary"
+            checked={selected}
+            onChange={handleChecked}
+            sx={{
+              display: selected || isHovering ? 'flex' : 'none',
+            }}
+          />
           <Tooltip
             disableFocusListener
             disableTouchListener

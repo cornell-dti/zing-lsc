@@ -15,6 +15,7 @@ import { adminSignIn } from '@fire/firebase'
 
 export const EmailModal = ({
   selectedGroups,
+  selectedStudents,
   isEmailing,
   setIsEmailing,
   courseNames,
@@ -50,6 +51,44 @@ export const EmailModal = ({
     ]
   }
 
+  const emailStudents = async () => {
+    // const emailRcpts = selectedStudents
+    // const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+    // const emailSubject = 'Study Partners!'
+    // const emailItems = {
+    //   emailSubject,
+    //   emailRcpts,
+    //   emailBody,
+    //   courseId,
+    //   groupNum: -1,
+    //   selectedTemplate,
+    // }
+    // return sendEmail(emailItems)
+
+    let failure = false
+
+    await Promise.all(
+      selectedStudents.map((student) => {
+        const emailRcpts = [student]
+        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+        const emailSubject = 'Study Partners!'
+        const emailItems = {
+          emailSubject,
+          emailRcpts,
+          emailBody,
+          courseId,
+          groupNum: -1,
+          selectedTemplate,
+        }
+        return sendEmail(emailItems).then((res) => {
+          if (res === false) failure = true
+        })
+      })
+    )
+
+    return failure
+  }
+
   /**
    * promise that sends emails to each group.
    *
@@ -58,7 +97,7 @@ export const EmailModal = ({
   const sendGroupEmails = async () => {
     let failure = false
 
-    await Promise.all(
+    await Promise.all([
       selectedGroups.map((group) => {
         const emailRcpts = groupEmails(group)
         const emailBody = getBody(selectedTemplate, courseNames.join(', '))
@@ -75,8 +114,28 @@ export const EmailModal = ({
         return sendEmail(emailItems).then((res) => {
           if (res === false) failure = true
         })
-      })
-    )
+      }),
+      selectedStudents.map((student) => {
+        const emailRcpts = [student]
+        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+        const emailSubject = 'Study Partners!'
+        const emailItems = {
+          emailSubject,
+          emailRcpts,
+          emailBody,
+          courseId,
+          groupNum: -1,
+          selectedTemplate,
+        }
+        return sendEmail(emailItems).then((res) => {
+          if (res === false) failure = true
+        })
+      }),
+    ])
+
+    // emailStudents().then((res) => {
+    //   if (res === false) failure = true
+    // })
 
     return failure
   }
