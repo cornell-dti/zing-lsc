@@ -419,14 +419,6 @@ export const EditZing = () => {
       <Box m={6}>
         <DndProvider backend={HTML5Backend}>
           <Grid container spacing={1} padding={0}>
-            <Button
-              onClick={() =>
-                console.log(`Selected students: ${selectedStudents}`)
-              }
-            >
-              {' '}
-              Students{' '}
-            </Button>
             <UnmatchedGrid
               unmatchedStudents={unmatchedStudents}
               moveStudent={moveStudent}
