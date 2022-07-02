@@ -133,7 +133,9 @@ export const sendMails = async (
       },
       data: JSON.stringify(message),
     })
-    if (response.status === 202) {
+    logger.info(`Response from the endpoint is: `, response)
+    logger.info(`Reponse status is =  ${response.status}`)
+    if (response.status === 202 && parseInt(group) > 0) {
       await updateEmailTimestamp(courseId, group, template)
         .then(() =>
           logger.info(

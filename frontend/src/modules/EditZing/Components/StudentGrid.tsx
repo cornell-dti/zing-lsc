@@ -1,50 +1,11 @@
 import { useState } from 'react'
-import { styled } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import { STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
-// import { genderSVG } from 'EditZing/Styles/InlineSVGs'
-import { colors } from '@core'
 import { useDrag } from 'react-dnd'
-import {
-  StyledStudentDetail,
-  StyledStudentText,
-} from 'EditZing/Styles/StudentAndGroup.style'
 import Tooltip from '@mui/material/Tooltip'
 import { Checkbox, Box, Typography } from '@mui/material'
-const PREFIX = 'StudentGrid'
-
-const classes = {
-  paper1: `${PREFIX}-paper1`,
-  paper2: `${PREFIX}-paper2`,
-}
-
-// should we make it so that when it overflows, then the user can scroll?
-const StyledGrid = styled(Grid)(
-  ({ theme }) => `
-  & .${classes.paper1} {
-    padding: ${theme.spacing(2)};
-    text-align: left;
-    color: ${colors.black};
-    font-family: 'Montserrat';
-    font-weight: 700;
-    font-size: 14;
-    border: 0px solid rgba(205, 156, 242, 0.15);
-    box-shadow: 0px 2px 5px rgba(205, 156, 242, 0.2);
-    border-radius: 10px;
-    //overflow-x: scroll;
-    width: 112px;
-  }
-
-  & .${classes.paper2} {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    margin-top: 2px;
-  }
-`
-)
 
 /** the equivalent of MoveableItem */
 export const StudentGrid = ({
@@ -83,7 +44,7 @@ export const StudentGrid = ({
           onMouseOut={() => setIsHovering(false)}
           style={{ opacity: opacity }}
           sx={{
-            padding: '10px',
+            padding: '11px 12px',
             background: selected ? 'rgba(129, 94, 212, 0.15)' : '#FBF9FF',
             border: '0.25px solid #C0AEEA',
             fontFamily: 'Montserrat',

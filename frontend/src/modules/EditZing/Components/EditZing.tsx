@@ -336,15 +336,8 @@ export const EditZing = () => {
     )
     handleMenuClose()
   }
-
-  const handleSelectStudents = () => {
-    setIsEmailing(true)
-  }
-
   return courseInfo && hasLoadedStudentData ? (
-    <Box
-    // sx={{ maxWidth: '1440px', marginLeft: 'auto', marginRight: 'auto' }}
-    >
+    <Box>
       {isEmailing && (
         <EmailModal
           selectedGroups={selectedGroups}
@@ -405,9 +398,6 @@ export const EditZing = () => {
             >
               <MenuItem onClick={handleSelectNewlyMatched}>
                 Newly Matched
-              </MenuItem>
-              <MenuItem onClick={handleSelectStudents}>
-                Selected Students
               </MenuItem>
             </Menu>
           </>

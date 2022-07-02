@@ -57,27 +57,22 @@ export const EmailModal = ({
    * @throws error if there are any errors in sending the email
    */
   const sendIndividualEmails = async () => {
-    try {
-      await Promise.all(
-        selectedStudents.map((student) => {
-          const emailRcpts = [student]
-          const emailBody = getBody(selectedTemplate, courseNames.join(', '))
-          const emailSubject = 'Study Partners!'
-          const emailItems = {
-            emailSubject,
-            emailRcpts,
-            emailBody,
-            courseId,
-            groupNum: -1,
-            selectedTemplate,
-          }
-          return sendEmail(emailItems)
-        })
-      )
-    } catch (err) {
-      console.log(`Failed to send individual emails`)
-      throw new Error('Failed to send individual emails')
-    }
+    await Promise.all(
+      selectedStudents.map((student) => {
+        const emailRcpts = [student]
+        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+        const emailSubject = 'Study Partners!'
+        const emailItems = {
+          emailSubject,
+          emailRcpts,
+          emailBody,
+          courseId,
+          groupNum: -1,
+          selectedTemplate,
+        }
+        return sendEmail(emailItems)
+      })
+    )
   }
 
   /**
@@ -86,28 +81,23 @@ export const EmailModal = ({
    * @throws error if there are any errors in sending the email
    */
   const sendGroupEmails = async () => {
-    try {
-      await Promise.all(
-        selectedGroups.map((group) => {
-          const emailRcpts = groupEmails(group)
-          const emailBody = getBody(selectedTemplate, courseNames.join(', '))
-          const emailSubject = 'Study Partners!'
-          const groupNum = group.groupNumber.toString()
-          const emailItems = {
-            emailSubject,
-            emailRcpts,
-            emailBody,
-            courseId,
-            groupNum,
-            selectedTemplate,
-          }
-          return sendEmail(emailItems)
-        })
-      )
-    } catch (err) {
-      console.log(`Failed to send group emails`)
-      throw new Error('Failed to send group emails')
-    }
+    await Promise.all(
+      selectedGroups.map((group) => {
+        const emailRcpts = groupEmails(group)
+        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+        const emailSubject = 'Study Partners!'
+        const groupNum = group.groupNumber.toString()
+        const emailItems = {
+          emailSubject,
+          emailRcpts,
+          emailBody,
+          courseId,
+          groupNum,
+          selectedTemplate,
+        }
+        return sendEmail(emailItems)
+      })
+    )
 
     // emailStudents().then((res) => {
     //   if (res === false) failure = true

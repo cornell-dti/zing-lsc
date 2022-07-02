@@ -177,6 +177,7 @@ export const sendEmail = async (emailItems: any) => {
       emailSent = false
       console.log('Email send error. Please try again.')
       console.log(res)
+      throw new Error(`API call to send email failed.`)
 
       /* firebase login requires user action (ie. press button) will throw error 
           if we try to call it straight up. 
