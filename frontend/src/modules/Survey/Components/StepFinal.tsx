@@ -9,6 +9,8 @@ import {
 } from 'Survey/Styles/StepFinal.style'
 import { StepFinalProps } from 'Survey/Types'
 import { Button } from '@mui/material'
+import { SURVEY_PATH } from '@core/Constants'
+import { Link } from 'react-router-dom'
 import check from '@assets/img/whitecheckmark.svg'
 import warn from '@assets/img/warnbutton.svg'
 import xmark from '@assets/img/xbutton.svg'
@@ -19,6 +21,12 @@ export const StepFinal = ({
   errorMsg,
 }: StepFinalProps) => {
   const showWarning = success && submissionResponse.failed.length !== 0
+  const buttonStyle = {
+    width: '14em',
+    fontSize: { sm: 14, md: 22 },
+    mt: '1.25em',
+    boxShadow: 1,
+  }
 
   return (
     <StyledContainer>
@@ -55,19 +63,37 @@ export const StepFinal = ({
             </StyledCongratulationsText>
           )}
         </StyledCongratulationsWrapper>
-        <Button
-          color="secondary"
-          variant="outlined"
-          href="https://lsc.cornell.edu/"
-          sx={{
-            width: '14em',
-            fontSize: { sm: 14, md: 22 },
-            mt: '1.25em',
-            boxShadow: 1,
-          }}
-        >
-          Back to home
-        </Button>
+
+        {!showWarning && success ? (
+          <Button
+            color="secondary"
+            variant="outlined"
+            href="https://lsc.cornell.edu/"
+            sx={buttonStyle}
+          >
+            Back to LSC
+          </Button>
+        ) : (
+          <>
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={() => window.location.reload()}
+              sx={buttonStyle}
+            >
+              Return to survey
+            </Button>
+            <Button
+              color="primary"
+              variant="outlined"
+              href="https://lsc.cornell.edu/"
+              sx={buttonStyle}
+            >
+              Back to LSC
+            </Button>
+          </>
+        )}
+
         <StyledContactWrapper>
           <StyledContactText>
             Contact lscstudypartners@cornell.edu with any questions.
