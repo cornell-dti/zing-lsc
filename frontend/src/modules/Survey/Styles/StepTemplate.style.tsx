@@ -61,7 +61,6 @@ export const StepContainer = styled.div`
     height: 100%;
   }
   position: relative;
-  // background: grey;
 `
 
 export const StyledWrapper = styled.div`

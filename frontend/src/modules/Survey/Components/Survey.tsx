@@ -93,13 +93,12 @@ export const Survey = () => {
     </SplashBackground>
   ) : currStep === totalSteps + 1 ? (
     // Form confirmation
-    <QuestionBackground>
-      <StepFinal
-        success={surveyError === null}
-        submissionResponse={surveySubmissionResponse!}
-        errorMsg={surveyError != null ? surveyError : ''}
-      />
-    </QuestionBackground>
+
+    <StepFinal
+      success={surveyError === null}
+      submissionResponse={surveySubmissionResponse!}
+      errorMsg={surveyError != null ? surveyError : ''}
+    />
   ) : (
     <QuestionBackground>
       <StepTemplate

@@ -1,14 +1,8 @@
 import React, { FunctionComponent } from 'react'
 import { StepTemplateProps } from 'Survey/Types'
-import {
-  StyledWrapper,
-  ButtonsContainer,
-  BackButton,
-  NextButton,
-  StepContainer,
-} from 'Survey/Styles/StepTemplate.style'
+import { StyledWrapper } from 'Survey/Styles/StepTemplate.style'
 import { ProgressBar } from '@core/Components/index'
-import { IconButton, Typography, CircularProgress } from '@mui/material'
+import { IconButton, Typography, CircularProgress, Box } from '@mui/material'
 import { ArrowBack, ArrowForward, Check } from '@mui/icons-material'
 
 export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
@@ -23,11 +17,46 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   const showFinish = stepNumber === totalSteps
 
   return (
-    <StepContainer>
+    <Box
+      sx={{
+        background: '#fff',
+        width: {
+          xs: '100%',
+          lg: '80%',
+        },
+        height: {
+          xs: '100%',
+          lg: '90%',
+        },
+        maxWidth: '1440px',
+        position: 'relative',
+      }}
+    >
       <ProgressBar step={stepNumber} total={totalSteps} />
       <StyledWrapper>{children}</StyledWrapper>
-      <ButtonsContainer>
-        <BackButton>
+      <Box
+        sx={{
+          display: 'flex',
+          flexFlow: 'row',
+          width: '100%',
+          paddingBottom: '20%',
+          paddingTop: '50px',
+          '& > *': {
+            position: {
+              xs: 'absolute',
+              lg: 'static',
+            },
+            textAlign: 'center',
+            color: '#815ed4',
+          },
+        }}
+      >
+        <Box
+          sx={{
+            left: '10%',
+            marginLeft: '15%',
+          }}
+        >
           <IconButton
             className="next"
             onClick={gotoPrevStep}
@@ -38,9 +67,17 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
             <ArrowBack />
           </IconButton>
           <Typography id="previous">Prev</Typography>
-        </BackButton>
+        </Box>
 
-        <NextButton>
+        <Box
+          sx={{
+            right: '10%',
+            marginRight: '15%',
+            marginLeft: {
+              lg: 'auto',
+            },
+          }}
+        >
           <IconButton
             onClick={gotoNextStep}
             disabled={!isStepValid || isSubmittingSurvey}
@@ -56,8 +93,8 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
             )}
           </IconButton>
           <Typography id="next">{showFinish ? 'Finish!' : 'Next'}</Typography>
-        </NextButton>
-      </ButtonsContainer>
-    </StepContainer>
+        </Box>
+      </Box>
+    </Box>
   )
 }
