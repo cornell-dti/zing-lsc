@@ -56,7 +56,7 @@ export const GroupGrid = ({
   }
 
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
+    <Grid item xs={12} sm={6} md={4} lg={3} xl={2.5}>
       <Box
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}

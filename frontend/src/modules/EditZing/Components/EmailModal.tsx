@@ -246,7 +246,8 @@ export const EmailModal = ({
           }}
           endIcon={<SendIcon />}
         >
-          Send {selectedGroups.length} Emails
+          Send {selectedGroups.length > 0 && selectedGroups.length}
+          {selectedStudents.length > 0 && selectedStudents.length} Emails
         </Button>
       )
     } else return null
@@ -278,10 +279,14 @@ export const EmailModal = ({
           sx={{ display: 'flex', gap: 1 }}
         >
           <Box component="span">To:</Box>
-          <Box component="span" sx={{ fontWeight: 900 }}>
+          <Box
+            component="span"
+            sx={{ fontWeight: 900, maxWidth: '90%', wordBreak: 'break-word' }}
+          >
             {selectedGroups
               .map(({ groupNumber }) => `Group ${groupNumber}`)
               .join(', ')}
+            {selectedStudents.join(', ')}
           </Box>
         </Typography>
         {step === 0 && <Step0 />}

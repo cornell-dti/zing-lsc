@@ -342,7 +342,9 @@ export const EditZing = () => {
   }
 
   return courseInfo && hasLoadedStudentData ? (
-    <Box>
+    <Box
+    // sx={{ maxWidth: '1440px', marginLeft: 'auto', marginRight: 'auto' }}
+    >
       {isEmailing && (
         <EmailModal
           selectedGroups={selectedGroups}
