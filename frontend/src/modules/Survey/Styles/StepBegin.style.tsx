@@ -31,9 +31,6 @@ export const StyledLeftPanel = styled.div`
   ${halfPanel};
   align-items: center;
   background: #815ed4;
-  @media (max-width: 900px) {
-    display: none;
-  }
 `
 
 export const StyledWhiteActionText = styled.h1`
