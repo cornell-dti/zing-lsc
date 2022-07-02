@@ -12,7 +12,7 @@ import {
   StyledStudentText,
 } from 'EditZing/Styles/StudentAndGroup.style'
 import Tooltip from '@mui/material/Tooltip'
-import { Checkbox } from '@mui/material'
+import { Checkbox, Box, Typography } from '@mui/material'
 const PREFIX = 'StudentGrid'
 
 const classes = {
@@ -34,6 +34,7 @@ const StyledGrid = styled(Grid)(
     box-shadow: 0px 2px 5px rgba(205, 156, 242, 0.2);
     border-radius: 10px;
     //overflow-x: scroll;
+    width: 112px;
   }
 
   & .${classes.paper2} {
@@ -75,22 +76,24 @@ export const StudentGrid = ({
   const opacity = isDragging ? '0' : '1.0'
 
   return (
-    <StyledGrid item xs={xsSize}>
+    <Grid item xs={xsSize} sx={{ minWidth: '112px' }}>
       <div ref={drag}>
         <Paper
           onMouseOver={() => setIsHovering(true)}
           onMouseOut={() => setIsHovering(false)}
           style={{ opacity: opacity }}
-          className={classes.paper1}
+          sx={{
+            padding: '10px',
+            background: selected ? 'rgba(129, 94, 212, 0.15)' : '#FBF9FF',
+            border: '0.25px solid #C0AEEA',
+            fontFamily: 'Montserrat',
+            fontWeight: '700',
+            fontSize: '14',
+            boxShadow: '0px 2px 5px rgba(205, 156, 242, 0.2)',
+            borderRadius: '10px',
+            width: '100%',
+          }}
         >
-          <Checkbox
-            color="secondary"
-            checked={selected}
-            onChange={handleChecked}
-            sx={{
-              display: selected || isHovering ? 'flex' : 'none',
-            }}
-          />
           <Tooltip
             disableFocusListener
             disableTouchListener
@@ -101,17 +104,43 @@ export const StudentGrid = ({
               submissionTime.getDate()
             }
           >
-            <StyledStudentText>{student.name}</StyledStudentText>
+            <Box
+              sx={{
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                gap: '13px',
+                position: 'relative',
+              }}
+            >
+              <Box sx={{ width: '90%' }}>
+                <Typography sx={{ fontWeight: '800', fontSize: '0.875rem' }}>
+                  {student.name}
+                </Typography>
+                <Typography sx={{ fontWeight: '400', fontSize: '0.875rem' }}>
+                  {student.email.replace('@cornell.edu', '')}
+                </Typography>
+                <Typography sx={{ fontWeight: '400', fontSize: '0.875rem' }}>
+                  {student.year}
+                </Typography>
+              </Box>
+
+              <Checkbox
+                color="secondary"
+                checked={selected}
+                onChange={handleChecked}
+                sx={{
+                  display: selected || isHovering ? '' : 'none',
+                  width: '20px',
+                  height: '20px',
+                  position: 'absolute',
+                  right: '4px',
+                  top: '4px',
+                }}
+              />
+            </Box>
           </Tooltip>
-          <div className={classes.paper2}>
-            {/* {genderSVG} {student.pronoun === 'a' ? 'Male' : 'Female'} */}
-            <StyledStudentDetail>
-              {student.email.replace('@cornell.edu', '')}
-            </StyledStudentDetail>
-            <StyledStudentDetail>{student.year}</StyledStudentDetail>
-          </div>
         </Paper>
       </div>
-    </StyledGrid>
+    </Grid>
   )
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import { Box } from '@mui/material'
 import { StudentGrid } from 'EditZing/Components/StudentGrid'
 import Grid, { GridSize } from '@mui/material/Grid'
 import { UnmatchedGridProps } from 'EditZing/Types/ComponentProps'
@@ -41,7 +41,7 @@ export const UnmatchedGrid = ({
           </StyledUnmatchedText>
           <MatchButton label="Match" onClick={matchStudents} />
         </StyledUnmatchedTextWrapper>
-        <Grid container spacing={2}>
+        <Box sx={{ display: 'flex', flexFlow: 'row wrap', gap: '8px' }}>
           {unmatchedStudents.map((student, index) => (
             <StudentGrid
               key={index}
@@ -52,7 +52,7 @@ export const UnmatchedGrid = ({
               handleAddStudent={handleAddStudent}
             />
           ))}
-        </Grid>
+        </Box>
       </StyledUnmatchedContainer>
     </Grid>
   )

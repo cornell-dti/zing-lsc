@@ -380,7 +380,7 @@ export const EditZing = () => {
           {courseInfo.names.join(', ')} ({courseInfo.roster})
         </Typography>
         <Box flexGrow={2} />
-        {selectedGroupNumbers.length === 0 ? (
+        {selectedGroupNumbers.length === 0 && selectedStudents.length === 0 ? (
           <>
             <Button
               onClick={handleMenuOpen}
@@ -410,7 +410,12 @@ export const EditZing = () => {
             </Menu>
           </>
         ) : (
-          <Button onClick={() => setIsEmailing(!isEmailing)}>
+          <Button
+            disabled={
+              selectedGroupNumbers.length > 0 && selectedStudents.length > 0
+            }
+            onClick={() => setIsEmailing(!isEmailing)}
+          >
             Email selected
           </Button>
         )}
