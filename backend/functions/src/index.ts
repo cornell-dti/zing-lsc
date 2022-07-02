@@ -9,8 +9,6 @@ import {
 } from './middleware/auth-middleware'
 import { unless } from './middleware/unless'
 
-require('dotenv').config({ path: '../.env' })
-
 // import routers
 import studentsRouter from './student/routes'
 import matchingRouter from './matching/routes'
