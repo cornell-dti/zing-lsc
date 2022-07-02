@@ -1,9 +1,13 @@
 import { db } from '../config'
 import admin from 'firebase-admin'
+import { getStudentsData } from '../student/functions'
+import { Student } from '../types'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
 
 // =====================  HELPER FUNCTIONS ======================
+/** Avoid using this assertion check, it's usually not necessary.
+ *  Just get the course doc and throw an error if the data is undefined. */
 async function assertIsExistingCourse(courseId: string) {
   await courseRef
     .doc(courseId)
@@ -66,25 +70,7 @@ async function makeMatches(courseId: string) {
   const lastGroupNumber: number = data.lastGroupNumber
 
   // get relevant student data
-  const studentData = await Promise.all(
-    unmatchedEmails.map((studentEmail: string) =>
-      studentRef
-        .doc(studentEmail)
-        .get()
-        .then((snapshot) => {
-          if (!snapshot.exists)
-            throw new Error(`Student ${studentEmail} does not exist`)
-          const d: any = snapshot.data()
-          d['email'] = snapshot.id
-          d['submissionTime'] = d.submissionTime.toDate()
-          return d
-        })
-        .catch((err) => {
-          console.log(err)
-          throw new Error(`Error in getting data for ${studentEmail}`)
-        })
-    )
-  )
+  const studentData = await getStudentsData(unmatchedEmails)
 
   // Zero students can't be matched
   if (unmatchedEmails.length === 0) {
@@ -96,8 +82,8 @@ async function makeMatches(courseId: string) {
   }
 
   // Fairly naive group matching code but it's written for clarity
-  let studentDataTriples
-  let studentDataDoubles
+  let studentDataTriples: Student[]
+  let studentDataDoubles: Student[]
   if (unmatchedEmails.length % 3 === 0) {
     studentDataTriples = studentData
     studentDataDoubles = []

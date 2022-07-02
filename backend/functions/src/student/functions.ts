@@ -1,19 +1,35 @@
 import { db } from '../config'
 import admin from 'firebase-admin'
 import { logger } from 'firebase-functions'
-const courseR = db.collection('courses')
-const studentR = db.collection('students')
 import {
   mapCatalogNameToCourseId,
   MissingCourseError,
 } from '../course/get_course_id'
+import { Student } from '../types'
+const courseRef = db.collection('courses')
+const studentRef = db.collection('students')
+
+/** Get student data as Student type (with email and timestamps as Date) */
+export const getStudentData = async (email: string) => {
+  const studentData = (await studentRef.doc(email).get()).data()
+  if (!studentData) {
+    throw new Error(`Student document for ${email} does not exist`)
+  }
+  studentData.email = email
+  studentData.submissionTime = studentData.submissionTime.toDate()
+  return studentData as Student
+}
+
+/** Get multiple student data as Student type (email + timestamps as Date) */
+export const getStudentsData = (emails: string[]) =>
+  Promise.all(emails.map((email) => getStudentData(email)))
 
 async function removeStudentFromCourse(
   email: any,
   courseId: string,
   groupNumber: any
 ) {
-  const ref = courseR
+  const ref = courseRef
     .doc(courseId)
     .collection('groups')
     .doc(groupNumber.toString())
@@ -31,14 +47,12 @@ async function removeStudentFromCourse(
 // Note: the error handling in this file is done the way it is so it is easier
 // to decide response codes based on error type.
 // NOTE: this function WILL succeed even if no classes could be found.
-const addStudentSurveyResponse = async (
+export const addStudentSurveyResponse = async (
   name: string,
   email: string,
   college: string,
   year: string,
-  courseCatalogNames: string[],
-  courseRef = courseR,
-  studentRef = studentR
+  courseCatalogNames: string[]
 ) => {
   const roster = 'SU22' // Summer 2022 for LSC launch
 
@@ -221,8 +235,8 @@ const addStudentSurveyResponse = async (
 }
 
 // This has not been used in a very long long time
-async function removeStudent(email: string) {
-  const studentDocRef = studentR.doc(email)
+export async function removeStudent(email: string) {
+  const studentDocRef = studentRef.doc(email)
   const data = (await studentDocRef.get()).data()
   if (!data) throw new Error(`Cannot find student ${email}`)
   const groups = data.groups
@@ -235,12 +249,12 @@ async function removeStudent(email: string) {
 }
 
 /** Update student notes for a specific course */
-const updateStudentNotes = async (
+export const updateStudentNotes = async (
   email: string,
   courseId: string,
   notes: string
 ) => {
-  const studentDoc = studentR.doc(email)
+  const studentDoc = studentRef.doc(email)
   const studentData = (await studentDoc.get()).data()
   if (!studentData) {
     throw new Error(`Student document for ${email} does not exist`)
@@ -264,5 +278,3 @@ const updateStudentNotes = async (
     `Updated notes for [${courseId}] in student [${email}] to [${notes}]`
   )
 }
-
-export { addStudentSurveyResponse, removeStudent, updateStudentNotes }
