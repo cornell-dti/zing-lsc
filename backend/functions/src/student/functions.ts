@@ -17,6 +17,10 @@ export const getStudentData = async (email: string) => {
   }
   studentData.email = email
   studentData.submissionTime = studentData.submissionTime.toDate()
+  studentData.groups = studentData.groups.map((group: any) => ({
+    ...group,
+    notesModifyTime: group.notesModifyTime.toDate(),
+  }))
   return studentData as Student
 }
 
