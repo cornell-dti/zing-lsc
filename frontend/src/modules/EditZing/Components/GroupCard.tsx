@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import StudentCard from 'EditZing/Components/StudentCard'
 import { GroupGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrop } from 'react-dnd'
 import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
 import { StyledGroupText } from 'EditZing/Styles/StudentAndGroup.style'
-import { Box, Tooltip, Grid, Checkbox } from '@mui/material'
+import { Box, Tooltip, Checkbox } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 
 /** the equivalent of Column */

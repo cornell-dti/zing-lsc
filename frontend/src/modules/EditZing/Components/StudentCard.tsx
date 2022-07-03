@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import Paper from '@mui/material/Paper'
-import Grid from '@mui/material/Grid'
 import { STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrag } from 'react-dnd'
