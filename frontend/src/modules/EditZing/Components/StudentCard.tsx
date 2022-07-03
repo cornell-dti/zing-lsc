@@ -49,7 +49,7 @@ const StudentCard = ({
           style={{ opacity: opacity }}
           sx={{
             padding: '11px 12px',
-            background: selected ? 'rgba(129, 94, 212, 0.15)' : '#FBF9FF',
+            background: selected ? 'rgba(213, 204, 230, .85)' : '#FBF9FF',
             border: '0.25px solid #C0AEEA',
             fontFamily: 'Montserrat',
             fontWeight: '700',
@@ -63,28 +63,28 @@ const StudentCard = ({
             height: '105px',
           }}
         >
-          <Tooltip
-            disableFocusListener
-            disableTouchListener
-            title={
-              'Requested study partner ' +
-              (submissionTime.getMonth() + 1) +
-              '/' +
-              submissionTime.getDate()
-            }
+          <Box
+            sx={{
+              display: 'flex',
+              flexFlow: 'row nowrap',
+              gap: '13px',
+              position: 'relative',
+            }}
           >
             <Box
               sx={{
-                display: 'flex',
-                flexFlow: 'row nowrap',
-                gap: '13px',
-                position: 'relative',
+                width: isHovering || selected ? '75%' : '100%',
               }}
             >
-              <Box
-                sx={{
-                  width: isHovering || selected ? '75%' : '100%',
-                }}
+              <Tooltip
+                disableFocusListener
+                disableTouchListener
+                title={
+                  'Requested study partner ' +
+                  (submissionTime.getMonth() + 1) +
+                  '/' +
+                  submissionTime.getDate()
+                }
               >
                 <Typography
                   sx={{
@@ -95,30 +95,30 @@ const StudentCard = ({
                 >
                   {student.name}
                 </Typography>
-                <Typography sx={{ fontWeight: '400', fontSize: '0.875rem' }}>
-                  {student.email.replace('@cornell.edu', '')}
-                </Typography>
-                <Typography sx={{ fontWeight: '400', fontSize: '0.875rem' }}>
-                  {student.year}
-                </Typography>
-              </Box>
-
-              <Checkbox
-                color="secondary"
-                checked={selected}
-                onChange={handleChecked}
-                disableRipple
-                sx={{
-                  display: selected || isHovering ? '' : 'none',
-                  width: '20px',
-                  height: '20px',
-                  position: 'absolute',
-                  right: '1px',
-                  top: '1px',
-                }}
-              />
+              </Tooltip>
+              <Typography sx={{ fontWeight: '400', fontSize: '0.875rem' }}>
+                {student.email.replace('@cornell.edu', '')}
+              </Typography>
+              <Typography sx={{ fontWeight: '400', fontSize: '0.875rem' }}>
+                {student.year}
+              </Typography>
             </Box>
-          </Tooltip>
+
+            <Checkbox
+              color="secondary"
+              checked={selected}
+              onChange={handleChecked}
+              disableRipple
+              sx={{
+                display: selected || isHovering ? '' : 'none',
+                width: '20px',
+                height: '20px',
+                position: 'absolute',
+                right: '1px',
+                top: '1px',
+              }}
+            />
+          </Box>
         </Paper>
       </div>
     </Box>
