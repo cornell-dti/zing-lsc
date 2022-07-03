@@ -20,17 +20,10 @@ export const StepFinal = ({
 
   const Success = () => {
     return (
-      <Box
-        sx={{
-          width: {
-            xs: '100%',
-            lg: '73%',
-          },
-        }}
-      >
+      <>
         <Typography
           sx={{
-            fontSize: '2.25rem',
+            fontSize: { xs: '1.5rem', md: '2.25rem' },
             fontWeight: '500',
             color: '#fff',
           }}
@@ -41,23 +34,16 @@ export const StepFinal = ({
         <StyledContactText>
           Courses added: {submissionResponse.added.join(', ')}
         </StyledContactText>
-      </Box>
+      </>
     )
   }
 
   const Warning = () => {
     return (
-      <Box
-        sx={{
-          width: {
-            xs: '100%',
-            lg: '73%',
-          },
-        }}
-      >
+      <>
         <Typography
           sx={{
-            fontSize: '2.25rem',
+            fontSize: { xs: '1.5rem', md: '2.25rem' },
             fontWeight: '500',
             color: '#fff',
           }}
@@ -72,23 +58,16 @@ export const StepFinal = ({
           <br />
           Courses not added: {submissionResponse.failed.join(', ')}
         </StyledContactText>
-      </Box>
+      </>
     )
   }
 
   const Error = () => {
     return (
-      <Box
-        sx={{
-          width: {
-            xs: '100%',
-            lg: '73%',
-          },
-        }}
-      >
+      <>
         <Typography
           sx={{
-            fontSize: '2.25rem',
+            fontSize: { xs: '2rem', md: '2.25rem' },
             fontWeight: '500',
             color: '#fff',
           }}
@@ -96,7 +75,7 @@ export const StepFinal = ({
           Something went wrong.
         </Typography>
         <StyledContactText> Error: {errorMsg}</StyledContactText>
-      </Box>
+      </>
     )
   }
 
@@ -106,28 +85,48 @@ export const StepFinal = ({
         background: '#815ed4',
         display: 'flex',
         flexFlow: 'column nowrap',
-        width: '100vw',
-        height: '100vh',
+        width: {
+          xs: '100vw',
+          md: '80%',
+        },
+        height: {
+          xs: '100%',
+          md: '90%',
+        },
         justifyContent: 'center',
         alignItems: 'center',
         alignContent: 'center',
-        paddingBottom: '100px',
+        padding: '5%',
       }}
     >
-      <StyledLogoWrapper>
-        <StyledCongratulationsWrapper>
-          <StyledCheck src={showWarning ? warn : success ? check : xmark} />
+      <Box
+        sx={{
+          display: 'flex',
+          flexFlow: 'row wrap',
+          gap: '48px',
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <StyledCheck src={showWarning ? warn : success ? check : xmark} />
+        <Box
+          sx={{
+            maxWidth: '698px',
+          }}
+        >
           {showWarning && <Warning />}
           {success && <Success />}
           {!success && <Error />}
-        </StyledCongratulationsWrapper>
-      </StyledLogoWrapper>
+        </Box>
+      </Box>
       <Typography
         sx={{
           fontWeight: '400',
           color: '#fff',
-          fontSize: '1.5rem',
-          margin: '10% 5%',
+          fontSize: { xs: '1.15rem', md: '1.75rem' },
+          margin: '10% 0',
+          maxWidth: '699px',
         }}
       >
         Contact{' '}
