@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 import {
-  StyledCoursesWrapper,
   StyledQuestionText,
   StyledWarningText,
 } from 'Survey/Styles/StepCourse.style'
@@ -88,7 +87,15 @@ export const StepCourse = ({
         more than once
       </StyledWarningText>
 
-      <StyledCoursesWrapper>
+      <Box
+        sx={{
+          display: 'flex',
+          flexFlow: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '1rem',
+        }}
+      >
         {courses.map((course, index) => (
           <TextField
             inputProps={{ title: `course ${index} name field` }}
@@ -115,7 +122,7 @@ export const StepCourse = ({
           sx={textFieldStyle}
           FormHelperTextProps={helperTextStyle}
         />
-      </StyledCoursesWrapper>
+      </Box>
     </Box>
   )
 }
