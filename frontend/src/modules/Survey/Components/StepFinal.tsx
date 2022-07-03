@@ -22,40 +22,83 @@ export const StepFinal = ({
 
   const Success = () => {
     return (
-      <StyledCongratulationsText>
-        Congratulations on completing the form! You should receive an email with
-        your team members shortly.
-        <br />
+      <Box
+        sx={{
+          width: {
+            xs: '100%',
+            lg: '73%',
+          },
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: '2.25rem',
+            fontWeight: '500',
+            color: '#fff',
+          }}
+        >
+          Congratulations on completing the form! You should receive an email
+          with your team members shortly.
+        </Typography>
         <StyledContactText>
           Courses added: {submissionResponse.added.join(', ')}
         </StyledContactText>
-      </StyledCongratulationsText>
+      </Box>
     )
   }
 
   const Warning = () => {
     return (
-      <StyledCongratulationsText>
-        Some course(s) could not be found in roster {submissionResponse.roster}.
-        Please double-check that they were spelled correctly, and resubmit the
-        form if needed.
-        <br />
+      <Box
+        sx={{
+          width: {
+            xs: '100%',
+            lg: '73%',
+          },
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: '2.25rem',
+            fontWeight: '500',
+            color: '#fff',
+          }}
+        >
+          Some course(s) could not be found in roster
+          {submissionResponse.roster}. Please double-check that they were
+          spelled correctly, and resubmit the form if needed.
+        </Typography>
         <StyledContactText>
           Courses added successfully:
           {submissionResponse.added.join(', ') || 'none'}
           <br />
           Courses not added: {submissionResponse.failed.join(', ')}
         </StyledContactText>
-      </StyledCongratulationsText>
+      </Box>
     )
   }
 
   const Error = () => {
     return (
-      <StyledCongratulationsText>
-        <Typography> Something went wrong. </Typography>
+      <Box
+        sx={{
+          width: {
+            xs: '100%',
+            lg: '73%',
+          },
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: '2.25rem',
+            fontWeight: '500',
+            color: '#fff',
+          }}
+        >
+          Something went wrong.
+        </Typography>
         <StyledContactText> Error: {errorMsg}</StyledContactText>
-      </StyledCongratulationsText>
+      </Box>
     )
   }
 
@@ -64,9 +107,13 @@ export const StepFinal = ({
       sx={{
         background: '#815ed4',
         display: 'flex',
-        flexFlow: 'row wrap',
+        flexFlow: 'column nowrap',
         width: '100vw',
         height: '100vh',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignContent: 'center',
+        paddingBottom: '100px',
       }}
     >
       <StyledLogoWrapper>
@@ -77,11 +124,21 @@ export const StepFinal = ({
           {!success && <Error />}
         </StyledCongratulationsWrapper>
       </StyledLogoWrapper>
-      <StyledContactWrapper>
-        <StyledContactText>
-          Contact lscstudypartners@cornell.edu with any questions.
-        </StyledContactText>
-      </StyledContactWrapper>
+      <Typography
+        sx={{
+          fontWeight: '400',
+          color: '#fff',
+          fontSize: '1.5rem',
+          margin: '10% 5%',
+          background: '#815ed4',
+        }}
+      >
+        Contact{' '}
+        <a href="mailto:lscstudypartners@cornell.edu">
+          lscstudypartners@cornell.edu
+        </a>{' '}
+        with any questions.
+      </Typography>
     </Box>
   )
 }
