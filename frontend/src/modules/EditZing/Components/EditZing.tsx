@@ -418,20 +418,24 @@ export const EditZing = () => {
 
       <Box m={6}>
         <DndProvider backend={HTML5Backend}>
-          <UnmatchedGrid
-            unmatchedStudents={unmatchedStudents}
-            moveStudent={moveStudent}
-            matchStudents={matchStudents}
-            handleAddStudent={handleAddStudent}
-          />
           <Box
             sx={{
               margin: '32px 0',
-              display: 'flex',
-              flexFlow: 'row wrap',
               gap: '32px',
+              display: 'grid',
+              gridTemplateColumns:
+                'repeat(auto-fit, minmax(380px, max-content))',
+              justifyContent: 'center',
             }}
           >
+            <Box sx={{ gridColumn: '1 / -1' }}>
+              <UnmatchedGrid
+                unmatchedStudents={unmatchedStudents}
+                moveStudent={moveStudent}
+                matchStudents={matchStudents}
+                handleAddStudent={handleAddStudent}
+              />
+            </Box>
             {studentGroups.map((studentGroup, index) => (
               <GroupCard
                 key={studentGroup.groupNumber}
