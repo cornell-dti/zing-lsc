@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios, { AxiosResponse } from 'axios'
-import { GroupGrid } from 'EditZing/Components/GroupGrid'
+import GroupCard from 'EditZing/Components/GroupCard'
 import { UnmatchedGrid } from './UnmatchedGrid'
 import { Student } from 'EditZing/Types/Student'
 import { DndProvider } from 'react-dnd'
@@ -337,7 +337,11 @@ export const EditZing = () => {
     handleMenuClose()
   }
   return courseInfo && hasLoadedStudentData ? (
-    <Box>
+    <Box
+      sx={{
+        paddingBottom: '100px',
+      }}
+    >
       {isEmailing && (
         <EmailModal
           selectedGroups={selectedGroups}
@@ -415,15 +419,22 @@ export const EditZing = () => {
 
       <Box m={6}>
         <DndProvider backend={HTML5Backend}>
-          <Grid container spacing={1} padding={0}>
-            <UnmatchedGrid
-              unmatchedStudents={unmatchedStudents}
-              moveStudent={moveStudent}
-              matchStudents={matchStudents}
-              handleAddStudent={handleAddStudent}
-            />
+          <UnmatchedGrid
+            unmatchedStudents={unmatchedStudents}
+            moveStudent={moveStudent}
+            matchStudents={matchStudents}
+            handleAddStudent={handleAddStudent}
+          />
+          <Box
+            sx={{
+              margin: '32px 0',
+              display: 'flex',
+              flexFlow: 'row wrap',
+              gap: '32px',
+            }}
+          >
             {studentGroups.map((studentGroup, index) => (
-              <GroupGrid
+              <GroupCard
                 key={studentGroup.groupNumber}
                 studentList={studentGroup.memberData}
                 groupNumber={studentGroup.groupNumber}
@@ -442,7 +453,7 @@ export const EditZing = () => {
                 handleAddStudent={handleAddStudent}
               />
             ))}
-          </Grid>
+          </Box>
         </DndProvider>
       </Box>
       <Snackbar

@@ -8,7 +8,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { Checkbox, Box, Typography } from '@mui/material'
 
 /** the equivalent of MoveableItem */
-export const StudentGrid = ({
+const StudentCard = ({
   student,
   groupNumber,
   xsSize = 6,
@@ -37,7 +37,11 @@ export const StudentGrid = ({
   const opacity = isDragging ? '0' : '1.0'
 
   return (
-    <Grid item xs={xsSize} sx={{ minWidth: '112px' }}>
+    <Box
+      sx={{
+        width: '150px',
+      }}
+    >
       <div ref={drag}>
         <Paper
           onMouseOver={() => setIsHovering(true)}
@@ -50,9 +54,13 @@ export const StudentGrid = ({
             fontFamily: 'Montserrat',
             fontWeight: '700',
             fontSize: '14',
-            boxShadow: '0px 2px 5px rgba(205, 156, 242, 0.2)',
+            boxShadow: isHovering
+              ? '4px 4px 10px rgba(0, 0, 0, 0.3)'
+              : '0px 2px 5px rgba(205, 156, 242, 0.2)',
             borderRadius: '10px',
             width: '100%',
+            minHeight: '80px',
+            height: '105px',
           }}
         >
           <Tooltip
@@ -73,8 +81,18 @@ export const StudentGrid = ({
                 position: 'relative',
               }}
             >
-              <Box sx={{ width: '90%' }}>
-                <Typography sx={{ fontWeight: '800', fontSize: '0.875rem' }}>
+              <Box
+                sx={{
+                  width: isHovering || selected ? '75%' : '100%',
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: '800',
+                    fontSize: '0.875rem',
+                    wordBreak: 'break-word',
+                  }}
+                >
                   {student.name}
                 </Typography>
                 <Typography sx={{ fontWeight: '400', fontSize: '0.875rem' }}>
@@ -89,19 +107,22 @@ export const StudentGrid = ({
                 color="secondary"
                 checked={selected}
                 onChange={handleChecked}
+                disableRipple
                 sx={{
                   display: selected || isHovering ? '' : 'none',
                   width: '20px',
                   height: '20px',
                   position: 'absolute',
-                  right: '4px',
-                  top: '4px',
+                  right: '1px',
+                  top: '1px',
                 }}
               />
             </Box>
           </Tooltip>
         </Paper>
       </div>
-    </Grid>
+    </Box>
   )
 }
+
+export default StudentCard

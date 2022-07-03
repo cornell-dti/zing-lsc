@@ -51,6 +51,13 @@ export const EmailModal = ({
     ]
   }
 
+  const individualEmails = (students: string[]) => {
+    return [
+      'lscstudypartners@cornell.edu',
+      ...students.map((email: string) => email),
+    ]
+  }
+
   /**
    * promise that sends emails to each individual student.
    *
@@ -58,8 +65,8 @@ export const EmailModal = ({
    */
   const sendIndividualEmails = async () => {
     await Promise.all(
-      selectedStudents.map((student) => {
-        const emailRcpts = [student]
+      selectedStudents.map(() => {
+        const emailRcpts = individualEmails(selectedStudents)
         const emailBody = getBody(selectedTemplate, courseNames.join(', '))
         const emailSubject = 'Study Partners!'
         const emailItems = {
@@ -98,10 +105,6 @@ export const EmailModal = ({
         return sendEmail(emailItems)
       })
     )
-
-    // emailStudents().then((res) => {
-    //   if (res === false) failure = true
-    // })
   }
 
   /**

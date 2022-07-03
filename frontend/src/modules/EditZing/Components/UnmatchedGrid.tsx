@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { StudentGrid } from 'EditZing/Components/StudentGrid'
+import StudentCard from 'EditZing/Components/StudentCard'
 import Grid, { GridSize } from '@mui/material/Grid'
 import { UnmatchedGridProps } from 'EditZing/Types/ComponentProps'
 import {
@@ -43,7 +43,7 @@ export const UnmatchedGrid = ({
         </StyledUnmatchedTextWrapper>
         <Box sx={{ display: 'flex', flexFlow: 'row wrap', gap: '8px' }}>
           {unmatchedStudents.map((student, index) => (
-            <StudentGrid
+            <StudentCard
               key={index}
               groupNumber={-1}
               student={student}
