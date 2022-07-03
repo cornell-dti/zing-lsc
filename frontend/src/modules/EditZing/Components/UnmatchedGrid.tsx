@@ -1,5 +1,5 @@
-import React from 'react'
-import { StudentGrid } from 'EditZing/Components/StudentGrid'
+import { Box } from '@mui/material'
+import StudentCard from 'EditZing/Components/StudentCard'
 import Grid, { GridSize } from '@mui/material/Grid'
 import { UnmatchedGridProps } from 'EditZing/Types/ComponentProps'
 import {
@@ -16,6 +16,7 @@ export const UnmatchedGrid = ({
   unmatchedStudents,
   moveStudent,
   matchStudents,
+  handleAddStudent,
 }: UnmatchedGridProps) => {
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -40,17 +41,18 @@ export const UnmatchedGrid = ({
           </StyledUnmatchedText>
           <MatchButton label="Match" onClick={matchStudents} />
         </StyledUnmatchedTextWrapper>
-        <Grid container spacing={2}>
+        <Box sx={{ display: 'flex', flexFlow: 'row wrap', gap: '8px' }}>
           {unmatchedStudents.map((student, index) => (
-            <StudentGrid
+            <StudentCard
               key={index}
               groupNumber={-1}
               student={student}
               xsSize={xsSize}
               submissionTime={student.submissionTime}
+              handleAddStudent={handleAddStudent}
             />
           ))}
-        </Grid>
+        </Box>
       </StyledUnmatchedContainer>
     </Grid>
   )
