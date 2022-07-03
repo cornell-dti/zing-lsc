@@ -1,10 +1,8 @@
 import {
   StyledCongratulationsWrapper,
   StyledLogoWrapper,
-  StyledCongratulationsText,
   StyledCheck,
   StyledContactText,
-  StyledContactWrapper,
 } from 'Survey/Styles/StepFinal.style'
 
 import { Box, Typography } from '@mui/material'
@@ -130,7 +128,6 @@ export const StepFinal = ({
           color: '#fff',
           fontSize: '1.5rem',
           margin: '10% 5%',
-          background: '#815ed4',
         }}
       >
         Contact{' '}
