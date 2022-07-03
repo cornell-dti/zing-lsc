@@ -1,9 +1,4 @@
-import {
-  StyledCongratulationsWrapper,
-  StyledLogoWrapper,
-  StyledCheck,
-  StyledContactText,
-} from 'Survey/Styles/StepFinal.style'
+import { StyledCheck } from 'Survey/Styles/StepFinal.style'
 
 import { Box, Typography } from '@mui/material'
 import { StepFinalProps } from 'Survey/Types'
@@ -24,16 +19,23 @@ export const StepFinal = ({
         <Typography
           sx={{
             fontSize: { xs: '1.5rem', md: '2.25rem' },
-            fontWeight: '500',
+            fontWeight: '700',
             color: '#fff',
           }}
         >
-          Congratulations on completing the form! You should receive an email
-          with your team members shortly.
+          Congrats on completing the form!
         </Typography>
-        <StyledContactText>
-          Courses added: {submissionResponse.added.join(', ')}
-        </StyledContactText>
+        <Typography
+          sx={{
+            color: '#fff',
+            fontSize: '1.15rem',
+          }}
+        >
+          You should receive an email with your team members shortly.
+          <br />
+          <strong>Courses added: </strong>
+          {submissionResponse.added.join(', ') || `None`}
+        </Typography>
       </>
     )
   }
@@ -44,20 +46,28 @@ export const StepFinal = ({
         <Typography
           sx={{
             fontSize: { xs: '1.5rem', md: '2.25rem' },
-            fontWeight: '500',
+            fontWeight: '700',
             color: '#fff',
           }}
         >
           Some course(s) could not be found in roster
-          {submissionResponse.roster}. Please double-check that they were
-          spelled correctly, and resubmit the form if needed.
+          {submissionResponse.roster}.
         </Typography>
-        <StyledContactText>
-          Courses added successfully:
-          {submissionResponse.added.join(', ') || 'none'}
+        <Typography
+          sx={{
+            color: '#fff',
+            fontSize: '1.15rem',
+          }}
+        >
+          Please double-check that they were spelled correctly, and resubmit the
+          form if needed.
           <br />
-          Courses not added: {submissionResponse.failed.join(', ')}
-        </StyledContactText>
+          <strong> Courses added successfully: </strong>
+          {submissionResponse.added.join(', ') || 'None'}
+          <br />
+          <strong>Courses not added: </strong>
+          {submissionResponse.failed.join(', ')}
+        </Typography>
       </>
     )
   }
@@ -68,13 +78,21 @@ export const StepFinal = ({
         <Typography
           sx={{
             fontSize: { xs: '2rem', md: '2.25rem' },
-            fontWeight: '500',
+            fontWeight: '700',
             color: '#fff',
           }}
         >
           Something went wrong.
         </Typography>
-        <StyledContactText> Error: {errorMsg}</StyledContactText>
+        <Typography
+          sx={{
+            color: '#fff',
+            fontSize: '1.15rem',
+          }}
+        >
+          {' '}
+          Error: {errorMsg}
+        </Typography>
       </>
     )
   }
@@ -87,11 +105,11 @@ export const StepFinal = ({
         flexFlow: 'column nowrap',
         width: {
           xs: '100vw',
-          md: '80%',
+          lg: '80%',
         },
         height: {
           xs: '100%',
-          md: '90%',
+          lg: '90%',
         },
         justifyContent: 'center',
         alignItems: 'center',
@@ -116,7 +134,7 @@ export const StepFinal = ({
           }}
         >
           {showWarning && <Warning />}
-          {success && <Success />}
+          {success && !showWarning && <Success />}
           {!success && <Error />}
         </Box>
       </Box>
@@ -124,7 +142,7 @@ export const StepFinal = ({
         sx={{
           fontWeight: '400',
           color: '#fff',
-          fontSize: { xs: '1.15rem', md: '1.75rem' },
+          fontSize: { xs: '1.15rem', xl: '1.75rem' },
           margin: '10% 0',
           maxWidth: '699px',
         }}
