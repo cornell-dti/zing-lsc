@@ -4,7 +4,11 @@ import { logger } from 'firebase-functions'
 import { checkAuth } from '../middleware/auth-middleware'
 const router = Router()
 
-import { addStudentSurveyResponse, removeStudent } from './functions'
+import {
+  addStudentSurveyResponse,
+  removeStudent,
+  updateStudentNotes,
+} from './functions'
 
 router.post('/survey', (req, res) => {
   const { name, email, college, year, courseCatalogNames } = req.body
@@ -24,6 +28,18 @@ router.post('/survey', (req, res) => {
         return res.status(500).send({ success: false, message: err.message })
       }
       return res.status(400).send({ success: false, message: err.message })
+    })
+})
+
+router.post('/notes', (req, res) => {
+  const { email, courseId, notes } = req.body
+  updateStudentNotes(email, courseId, notes)
+    .then(() => res.status(200).send({ success: true }))
+    .catch((err) => {
+      logger.error(
+        `Error updating notes for [${courseId}] in student [${email}] to [${notes}]: ${err.message}`
+      )
+      res.status(400).send({ success: false, message: err.message })
     })
 })
 
