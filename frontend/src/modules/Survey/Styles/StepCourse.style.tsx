@@ -1,12 +1,6 @@
 import styled from 'styled-components'
 import { h2, h4 } from '@core'
 
-export const StyledContainer = styled.main`
-  width: 100%;
-  margin: auto;
-  padding: 15% 5%;
-`
-
 export const StyledQuestionText = styled.h1`
   ${h2};
   font-weight: 500;
@@ -22,11 +16,4 @@ export const StyledWarningText = styled.div`
   text-align: center;
   margin: 0px 20%;
   margin-bottom: 50px;
-`
-export const StyledCoursesWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
 `
