@@ -9,8 +9,6 @@ import {
 } from 'Survey/Styles/StepFinal.style'
 import { StepFinalProps } from 'Survey/Types'
 import { Button } from '@mui/material'
-import { SURVEY_PATH } from '@core/Constants'
-import { Link } from 'react-router-dom'
 import check from '@assets/img/whitecheckmark.svg'
 import warn from '@assets/img/warnbutton.svg'
 import xmark from '@assets/img/xbutton.svg'
