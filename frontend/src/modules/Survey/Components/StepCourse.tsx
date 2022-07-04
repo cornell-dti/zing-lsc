@@ -1,13 +1,11 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import {
-  StyledContainer,
-  StyledCoursesWrapper,
   StyledQuestionText,
   StyledWarningText,
 } from 'Survey/Styles/StepCourse.style'
 import { StepCourseProps } from 'Survey/Types'
-import { TextField } from '@mui/material'
+import { TextField, Box } from '@mui/material'
 
 export const StepCourse = ({
   validCourseRe,
@@ -73,7 +71,13 @@ export const StepCourse = ({
     courses.length === 0 ? 'ABC 1100' : '+ Add another course...'
 
   return (
-    <StyledContainer>
+    <Box
+      sx={{
+        width: '100%',
+        margin: 'auto',
+        padding: '15% 5%',
+      }}
+    >
       <StyledQuestionText>
         What course(s) would you like to find study partners for?
       </StyledQuestionText>
@@ -83,7 +87,15 @@ export const StepCourse = ({
         more than once
       </StyledWarningText>
 
-      <StyledCoursesWrapper>
+      <Box
+        sx={{
+          display: 'flex',
+          flexFlow: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '1rem',
+        }}
+      >
         {courses.map((course, index) => (
           <TextField
             inputProps={{ title: `course ${index} name field` }}
@@ -110,7 +122,7 @@ export const StepCourse = ({
           sx={textFieldStyle}
           FormHelperTextProps={helperTextStyle}
         />
-      </StyledCoursesWrapper>
-    </StyledContainer>
+      </Box>
+    </Box>
   )
 }
