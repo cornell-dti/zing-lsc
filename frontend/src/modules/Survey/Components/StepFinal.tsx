@@ -181,7 +181,7 @@ export const StepFinal = ({
           fontWeight: '400',
           color: '#fff',
           fontSize: { xs: '1.15rem', xl: '1.75rem' },
-          margin: '10% 0',
+          margin: '4% 0',
           maxWidth: '699px',
         }}
       >
