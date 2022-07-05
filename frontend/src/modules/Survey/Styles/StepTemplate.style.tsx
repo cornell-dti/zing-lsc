@@ -1,36 +1,6 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import progress from '@assets/img/progressbarstep1.svg'
-import { colors, StyledComponent } from '@core'
-import { GoNextPrevButton } from 'Survey/Components/UIElements/GoNextPrevButton'
-
-const ProgressBar = ({ className }: StyledComponent) => (
-  <div className={className}>
-    <img src={progress} alt="progress" />
-  </div>
-)
-
-const panel = css`
-  display: flex;
-  flex-direction: column;
-`
-
-export const fullPanel = css`
-  ${panel};
-  height: 100%;
-  width: 100%;
-`
-
-export const StyledFullPanel = styled.div`
-  ${fullPanel}
-  box-sizing: border-box;
-  padding: 1.5rem;
-  position: relative;
-`
-
-export const StyledFullPanelNoPadding = styled.div`
-  ${fullPanel}
-`
+import { colors } from '@core'
 
 export const StyledContainer = styled.main`
   height: 86.5%;
@@ -39,22 +9,20 @@ export const StyledContainer = styled.main`
   box-shadow: -10px -10px 150px rgba(0, 0, 0, 0.1),
     10px 10px 150px rgba(0, 0, 0, 0.1);
   display: flex;
+  @media (max-width: 900px) {
+    width: 100%;
+    height: 100%;
+  }
 `
 
 export const StyledWrapper = styled.div`
   display: flex;
-`
+  flex-flow: column;
+  width: 100%;
+  padding: 0 5%;
 
-export const StyledPrevButton = styled(GoNextPrevButton)`
-  cursor: pointer;
-`
-
-export const StyledNextButton = styled(GoNextPrevButton)`
-  cursor: pointer;
-  margin-left: auto;
-`
-
-export const StyledProgressBar = styled(ProgressBar)`
-  justify-content: left;
-  align-content: left;
+  @media (min-width: 901px) {
+    overflow-y: scroll;
+    height: 80%;
+  }
 `

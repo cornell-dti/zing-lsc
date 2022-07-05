@@ -1,5 +1,5 @@
 require('dotenv').config({ path: '../../.env' })
-const { db } = require('../config')
+import { db } from '../config'
 
 const usersRef = db.collection('allowed_users')
 

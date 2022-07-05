@@ -1,7 +1,4 @@
-import styled, { css } from 'styled-components'
-
-import { h2, h3 } from '@core'
-import { StyledContainer as Container } from 'Survey/Styles/StepTemplate.style'
+import styled from 'styled-components'
 import { SuccessIcon } from 'Survey/Types'
 
 const Check = ({ className, src }: SuccessIcon) => (
@@ -15,53 +12,4 @@ export const StyledCheck = styled(Check)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
-
-export const StyledContainer = styled(Container)`
-  background: #815ed4;
-  display: flex;
-  flex-flow: row wrap;
-`
-
-const panel = css`
-  display: flex;
-  flex-direction: column;
-`
-
-const fullPanel = css`
-  ${panel};
-  height: 100%;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  margin: 2% 15%;
-`
-
-export const StyledFullPanel = styled.div`
-  ${fullPanel}
-`
-
-export const StyledCongratulationsWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`
-export const StyledCongratulationsText = styled.h1`
-  ${h2};
-  font-weight: 500;
-  color: white;
-`
-export const StyledContactWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin-top: 5%;
-`
-
-export const StyledContactText = styled.text`
-  ${h3};
-  font-weight: 400;
-  color: #ffffff;
 `

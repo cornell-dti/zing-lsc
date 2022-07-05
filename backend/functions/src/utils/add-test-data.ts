@@ -53,7 +53,7 @@ const addTestStudents = async () => {
     alphabet.map((a) =>
       addStudentSurveyResponse(
         a,
-        `${a}@gmail.com`,
+        `${a}@cornell.edu`,
         selectCollege(),
         selectYear(),
         selectClasses()

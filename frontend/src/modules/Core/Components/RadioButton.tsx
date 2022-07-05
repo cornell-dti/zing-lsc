@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { RadioButtonProps } from '@core/Types/FormFieldProps'
 import { StyledLabel, StyledContainer } from '@core/Styles/RadioButton.style'
 import Radio, { RadioProps } from '@mui/material/Radio'

@@ -4,23 +4,10 @@ import {
   Box,
   TextField,
   InputLabel,
-  FormHelperText,
   Typography,
 } from '@mui/material'
 import { ArrowForward } from '@mui/icons-material'
-import {
-  StyledContainer,
-  StyledLeftPanel,
-  StyledRightPanel,
-  StyledFields,
-  StyledWhiteActionText,
-  StyledTeamPic,
-  StyledTitleWrapper,
-  StyledHeaderText,
-  StyledWelcomeText,
-  StyledErrorText,
-} from 'Survey/Styles/StepBegin.style'
-import { StyledLabelText } from 'Survey/Styles/Survey.style'
+import { StyledTeamPic } from 'Survey/Styles/StepBegin.style'
 import { StepBeginProps } from 'Survey/Types'
 
 export const StepBegin = ({
@@ -36,32 +23,107 @@ export const StepBegin = ({
     '& .MuiInput-underline:before': { borderBottomColor: 'purple.75' },
   }
 
+  const helperTextStyle = {
+    style: {
+      color: '#d41e42',
+      fontSize: '1rem',
+      fontWeight: 600,
+    },
+  }
+
   const [isValidEmail, setIsValidEmail] = React.useState(true)
   const validEmail = /^\w+@cornell.edu$/
 
   return (
-    <StyledContainer>
-      <StyledLeftPanel>
-        <StyledWhiteActionText>
-          Cornell’s Learning Strategies Center can help match Cornell students
-          with study partners!
-        </StyledWhiteActionText>
+    <Box
+      component="main"
+      sx={{
+        backgroundColor: '#fff',
+        boxShadow:
+          '-10px -10px 150px rgba(0, 0, 0, 0.1), 10px 10px 150px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        width: {
+          xs: '100%',
+          lg: '80%',
+        },
+        height: {
+          xs: '100%',
+          lg: '86.5%',
+        },
+      }}
+    >
+      <Box
+        sx={{
+          display: {
+            xs: 'none',
+            lg: 'flex',
+          },
+          width: '50%',
+          flexFlow: 'column nowrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          background: '#815ed4',
+        }}
+      >
+        <Typography
+          variant="h3"
+          align="center"
+          sx={{
+            fontWeight: '700',
+            fontSize: '24px',
+            color: '#fff',
+            margin: ' 0 3rem',
+          }}
+        >
+          LSC can help match you with study partners for your classes!
+        </Typography>
         <StyledTeamPic />
-      </StyledLeftPanel>
-      <StyledRightPanel>
-        <StyledTitleWrapper>
-          <StyledHeaderText>Hi,</StyledHeaderText>
-          <StyledWelcomeText>Find study partners!</StyledWelcomeText>
-        </StyledTitleWrapper>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          width: {
+            xs: '100%',
+            lg: '50%',
+          },
+          flexFlow: 'column nowrap',
+          padding: '36px 3rem',
+        }}
+      >
+        <Box>
+          <Typography
+            sx={{
+              color: '#3d2d49',
+              fontSize: '4.5rem',
+            }}
+          >
+            Hi,
+          </Typography>
+          <Typography
+            sx={{
+              color: '#3d2d49',
+              fontSize: '2.25rem',
+              fontWeight: '300',
+            }}
+          >
+            Find study partners!
+          </Typography>
+        </Box>
 
-        <StyledFields>
-          <InputLabel id="Name:" htmlFor="user name">
-            <StyledLabelText> Name: </StyledLabelText>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'column',
+            justifyContent: 'center',
+            margin: '4rem 0',
+          }}
+        >
+          <InputLabel htmlFor="name">
+            <Typography fontWeight="medium">Name:</Typography>
           </InputLabel>
           <TextField
-            id="user name"
+            id="name"
             variant="standard"
-            aria-labelledby="Name:"
             placeholder="Student Name"
             sx={textInputStyle}
             value={name}
@@ -69,13 +131,12 @@ export const StepBegin = ({
               setName(e.target.value)
             }
           />
-          <InputLabel id="Email:" htmlFor="user email">
-            <StyledLabelText> Email: </StyledLabelText>
+          <InputLabel htmlFor="email">
+            <Typography fontWeight="medium">Email:</Typography>
           </InputLabel>
           <TextField
-            id="user email"
+            id="email"
             variant="standard"
-            aria-labelledby="Email:"
             value={email}
             sx={textInputStyle}
             type="email"
@@ -85,13 +146,10 @@ export const StepBegin = ({
               setEmail(e.target.value)
             }
             error={!isValidEmail}
+            helperText={!isValidEmail && 'Invalid Email'}
+            FormHelperTextProps={helperTextStyle}
           />
-          <FormHelperText id="email-helper-text">
-            <StyledErrorText>
-              {isValidEmail ? ' ' : 'Invalid Email'}
-            </StyledErrorText>
-          </FormHelperText>
-        </StyledFields>
+        </Box>
         <Box
           sx={{
             marginLeft: 'auto',
@@ -101,17 +159,16 @@ export const StepBegin = ({
           }}
         >
           <IconButton
-            className="next"
             onClick={gotoNextStep}
             disabled={name === '' || email === '' || !isValidEmail}
             sx={{ boxShadow: 3 }}
-            aria-labelledby="Next"
+            aria-labelledby="next"
           >
             <ArrowForward />
           </IconButton>
-          <Typography id="Next"> Next </Typography>
+          <Typography id="next">Next</Typography>
         </Box>
-      </StyledRightPanel>
-    </StyledContainer>
+      </Box>
+    </Box>
   )
 }

@@ -1,11 +1,8 @@
 import React, { FunctionComponent } from 'react'
 import { StepTemplateProps } from 'Survey/Types'
-import {
-  StyledWrapper,
-  StyledFullPanel,
-} from 'Survey/Styles/StepTemplate.style'
+import { StyledWrapper } from 'Survey/Styles/StepTemplate.style'
 import { ProgressBar } from '@core/Components/index'
-import { IconButton, Box } from '@mui/material'
+import { IconButton, Typography, CircularProgress, Box } from '@mui/material'
 import { ArrowBack, ArrowForward, Check } from '@mui/icons-material'
 
 export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
@@ -14,73 +11,90 @@ export const StepTemplate: FunctionComponent<StepTemplateProps> = ({
   totalSteps,
   gotoPrevStep,
   gotoNextStep,
+  isSubmittingSurvey,
   children,
-  setShowError,
 }) => {
-  const handlePrev = () => {
-    setShowError(false)
-    gotoPrevStep()
-  }
-
-  const handleNext = () => {
-    if (isStepValid) {
-      setShowError(false)
-      gotoNextStep()
-    } else {
-      setShowError(true)
-    }
-  }
+  const showFinish = stepNumber === totalSteps
 
   return (
     <Box
       sx={{
-        backgroundColor: 'white',
-        width: '80%',
-        height: '90%',
+        background: '#fff',
+        width: {
+          xs: '100%',
+          lg: '80%',
+        },
+        height: {
+          xs: '100%',
+          lg: '90%',
+        },
+        maxWidth: '1440px',
+        position: 'relative',
       }}
     >
       <ProgressBar step={stepNumber} total={totalSteps} />
-      <StyledFullPanel>
-        <StyledWrapper style={{ height: '85%', overflowY: 'scroll' }}>
-          {children}
-        </StyledWrapper>
-
-        <StyledWrapper style={{ height: '15%', margin: '0% 2%' }}>
-          <Box sx={{ textAlign: 'center', color: 'purple.100' }}>
-            <IconButton
-              className="next"
-              onClick={handlePrev}
-              color="secondary"
-              sx={{ boxShadow: 3 }}
-              aria-label="previous button"
-            >
-              <ArrowBack />
-            </IconButton>
-            <br />
-            Prev
-          </Box>
-
-          <Box
-            sx={{
-              marginLeft: 'auto',
-              textAlign: 'center',
-              color: 'purple.100',
-            }}
+      <StyledWrapper>{children}</StyledWrapper>
+      <Box
+        sx={{
+          display: 'flex',
+          flexFlow: 'row',
+          width: '100%',
+          paddingBottom: '20%',
+          paddingTop: '50px',
+          '& > *': {
+            position: {
+              xs: 'absolute',
+              lg: 'static',
+            },
+            textAlign: 'center',
+            color: '#815ed4',
+          },
+        }}
+      >
+        <Box
+          sx={{
+            left: '10%',
+            marginLeft: '15%',
+          }}
+        >
+          <IconButton
+            className="next"
+            onClick={gotoPrevStep}
+            color="secondary"
+            sx={{ boxShadow: 3 }}
+            aria-label="previous button"
           >
-            <IconButton
-              className="next"
-              onClick={handleNext}
-              disabled={!isStepValid}
-              sx={{ boxShadow: 3 }}
-              aria-label="next button"
-            >
-              {stepNumber === totalSteps ? <Check /> : <ArrowForward />}
-            </IconButton>
-            <br />
-            {stepNumber === totalSteps ? 'Finish!' : 'Next'}
-          </Box>
-        </StyledWrapper>
-      </StyledFullPanel>
+            <ArrowBack />
+          </IconButton>
+          <Typography id="previous">Prev</Typography>
+        </Box>
+
+        <Box
+          sx={{
+            right: '10%',
+            marginRight: '15%',
+            marginLeft: {
+              lg: 'auto',
+            },
+          }}
+        >
+          <IconButton
+            onClick={gotoNextStep}
+            disabled={!isStepValid || isSubmittingSurvey}
+            sx={{ boxShadow: 3 }}
+            aria-labelledby="next"
+          >
+            {isSubmittingSurvey ? (
+              <CircularProgress size={24} />
+            ) : showFinish ? (
+              <Check />
+            ) : (
+              <ArrowForward />
+            )}
+          </IconButton>
+          <Typography id="next">{showFinish ? 'Finish!' : 'Next'}</Typography>
+        </Box>
+      </Box>
     </Box>
   )
 }
