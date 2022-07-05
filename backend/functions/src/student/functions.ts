@@ -282,30 +282,3 @@ export const updateStudentNotes = async (
     `Updated notes for [${courseId}] in student [${email}] to [${notes}]`
   )
 }
-
-/** Obtain student notes for a specific course */
-export const getStudentNotes = async (email: string, courseId: string) => {
-  const studentDoc = studentRef.doc(email)
-  const studentData = (await studentDoc.get()).data()
-  if (!studentData) {
-    throw new Error(`Student document for ${email} does not exist`)
-  }
-
-  const groups: {
-    courseId: string
-    notes: string
-    notesModifyTime: admin.firestore.Timestamp
-  }[] = studentData.groups
-  const groupMembership = groups.find((group) => group.courseId === courseId)
-  if (!groupMembership) {
-    throw new Error(`Student ${email} does not have membership in ${courseId}`)
-  }
-
-  const notes = groupMembership.notes
-
-  logger.info(
-    `Obtained notes for [${courseId}] in student [${email}] to [${notes}]`
-  )
-
-  return notes
-}
