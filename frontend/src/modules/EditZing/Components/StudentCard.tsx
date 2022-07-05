@@ -5,6 +5,8 @@ import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrag } from 'react-dnd'
 import Tooltip from '@mui/material/Tooltip'
 import { Checkbox, Box, Typography } from '@mui/material'
+import NotesModal from './NotesModal'
+import notesIcon from '@assets/img/notesIcon.png'
 
 /** the equivalent of MoveableItem */
 const StudentCard = ({
@@ -33,6 +35,10 @@ const StudentCard = ({
     setSelected(!selected)
   }
 
+  const [openNotes, setOpenNotes] = useState(false)
+  const handleOpenNotes = () => setOpenNotes(true)
+  const handleCloseNotes = () => setOpenNotes(false)
+
   const opacity = isDragging ? '0' : '1.0'
 
   return (
@@ -41,6 +47,11 @@ const StudentCard = ({
         width: '150px',
       }}
     >
+      <NotesModal
+        open={openNotes}
+        handleClose={handleCloseNotes}
+        student={student}
+      />
       <div ref={drag}>
         <Paper
           onMouseOver={() => setIsHovering(true)}
@@ -117,6 +128,21 @@ const StudentCard = ({
                 top: '1px',
               }}
             />
+            <button onClick={handleOpenNotes}>
+              <img
+                src={notesIcon}
+                style={{
+                  width: '24px',
+                  height: '24px',
+                  position: 'absolute',
+                  right: '-1px',
+                  top: '21px',
+                  cursor: 'pointer',
+                  display: isHovering ? '' : 'none',
+                }}
+                alt=""
+              />
+            </button>
           </Box>
         </Paper>
       </div>
