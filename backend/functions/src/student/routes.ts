@@ -6,6 +6,7 @@ const router = Router()
 
 import {
   addStudentSurveyResponse,
+  getStudentNotes,
   removeStudent,
   updateStudentNotes,
 } from './functions'
@@ -40,6 +41,18 @@ router.post('/notes', (req, res) => {
         `Error updating notes for [${courseId}] in student [${email}] to [${notes}]: ${err.message}`
       )
       res.status(400).send({ success: false, message: err.message })
+    })
+})
+
+router.get(`/notes/:courseId/:email`, (req, res) => {
+  const { email, courseId } = req.params
+  getStudentNotes(email, courseId)
+    .then((note) => res.status(200).send(note))
+    .catch((err) => {
+      logger.error(
+        `Failed to obtain notes for [${email}] in course [${courseId}]: ${err.message}`
+      )
+      res.status(400).send({ sucess: false, message: err.message })
     })
 })
 
