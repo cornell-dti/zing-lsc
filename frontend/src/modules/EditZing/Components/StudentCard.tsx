@@ -4,7 +4,7 @@ import { STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrag } from 'react-dnd'
 import Tooltip from '@mui/material/Tooltip'
-import { Checkbox, Box, Typography } from '@mui/material'
+import { Checkbox, Box, Typography, Snackbar } from '@mui/material'
 import NotesModal from './NotesModal'
 import notesIcon from '@assets/img/notesIcon.png'
 
@@ -36,6 +36,8 @@ const StudentCard = ({
   }
 
   const [openNotes, setOpenNotes] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [notSaved, setNotSaved] = useState(false)
   const handleOpenNotes = () => setOpenNotes(true)
   const handleCloseNotes = () => setOpenNotes(false)
 
@@ -47,10 +49,24 @@ const StudentCard = ({
         width: '150px',
       }}
     >
+      <Snackbar
+        open={saved}
+        autoHideDuration={3000}
+        onClose={() => setSaved(false)}
+        message="Notes saved."
+      />
+      <Snackbar
+        open={notSaved}
+        autoHideDuration={3000}
+        onClose={() => setNotSaved(false)}
+        message="Notes failed to save."
+      />
       <NotesModal
         open={openNotes}
         handleClose={handleCloseNotes}
         student={student}
+        setSaved={setSaved}
+        setNotSaved={setNotSaved}
       />
       <div ref={drag}>
         <Paper
@@ -128,6 +144,7 @@ const StudentCard = ({
                 top: '1px',
               }}
             />
+
             <button onClick={handleOpenNotes}>
               <img
                 src={notesIcon}
