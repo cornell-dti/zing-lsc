@@ -106,10 +106,12 @@ const StudentCard = ({
                 disableFocusListener
                 disableTouchListener
                 title={
-                  'Requested: ' +
-                  (submissionTime.getMonth() + 1) +
-                  '/' +
-                  submissionTime.getDate()
+                  <Typography sx={{ fontWeight: '500', fontSize: '13px' }}>
+                    Requested:{' '}
+                    <Typography sx={{ fontWeight: '900', fontSize: '18px' }}>
+                      {submissionTime.getMonth() + 1}/{submissionTime.getDate()}
+                    </Typography>
+                  </Typography>
                 }
               >
                 <Typography
@@ -142,10 +144,20 @@ const StudentCard = ({
                 position: 'absolute',
                 right: '1px',
                 top: '1px',
+                '&:hover': {
+                  transform: 'scale(1.15)',
+                },
               }}
             />
 
-            <button onClick={handleOpenNotes}>
+            <Box
+              sx={{
+                '& :hover': {
+                  transform: 'scale(1.15)',
+                },
+              }}
+              onClick={handleOpenNotes}
+            >
               <img
                 src={notesIcon}
                 style={{
@@ -153,13 +165,13 @@ const StudentCard = ({
                   height: '24px',
                   position: 'absolute',
                   right: '-1px',
-                  top: '21px',
+                  top: '22px',
                   cursor: 'pointer',
                   display: isHovering ? '' : 'none',
                 }}
                 alt=""
               />
-            </button>
+            </Box>
           </Box>
         </Paper>
       </div>
