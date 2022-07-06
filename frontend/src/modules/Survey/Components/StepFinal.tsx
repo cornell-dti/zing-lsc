@@ -14,9 +14,10 @@ export const StepFinal = ({
 }: StepFinalProps) => {
   const showWarning = success && submissionResponse.failed.length !== 0
   const buttonStyle = {
-    width: '14em',
+    minWidth: '14em',
     fontSize: { sm: 14, md: 22 },
     mt: '1.25em',
+    p: '0.24em 1em',
     boxShadow: 1,
   }
 
@@ -38,7 +39,8 @@ export const StepFinal = ({
             fontSize: '1.15rem',
           }}
         >
-          You should receive an email with your team members shortly.
+          You will receive an email in the next few days with more information
+          about next steps.
           <br />
           <strong>Courses added: </strong>
           {submissionResponse.added.join(', ') || `None`}
@@ -151,9 +153,9 @@ export const StepFinal = ({
           color="secondary"
           variant="outlined"
           href="https://lsc.cornell.edu/"
-          sx={buttonStyle}
+          sx={{ ...buttonStyle, mt: '4rem' }}
         >
-          Back to LSC
+          Back to Learning Strategies Center
         </Button>
       ) : (
         <>
@@ -171,7 +173,7 @@ export const StepFinal = ({
             href="https://lsc.cornell.edu/"
             sx={buttonStyle}
           >
-            Back to LSC
+            Back to Learning Strategies Center
           </Button>
         </>
       )}
