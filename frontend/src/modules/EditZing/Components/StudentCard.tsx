@@ -106,7 +106,7 @@ const StudentCard = ({
                 disableFocusListener
                 disableTouchListener
                 title={
-                  'Requested study partner ' +
+                  'Requested: ' +
                   (submissionTime.getMonth() + 1) +
                   '/' +
                   submissionTime.getDate()
