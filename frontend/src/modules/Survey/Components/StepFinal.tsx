@@ -50,7 +50,7 @@ export const StepFinal = ({
             color: '#fff',
           }}
         >
-          Some course(s) could not be found in roster
+          Some course(s) could not be found in roster{' '}
           {submissionResponse.roster}.
         </Typography>
         <Typography

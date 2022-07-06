@@ -70,12 +70,13 @@ export const StepBegin = ({
           align="center"
           sx={{
             fontWeight: '700',
-            fontSize: '24px',
+            fontSize: '1.75rem',
             color: '#fff',
             margin: ' 0 3rem',
           }}
         >
-          LSC can help match you with study partners for your classes!
+          Cornell's Learning Strategy Center can help match Cornell students
+          with study partners!
         </Typography>
         <StyledTeamPic />
       </Box>
@@ -88,6 +89,7 @@ export const StepBegin = ({
           },
           flexFlow: 'column nowrap',
           padding: '36px 3rem',
+          justifyContent: 'center',
         }}
       >
         <Box>
@@ -95,6 +97,7 @@ export const StepBegin = ({
             sx={{
               color: '#3d2d49',
               fontSize: '4.5rem',
+              fontWeight: '500',
             }}
           >
             Hi,
@@ -103,7 +106,7 @@ export const StepBegin = ({
             sx={{
               color: '#3d2d49',
               fontSize: '2.25rem',
-              fontWeight: '300',
+              fontWeight: '400',
             }}
           >
             Find study partners!
