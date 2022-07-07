@@ -26,7 +26,9 @@ export const RadioButton = ({
   const containerStyle = {
     display: 'flex',
     justifyContent: 'flex-start',
-    padding: '5px',
+    padding: '0.5rem',
+    minWidth: '35rem',
+    maxWidth: '60rem',
     background: '#FFFFFF',
     boxShadow: '2px 2px 8px rgba(0, 0, 0, 0.15)',
     borderRadius: '11px',
