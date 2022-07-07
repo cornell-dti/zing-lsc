@@ -2,6 +2,7 @@ import { StyledCheck } from 'Survey/Styles/StepFinal.style'
 
 import { Box, Typography } from '@mui/material'
 import { StepFinalProps } from 'Survey/Types'
+import { Button } from '@mui/material'
 import check from '@assets/img/whitecheckmark.svg'
 import warn from '@assets/img/warnbutton.svg'
 import xmark from '@assets/img/xbutton.svg'
@@ -12,6 +13,13 @@ export const StepFinal = ({
   errorMsg,
 }: StepFinalProps) => {
   const showWarning = success && submissionResponse.failed.length !== 0
+  const buttonStyle = {
+    minWidth: '14em',
+    fontSize: { sm: 14, md: 22 },
+    mt: '1.25em',
+    p: '0.24em 1em',
+    boxShadow: 1,
+  }
 
   const Success = () => {
     return (
@@ -31,7 +39,8 @@ export const StepFinal = ({
             fontSize: '1.15rem',
           }}
         >
-          You should receive an email with your team members shortly.
+          You will receive an email in the next few days with more information
+          about next steps.
           <br />
           <strong>Courses added: </strong>
           {submissionResponse.added.join(', ') || `None`}
@@ -138,12 +147,43 @@ export const StepFinal = ({
           {!success && <Error />}
         </Box>
       </Box>
+
+      {!showWarning && success ? (
+        <Button
+          color="secondary"
+          variant="outlined"
+          href="https://lsc.cornell.edu/"
+          sx={{ ...buttonStyle, mt: '4rem' }}
+        >
+          Back to Learning Strategies Center
+        </Button>
+      ) : (
+        <>
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={() => window.location.reload()}
+            sx={buttonStyle}
+          >
+            Return to survey
+          </Button>
+          <Button
+            color="primary"
+            variant="outlined"
+            href="https://lsc.cornell.edu/"
+            sx={buttonStyle}
+          >
+            Back to Learning Strategies Center
+          </Button>
+        </>
+      )}
+
       <Typography
         sx={{
           fontWeight: '400',
           color: '#fff',
           fontSize: { xs: '1.15rem', xl: '1.75rem' },
-          margin: '10% 0',
+          margin: '4% 0',
           maxWidth: '699px',
         }}
       >
