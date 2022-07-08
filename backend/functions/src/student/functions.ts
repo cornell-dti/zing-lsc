@@ -1,26 +1,46 @@
 import { db } from '../config'
 import admin from 'firebase-admin'
 import { logger } from 'firebase-functions'
-const courseR = db.collection('courses')
-const studentR = db.collection('students')
 import {
   mapCatalogNameToCourseId,
   MissingCourseError,
 } from '../course/get_course_id'
+import { Student } from '../types'
+const courseRef = db.collection('courses')
+const studentRef = db.collection('students')
+
+/** Get student data as Student type (with email and timestamps as Date) */
+export const getStudentData = async (email: string) => {
+  const studentData = (await studentRef.doc(email).get()).data()
+  if (!studentData) {
+    throw new Error(`Student document for ${email} does not exist`)
+  }
+  studentData.email = email
+  studentData.submissionTime = studentData.submissionTime.toDate()
+  studentData.groups = studentData.groups.map((group: any) => ({
+    ...group,
+    notesModifyTime: group.notesModifyTime.toDate(),
+  }))
+  return studentData as Student
+}
+
+/** Get multiple student data as Student type (email + timestamps as Date) */
+export const getStudentsData = (emails: string[]) =>
+  Promise.all(emails.map((email) => getStudentData(email)))
 
 async function removeStudentFromCourse(
   email: any,
   courseId: string,
   groupNumber: any
 ) {
-  const ref = courseR
+  const ref = courseRef
     .doc(courseId)
     .collection('groups')
     .doc(groupNumber.toString())
   const data: any = (await ref.get()).data()
   if (data.members.length === 1 && data.members.includes(email)) {
     //second condition is a sanity check
-    return ref.delete()
+    return ref.delete() // Fix this if we ever use this function, I don't think they want groups to ever be deleted fully
   } else {
     return ref.update({
       members: admin.firestore.FieldValue.arrayRemove(email),
@@ -31,14 +51,12 @@ async function removeStudentFromCourse(
 // Note: the error handling in this file is done the way it is so it is easier
 // to decide response codes based on error type.
 // NOTE: this function WILL succeed even if no classes could be found.
-const addStudentSurveyResponse = async (
+export const addStudentSurveyResponse = async (
   name: string,
   email: string,
   college: string,
   year: string,
-  courseCatalogNames: string[],
-  courseRef = courseR,
-  studentRef = studentR
+  courseCatalogNames: string[]
 ) => {
   const roster = 'SU22' // Summer 2022 for LSC launch
 
@@ -115,10 +133,15 @@ const addStudentSurveyResponse = async (
     (course) => !existingCourseIds.includes(course.courseId)
   )
 
+  // Can't use serverTimestamp in arrays (error), but want to have same timestamp for everything here
+  const surveyTimestamp = admin.firestore.Timestamp.now()
+
   // Map to group membership objects for the student
   const newCourses = newCourseIdsWithNames.map((course) => ({
     courseId: course.courseId,
     groupNumber: -1,
+    notes: '',
+    notesModifyTime: surveyTimestamp, // Can't use serverTimestamp in arrays...
   }))
 
   // First, update the [student] collection to include the data for the new student
@@ -129,7 +152,7 @@ const addStudentSurveyResponse = async (
       college,
       year,
       groups: [...existingCourses, ...newCourses],
-      submissionTime: admin.firestore.FieldValue.serverTimestamp(),
+      submissionTime: surveyTimestamp,
     })
     .catch((err) => {
       console.log(err)
@@ -185,7 +208,7 @@ const addStudentSurveyResponse = async (
         snapshotRef
           .update({
             unmatched: admin.firestore.FieldValue.arrayUnion(email),
-            latestSubmissionTime: admin.firestore.FieldValue.serverTimestamp(),
+            latestSubmissionTime: surveyTimestamp,
           })
           .catch((err) => {
             console.log(err)
@@ -216,8 +239,8 @@ const addStudentSurveyResponse = async (
 }
 
 // This has not been used in a very long long time
-async function removeStudent(email: string) {
-  const studentDocRef = studentR.doc(email)
+export async function removeStudent(email: string) {
+  const studentDocRef = studentRef.doc(email)
   const data = (await studentDocRef.get()).data()
   if (!data) throw new Error(`Cannot find student ${email}`)
   const groups = data.groups
@@ -229,4 +252,33 @@ async function removeStudent(email: string) {
   await Promise.all([courseUpdates, studentDocRef.delete()].flat())
 }
 
-export { addStudentSurveyResponse, removeStudent }
+/** Update student notes for a specific course */
+export const updateStudentNotes = async (
+  email: string,
+  courseId: string,
+  notes: string
+) => {
+  const studentDoc = studentRef.doc(email)
+  const studentData = (await studentDoc.get()).data()
+  if (!studentData) {
+    throw new Error(`Student document for ${email} does not exist`)
+  }
+
+  const groups: {
+    courseId: string
+    notes: string
+    notesModifyTime: admin.firestore.Timestamp
+  }[] = studentData.groups
+  const groupMembership = groups.find((group) => group.courseId === courseId)
+  if (!groupMembership) {
+    throw new Error(`Student ${email} does not have membership in ${courseId}`)
+  }
+
+  groupMembership.notes = notes
+  groupMembership.notesModifyTime = admin.firestore.Timestamp.now()
+
+  await studentDoc.update({ groups })
+  logger.info(
+    `Updated notes for [${courseId}] in student [${email}] to [${notes}]`
+  )
+}

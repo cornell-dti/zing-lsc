@@ -7,17 +7,7 @@ import {
   Typography,
 } from '@mui/material'
 import { ArrowForward } from '@mui/icons-material'
-import {
-  StyledContainer,
-  StyledLeftPanel,
-  StyledRightPanel,
-  StyledFields,
-  StyledWhiteActionText,
-  StyledTeamPic,
-  StyledTitleWrapper,
-  StyledHeaderText,
-  StyledWelcomeText,
-} from 'Survey/Styles/StepBegin.style'
+import { StyledTeamPic } from 'Survey/Styles/StepBegin.style'
 import { StepBeginProps } from 'Survey/Types'
 
 export const StepBegin = ({
@@ -45,20 +35,92 @@ export const StepBegin = ({
   const validEmail = /^\w+@cornell.edu$/
 
   return (
-    <StyledContainer>
-      <StyledLeftPanel>
-        <StyledWhiteActionText>
-          LSC can help match you with study partners for your classes!
-        </StyledWhiteActionText>
+    <Box
+      component="main"
+      sx={{
+        backgroundColor: '#fff',
+        boxShadow:
+          '-10px -10px 150px rgba(0, 0, 0, 0.1), 10px 10px 150px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        width: {
+          xs: '100%',
+          lg: '80%',
+        },
+        height: {
+          xs: '100%',
+          lg: '86.5%',
+        },
+      }}
+    >
+      <Box
+        sx={{
+          display: {
+            xs: 'none',
+            lg: 'flex',
+          },
+          width: '50%',
+          flexFlow: 'column nowrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          background: '#815ed4',
+        }}
+      >
+        <Typography
+          variant="h3"
+          align="center"
+          sx={{
+            fontWeight: '700',
+            fontSize: '1.75rem',
+            color: '#fff',
+            margin: ' 0 3rem',
+          }}
+        >
+          Cornell's Learning Strategies Center can help match Cornell students
+          with study partners!
+        </Typography>
         <StyledTeamPic />
-      </StyledLeftPanel>
-      <StyledRightPanel>
-        <StyledTitleWrapper>
-          <StyledHeaderText>Hi,</StyledHeaderText>
-          <StyledWelcomeText>Find study partners!</StyledWelcomeText>
-        </StyledTitleWrapper>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          width: {
+            xs: '100%',
+            lg: '50%',
+          },
+          flexFlow: 'column nowrap',
+          padding: '36px 3rem',
+          justifyContent: 'center',
+        }}
+      >
+        <Box>
+          <Typography
+            sx={{
+              color: '#3d2d49',
+              fontSize: '4.5rem',
+              fontWeight: '500',
+            }}
+          >
+            Hi,
+          </Typography>
+          <Typography
+            sx={{
+              color: '#3d2d49',
+              fontSize: '2.25rem',
+              fontWeight: '400',
+            }}
+          >
+            Find study partners!
+          </Typography>
+        </Box>
 
-        <StyledFields>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'column',
+            justifyContent: 'center',
+            margin: '4rem 0',
+          }}
+        >
           <InputLabel htmlFor="name">
             <Typography fontWeight="medium">Name:</Typography>
           </InputLabel>
@@ -90,7 +152,7 @@ export const StepBegin = ({
             helperText={!isValidEmail && 'Invalid Email'}
             FormHelperTextProps={helperTextStyle}
           />
-        </StyledFields>
+        </Box>
         <Box
           sx={{
             marginLeft: 'auto',
@@ -109,7 +171,7 @@ export const StepBegin = ({
           </IconButton>
           <Typography id="next">Next</Typography>
         </Box>
-      </StyledRightPanel>
-    </StyledContainer>
+      </Box>
+    </Box>
   )
 }

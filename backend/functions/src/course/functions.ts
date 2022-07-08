@@ -1,21 +1,6 @@
-require('dotenv').config({ path: '../.env' })
-
 import { db } from '../config'
+import { getStudentsData } from '../student/functions'
 const courseRef = db.collection('courses')
-const studentRef = db.collection('students')
-
-async function getStudent(email: string) {
-  const snapshot = await studentRef.doc(email).get()
-  if (!snapshot.exists) throw new Error(`Student ${email} does not exist`)
-  const result: any = snapshot.data()
-  result.email = email
-  result.submissionTime = result.submissionTime.toDate()
-  return result
-}
-
-async function getDataForStudents(emails: string[]) {
-  return Promise.all(emails.map((email) => getStudent(email)))
-}
 
 async function getCourseInfo(courseId: string) {
   const snapshot = await courseRef.doc(courseId).get()
@@ -47,9 +32,9 @@ async function getStudentsForCourse(courseId: string) {
   ).docs
 
   const data = groupsQueryDocSnapshots.map((snapshot) => snapshot.data())
-  const unmatchedStudentData = await getDataForStudents(unmatched)
+  const unmatchedStudentData = await getStudentsData(unmatched)
   const groupStudentDataRaw = await Promise.all(
-    data.map((group) => getDataForStudents(group.members))
+    data.map((group) => getStudentsData(group.members))
   )
 
   const groupStudentData = groupStudentDataRaw.map((groupData, index) => ({
@@ -74,9 +59,4 @@ async function getStudentsForCourse(courseId: string) {
   }
 }
 
-export {
-  getDataForStudents,
-  getCourseInfo,
-  getAllCourses,
-  getStudentsForCourse,
-}
+export { getCourseInfo, getAllCourses, getStudentsForCourse }

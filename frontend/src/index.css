@@ -23,6 +23,12 @@ code {
     monospace;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 2px solid;
+}
+
 @font-face {
   font-family: 'Montserrat';
   font-weight: 300;

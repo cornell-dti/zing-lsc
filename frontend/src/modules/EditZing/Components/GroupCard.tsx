@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import { StudentGrid } from 'EditZing/Components/StudentGrid'
+import { useState } from 'react'
+import StudentCard from 'EditZing/Components/StudentCard'
 import { GroupGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrop } from 'react-dnd'
 import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
 import { StyledGroupText } from 'EditZing/Styles/StudentAndGroup.style'
-import { Box, Tooltip, Grid, Checkbox } from '@mui/material'
+import { Box, Tooltip, Checkbox } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 
 /** the equivalent of Column */
-export const GroupGrid = ({
+const GroupCard = ({
   studentList,
   groupNumber,
   moveStudent,
@@ -19,6 +19,7 @@ export const GroupGrid = ({
   addStudentEmailTimestamp,
   selected,
   handleChecked,
+  handleAddStudent,
 }: GroupGridProps) => {
   const tooltips = [
     {
@@ -55,12 +56,14 @@ export const GroupGrid = ({
   }
 
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
+    <Box>
       <Box
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
         ref={drop}
         sx={{
+          width: '380px',
+          height: '350px',
           padding: '2rem',
           border: 0.5,
           borderColor: selected || isHovering ? 'purple.50' : 'purple.16',
@@ -122,17 +125,27 @@ export const GroupGrid = ({
             }}
           />
         </Box>
-        <Grid container spacing={2}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(112px, max-content))',
+            gap: '16px',
+            justifyContent: 'center',
+          }}
+        >
           {studentList.map((student, index) => (
-            <StudentGrid
+            <StudentCard
               key={index}
               groupNumber={groupNumber}
               student={student}
               submissionTime={student.submissionTime}
+              handleAddStudent={handleAddStudent}
             />
           ))}
-        </Grid>
+        </Box>
       </Box>
-    </Grid>
+    </Box>
   )
 }
+
+export default GroupCard

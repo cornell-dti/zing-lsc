@@ -7,8 +7,7 @@ import {
   checkIsAuthorized,
   checkIsAuthorizedFromToken,
 } from './middleware/auth-middleware'
-
-require('dotenv').config({ path: '../.env' })
+import { unless } from './middleware/unless'
 
 // import routers
 import studentsRouter from './student/routes'
@@ -32,7 +31,15 @@ app.use(express.json())
 app.use(cors())
 
 // auth middleware before router
-app.use('/student', [appCheckVerification], studentsRouter)
+app.use(
+  '/student',
+  [
+    appCheckVerification,
+    unless(checkAuth, '/survey'),
+    unless(checkIsAuthorized, '/survey'),
+  ],
+  studentsRouter
+)
 app.use(
   '/matching',
   [appCheckVerification, checkAuth, checkIsAuthorized],

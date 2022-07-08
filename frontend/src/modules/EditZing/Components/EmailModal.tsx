@@ -15,6 +15,7 @@ import { adminSignIn } from '@fire/firebase'
 
 export const EmailModal = ({
   selectedGroups,
+  selectedStudents,
   isEmailing,
   setIsEmailing,
   courseNames,
@@ -51,13 +52,35 @@ export const EmailModal = ({
   }
 
   /**
+   * promise that sends emails to each individual student.
+   *
+   * @throws error if there are any errors in sending the email
+   */
+  const sendIndividualEmails = async () => {
+    await Promise.all(
+      selectedStudents.map((student: string) => {
+        const emailRcpts = [student, 'lscstudypartners@cornell.edu']
+        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+        const emailSubject = 'Study Partners!'
+        const emailItems = {
+          emailSubject,
+          emailRcpts,
+          emailBody,
+          courseId,
+          groupNum: -1,
+          selectedTemplate,
+        }
+        return sendEmail(emailItems)
+      })
+    )
+  }
+
+  /**
    * promise that sends emails to each group.
    *
-   * @returns true if there are any errors in sending the email OR false if no errors
+   * @throws error if there are any errors in sending the email
    */
   const sendGroupEmails = async () => {
-    let failure = false
-
     await Promise.all(
       selectedGroups.map((group) => {
         const emailRcpts = groupEmails(group)
@@ -72,13 +95,9 @@ export const EmailModal = ({
           groupNum,
           selectedTemplate,
         }
-        return sendEmail(emailItems).then((res) => {
-          if (res === false) failure = true
-        })
+        return sendEmail(emailItems)
       })
     )
-
-    return failure
   }
 
   /**
@@ -86,16 +105,14 @@ export const EmailModal = ({
    */
   const handleEmailSend = async () => {
     try {
-      const failure = await sendGroupEmails()
-      if (failure) {
-        step === 2 ? setStep(3) : setStep(2)
-        setEmailSentError(true)
-      } else {
-        setEmailSent(true)
-        setIsEmailing(false)
-        handleEmailTimestamp()
-      }
+      await sendGroupEmails()
+      await sendIndividualEmails()
+      setEmailSent(true)
+      setIsEmailing(false)
+      handleEmailTimestamp()
     } catch (e) {
+      step === 2 ? setStep(3) : setStep(2)
+      setEmailSentError(true)
       console.log(`error was ${e}`)
     }
   }
@@ -225,7 +242,8 @@ export const EmailModal = ({
           }}
           endIcon={<SendIcon />}
         >
-          Send {selectedGroups.length} Emails
+          Send {selectedGroups.length > 0 && selectedGroups.length}
+          {selectedStudents.length > 0 && selectedStudents.length} Emails
         </Button>
       )
     } else return null
@@ -257,10 +275,14 @@ export const EmailModal = ({
           sx={{ display: 'flex', gap: 1 }}
         >
           <Box component="span">To:</Box>
-          <Box component="span" sx={{ fontWeight: 900 }}>
+          <Box
+            component="span"
+            sx={{ fontWeight: 900, maxWidth: '90%', wordBreak: 'break-word' }}
+          >
             {selectedGroups
               .map(({ groupNumber }) => `Group ${groupNumber}`)
               .join(', ')}
+            {selectedStudents.join(', ')}
           </Box>
         </Typography>
         {step === 0 && <Step0 />}
