@@ -3,14 +3,16 @@ require('dotenv').config({ path: '../.env' })
 
 const selectCollege = () => {
   const colleges = [
-    'Engineering',
-    'A&S',
     'CALS',
-    'Dyson',
-    'ILR',
-    'HumEc',
     'AAP',
-    'Hotel Admin',
+    'A&S',
+    'Engineering',
+    'HumEc',
+    'Dyson',
+    'Nolan',
+    'ILR',
+    'SCE',
+    'Grad School',
   ]
   return colleges[Math.floor(Math.random() * colleges.length)]
 }
