@@ -2,7 +2,11 @@ import styled from 'styled-components'
 import { h2 } from '@core'
 
 export const StyledContainer = styled.main`
-  margin: auto;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  width: 100%;
+  padding: 50px 0;
 `
 
 export const StyledRadioButtonsWrapper = styled.div`
@@ -16,7 +20,7 @@ export const StyledRadioButtonsWrapper = styled.div`
 export const StyledQuestionText = styled.h1`
   ${h2};
   font-weight: 500;
-  line-height: 10px;
+  line-height: 1.2ch;
   text-align: center;
   margin-bottom: 2.5rem;
 `
@@ -24,4 +28,5 @@ export const StyledQuestionText = styled.h1`
 export const StyledFieldSet = styled.fieldset`
   border-style: none;
   border-color: #ffffff;
+  width: 100%;
 `

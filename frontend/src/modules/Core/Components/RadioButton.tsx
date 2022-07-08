@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { RadioButtonProps } from '@core/Types/FormFieldProps'
 import { StyledLabel, StyledContainer } from '@core/Styles/RadioButton.style'
 import Radio, { RadioProps } from '@mui/material/Radio'
@@ -28,8 +26,8 @@ export const RadioButton = ({
   const containerStyle = {
     display: 'flex',
     justifyContent: 'flex-start',
-    padding: '0rem',
-    paddingRight: '10rem',
+    padding: '0.5rem',
+    maxWidth: '60rem',
     background: '#FFFFFF',
     boxShadow: '2px 2px 8px rgba(0, 0, 0, 0.15)',
     borderRadius: '11px',

@@ -163,40 +163,25 @@ const lateAddStudent = () => {
 //     Happy studying!`
 // }
 
-const checkIn = () => {
-  return ` 
-    <div>  Dear students, </div>
-      <br> 
-      <br> 
-    <div> 
-      According to our records we matched you as study partners for a class you 
-      requested other students to study with. 
-    </div>  
-      <br> 
-    <div> 
-      We are writing to check in. We hope your group has been able to meet and 
-      that you are finding it useful to study with others! Please keep in mind that 
-      LSC peer study skills tutors are available to help your group set up a 
-      constructive group work environment-- you can self-enroll in the study skills 
-      tutors’ Canvas site to see when drop-in hours are held, you can show up any 
-      time that works for your group.
-    </div>
-      <br> 
-    <div> 
-      We know that sometimes matched students are not able to find a time to 
-      meet that works for everyone, or one person is auditing and decides not to 
-      do group work after all, or someone drops the class, and so on and so forth. 
-      If you need to be re-grouped please DO NOT fill out the webform again. Just 
-      reply to this email to let us know what’s going on, and we’ll try to help.
-    </div>
-      <br> 
-      <br> 
-    <div> 
-      Take care, 
-      The LSC Staff
-    </div>
-    `
-}
+const checkIn = `
+<p>Dear students,</p>
+<p>
+  According to our records we matched you as study partners for a class you
+  requested other students to study with.
+</p>
+<p>
+  We are writing to check in. We hope your group has been able to meet and that
+  you are finding it useful to study with others!
+</p>
+<p>
+  We know that sometimes matched students are not able to find a time to meet
+  that works for everyone, or one person is auditing and decides not to do group
+  work after all, or someone drops the class, and so on and so forth. If you
+  need to be re-grouped please DO NOT fill out the form again. Just reply to
+  this email to let us know what’s going on, and we’ll try to help.
+</p>
+<p>Take care, The LSC Staff</p>
+`
 
 // const custom = (body: string) => {
 //   return `<div> Dear Student(s), </div>
@@ -233,7 +218,7 @@ export const getBody = (templateName: TemplateName, className: string) => {
     case TemplateName.ASK_JOIN_GROUP:
       throw new Error('Out of scope for v1')
     case TemplateName.CHECK_IN:
-      return checkIn()
+      return checkIn
     default:
       throw new Error('Template not found')
   }
