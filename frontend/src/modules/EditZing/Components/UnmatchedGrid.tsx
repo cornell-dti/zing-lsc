@@ -13,6 +13,7 @@ import { MatchButton } from './MatchButton'
 
 /** Where unmatched students live in the grid */
 export const UnmatchedGrid = ({
+  courseId,
   unmatchedStudents,
   moveStudent,
   matchStudents,
@@ -45,10 +46,10 @@ export const UnmatchedGrid = ({
           {unmatchedStudents.map((student, index) => (
             <StudentCard
               key={index}
+              courseId={courseId}
               groupNumber={-1}
               student={student}
               xsSize={xsSize}
-              submissionTime={student.submissionTime}
               handleAddStudent={handleAddStudent}
             />
           ))}

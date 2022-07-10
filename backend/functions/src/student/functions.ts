@@ -16,10 +16,10 @@ export const getStudentData = async (email: string) => {
     throw new Error(`Student document for ${email} does not exist`)
   }
   studentData.email = email
-  studentData.submissionTime = studentData.submissionTime.toDate()
   studentData.groups = studentData.groups.map((group: any) => ({
     ...group,
     notesModifyTime: group.notesModifyTime.toDate(),
+    submissionTime: group.submissionTime.toDate(),
   }))
   return studentData as Student
 }
@@ -142,6 +142,7 @@ export const addStudentSurveyResponse = async (
     groupNumber: -1,
     notes: '',
     notesModifyTime: surveyTimestamp, // Can't use serverTimestamp in arrays...
+    submissionTime: surveyTimestamp,
   }))
 
   // First, update the [student] collection to include the data for the new student
@@ -152,7 +153,6 @@ export const addStudentSurveyResponse = async (
       college,
       year,
       groups: [...existingCourses, ...newCourses],
-      submissionTime: surveyTimestamp,
     })
     .catch((err) => {
       console.log(err)
