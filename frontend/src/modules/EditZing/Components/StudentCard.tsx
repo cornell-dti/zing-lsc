@@ -1,12 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Paper from '@mui/material/Paper'
-import { STUDENT_TYPE } from 'EditZing/Types/Student'
+import { GroupMembership, STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrag } from 'react-dnd'
 import Tooltip from '@mui/material/Tooltip'
 import { Checkbox, Box, Typography, Snackbar } from '@mui/material'
 import NotesModal from './NotesModal'
 import notesIcon from '@assets/img/notesIcon.png'
+import filledNotesIcon from '@assets/img/filledNotes.png'
+
+import { useParams } from 'react-router-dom'
 
 /** the equivalent of MoveableItem */
 const StudentCard = ({
@@ -16,6 +19,8 @@ const StudentCard = ({
   submissionTime,
   handleAddStudent,
 }: StudentGridProps) => {
+  const { courseId } = useParams<{ courseId: string }>()
+
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: STUDENT_TYPE,
@@ -41,6 +46,15 @@ const StudentCard = ({
   const handleOpenNotes = () => setOpenNotes(true)
   const handleCloseNotes = () => setOpenNotes(false)
 
+  const [studentNotes, setStudentNotes] = useState('')
+
+  useEffect(() => {
+    const savedNote = student.groups.find(
+      (g: GroupMembership) => g.courseId === courseId
+    )?.notes
+    setStudentNotes(savedNote || '')
+  }, [student, courseId])
+
   const opacity = isDragging ? '0' : '1.0'
 
   return (
@@ -65,6 +79,8 @@ const StudentCard = ({
         open={openNotes}
         handleClose={handleCloseNotes}
         student={student}
+        studentNotes={studentNotes}
+        setStudentNotes={setStudentNotes}
         setSaved={setSaved}
         setNotSaved={setNotSaved}
       />
@@ -100,7 +116,7 @@ const StudentCard = ({
           >
             <Box
               sx={{
-                width: isHovering || selected ? '75%' : '100%',
+                maxWidth: isHovering || selected ? '80%' : '100%',
               }}
             >
               <Tooltip
@@ -115,15 +131,34 @@ const StudentCard = ({
                   </Typography>
                 }
               >
-                <Typography
+                <Box
                   sx={{
-                    fontWeight: '800',
-                    fontSize: '0.875rem',
-                    wordBreak: 'break-word',
+                    width: '100%',
+                    display: 'flex',
+                    flexFlow: 'row nowrap',
+                    gap: '5px',
                   }}
                 >
-                  {student.name}
-                </Typography>
+                  <Typography
+                    sx={{
+                      fontWeight: '800',
+                      fontSize: '0.875rem',
+                      wordBreak: 'break-word',
+                    }}
+                  >
+                    {student.name}
+                  </Typography>
+                  <img
+                    src={filledNotesIcon}
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      cursor: 'pointer',
+                      display: studentNotes ? '' : 'none',
+                    }}
+                    alt=""
+                  />
+                </Box>
               </Tooltip>
               <Typography sx={{ fontWeight: '400', fontSize: '0.875rem' }}>
                 {student.email.replace('@cornell.edu', '')}
@@ -146,7 +181,7 @@ const StudentCard = ({
                 right: '1px',
                 top: '1px',
                 '&:hover': {
-                  transform: 'scale(1.15)',
+                  transform: 'scale(1.1)',
                 },
               }}
             />
@@ -154,7 +189,7 @@ const StudentCard = ({
             <Box
               sx={{
                 '& :hover': {
-                  transform: 'scale(1.15)',
+                  transform: 'scale(1.1)',
                 },
               }}
               onClick={handleOpenNotes}
@@ -168,10 +203,23 @@ const StudentCard = ({
                   right: '-1px',
                   top: '22px',
                   cursor: 'pointer',
-                  display: isHovering ? '' : 'none',
+                  display: !studentNotes && isHovering ? '' : 'none',
                 }}
                 alt=""
               />
+              {/* <img
+                src={filledNotesIcon}
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  position: 'absolute',
+                  right: '22px',
+                  top: '-1px',
+                  cursor: 'pointer',
+                  display: studentNotes ? '' : 'none',
+                }}
+                alt=""
+              /> */}
             </Box>
           </Box>
         </Paper>
