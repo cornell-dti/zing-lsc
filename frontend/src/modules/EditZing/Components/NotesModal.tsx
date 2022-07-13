@@ -14,20 +14,30 @@ import CloseIcon from '@mui/icons-material/Close'
 
 import { API_ROOT } from '@core/Constants'
 import axios from 'axios'
+import { GroupMembership } from 'EditZing/Types/Student'
 
 const NotesModal = (props: any) => {
   const { courseId } = useParams<{ courseId: string }>()
-  const { open, student, handleClose, setSaved, setNotSaved } = props
-  const [note, setNote] = useState(student.notes)
+  const {
+    open,
+    student,
+    studentNotes,
+    setStudentNotes,
+    handleClose,
+    setSaved,
+    setNotSaved,
+  } = props
   const [saving, setSaving] = useState(false)
+  const [localVal, setLocalVal] = useState('')
   const email = student.email
 
   // getting notes for student
   useEffect(() => {
-    const savedNote = student.groups.find((g: any) => g.courseId === courseId)
-      .notes
-    setNote(savedNote)
-  }, [courseId, student])
+    const savedNote = student.groups.find(
+      (g: GroupMembership) => g.courseId === courseId
+    ).notes
+    setLocalVal(savedNote)
+  }, [studentNotes, setStudentNotes, courseId, student])
 
   // saving notes to db
   const handleSave = async () => {
@@ -36,9 +46,12 @@ const NotesModal = (props: any) => {
       .post(`${API_ROOT}/student/notes`, {
         email: email,
         courseId: courseId,
-        notes: note,
+        notes: localVal,
       })
-      .then(() => setSaved(true))
+      .then(() => {
+        setSaved(true)
+        setStudentNotes(localVal)
+      })
       .catch(() => setNotSaved(true))
     setSaving(false)
     handleClose()
@@ -95,8 +108,8 @@ const NotesModal = (props: any) => {
         <OutlinedInput
           multiline
           rows={8}
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
+          value={localVal}
+          onChange={(e) => setLocalVal(e.target.value)}
           sx={{
             width: '100%',
             borderRadius: '15px',
