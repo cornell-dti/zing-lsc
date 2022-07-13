@@ -80,9 +80,10 @@ const StudentCard = ({
             fontFamily: 'Montserrat',
             fontWeight: '700',
             fontSize: '14',
-            boxShadow: isHovering
-              ? '4px 4px 8px rgba(0, 0, 0, 0.3)'
-              : '0px 2px 5px rgba(205, 156, 242, 0.2)',
+            boxShadow:
+              isHovering && !selected
+                ? '4px 4px 8px rgba(0, 0, 0, 0.3)'
+                : '0px 2px 5px rgba(205, 156, 242, 0.2)',
             borderRadius: '10px',
             width: '100%',
             minHeight: '80px',
