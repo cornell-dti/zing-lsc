@@ -10,6 +10,8 @@ export type Student = {
 export type GroupMembership = {
   courseId: string
   groupNumber: number
+  notes: string
+  notesModifyTime: Date
 }
 
 /** item type for drag and drop prop transfer via dnd */
