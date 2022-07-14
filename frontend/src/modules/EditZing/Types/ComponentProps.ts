@@ -59,6 +59,16 @@ export interface EmailModalProps {
   handleEmailTimestamp: () => void
 }
 
+export interface NotesModalProps {
+  open: boolean
+  student: Student
+  studentNotes: string
+  setStudentNotes: (arg: string) => void
+  handleClose: () => void
+  setSaved: (arg: boolean) => void
+  setNotSaved: (arg: boolean) => void
+}
+
 export interface TemplateRadioButtonsProps {
   selectedTemplate: string
   setSelectedTemplate: (value: TemplateName) => void

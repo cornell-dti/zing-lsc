@@ -167,6 +167,7 @@ const StudentCard = ({
             />
 
             <Box
+              component="button"
               sx={{
                 '& :hover': {
                   transform: 'scale(1.1)',

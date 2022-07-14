@@ -14,29 +14,26 @@ import CloseIcon from '@mui/icons-material/Close'
 
 import { API_ROOT } from '@core/Constants'
 import axios from 'axios'
-import { GroupMembership } from 'EditZing/Types/Student'
+import { NotesModalProps } from 'EditZing/Types/ComponentProps'
 
-const NotesModal = (props: any) => {
+const NotesModal = ({
+  open,
+  student,
+  studentNotes,
+  setStudentNotes,
+  handleClose,
+  setSaved,
+  setNotSaved,
+}: NotesModalProps) => {
   const { courseId } = useParams<{ courseId: string }>()
-  const {
-    open,
-    student,
-    studentNotes,
-    setStudentNotes,
-    handleClose,
-    setSaved,
-    setNotSaved,
-  } = props
   const [saving, setSaving] = useState(false)
   const [localVal, setLocalVal] = useState('')
   const email = student.email
 
   // getting notes for student
   useEffect(() => {
-    const savedNote = student.groups.find(
-      (g: GroupMembership) => g.courseId === courseId
-    ).notes
-    setLocalVal(savedNote)
+    const savedNote = student.groups.find((g) => g.courseId === courseId)?.notes
+    setLocalVal(savedNote || '')
   }, [studentNotes, setStudentNotes, courseId, student])
 
   // saving notes to db
