@@ -74,6 +74,11 @@ const StudentCard = ({
         autoHideDuration={3000}
         onClose={() => setNotSaved(false)}
         message="Notes failed to save."
+        ContentProps={{
+          style: {
+            background: '#ff3868',
+          },
+        }}
       />
       <NotesModal
         open={openNotes}
