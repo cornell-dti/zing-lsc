@@ -102,8 +102,6 @@ const StudentCard = ({
                 : '0px 2px 5px rgba(205, 156, 242, 0.2)',
             borderRadius: '10px',
             width: '100%',
-            minHeight: '80px',
-            height: '105px',
           }}
         >
           <Box
@@ -112,11 +110,12 @@ const StudentCard = ({
               flexFlow: 'row nowrap',
               gap: '13px',
               position: 'relative',
+              height: '90px',
             }}
           >
             <Box
               sx={{
-                maxWidth: isHovering || selected ? '80%' : '100%',
+                maxWidth: isHovering || selected ? '85%' : '85%',
               }}
             >
               <Tooltip
@@ -131,34 +130,15 @@ const StudentCard = ({
                   </Typography>
                 }
               >
-                <Box
+                <Typography
                   sx={{
-                    width: '100%',
-                    display: 'flex',
-                    flexFlow: 'row nowrap',
-                    gap: '5px',
+                    fontWeight: '800',
+                    fontSize: '0.875rem',
+                    wordBreak: 'break-word',
                   }}
                 >
-                  <Typography
-                    sx={{
-                      fontWeight: '800',
-                      fontSize: '0.875rem',
-                      wordBreak: 'break-word',
-                    }}
-                  >
-                    {student.name}
-                  </Typography>
-                  <img
-                    src={filledNotesIcon}
-                    style={{
-                      width: '20px',
-                      height: '20px',
-                      cursor: 'pointer',
-                      display: studentNotes ? '' : 'none',
-                    }}
-                    alt=""
-                  />
-                </Box>
+                  {student.name}
+                </Typography>
               </Tooltip>
               <Typography sx={{ fontWeight: '400', fontSize: '0.875rem' }}>
                 {student.email.replace('@cornell.edu', '')}
@@ -200,26 +180,26 @@ const StudentCard = ({
                   width: '24px',
                   height: '24px',
                   position: 'absolute',
-                  right: '-1px',
-                  top: '22px',
+                  right: '1px',
+                  bottom: '4px',
                   cursor: 'pointer',
                   display: !studentNotes && isHovering ? '' : 'none',
                 }}
                 alt=""
               />
-              {/* <img
+              <img
                 src={filledNotesIcon}
                 style={{
                   width: '20px',
                   height: '20px',
                   position: 'absolute',
-                  right: '22px',
-                  top: '-1px',
+                  right: '1px',
+                  bottom: '4px',
                   cursor: 'pointer',
                   display: studentNotes ? '' : 'none',
                 }}
                 alt=""
-              /> */}
+              />
             </Box>
           </Box>
         </Paper>
