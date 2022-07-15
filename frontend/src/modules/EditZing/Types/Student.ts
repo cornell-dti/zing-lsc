@@ -1,15 +1,31 @@
-export type Student = {
+export interface Student {
   name: string
   email: string
   year: string
   college: string
-  submissionTime: Date
   groups: GroupMembership[]
 }
 
-export type GroupMembership = {
+export interface GroupMembership {
   courseId: string
   groupNumber: number
+  submissionTime: Date
+}
+
+export interface ResponseStudent {
+  name: string
+  email: string
+  year: string
+  college: string
+  groups: ResponseGroupMembership[]
+}
+
+export interface ResponseGroupMembership {
+  courseId: string
+  groupNumber: number
+  notes: string
+  notesModifyTime: string
+  submissionTime: string
 }
 
 /** item type for drag and drop prop transfer via dnd */
@@ -23,3 +39,14 @@ export type DnDStudentTransferType = {
  * this case, this is a movable student type
  */
 export const STUDENT_TYPE = 'Student'
+
+export const responseStudentToStudent = (
+  student: ResponseStudent
+): Student => ({
+  ...student,
+  groups: student.groups.map((groupMembership) => ({
+    ...groupMembership,
+    // Remember to convert the notesModifyTime too
+    submissionTime: new Date(groupMembership.submissionTime),
+  })),
+})

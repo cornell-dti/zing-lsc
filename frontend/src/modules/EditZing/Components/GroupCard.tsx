@@ -9,6 +9,7 @@ import CircleIcon from '@mui/icons-material/Circle'
 
 /** the equivalent of Column */
 const GroupCard = ({
+  courseId,
   studentList,
   groupNumber,
   moveStudent,
@@ -136,9 +137,9 @@ const GroupCard = ({
           {studentList.map((student, index) => (
             <StudentCard
               key={index}
+              courseId={courseId}
               groupNumber={groupNumber}
               student={student}
-              submissionTime={student.submissionTime}
               handleAddStudent={handleAddStudent}
             />
           ))}
