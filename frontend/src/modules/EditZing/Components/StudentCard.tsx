@@ -126,14 +126,9 @@ const StudentCard = ({
               <Tooltip
                 disableFocusListener
                 disableTouchListener
-                title={
-                  <Typography sx={{ fontWeight: '500', fontSize: '13px' }}>
-                    Requested:{' '}
-                    <Typography sx={{ fontWeight: '900', fontSize: '18px' }}>
-                      {submissionTime.getMonth() + 1}/{submissionTime.getDate()}
-                    </Typography>
-                  </Typography>
-                }
+                title={`Requested: ${
+                  submissionTime.getMonth() + 1
+                }/${submissionTime.getDate()}`}
               >
                 <Typography
                   sx={{
