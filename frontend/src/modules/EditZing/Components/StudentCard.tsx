@@ -8,10 +8,10 @@ import { Checkbox, Box, Typography } from '@mui/material'
 
 /** the equivalent of MoveableItem */
 const StudentCard = ({
+  courseId,
   student,
   groupNumber,
   xsSize = 6,
-  submissionTime,
   handleAddStudent,
 }: StudentGridProps) => {
   const [{ isDragging }, drag] = useDrag({
@@ -34,6 +34,10 @@ const StudentCard = ({
   }
 
   const opacity = isDragging ? '0' : '1.0'
+
+  const submissionTime = student.groups.find(
+    (groupMembership) => groupMembership.courseId === courseId
+  )!.submissionTime
 
   return (
     <Box
