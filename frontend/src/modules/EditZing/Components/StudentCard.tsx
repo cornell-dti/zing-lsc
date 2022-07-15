@@ -4,7 +4,7 @@ import { GroupMembership, STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrag } from 'react-dnd'
 import Tooltip from '@mui/material/Tooltip'
-import { Checkbox, Box, Typography, Snackbar } from '@mui/material'
+import { Checkbox, Box, Typography, Snackbar, IconButton } from '@mui/material'
 import NotesModal from './NotesModal'
 import notesIcon from '@assets/img/notesIcon.png'
 import filledNotesIcon from '@assets/img/filledNotes.png'
@@ -165,48 +165,54 @@ const StudentCard = ({
                 position: 'absolute',
                 right: '1px',
                 top: '1px',
-                '&:hover': {
-                  transform: 'scale(1.1)',
-                },
               }}
             />
 
-            <Box
+            <IconButton
               component="button"
               sx={{
-                '& :hover': {
-                  transform: 'scale(1.1)',
-                },
+                border: 'none',
+                width: '24px',
+                height: '24px',
+                position: 'absolute',
+                right: '1px',
+                bottom: '4px',
+                cursor: 'pointer',
+                display: !studentNotes && isHovering ? '' : 'none',
               }}
               onClick={handleOpenNotes}
+              color="secondary"
             >
               <img
                 src={notesIcon}
-                style={{
-                  width: '24px',
-                  height: '24px',
-                  position: 'absolute',
-                  right: '1px',
-                  bottom: '4px',
-                  cursor: 'pointer',
-                  display: !studentNotes && isHovering ? '' : 'none',
-                }}
-                alt=""
+                style={{ width: '24px', height: '24px' }}
+                alt="edit student note"
               />
+            </IconButton>
+            <IconButton
+              component="button"
+              sx={{
+                border: 'none',
+                width: '20px',
+                height: '20px',
+                position: 'absolute',
+                right: '0px',
+                bottom: '4px',
+                cursor: 'pointer',
+                display: studentNotes ? '' : 'none',
+              }}
+              onClick={handleOpenNotes}
+              color="secondary"
+            >
               <img
                 src={filledNotesIcon}
                 style={{
                   width: '20px',
                   height: '20px',
-                  position: 'absolute',
-                  right: '1px',
-                  bottom: '4px',
-                  cursor: 'pointer',
-                  display: studentNotes ? '' : 'none',
                 }}
                 alt=""
               />
-            </Box>
+            </IconButton>
           </Box>
         </Paper>
       </div>
