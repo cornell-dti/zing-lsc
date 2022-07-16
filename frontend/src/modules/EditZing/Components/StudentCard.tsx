@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Paper from '@mui/material/Paper'
-import { GroupMembership, STUDENT_TYPE } from 'EditZing/Types/Student'
+import { STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrag } from 'react-dnd'
 import Tooltip from '@mui/material/Tooltip'
@@ -45,9 +45,7 @@ const StudentCard = ({
   const [studentNotes, setStudentNotes] = useState('')
 
   useEffect(() => {
-    const savedNote = student.groups.find(
-      (g: GroupMembership) => g.courseId === courseId
-    )?.notes
+    const savedNote = student.groups.find((g) => g.courseId === courseId)?.notes
     setStudentNotes(savedNote || '')
   }, [student, courseId])
 
@@ -107,6 +105,7 @@ const StudentCard = ({
                 : '0px 2px 5px rgba(205, 156, 242, 0.2)',
             borderRadius: '10px',
             width: '100%',
+            transition: 'box-shadow 0.1s',
           }}
         >
           <Box
