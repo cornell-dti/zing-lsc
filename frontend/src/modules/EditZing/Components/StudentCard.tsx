@@ -13,10 +13,10 @@ import { useParams } from 'react-router-dom'
 
 /** the equivalent of MoveableItem */
 const StudentCard = ({
+  courseId,
   student,
   groupNumber,
   xsSize = 6,
-  submissionTime,
   handleAddStudent,
 }: StudentGridProps) => {
   const { courseId } = useParams<{ courseId: string }>()
@@ -56,6 +56,10 @@ const StudentCard = ({
   }, [student, courseId])
 
   const opacity = isDragging ? '0' : '1.0'
+
+  const submissionTime = student.groups.find(
+    (groupMembership) => groupMembership.courseId === courseId
+  )!.submissionTime
 
   return (
     <Box

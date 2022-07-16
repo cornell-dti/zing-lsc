@@ -5,23 +5,26 @@ import {
   mapCatalogNameToCourseId,
   MissingCourseError,
 } from '../course/get_course_id'
-import { Student } from '../types'
+import { FirestoreStudent, Student } from '../types'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
 
 /** Get student data as Student type (with email and timestamps as Date) */
 export const getStudentData = async (email: string) => {
-  const studentData = (await studentRef.doc(email).get()).data()
-  if (!studentData) {
+  const studentDoc = await studentRef.doc(email).get()
+  if (!studentDoc.exists) {
     throw new Error(`Student document for ${email} does not exist`)
   }
-  studentData.email = email
-  studentData.submissionTime = studentData.submissionTime.toDate()
-  studentData.groups = studentData.groups.map((group: any) => ({
-    ...group,
-    notesModifyTime: group.notesModifyTime.toDate(),
-  }))
-  return studentData as Student
+  const studentData = studentDoc.data() as FirestoreStudent
+  return {
+    ...studentData,
+    email,
+    groups: studentData.groups.map((group) => ({
+      ...group,
+      notesModifyTime: group.notesModifyTime.toDate(),
+      submissionTime: group.submissionTime.toDate(),
+    })),
+  } as Student
 }
 
 /** Get multiple student data as Student type (email + timestamps as Date) */
@@ -142,6 +145,7 @@ export const addStudentSurveyResponse = async (
     groupNumber: -1,
     notes: '',
     notesModifyTime: surveyTimestamp, // Can't use serverTimestamp in arrays...
+    submissionTime: surveyTimestamp,
   }))
 
   // First, update the [student] collection to include the data for the new student
@@ -152,7 +156,6 @@ export const addStudentSurveyResponse = async (
       college,
       year,
       groups: [...existingCourses, ...newCourses],
-      submissionTime: surveyTimestamp,
     })
     .catch((err) => {
       console.log(err)
@@ -258,17 +261,14 @@ export const updateStudentNotes = async (
   courseId: string,
   notes: string
 ) => {
-  const studentDoc = studentRef.doc(email)
-  const studentData = (await studentDoc.get()).data()
-  if (!studentData) {
+  const studentDocRef = studentRef.doc(email)
+  const studentDoc = await studentDocRef.get()
+  if (!studentDoc.exists) {
     throw new Error(`Student document for ${email} does not exist`)
   }
+  const studentData = studentDoc.data() as FirestoreStudent
 
-  const groups: {
-    courseId: string
-    notes: string
-    notesModifyTime: admin.firestore.Timestamp
-  }[] = studentData.groups
+  const groups = studentData.groups
   const groupMembership = groups.find((group) => group.courseId === courseId)
   if (!groupMembership) {
     throw new Error(`Student ${email} does not have membership in ${courseId}`)
@@ -277,7 +277,7 @@ export const updateStudentNotes = async (
   groupMembership.notes = notes
   groupMembership.notesModifyTime = admin.firestore.Timestamp.now()
 
-  await studentDoc.update({ groups })
+  await studentDocRef.update({ groups })
   logger.info(
     `Updated notes for [${courseId}] in student [${email}] to [${notes}]`
   )

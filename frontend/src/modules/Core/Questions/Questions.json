@@ -3,14 +3,16 @@
     "question": "What college are you in?",
     "questionId": "college",
     "answers": {
-      "CALS": "CALS",
-      "AAP": "AAP",
-      "A&S": "A&S",
-      "Hotel Admin": "Hotel Administration",
-      "Dyson": "Dyson School",
-      "Engineering": "Engineering",
-      "ILR": "ILR",
-      "HumEc": "Human Ecology"
+      "CALS": "College of Agriculture and Life Sciences",
+      "AAP": "College of Architecture, Art, and Planning",
+      "A&S": "College of Arts and Sciences",
+      "Engineering": "College of Engineering",
+      "HumEc": "College of Human Ecology",
+      "Dyson": "Dyson School of Applied Economics and Management (SC Johnson College of Business)",
+      "Nolan": "Nolan School of Hotel Administration (SC Johnson College of Business)",
+      "ILR": "School of Industrial and Labor Relations",
+      "SCE": "School of Continuing Education & Summer Sessions",
+      "Grad School": "Graduate/Professional School"
     }
   },
   {

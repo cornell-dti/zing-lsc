@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios, { AxiosResponse } from 'axios'
 import GroupCard from 'EditZing/Components/GroupCard'
 import { UnmatchedGrid } from './UnmatchedGrid'
-import { Student } from 'EditZing/Types/Student'
+import { responseStudentToStudent, Student } from 'EditZing/Types/Student'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import {
@@ -10,6 +10,7 @@ import {
   CourseInfoResponse,
   CourseStudentDataResponse,
   Group,
+  ResponseGroup,
 } from 'EditZing/Types/CourseInfo'
 import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
 import { useParams } from 'react-router-dom'
@@ -94,18 +95,12 @@ export const EditZing = () => {
       .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
       .then((res: AxiosResponse<CourseStudentDataResponse>) => {
         setUnmatchedStudents(
-          res.data.data.unmatched.map((student) => ({
-            ...student,
-            submissionTime: new Date(student.submissionTime),
-          }))
+          res.data.data.unmatched.map(responseStudentToStudent)
         )
         setStudentGroups(
           res.data.data.groups.map((group) => ({
             ...group,
-            memberData: group.memberData.map((student) => ({
-              ...student,
-              submissionTime: new Date(student.submissionTime),
-            })),
+            memberData: group.memberData.map(responseStudentToStudent),
             createTime: new Date(group.createTime),
             updateTime: new Date(group.updateTime),
             shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
@@ -236,18 +231,12 @@ export const EditZing = () => {
       .post(`${API_ROOT}${MATCHING_API}/make`, { courseId: courseId })
       .then((response) => {
         setUnmatchedStudents(
-          response.data.data.unmatched.map((student: any) => ({
-            ...student,
-            submissionTime: new Date(student.submissionTime),
-          }))
+          response.data.data.unmatched.map(responseStudentToStudent)
         )
         const groups = studentGroups.concat(
-          response.data.data.groups.map((group: Group) => ({
+          response.data.data.groups.map((group: ResponseGroup) => ({
             ...group,
-            memberData: group.memberData.map((student) => ({
-              ...student,
-              submissionTime: new Date(student.submissionTime),
-            })),
+            memberData: group.memberData.map(responseStudentToStudent),
             createTime: new Date(group.createTime),
             updateTime: new Date(group.updateTime),
             shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
@@ -273,18 +262,12 @@ export const EditZing = () => {
       .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
       .then((res: AxiosResponse<CourseStudentDataResponse>) => {
         setUnmatchedStudents(
-          res.data.data.unmatched.map((student) => ({
-            ...student,
-            submissionTime: new Date(student.submissionTime),
-          }))
+          res.data.data.unmatched.map(responseStudentToStudent)
         )
         setStudentGroups(
           res.data.data.groups.map((group) => ({
             ...group,
-            memberData: group.memberData.map((student) => ({
-              ...student,
-              submissionTime: new Date(student.submissionTime),
-            })),
+            memberData: group.memberData.map(responseStudentToStudent),
             createTime: new Date(group.createTime),
             updateTime: new Date(group.updateTime),
             shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
@@ -430,6 +413,7 @@ export const EditZing = () => {
           >
             <Box sx={{ gridColumn: '1 / -1' }}>
               <UnmatchedGrid
+                courseId={courseId}
                 unmatchedStudents={unmatchedStudents}
                 moveStudent={moveStudent}
                 matchStudents={matchStudents}
@@ -439,6 +423,7 @@ export const EditZing = () => {
             {studentGroups.map((studentGroup, index) => (
               <GroupCard
                 key={studentGroup.groupNumber}
+                courseId={courseId}
                 studentList={studentGroup.memberData}
                 groupNumber={studentGroup.groupNumber}
                 shareMatchEmailTimestamp={studentGroup.shareMatchEmailTimestamp}
