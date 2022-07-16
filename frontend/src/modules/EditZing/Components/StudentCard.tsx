@@ -19,8 +19,6 @@ const StudentCard = ({
   xsSize = 6,
   handleAddStudent,
 }: StudentGridProps) => {
-  const { courseId } = useParams<{ courseId: string }>()
-
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: STUDENT_TYPE,
