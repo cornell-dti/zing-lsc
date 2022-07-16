@@ -9,8 +9,6 @@ import NotesModal from './NotesModal'
 import notesIcon from '@assets/img/notesIcon.png'
 import filledNotesIcon from '@assets/img/filledNotes.png'
 
-import { useParams } from 'react-router-dom'
-
 /** the equivalent of MoveableItem */
 const StudentCard = ({
   courseId,
