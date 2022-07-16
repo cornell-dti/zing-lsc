@@ -10,7 +10,7 @@ export interface GroupMembership {
   courseId: string
   groupNumber: number
   notes: string
-  notesModifyTime: string
+  notesModifyTime: Date
   submissionTime: Date
 }
 
@@ -49,6 +49,7 @@ export const responseStudentToStudent = (
   groups: student.groups.map((groupMembership) => ({
     ...groupMembership,
     // Remember to convert the notesModifyTime too
+    notesModifyTime: new Date(groupMembership.notesModifyTime),
     submissionTime: new Date(groupMembership.submissionTime),
   })),
 })
