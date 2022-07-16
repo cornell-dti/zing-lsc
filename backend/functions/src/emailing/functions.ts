@@ -5,13 +5,15 @@ import admin from 'firebase-admin'
 import { logger } from 'firebase-functions'
 import { db } from '../config'
 const courseRef = db.collection('courses')
+const studentRef = db.collection('students')
+import { FirestoreGroupMembership, FirestoreStudent } from '../types'
 
 // ==== Timestamp helper functions
 
 type timestampsType = { [key: string]: string }
 
 const timestamps: timestampsType = {
-  'Share matched results': 'shareMatchEmailTimestamp',
+  'Share matchetd results': 'shareMatchEmailTimestamp',
   'First no match notification': 'firstNoMatchEmailTimestamp',
   'Second no match notification': 'secondNoMatchEmailTimestamp',
   'Request to add student to group': 'addStudentEmailTimestamp',
@@ -43,6 +45,37 @@ export const updateEmailTimestamp = (
     .collection('groups')
     .doc(group)
     .update({ [timestampField]: time })
+}
+
+export const updateIndivTimestamp = async (
+  courseId: string,
+  email: string,
+  template: string
+) => {
+  const studentDocRef = studentRef.doc(email)
+  const studentDoc = await studentDocRef.get()
+  const timestampField = getTimestampField(
+    template
+  ) as keyof FirestoreGroupMembership
+
+  if (!studentDoc.exists) {
+    throw new Error(`Student document for ${email} does not exist`)
+  }
+  const studentData = studentDoc.data() as FirestoreStudent
+
+  const groups = studentData.groups
+  const groupMembership = groups.find((group) => group.courseId === courseId)
+  if (!groupMembership) {
+    throw new Error(`Student ${email} does not have membership in ${courseId}`)
+  }
+
+  let timefield = groupMembership[timestampField] as admin.firestore.Timestamp
+  timefield = admin.firestore.Timestamp.now()
+
+  await studentDocRef.update({ groups })
+  logger.info(
+    `Updated email timestamp for template [${template}] for student [${email}] in [${courseId}]`
+  )
 }
 
 /* ==== Emailing Helper Functions ==== */
