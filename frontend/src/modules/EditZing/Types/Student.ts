@@ -10,7 +10,7 @@ export interface GroupMembership {
   courseId: string
   groupNumber: number
   notes: string
-  notesModifyTime: Date
+  notesModifyTime: string
   submissionTime: Date
 }
 
