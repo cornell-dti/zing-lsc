@@ -47,16 +47,9 @@ export const updateEmailTimestamp = (
     .update({ [timestampField]: time })
 }
 
-export const updateIndivTimestamp = async (
-  courseId: string,
-  email: string,
-  template: string
-) => {
+export const updateIndivTimestamp = async (courseId: string, email: string) => {
   const studentDocRef = studentRef.doc(email)
   const studentDoc = await studentDocRef.get()
-  const timestampField = getTimestampField(
-    template
-  ) as keyof FirestoreGroupMembership
 
   if (!studentDoc.exists) {
     throw new Error(`Student document for ${email} does not exist`)
@@ -69,12 +62,11 @@ export const updateIndivTimestamp = async (
     throw new Error(`Student ${email} does not have membership in ${courseId}`)
   }
 
-  let timefield = groupMembership[timestampField] as admin.firestore.Timestamp
-  timefield = admin.firestore.Timestamp.now()
+  groupMembership.firstNoMatchEmailTimestamp = admin.firestore.Timestamp.now()
 
   await studentDocRef.update({ groups })
   logger.info(
-    `Updated email timestamp for template [${template}] for student [${email}] in [${courseId}]`
+    `Updated email timestamp for first no match email for student [${email}] in [${courseId}]`
   )
 }
 
