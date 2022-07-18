@@ -1,5 +1,6 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
+import { db } from '../config'
 import {
   createEmailAsJson,
   sendMails,
@@ -8,6 +9,7 @@ import {
 } from './functions'
 
 const router = express()
+const courseRef = db.collection('courses')
 
 /**
 
@@ -29,7 +31,7 @@ const router = express()
       FAIL -> res.data = 'Email send failure.' 
 
     */
-router.post('/send', (req, res) => {
+router.post('/send', async (req, res) => {
   const {
     emailAddress,
     authToken,
@@ -40,7 +42,15 @@ router.post('/send', (req, res) => {
     group,
     template,
   } = req.body
-  const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
+
+  const groupData = await courseRef
+    .doc(courseId)
+    .collection('groups')
+    .doc(group)
+    .get()
+  const groupRcpts = (groupData.data() as any).members
+
+  const message = createEmailAsJson(groupRcpts, emailSubject, emailBody)
 
   sendMails(emailAddress, message, authToken, courseId, group, template)
     .then((result) => {
@@ -86,11 +96,6 @@ router.post('/timestamp', (req, res) => {
       )
       res.status(400).json('ERROR: email Time update failure')
     })
-})
-
-router.post('/indiv-timestamp', (req, res) => {
-  const { courseId, email, template } = req.body
-  updateIndivTimestamp(courseId, email, template)
 })
 
 export default router

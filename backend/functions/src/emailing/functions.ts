@@ -6,7 +6,7 @@ import { logger } from 'firebase-functions'
 import { db } from '../config'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
-import { FirestoreGroupMembership, FirestoreStudent } from '../types'
+import { FirestoreStudent } from '../types'
 
 // ==== Timestamp helper functions
 
