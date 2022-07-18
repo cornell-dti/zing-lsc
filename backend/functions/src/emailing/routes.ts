@@ -43,7 +43,7 @@ router.post('/send', async (req, res) => {
     indivEmail,
   } = req.body
 
-  let emailRcpts: string[] = []
+  let emailRcpts = ['lscstudypartners@cornell.edu']
 
   if (parseInt(group) > 0) {
     const groupData = await courseRef
@@ -52,12 +52,11 @@ router.post('/send', async (req, res) => {
       .doc(group)
       .get()
 
-    emailRcpts = [
-      'lscstudypartners@cornell.edu',
-      ...(groupData.data() as any).members,
-    ]
-  } else {
-    emailRcpts = [indivEmail]
+    emailRcpts = [emailRcpts, ...(groupData.data() as any).members]
+  }
+
+  if (indivEmail !== undefined) {
+    emailRcpts = [emailRcpts, ...indivEmail]
   }
 
   const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
