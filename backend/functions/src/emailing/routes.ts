@@ -40,22 +40,37 @@ router.post('/send', async (req, res) => {
     courseId,
     group,
     template,
+    indivEmail,
   } = req.body
 
-  const groupData = await courseRef
-    .doc(courseId)
-    .collection('groups')
-    .doc(group)
-    .get()
+  let emailRcpts: string[] = []
 
-  const emailRcpts = [
-    'lscstudypartners@cornell.edu',
-    ...(groupData.data() as any).members,
-  ]
+  if (parseInt(group) > 0) {
+    const groupData = await courseRef
+      .doc(courseId)
+      .collection('groups')
+      .doc(group)
+      .get()
+
+    emailRcpts = [
+      'lscstudypartners@cornell.edu',
+      ...(groupData.data() as any).members,
+    ]
+  } else {
+    emailRcpts = [indivEmail]
+  }
 
   const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
 
-  sendMails(emailAddress, message, authToken, courseId, group, template)
+  sendMails(
+    emailAddress,
+    message,
+    authToken,
+    courseId,
+    group,
+    template,
+    indivEmail
+  )
     .then((result) => {
       if (result === 202) {
         logger.info(
