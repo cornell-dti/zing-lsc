@@ -5,7 +5,7 @@ import {
   createEmailAsJson,
   sendMails,
   updateEmailTimestamp,
-  updateIndivTimestamp,
+  //updateIndivTimestamp,
 } from './functions'
 
 const router = express()
@@ -37,7 +37,6 @@ router.post('/send', async (req, res) => {
     authToken,
     emailBody,
     emailSubject,
-    emailRcpts,
     courseId,
     group,
     template,
@@ -48,9 +47,13 @@ router.post('/send', async (req, res) => {
     .collection('groups')
     .doc(group)
     .get()
-  const groupRcpts = (groupData.data() as any).members
 
-  const message = createEmailAsJson(groupRcpts, emailSubject, emailBody)
+  const emailRcpts = [
+    'lscstudypartners@cornell.edu',
+    ...(groupData.data() as any).members,
+  ]
+
+  const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
 
   sendMails(emailAddress, message, authToken, courseId, group, template)
     .then((result) => {

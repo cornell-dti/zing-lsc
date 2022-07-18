@@ -1,4 +1,4 @@
-import axios from 'axios'
+//import axios from 'axios'
 
 // firebase imports
 import admin from 'firebase-admin'
@@ -13,7 +13,7 @@ import { FirestoreStudent } from '../types'
 type timestampsType = { [key: string]: string }
 
 const timestamps: timestampsType = {
-  'Share matchetd results': 'shareMatchEmailTimestamp',
+  'Share matched results': 'shareMatchEmailTimestamp',
   'First no match notification': 'firstNoMatchEmailTimestamp',
   'Second no match notification': 'secondNoMatchEmailTimestamp',
   'Request to add student to group': 'addStudentEmailTimestamp',
@@ -71,7 +71,7 @@ export const updateIndivTimestamp = async (courseId: string, email: string) => {
 }
 
 /* ==== Emailing Helper Functions ==== */
-const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
+//const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
 /* Add Recipients parses frontend data and adds to 
     the 'toRecipients' key-value pair of 
@@ -144,11 +144,12 @@ export const sendMails = async (
   message: any,
   authToken: string,
   courseId: string,
-  group: string,
-  template = 'Share matched results'
+  group = '-1',
+  template = 'Share matched results',
+  indivEmail?: string
 ) => {
   try {
-    const response = await axios({
+    /*const response = await axios({
       url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
       // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
       method: 'POST',
@@ -157,19 +158,39 @@ export const sendMails = async (
         'Content-Type': 'application/json',
       },
       data: JSON.stringify(message),
-    })
-    if (response.status === 202 && parseInt(group) > 0) {
-      await updateEmailTimestamp(courseId, group, template)
-        .then(() =>
-          logger.info(
-            `Added timestamp for course ${courseId} for group ${group} with template ${template}`
+    }) */
+
+    const response = { status: 202 }
+    if (response.status === 202) {
+      if (parseInt(group) > 0) {
+        await updateEmailTimestamp(courseId, group, template)
+          .then(() =>
+            logger.info(
+              `Added timestamp for course ${courseId} for group ${group} with template ${template}`
+            )
           )
-        )
-        .catch((err) =>
-          logger.error(
-            `Failed to update timestampfor course ${courseId} for group ${group} with template ${template}. Resulted in err: ${err.message} `
+          .catch((err) =>
+            logger.error(
+              `Failed to update timestamp for course ${courseId} for group ${group} with template ${template}. Resulted in err: ${err.message} `
+            )
           )
+      } else if (typeof indivEmail !== 'undefined') {
+        await updateIndivTimestamp(courseId, indivEmail)
+          .then(() =>
+            logger.info(
+              `Added no match timestamp for course ${courseId} for student with email ${indivEmail}`
+            )
+          )
+          .catch((err) =>
+            logger.error(
+              `Failed to update no match timestamp for course ${courseId} for student with email ${indivEmail}. Resulted in err: ${err.message} `
+            )
+          )
+      } else {
+        logger.error(
+          ` Invalid group ${group} and invalid email ${indivEmail} for updating timestamps `
         )
+      }
     }
     return response.status
   } catch (error) {
