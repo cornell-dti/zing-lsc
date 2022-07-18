@@ -21,6 +21,7 @@ const GroupCard = ({
   selected,
   handleChecked,
   handleAddStudent,
+  updateNotes,
 }: GroupGridProps) => {
   const tooltips = [
     {
@@ -141,6 +142,7 @@ const GroupCard = ({
               groupNumber={groupNumber}
               student={student}
               handleAddStudent={handleAddStudent}
+              updateNotes={updateNotes}
             />
           ))}
         </Box>

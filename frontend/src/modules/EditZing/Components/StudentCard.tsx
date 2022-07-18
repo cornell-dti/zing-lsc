@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Paper from '@mui/material/Paper'
 import { STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
@@ -8,6 +8,8 @@ import { Checkbox, Box, Typography, Snackbar, IconButton } from '@mui/material'
 import NotesModal from './NotesModal'
 import notesIcon from '@assets/img/notesIcon.png'
 import filledNotesIcon from '@assets/img/filledNotes.png'
+import axios from 'axios'
+import { API_ROOT, STUDENT_API } from '@core/Constants'
 
 /** the equivalent of MoveableItem */
 const StudentCard = ({
@@ -16,6 +18,7 @@ const StudentCard = ({
   groupNumber,
   xsSize = 6,
   handleAddStudent,
+  updateNotes,
 }: StudentGridProps) => {
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -36,18 +39,37 @@ const StudentCard = ({
     setSelected(!selected)
   }
 
-  const [openNotes, setOpenNotes] = useState(false)
-  const [saved, setSaved] = useState(false)
-  const [notSaved, setNotSaved] = useState(false)
-  const handleOpenNotes = () => setOpenNotes(true)
-  const handleCloseNotes = () => setOpenNotes(false)
+  const studentNotes = student.groups.find((g) => g.courseId === courseId)!
+    .notes
+  const [modalNotes, setModalNotes] = useState(studentNotes)
 
-  const [studentNotes, setStudentNotes] = useState('')
+  const [openNotesModal, setOpenNotesModal] = useState(false)
+  const [isNotesSaving, setIsNotesSaving] = useState(false)
+  const [showNotesSaveSuccess, setShowNotesSaveSuccess] = useState(false)
+  const [showNotesSaveFailure, setShowNotesSaveFailure] = useState(false)
+  const handleOpenNotes = () => {
+    setModalNotes(studentNotes) // Reset student notes every time modal opened
+    setOpenNotesModal(true)
+  }
+  const handleCloseNotes = () => setOpenNotesModal(false)
 
-  useEffect(() => {
-    const savedNote = student.groups.find((g) => g.courseId === courseId)?.notes
-    setStudentNotes(savedNote || '')
-  }, [student, courseId])
+  // saving notes to db
+  const saveModalNotes = async () => {
+    setIsNotesSaving(true)
+    await axios
+      .post(`${API_ROOT}${STUDENT_API}/notes`, {
+        email: student.email,
+        courseId: courseId,
+        notes: modalNotes,
+      })
+      .then(() => {
+        updateNotes(student.email, modalNotes) // Share the changes to rest of the page
+        setShowNotesSaveSuccess(true)
+      })
+      .catch(() => setShowNotesSaveFailure(true))
+    setIsNotesSaving(false)
+    setOpenNotesModal(false)
+  }
 
   const opacity = isDragging ? '0' : '1.0'
 
@@ -62,15 +84,15 @@ const StudentCard = ({
       }}
     >
       <Snackbar
-        open={saved}
+        open={showNotesSaveSuccess}
         autoHideDuration={3000}
-        onClose={() => setSaved(false)}
+        onClose={() => setShowNotesSaveSuccess(false)}
         message="Notes saved."
       />
       <Snackbar
-        open={notSaved}
+        open={showNotesSaveFailure}
         autoHideDuration={3000}
-        onClose={() => setNotSaved(false)}
+        onClose={() => setShowNotesSaveFailure(false)}
         message="Notes failed to save."
         ContentProps={{
           style: {
@@ -79,13 +101,13 @@ const StudentCard = ({
         }}
       />
       <NotesModal
-        open={openNotes}
+        open={openNotesModal}
+        isSaving={isNotesSaving}
+        name={student.name}
+        modalNotes={modalNotes}
+        setModalNotes={setModalNotes}
+        saveModalNotes={saveModalNotes}
         handleClose={handleCloseNotes}
-        student={student}
-        studentNotes={studentNotes}
-        setStudentNotes={setStudentNotes}
-        setSaved={setSaved}
-        setNotSaved={setNotSaved}
       />
       <div ref={drag}>
         <Paper

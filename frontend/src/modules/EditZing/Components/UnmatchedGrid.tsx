@@ -18,6 +18,7 @@ export const UnmatchedGrid = ({
   moveStudent,
   matchStudents,
   handleAddStudent,
+  updateNotes,
 }: UnmatchedGridProps) => {
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -51,6 +52,7 @@ export const UnmatchedGrid = ({
               student={student}
               xsSize={xsSize}
               handleAddStudent={handleAddStudent}
+              updateNotes={updateNotes}
             />
           ))}
         </Box>
