@@ -1,4 +1,4 @@
-//import axios from 'axios'
+import axios from 'axios'
 
 // firebase imports
 import admin from 'firebase-admin'
@@ -62,16 +62,13 @@ export const updateIndivTimestamp = async (courseId: string, email: string) => {
     throw new Error(`Student ${email} does not have membership in ${courseId}`)
   }
 
-  groupMembership.firstNoMatchEmailTimestamp = admin.firestore.Timestamp.now()
+  groupMembership.firstNoMatchEmailTime = admin.firestore.Timestamp.now()
 
   await studentDocRef.update({ groups })
-  logger.info(
-    `Updated email timestamp for first no match email for student [${email}] in [${courseId}]`
-  )
 }
 
 /* ==== Emailing Helper Functions ==== */
-//const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
+const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
 /* Add Recipients parses frontend data and adds to 
     the 'toRecipients' key-value pair of 
@@ -149,7 +146,7 @@ export const sendMails = async (
   indivEmail?: string
 ) => {
   try {
-    /*const response = await axios({
+    const response = await axios({
       url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
       // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
       method: 'POST',
@@ -158,9 +155,8 @@ export const sendMails = async (
         'Content-Type': 'application/json',
       },
       data: JSON.stringify(message),
-    }) */
+    })
 
-    const response = { status: 202 }
     if (response.status === 202) {
       if (parseInt(group) > 0) {
         await updateEmailTimestamp(courseId, group, template)
@@ -174,7 +170,9 @@ export const sendMails = async (
               `Failed to update timestamp for course ${courseId} for group ${group} with template ${template}. Resulted in err: ${err.message} `
             )
           )
-      } else if (typeof indivEmail !== 'undefined') {
+      }
+
+      if (typeof indivEmail !== 'undefined') {
         await updateIndivTimestamp(courseId, indivEmail)
           .then(() =>
             logger.info(
@@ -186,7 +184,9 @@ export const sendMails = async (
               `Failed to update no match timestamp for course ${courseId} for student with email ${indivEmail}. Resulted in err: ${err.message} `
             )
           )
-      } else {
+      }
+
+      if (parseInt(group) < 0 && typeof indivEmail === undefined) {
         logger.error(
           ` Invalid group ${group} and invalid email ${indivEmail} for updating timestamps `
         )

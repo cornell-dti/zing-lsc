@@ -52,11 +52,11 @@ router.post('/send', async (req, res) => {
       .doc(group)
       .get()
 
-    emailRcpts = [emailRcpts, ...(groupData.data() as any).members]
+    emailRcpts = [...emailRcpts, ...(groupData.data() as any).members]
   }
 
   if (indivEmail !== undefined) {
-    emailRcpts = [emailRcpts, ...indivEmail]
+    emailRcpts = [...emailRcpts, indivEmail]
   }
 
   const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
