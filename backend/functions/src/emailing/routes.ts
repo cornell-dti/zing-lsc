@@ -1,12 +1,7 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
 import { db } from '../config'
-import {
-  createEmailAsJson,
-  sendMails,
-  updateEmailTimestamp,
-  //updateIndivTimestamp,
-} from './functions'
+import { createEmailAsJson, sendMails, updateEmailTimestamp } from './functions'
 
 const router = express()
 const courseRef = db.collection('courses')

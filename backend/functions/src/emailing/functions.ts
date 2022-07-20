@@ -4,9 +4,10 @@ import axios from 'axios'
 import admin from 'firebase-admin'
 import { logger } from 'firebase-functions'
 import { db } from '../config'
+import { FirestoreStudent } from '../types'
+
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
-import { FirestoreStudent } from '../types'
 
 // ==== Timestamp helper functions
 
