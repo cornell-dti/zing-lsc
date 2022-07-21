@@ -1,10 +1,13 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
-import { db } from '../config'
-import { createEmailAsJson, sendMails, updateEmailTimestamp } from './functions'
+import {
+  createEmailAsJson,
+  sendMails,
+  updateEmailTimestamp,
+  getRecipients,
+} from './functions'
 
 const router = express()
-const courseRef = db.collection('courses')
 
 /**
 
@@ -38,22 +41,7 @@ router.post('/send', async (req, res) => {
     indivEmail,
   } = req.body
 
-  let emailRcpts = ['lscstudypartners@cornell.edu']
-
-  if (parseInt(group) > 0) {
-    const groupData = await courseRef
-      .doc(courseId)
-      .collection('groups')
-      .doc(group)
-      .get()
-
-    emailRcpts = [...emailRcpts, ...(groupData.data() as any).members]
-  }
-
-  if (indivEmail !== undefined) {
-    emailRcpts = [...emailRcpts, indivEmail]
-  }
-
+  const emailRcpts = await getRecipients(courseId, group, indivEmail)
   const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
 
   sendMails(
@@ -73,7 +61,7 @@ router.post('/send', async (req, res) => {
         res.json('Email send success.')
       } else {
         logger.error(
-          `** Likely auth error ** : Email failed to send by  ${emailAddress} to ${emailRcpts.toString()}`
+          `** Likely auth error ** : Email failed to send by ${emailAddress} to ${emailRcpts.toString()}`
         )
         res.json('Email send failure.')
       }

@@ -71,6 +71,30 @@ export const updateIndivTimestamp = async (courseId: string, email: string) => {
 /* ==== Emailing Helper Functions ==== */
 const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
+export async function getRecipients(
+  courseId: string,
+  group: string,
+  indivEmail: string
+) {
+  let emailRcpts = ['lscstudypartners@cornell.edu']
+
+  if (parseInt(group) > 0) {
+    const groupData = await courseRef
+      .doc(courseId)
+      .collection('groups')
+      .doc(group)
+      .get()
+
+    emailRcpts = [...emailRcpts, ...(groupData.data() as any).members]
+  }
+
+  if (indivEmail !== undefined) {
+    emailRcpts = [...emailRcpts, indivEmail]
+  }
+
+  return emailRcpts
+}
+
 /* Add Recipients parses frontend data and adds to 
     the 'toRecipients' key-value pair of 
     the email request body sent to the MS Graph API */
@@ -146,6 +170,16 @@ export const sendMails = async (
   template = 'Share matched results',
   indivEmail?: string
 ) => {
+  if (parseInt(group) < 0 && indivEmail === undefined) {
+    logger.error(
+      ` Invalid group ${group} and invalid email "${indivEmail}" for updating timestamps `
+    )
+    return
+  } else if (parseInt(group) > 0 && indivEmail !== undefined) {
+    logger.error(`group and individual email cannot both be specified `)
+    return
+  }
+
   try {
     const response = await axios({
       url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
@@ -163,12 +197,12 @@ export const sendMails = async (
         await updateEmailTimestamp(courseId, group, template)
           .then(() =>
             logger.info(
-              `Added timestamp for course ${courseId} for group ${group} with template ${template}`
+              `Added timestamp for course ${courseId} for group ${group} with template "${template}"`
             )
           )
           .catch((err) =>
             logger.error(
-              `Failed to update timestamp for course ${courseId} for group ${group} with template ${template}. Resulted in err: ${err.message} `
+              `Failed to update timestamp for course ${courseId} for group ${group} with template "${template}." Resulted in err: ${err.message} `
             )
           )
       }
@@ -182,15 +216,9 @@ export const sendMails = async (
           )
           .catch((err) =>
             logger.error(
-              `Failed to update no match timestamp for course ${courseId} for student with email ${indivEmail}. Resulted in err: ${err.message} `
+              `Failed to update no match timestamp for student with email ${indivEmail} for course ${courseId}. Resulted in err: ${err.message} `
             )
           )
-      }
-
-      if (parseInt(group) < 0 && typeof indivEmail === undefined) {
-        logger.error(
-          ` Invalid group ${group} and invalid email ${indivEmail} for updating timestamps `
-        )
       }
     }
     return response.status
