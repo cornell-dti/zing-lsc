@@ -4,10 +4,18 @@ import { STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrag } from 'react-dnd'
 import Tooltip from '@mui/material/Tooltip'
-import { Checkbox, Box, Typography, Snackbar, IconButton } from '@mui/material'
+import {
+  Checkbox,
+  Box,
+  Typography,
+  Snackbar,
+  IconButton,
+  SvgIcon,
+} from '@mui/material'
 import NotesModal from './NotesModal'
-import notesIcon from '@assets/img/notesIcon.png'
-import filledNotesIcon from '@assets/img/filledNotes.png'
+import { ReactComponent as FilledEditIcon } from '@assets/img/FilledEditIcon.svg'
+import { ReactComponent as EditIcon } from '@assets/img/EditIcon.svg'
+
 import axios from 'axios'
 import { API_ROOT, STUDENT_API } from '@core/Constants'
 
@@ -54,9 +62,9 @@ const StudentCard = ({
   const handleCloseNotes = () => setOpenNotesModal(false)
 
   // saving notes to db
-  const saveModalNotes = async () => {
+  const saveModalNotes = () => {
     setIsNotesSaving(true)
-    await axios
+    axios
       .post(`${API_ROOT}${STUDENT_API}/notes`, {
         email: student.email,
         courseId: courseId,
@@ -96,7 +104,7 @@ const StudentCard = ({
         message="Notes failed to save."
         ContentProps={{
           style: {
-            background: '#ff3868',
+            background: '#FF6584',
           },
         }}
       />
@@ -199,11 +207,9 @@ const StudentCard = ({
               onClick={handleOpenNotes}
               color="secondary"
             >
-              <img
-                src={notesIcon}
-                style={{ width: '24px', height: '24px' }}
-                alt="edit student note"
-              />
+              <SvgIcon>
+                <EditIcon />
+              </SvgIcon>
             </IconButton>
             <IconButton
               component="button"
@@ -220,14 +226,9 @@ const StudentCard = ({
               onClick={handleOpenNotes}
               color="secondary"
             >
-              <img
-                src={filledNotesIcon}
-                style={{
-                  width: '20px',
-                  height: '20px',
-                }}
-                alt=""
-              />
+              <SvgIcon>
+                <FilledEditIcon />
+              </SvgIcon>
             </IconButton>
           </Box>
         </Paper>

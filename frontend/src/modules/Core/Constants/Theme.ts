@@ -270,11 +270,6 @@ theme = createTheme(theme, {
         },
       },
     },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {},
-      },
-    },
     MuiMenu: {
       defaultProps: {
         PaperProps: {
