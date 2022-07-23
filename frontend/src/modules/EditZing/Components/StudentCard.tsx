@@ -102,11 +102,7 @@ const StudentCard = ({
         autoHideDuration={3000}
         onClose={() => setShowNotesSaveFailure(false)}
         message="Notes failed to save."
-        ContentProps={{
-          style: {
-            background: '#FF6584',
-          },
-        }}
+        ContentProps={{ sx: { bgcolor: 'error.main' } }}
       />
       <NotesModal
         open={openNotesModal}
