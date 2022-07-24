@@ -40,3 +40,12 @@ export type FirestoreGroupMembership = {
   notesModifyTime: Timestamp
   submissionTime: Timestamp
 }
+
+export type FirestoreEmailTemplate = {
+  id: string
+  name: string
+  type: 'group' | 'student'
+  subject: string
+  body: string
+  modifyTime: Timestamp
+}
