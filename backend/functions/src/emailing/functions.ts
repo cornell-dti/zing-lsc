@@ -166,16 +166,16 @@ export const sendMails = async (
   message: any,
   authToken: string,
   courseId: string,
-  group = '-1',
+  group?: string,
   template = 'Share matched results',
   indivEmail?: string
 ) => {
-  if (parseInt(group) < 0 && indivEmail === undefined) {
+  if (!group || (parseInt(group) < 0 && indivEmail === undefined)) {
     logger.error(
       ` Invalid group ${group} and invalid email "${indivEmail}" for updating timestamps `
     )
     return
-  } else if (parseInt(group) > 0 && indivEmail !== undefined) {
+  } else if (group && indivEmail) {
     logger.error(`group and individual email cannot both be specified `)
     return
   }
@@ -193,7 +193,7 @@ export const sendMails = async (
     })
 
     if (response.status === 202) {
-      if (parseInt(group) > 0) {
+      if (group && parseInt(group) > 0) {
         await updateEmailTimestamp(courseId, group, template)
           .then(() =>
             logger.info(
