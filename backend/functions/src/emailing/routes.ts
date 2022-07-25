@@ -47,7 +47,7 @@ router.post('/send', async (req, res) => {
     emailRcpts = await getRecipients(courseId, group, indivEmail)
   } catch (err: any) {
     logger.error(err.message)
-    res.status(400).json('invalid email recipients')
+    res.status(400).send({ success: false, message: err.message })
     return
   }
 
@@ -74,11 +74,11 @@ router.post('/send', async (req, res) => {
         res.status(400).json('Email send failure.')
       }
     })
-    .catch(() => {
+    .catch((err) => {
       logger.error(
         `Email send request failed from ${emailAddress} to ${emailRcpts.toString()}`
       )
-      res.sendStatus(400)
+      res.status(400).send({ success: false, message: err.message })
     })
 })
 
