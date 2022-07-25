@@ -79,7 +79,7 @@ export async function getRecipients(
   let emailRcpts = ['lscstudypartners@cornell.edu']
 
   if (group && indivEmail) {
-    throw new Error('Both group and indivEmail are specified')
+    throw new Error('group and indivEmail cannot both be specified')
   }
 
   if (group && parseInt(group) > 0) {
@@ -176,7 +176,7 @@ export const sendMails = async (
 ) => {
   if ((!group || parseInt(group) < 0) && !indivEmail) {
     logger.error(
-      ` Invalid group ${group} and invalid email "${indivEmail}" for updating timestamps `
+      ` Invalid group ${group} and invalid email ${indivEmail} for updating timestamps `
     )
     throw new Error('No valid group or individual email')
   } else if (group && indivEmail) {
@@ -241,9 +241,7 @@ export const sendStudEmails = async (
   template = 'Share matched results',
   indivEmail?: string
 ) => {
-  let emailRcpts: string[]
-
-  emailRcpts = await getRecipients(courseId, group, indivEmail)
+  const emailRcpts = await getRecipients(courseId, group, indivEmail)
 
   const message = createEmailAsJson(emailRcpts, subject, body)
 
