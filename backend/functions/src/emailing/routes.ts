@@ -40,7 +40,16 @@ router.post('/send', async (req, res) => {
     indivEmail,
   } = req.body
 
-  const emailRcpts = await getRecipients(courseId, group, indivEmail)
+  let emailRcpts: string[]
+
+  //This is not a great solution, but I don't know a better way to log the email recipients
+  try {
+    emailRcpts = await getRecipients(courseId, group, indivEmail)
+  } catch (err: any) {
+    logger.error(err.message)
+    res.status(400).json('invalid email recipients')
+    return
+  }
 
   sendStudEmails(
     emailAddress,
@@ -69,7 +78,7 @@ router.post('/send', async (req, res) => {
       logger.error(
         `Email send request failed from ${emailAddress} to ${emailRcpts.toString()}`
       )
-      res.status(400)
+      res.sendStatus(400)
     })
 })
 

@@ -201,12 +201,12 @@ export const sendMails = async (
         await updateEmailTimestamp(courseId, group, template)
           .then(() =>
             logger.info(
-              `Added timestamp for course ${courseId} for group ${group} with template "${template}"`
+              `Added timestamp for course ${courseId} for group ${group} with template ${template}`
             )
           )
           .catch((err) =>
             logger.error(
-              `Failed to update timestamp for course ${courseId} for group ${group} with template "${template}." Resulted in err: ${err.message} `
+              `Failed to update timestamp for course ${courseId} for group ${group} with template ${template}. Resulted in err: ${err.message} `
             )
           )
       }
