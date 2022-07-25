@@ -73,12 +73,16 @@ const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
 export async function getRecipients(
   courseId: string,
-  group: string,
-  indivEmail: string
+  group?: string,
+  indivEmail?: string
 ) {
   let emailRcpts = ['lscstudypartners@cornell.edu']
 
-  if (parseInt(group) > 0) {
+  if (group && indivEmail) {
+    throw new Error('Both group and indivEmail are specified')
+  }
+
+  if (group && parseInt(group) > 0) {
     const groupData = await courseRef
       .doc(courseId)
       .collection('groups')
@@ -88,7 +92,7 @@ export async function getRecipients(
     emailRcpts = [...emailRcpts, ...(groupData.data() as any).members]
   }
 
-  if (indivEmail !== undefined) {
+  if (indivEmail) {
     emailRcpts = [...emailRcpts, indivEmail]
   }
 
@@ -170,14 +174,14 @@ export const sendMails = async (
   template = 'Share matched results',
   indivEmail?: string
 ) => {
-  if (!group || (parseInt(group) < 0 && indivEmail === undefined)) {
+  if ((!group || parseInt(group) < 0) && !indivEmail) {
     logger.error(
       ` Invalid group ${group} and invalid email "${indivEmail}" for updating timestamps `
     )
-    return
+    throw new Error('No valid group or individual email')
   } else if (group && indivEmail) {
     logger.error(`group and individual email cannot both be specified `)
-    return
+    throw new Error('Both group and individual email are specified')
   }
 
   try {
@@ -207,7 +211,7 @@ export const sendMails = async (
           )
       }
 
-      if (typeof indivEmail !== 'undefined') {
+      if (indivEmail) {
         await updateIndivTimestamp(courseId, indivEmail)
           .then(() =>
             logger.info(
@@ -225,4 +229,28 @@ export const sendMails = async (
   } catch (error) {
     return error
   }
+}
+
+export const sendStudEmails = async (
+  from: string,
+  authToken: string,
+  subject: string,
+  body: string,
+  courseId: string,
+  group?: string,
+  template = 'Share matched results',
+  indivEmail?: string
+) => {
+  const emailRcpts = await getRecipients(courseId, group, indivEmail)
+  const message = createEmailAsJson(emailRcpts, subject, body)
+
+  return await sendMails(
+    from,
+    message,
+    authToken,
+    courseId,
+    group,
+    template,
+    indivEmail
+  )
 }

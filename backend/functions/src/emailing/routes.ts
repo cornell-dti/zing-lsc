@@ -1,8 +1,7 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
 import {
-  createEmailAsJson,
-  sendMails,
+  sendStudEmails,
   updateEmailTimestamp,
   getRecipients,
 } from './functions'
@@ -33,8 +32,8 @@ router.post('/send', async (req, res) => {
   const {
     emailAddress,
     authToken,
-    emailBody,
     emailSubject,
+    emailBody,
     courseId,
     group,
     template,
@@ -42,12 +41,12 @@ router.post('/send', async (req, res) => {
   } = req.body
 
   const emailRcpts = await getRecipients(courseId, group, indivEmail)
-  const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
 
-  sendMails(
+  sendStudEmails(
     emailAddress,
-    message,
     authToken,
+    emailSubject,
+    emailBody,
     courseId,
     group,
     template,
@@ -58,19 +57,20 @@ router.post('/send', async (req, res) => {
         logger.info(
           `Email sent successfully by ${emailAddress} to ${emailRcpts.toString()}`
         )
-        res.json('Email send success.')
+        res.status(200).json('Email send success.')
       } else {
         logger.error(
           `** Likely auth error ** : Email failed to send by ${emailAddress} to ${emailRcpts.toString()}`
         )
-        res.json('Email send failure.')
+        res.status(400).json('Email send failure.')
       }
     })
-    .catch(() =>
+    .catch(() => {
       logger.error(
         `Email send request failed from ${emailAddress} to ${emailRcpts.toString()}`
       )
-    )
+      res.status(400)
+    })
 })
 
 /** @.com/api root/email/timestamp
