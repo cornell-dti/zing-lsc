@@ -1,10 +1,6 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
-import {
-  sendStudEmails,
-  updateEmailTimestamp,
-  getRecipients,
-} from './functions'
+import { sendStudEmails, updateEmailTimestamp } from './functions'
 
 const router = express()
 
@@ -40,46 +36,22 @@ router.post('/send', async (req, res) => {
     indivEmail,
   } = req.body
 
-  let emailRcpts: string[]
-
-  //This is not a great solution, but I don't know a better way to log the email recipients
   try {
-    emailRcpts = await getRecipients(courseId, group, indivEmail)
-  } catch (err: any) {
-    logger.error(err.message)
-    res.status(400).send({ success: false, message: err.message })
-    return
-  }
+    await sendStudEmails(
+      emailAddress,
+      authToken,
+      emailSubject,
+      emailBody,
+      courseId,
+      group,
+      template,
+      indivEmail
+    )
 
-  sendStudEmails(
-    emailAddress,
-    authToken,
-    emailSubject,
-    emailBody,
-    courseId,
-    group,
-    template,
-    indivEmail
-  )
-    .then((result) => {
-      if (result === 202) {
-        logger.info(
-          `Email sent successfully by ${emailAddress} to ${emailRcpts.toString()}`
-        )
-        res.status(200).json('Email send success.')
-      } else {
-        logger.error(
-          `** Likely auth error ** : Email failed to send by ${emailAddress} to ${emailRcpts.toString()}`
-        )
-        res.status(400).json('Email send failure.')
-      }
-    })
-    .catch((err) => {
-      logger.error(
-        `Email send request failed from ${emailAddress} to ${emailRcpts.toString()}`
-      )
-      res.status(400).send({ success: false, message: err.message })
-    })
+    res.status(200).json('Email send success')
+  } catch (err: any) {
+    res.status(400).json(err.message)
+  }
 })
 
 /** @.com/api root/email/timestamp

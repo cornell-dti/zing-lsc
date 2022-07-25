@@ -241,10 +241,13 @@ export const sendStudEmails = async (
   template = 'Share matched results',
   indivEmail?: string
 ) => {
-  const emailRcpts = await getRecipients(courseId, group, indivEmail)
+  let emailRcpts: string[]
+
+  emailRcpts = await getRecipients(courseId, group, indivEmail)
+
   const message = createEmailAsJson(emailRcpts, subject, body)
 
-  return await sendMails(
+  await sendMails(
     from,
     message,
     authToken,
@@ -253,4 +256,24 @@ export const sendStudEmails = async (
     template,
     indivEmail
   )
+    .then((result) => {
+      if (result === 202) {
+        logger.info(
+          `Email sent successfully by ${from} to ${emailRcpts.toString()}`
+        )
+      } else {
+        logger.error(
+          `** Likely auth error ** : Email failed to send by ${from} to ${emailRcpts.toString()}`
+        )
+
+        throw Error('Email send failure')
+      }
+    })
+    .catch((err) => {
+      logger.error(
+        `Email send request failed from ${from} to ${emailRcpts.toString()}`
+      )
+
+      throw err
+    })
 }
