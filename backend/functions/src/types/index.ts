@@ -24,6 +24,16 @@ export type GroupMembership = {
   submissionTime: Date
 }
 
+/** Information about an email template */
+export type EmailTemplate = {
+  id: string
+  name: string
+  type: 'group' | 'student'
+  subject: string
+  body: string
+  modifyTime: Date
+}
+
 /** How student data is stored in the database */
 export type FirestoreStudent = {
   name: string
@@ -41,6 +51,7 @@ export type FirestoreGroupMembership = {
   submissionTime: Timestamp
 }
 
+/** How email template data is stored in the database */
 export type FirestoreEmailTemplate = {
   id: string
   name: string

@@ -1,6 +1,11 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
-import { createEmailAsJson, sendMails, updateEmailTimestamp } from './functions'
+import {
+  createEmailAsJson,
+  getEmailTemplates,
+  sendMails,
+  updateEmailTimestamp,
+} from './functions'
 
 const router = express()
 
@@ -80,6 +85,16 @@ router.post('/timestamp', (req, res) => {
         `Email time failed to update for groups ${groups.toString()} in course ${courseId}.`
       )
       res.status(400).json('ERROR: email Time update failure')
+    })
+})
+
+/** Get all email template information */
+router.get('/templates', (req, res) => {
+  getEmailTemplates()
+    .then((data) => res.status(200).send({ success: true, data }))
+    .catch((err) => {
+      logger.error(`Unexpected error getting email templates: ${err.message}`)
+      res.status(500).send({ success: false, err: err.message })
     })
 })
 

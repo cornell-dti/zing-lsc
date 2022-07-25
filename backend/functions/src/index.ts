@@ -37,7 +37,7 @@ app.use(
 )
 app.use('/matching', [checkAuth, checkIsAuthorized], matchingRouter)
 app.use('/course', [checkAuth, checkIsAuthorized], courseRouter)
-app.use('/email', emailRouter)
+app.use('/email', [checkAuth, checkIsAuthorized], emailRouter)
 
 app.get('/getauth', checkAuth, (req, res) => {
   if (req.headers?.authorization?.startsWith('Bearer ')) {

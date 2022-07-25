@@ -4,7 +4,9 @@ import axios from 'axios'
 import admin from 'firebase-admin'
 import { logger } from 'firebase-functions'
 import { db } from '../config'
+import { EmailTemplate, FirestoreEmailTemplate } from '../types'
 const courseRef = db.collection('courses')
+const templateRef = db.collection('email_templates')
 
 // ==== Timestamp helper functions
 
@@ -150,4 +152,18 @@ export const sendMails = async (
   } catch (error) {
     return error
   }
+}
+
+/** Get all email template information from Firestore */
+export const getEmailTemplates = async () => {
+  const templateCollection = await templateRef.get()
+  return templateCollection.docs
+    .map((templateDoc) => templateDoc.data() as FirestoreEmailTemplate)
+    .map(
+      (templateData) =>
+        ({
+          ...templateData,
+          modifyTime: templateData.modifyTime.toDate(),
+        } as EmailTemplate)
+    )
 }
