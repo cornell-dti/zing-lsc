@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios, { AxiosResponse } from 'axios'
+import { getDownloadURL, ref } from 'firebase/storage'
 import {
   Box,
   List,
@@ -9,6 +10,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import { templatesBucket } from '@fire/firebase'
 import { API_ROOT, EMAIL_PATH } from '@core/Constants'
 import {
   EmailTemplate,
@@ -23,11 +25,13 @@ export const TemplateEditor = () => {
   const [templateName, setTemplateName] = useState('')
   const [templateType, setTemplateType] = useState<'group' | 'student'>('group')
   const [templateSubject, setTemplateSubject] = useState('')
+  const [templateHtml, setTemplateHtml] = useState('')
 
   const resetForm = (template: EmailTemplate) => {
     setTemplateName(template.name)
     setTemplateType(template.type)
     setTemplateSubject(template.subject)
+    setTemplateHtml(template.html)
   }
 
   const changeSelectedTemplate = (template: EmailTemplate) => {
@@ -41,9 +45,18 @@ export const TemplateEditor = () => {
   useEffect(() => {
     axios
       .get(`${API_ROOT}${EMAIL_PATH}/templates`)
-      .then((res: AxiosResponse<EmailTemplatesResponse>) => {
-        const templates = res.data.data.map(
-          responseEmailTemplateToEmailTemplate
+      .then(async (res: AxiosResponse<EmailTemplatesResponse>) => {
+        const templates = await Promise.all(
+          res.data.data
+            .map(responseEmailTemplateToEmailTemplate)
+            .map(async (template) => {
+              // Download the HTML for the email body in Cloud Storage bucket
+              const url = await getDownloadURL(
+                ref(templatesBucket, template.body)
+              )
+              const html = (await axios.get(url)).data as string
+              return { ...template, html }
+            })
         )
         setTemplates(templates)
         const mostRecentModifiedTemplate = templates.reduce((p, c) =>
@@ -103,6 +116,13 @@ export const TemplateEditor = () => {
             label="Email Subject"
             value={templateSubject}
             onChange={(event) => setTemplateSubject(event.target.value)}
+          />
+          <TextField
+            label="Email Body (HTML)"
+            multiline
+            minRows={10}
+            value={templateHtml}
+            onChange={(event) => setTemplateHtml(event.target.value)}
           />
         </Box>
       </Box>

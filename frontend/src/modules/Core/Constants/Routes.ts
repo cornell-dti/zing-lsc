@@ -17,3 +17,5 @@ export const INSTRUCTOR_API = '/instructor'
 export const COURSE_API = '/course'
 export const MATCHING_API = '/matching'
 export const STUDENT_API = '/student'
+
+export const TEMPLATES_BUCKET = 'gs://zing-lsc-templates'

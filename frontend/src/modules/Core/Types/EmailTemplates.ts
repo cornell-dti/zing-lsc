@@ -5,6 +5,7 @@ export interface EmailTemplate {
   subject: string
   body: string
   modifyTime: Date
+  html: string
 }
 
 export interface ResponseEmailTemplate {
@@ -26,4 +27,5 @@ export const responseEmailTemplateToEmailTemplate = (
 ): EmailTemplate => ({
   ...template,
   modifyTime: new Date(template.modifyTime),
+  html: '',
 })
