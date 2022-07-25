@@ -14,6 +14,7 @@ import {
   DASHBOARD_PATH,
   EMAIL_PATH,
   API_ROOT,
+  TEMPLATE_EDITOR_PATH,
 } from '@core'
 import { Home } from 'Home'
 import { Survey } from 'Survey'
@@ -21,6 +22,7 @@ import { CreateZingForm } from 'CreateZing'
 import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
 import { Emailing } from 'Emailing'
+import { TemplateEditor } from 'TemplateEditor'
 import './App.css'
 import theme from '@core/Constants/Theme'
 import { useEffect, useRef, useState } from 'react'
@@ -100,6 +102,11 @@ const App = () => {
                 exact
                 path={`${EDIT_ZING_PATH}/:courseId`}
                 component={EditZing}
+              />
+              <PrivateRoute
+                exact
+                path={TEMPLATE_EDITOR_PATH}
+                component={TemplateEditor}
               />
             </Switch>
           </AuthProvider>
