@@ -89,15 +89,17 @@ export const TemplateEditor = () => {
         </List>
         <Box
           component="form"
-          display="flex"
-          flexDirection="column"
-          gap={2}
-          minWidth={600}
+          display="grid"
+          gridTemplateColumns="1fr 1fr"
+          rowGap={2}
+          columnGap={4}
+          flexGrow={1}
         >
           <TextField
             label="Template Name"
             value={templateName}
             onChange={(event) => setTemplateName(event.target.value)}
+            sx={{ gridColumn: 1 }}
           />
           <TextField
             label="Type"
@@ -106,24 +108,39 @@ export const TemplateEditor = () => {
             onChange={(event) =>
               setTemplateType(event.target.value as 'group' | 'student')
             }
+            sx={{ gridColumn: 1 }}
           >
             <MenuItem value="group">
               Group (shared email to all group members)
             </MenuItem>
-            <MenuItem value="student">Student (individual emails)</MenuItem>
+            <MenuItem value="student">Student (one email per student)</MenuItem>
           </TextField>
           <TextField
             label="Email Subject"
             value={templateSubject}
             onChange={(event) => setTemplateSubject(event.target.value)}
+            sx={{ gridColumn: 1 }}
           />
+          <Box sx={{ gridColumn: 2, alignSelf: 'center', display: 'flex' }}>
+            <Typography sx={{ fontWeight: 'bold', mr: 1 }}>Subject:</Typography>
+            <Typography>{templateSubject}</Typography>
+          </Box>
           <TextField
             label="Email Body (HTML)"
             multiline
             minRows={10}
             value={templateHtml}
             onChange={(event) => setTemplateHtml(event.target.value)}
+            sx={{ gridColumn: 1 }}
+            InputProps={{ sx: { fontFamily: 'monospace' } }}
           />
+          <Box sx={{ gridColumn: 2, display: 'flex', flexDirection: 'column' }}>
+            <Typography sx={{ fontWeight: 'bold', mb: 1 }}>Body:</Typography>
+            <Typography
+              dangerouslySetInnerHTML={{ __html: templateHtml }}
+              sx={{ gridColumn: 2 }}
+            />
+          </Box>
         </Box>
       </Box>
     </Box>
