@@ -1,6 +1,6 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
-import { sendStudEmails, updateEmailTimestamp } from './functions'
+import { sendStudentEmails, updateEmailTimestamp } from './functions'
 
 const router = express()
 
@@ -24,7 +24,7 @@ const router = express()
       FAIL -> res.data = 'Email send failure.' 
 
     */
-router.post('/send', async (req, res) => {
+router.post('/send', (req, res) => {
   const {
     emailAddress,
     authToken,
@@ -36,22 +36,22 @@ router.post('/send', async (req, res) => {
     indivEmail,
   } = req.body
 
-  try {
-    await sendStudEmails(
-      emailAddress,
-      authToken,
-      emailSubject,
-      emailBody,
-      courseId,
-      group,
-      template,
-      indivEmail
+  sendStudentEmails(
+    emailAddress,
+    authToken,
+    emailSubject,
+    emailBody,
+    courseId,
+    group,
+    template,
+    indivEmail
+  )
+    .then(() =>
+      res.status(200).json({ success: true, message: 'Email send success' })
     )
-
-    res.status(200).json('Email send success')
-  } catch (err: any) {
-    res.status(400).json(err.message)
-  }
+    .catch((err) =>
+      res.status(400).json({ success: false, message: err.message })
+    )
 })
 
 /** @.com/api root/email/timestamp

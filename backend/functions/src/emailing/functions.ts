@@ -174,6 +174,7 @@ export const sendMails = async (
   template = 'Share matched results',
   indivEmail?: string
 ) => {
+  //not sure if this check is necessary, since emailRcpts already checks for this
   if ((!group || parseInt(group) < 0) && !indivEmail) {
     logger.error(
       ` Invalid group ${group} and invalid email ${indivEmail} for updating timestamps `
@@ -231,7 +232,7 @@ export const sendMails = async (
   }
 }
 
-export const sendStudEmails = async (
+export const sendStudentEmails = async (
   from: string,
   authToken: string,
   subject: string,
@@ -242,7 +243,6 @@ export const sendStudEmails = async (
   indivEmail?: string
 ) => {
   const emailRcpts = await getRecipients(courseId, group, indivEmail)
-
   const message = createEmailAsJson(emailRcpts, subject, body)
 
   await sendMails(
