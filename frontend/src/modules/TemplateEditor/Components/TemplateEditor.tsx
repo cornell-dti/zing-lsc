@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from 'axios'
 import { getDownloadURL, ref } from 'firebase/storage'
 import {
   Box,
+  Button,
   List,
   ListItemButton,
   ListItemText,
@@ -125,15 +126,35 @@ export const TemplateEditor = () => {
             <Typography sx={{ fontWeight: 'bold', mr: 1 }}>Subject:</Typography>
             <Typography>{templateSubject}</Typography>
           </Box>
-          <TextField
-            label="Email Body (HTML)"
-            multiline
-            minRows={10}
-            value={templateHtml}
-            onChange={(event) => setTemplateHtml(event.target.value)}
-            sx={{ gridColumn: 1 }}
-            InputProps={{ sx: { fontFamily: 'monospace' } }}
-          />
+          <Box sx={{ gridColumn: 1 }}>
+            <TextField
+              label="Email Body (HTML)"
+              multiline
+              fullWidth
+              minRows={10}
+              value={templateHtml}
+              onChange={(event) => setTemplateHtml(event.target.value)}
+              InputProps={{ sx: { fontFamily: 'monospace' } }}
+            />
+            <Box display="flex" justifyContent="right" gap={2} mt={2}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() =>
+                  resetForm(templates.find((t) => t.id === selectedTemplateId)!)
+                }
+              >
+                Cancel changes
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => alert('TODO implement saving')}
+              >
+                Save changes
+              </Button>
+            </Box>
+          </Box>
           <Box sx={{ gridColumn: 2, display: 'flex', flexDirection: 'column' }}>
             <Typography sx={{ fontWeight: 'bold', mb: 1 }}>Body:</Typography>
             <Typography
