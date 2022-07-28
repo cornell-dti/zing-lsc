@@ -39,4 +39,5 @@ export type FirestoreGroupMembership = {
   notes: string
   notesModifyTime: Timestamp
   submissionTime: Timestamp
+  firstNoMatchEmailTime: Timestamp
 }
