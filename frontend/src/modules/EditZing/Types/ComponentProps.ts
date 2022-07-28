@@ -13,6 +13,7 @@ export interface UnmatchedGridProps {
   ) => void
   matchStudents: () => void
   handleAddStudent: (student: string, selected: boolean) => void
+  updateNotes: (student: string, notes: string) => void
 }
 
 export interface GroupGridProps {
@@ -32,6 +33,7 @@ export interface GroupGridProps {
   selected: boolean
   handleChecked: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleAddStudent: (student: string, selected: boolean) => void
+  updateNotes: (student: string, notes: string) => void
 }
 
 export interface StudentGridProps {
@@ -40,6 +42,7 @@ export interface StudentGridProps {
   groupNumber: number
   xsSize?: GridSize
   handleAddStudent: (student: string, selected: boolean) => void
+  updateNotes: (student: string, notes: string) => void
 }
 
 export interface MatchLoadingProps {
@@ -59,6 +62,16 @@ export interface EmailModalProps {
   setEmailSent: (arg: boolean) => void
   setEmailSentError: (arg: boolean) => void
   handleEmailTimestamp: () => void
+}
+
+export interface NotesModalProps {
+  open: boolean
+  isSaving: boolean
+  name: string
+  modalNotes: string
+  setModalNotes: (arg: string) => void
+  saveModalNotes: () => void
+  handleClose: () => void
 }
 
 export interface TemplateRadioButtonsProps {

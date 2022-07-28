@@ -4,7 +4,20 @@ import { STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrag } from 'react-dnd'
 import Tooltip from '@mui/material/Tooltip'
-import { Checkbox, Box, Typography } from '@mui/material'
+import {
+  Checkbox,
+  Box,
+  Typography,
+  Snackbar,
+  IconButton,
+  SvgIcon,
+} from '@mui/material'
+import NotesModal from './NotesModal'
+import { ReactComponent as FilledEditIcon } from '@assets/img/FilledEditIcon.svg'
+import { ReactComponent as EditIcon } from '@assets/img/EditIcon.svg'
+
+import axios from 'axios'
+import { API_ROOT, STUDENT_API } from '@core/Constants'
 
 /** the equivalent of MoveableItem */
 const StudentCard = ({
@@ -13,6 +26,7 @@ const StudentCard = ({
   groupNumber,
   xsSize = 6,
   handleAddStudent,
+  updateNotes,
 }: StudentGridProps) => {
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -33,6 +47,38 @@ const StudentCard = ({
     setSelected(!selected)
   }
 
+  const studentNotes = student.groups.find((g) => g.courseId === courseId)!
+    .notes
+  const [modalNotes, setModalNotes] = useState(studentNotes)
+
+  const [openNotesModal, setOpenNotesModal] = useState(false)
+  const [isNotesSaving, setIsNotesSaving] = useState(false)
+  const [showNotesSaveSuccess, setShowNotesSaveSuccess] = useState(false)
+  const [showNotesSaveFailure, setShowNotesSaveFailure] = useState(false)
+  const handleOpenNotes = () => {
+    setModalNotes(studentNotes) // Reset student notes every time modal opened
+    setOpenNotesModal(true)
+  }
+  const handleCloseNotes = () => setOpenNotesModal(false)
+
+  // saving notes to db
+  const saveModalNotes = () => {
+    setIsNotesSaving(true)
+    axios
+      .post(`${API_ROOT}${STUDENT_API}/notes`, {
+        email: student.email,
+        courseId: courseId,
+        notes: modalNotes,
+      })
+      .then(() => {
+        updateNotes(student.email, modalNotes) // Share the changes to rest of the page
+        setShowNotesSaveSuccess(true)
+      })
+      .catch(() => setShowNotesSaveFailure(true))
+    setIsNotesSaving(false)
+    setOpenNotesModal(false)
+  }
+
   const opacity = isDragging ? '0' : '1.0'
 
   const submissionTime = student.groups.find(
@@ -45,6 +91,28 @@ const StudentCard = ({
         width: '150px',
       }}
     >
+      <Snackbar
+        open={showNotesSaveSuccess}
+        autoHideDuration={3000}
+        onClose={() => setShowNotesSaveSuccess(false)}
+        message="Notes saved."
+      />
+      <Snackbar
+        open={showNotesSaveFailure}
+        autoHideDuration={3000}
+        onClose={() => setShowNotesSaveFailure(false)}
+        message="Notes failed to save."
+        ContentProps={{ sx: { bgcolor: 'error.main' } }}
+      />
+      <NotesModal
+        open={openNotesModal}
+        isSaving={isNotesSaving}
+        name={student.name}
+        modalNotes={modalNotes}
+        setModalNotes={setModalNotes}
+        saveModalNotes={saveModalNotes}
+        handleClose={handleCloseNotes}
+      />
       <div ref={drag}>
         <Paper
           onMouseOver={() => setIsHovering(true)}
@@ -57,13 +125,13 @@ const StudentCard = ({
             fontFamily: 'Montserrat',
             fontWeight: '700',
             fontSize: '14',
-            boxShadow: isHovering
-              ? '4px 4px 8px rgba(0, 0, 0, 0.3)'
-              : '0px 2px 5px rgba(205, 156, 242, 0.2)',
+            boxShadow:
+              isHovering && !selected
+                ? '4px 4px 8px rgba(0, 0, 0, 0.3)'
+                : '0px 2px 5px rgba(205, 156, 242, 0.2)',
             borderRadius: '10px',
             width: '100%',
-            minHeight: '80px',
-            height: '105px',
+            transition: 'box-shadow 0.1s',
           }}
         >
           <Box
@@ -72,22 +140,20 @@ const StudentCard = ({
               flexFlow: 'row nowrap',
               gap: '13px',
               position: 'relative',
+              height: '90px',
             }}
           >
             <Box
               sx={{
-                width: isHovering || selected ? '75%' : '100%',
+                maxWidth: isHovering || selected ? '85%' : '85%',
               }}
             >
               <Tooltip
                 disableFocusListener
                 disableTouchListener
-                title={
-                  'Requested study partner ' +
-                  (submissionTime.getMonth() + 1) +
-                  '/' +
-                  submissionTime.getDate()
-                }
+                title={`Requested: ${
+                  submissionTime.getMonth() + 1
+                }/${submissionTime.getDate()}`}
               >
                 <Typography
                   sx={{
@@ -121,6 +187,45 @@ const StudentCard = ({
                 top: '1px',
               }}
             />
+
+            <IconButton
+              component="button"
+              sx={{
+                border: 'none',
+                width: '24px',
+                height: '24px',
+                position: 'absolute',
+                right: '1px',
+                bottom: '4px',
+                cursor: 'pointer',
+                display: !studentNotes && isHovering ? '' : 'none',
+              }}
+              onClick={handleOpenNotes}
+              color="secondary"
+            >
+              <SvgIcon>
+                <EditIcon />
+              </SvgIcon>
+            </IconButton>
+            <IconButton
+              component="button"
+              sx={{
+                border: 'none',
+                width: '20px',
+                height: '20px',
+                position: 'absolute',
+                right: '0px',
+                bottom: '4px',
+                cursor: 'pointer',
+                display: studentNotes ? '' : 'none',
+              }}
+              onClick={handleOpenNotes}
+              color="secondary"
+            >
+              <SvgIcon>
+                <FilledEditIcon />
+              </SvgIcon>
+            </IconButton>
           </Box>
         </Paper>
       </div>
