@@ -49,6 +49,7 @@ export type FirestoreGroupMembership = {
   notes: string
   notesModifyTime: Timestamp
   submissionTime: Timestamp
+  firstNoMatchEmailTime: Timestamp
 }
 
 /** How email template data is stored in the database */
