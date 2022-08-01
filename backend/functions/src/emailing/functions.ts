@@ -294,3 +294,39 @@ export const getEmailTemplates = async () => {
         } as EmailTemplate)
     )
 }
+
+/** Update an email template with new name, type, and subject */
+export const updateEmailTemplate = (
+  id: string,
+  name: string,
+  type: 'group' | 'student',
+  subject: string
+) => {
+  const types = ['group', 'student']
+  if (!types.includes(type)) {
+    logger.error(`Email type ${type} is not in types [${types.join(', ')}]`)
+    throw new Error(`Unrecognized email type ${type}`)
+  }
+
+  return templateRef
+    .doc(id)
+    .update({
+      name,
+      type,
+      subject,
+      modifyTime: admin.firestore.Timestamp.now(),
+    })
+    .then(() =>
+      logger.info(
+        `Updated email template ${id} with name ${name}, type ${type}, subject ${subject}`
+      )
+    )
+    .catch((err) => {
+      if (err.message.includes('NOT_FOUND')) {
+        logger.error(`Cannot update nonexistent template id ${id}`)
+        throw new Error(`No email template with id ${id}`)
+      } else {
+        throw err
+      }
+    })
+}

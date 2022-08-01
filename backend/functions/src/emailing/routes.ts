@@ -3,6 +3,7 @@ import { logger } from 'firebase-functions'
 import {
   getEmailTemplates,
   sendStudentEmails,
+  updateEmailTemplate,
   updateEmailTimestamp,
 } from './functions'
 
@@ -90,6 +91,20 @@ router.get('/templates', (req, res) => {
     .catch((err) => {
       logger.error(`Unexpected error getting email templates: ${err.message}`)
       res.status(500).send({ success: false, err: err.message })
+    })
+})
+
+router.post('/templates/update', (req, res) => {
+  const { id, name, type, subject } = req.body
+  updateEmailTemplate(id, name, type, subject)
+    .then(() => res.status(200).send({ success: true }))
+    .catch((err) => {
+      const code =
+        err.message.includes('Unrecognized email type') ||
+        err.message.includes('No email template with id')
+          ? 400
+          : 500
+      res.status(code).send({ success: false, err: err.message })
     })
 })
 
