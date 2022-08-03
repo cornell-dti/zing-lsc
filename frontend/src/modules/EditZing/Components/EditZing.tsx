@@ -258,6 +258,7 @@ export const EditZing = () => {
 
   /** Handles updating the groups state when we send an email so timestamp shows directly after email is sent without requiring page refresh. */
   const handleEmailTimestamp = () => {
+    // this is not efficient, you can just update the groups locally
     axios
       .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
       .then((res: AxiosResponse<CourseStudentDataResponse>) => {
@@ -285,8 +286,6 @@ export const EditZing = () => {
       .catch((error) => displayNetworkError(error.message))
   }
 
-  // TODO: remove this eslint disable once selectedGroups is used
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const selectedGroups = studentGroups.filter((group) =>
     selectedGroupNumbers.includes(group.groupNumber)
   )
@@ -318,6 +317,43 @@ export const EditZing = () => {
     )
     handleMenuClose()
   }
+
+  /** Helper: return a new Student with the specified notes for particular courseId */
+  const studentWithNotes = (
+    student: Student,
+    courseId: string,
+    notes: string
+  ): Student => ({
+    ...student,
+    groups: student.groups.map((group) =>
+      group.courseId === courseId ? { ...group, notes } : group
+    ),
+  })
+
+  /** Update notes for a student in some group or unmatched */
+  const updateNotes = (student: string, notes: string) => {
+    if (unmatchedStudents.some((s) => s.email === student)) {
+      setUnmatchedStudents(
+        unmatchedStudents.map((s) =>
+          s.email === student ? studentWithNotes(s, courseId, notes) : s
+        )
+      )
+    } else {
+      setStudentGroups(
+        studentGroups.map((g) =>
+          g.memberData.some((s) => s.email === student)
+            ? {
+                ...g,
+                memberData: g.memberData.map((s) =>
+                  s.email === student ? studentWithNotes(s, courseId, notes) : s
+                ),
+              }
+            : g
+        )
+      )
+    }
+  }
+
   return courseInfo && hasLoadedStudentData ? (
     <Box
       sx={{
@@ -418,6 +454,7 @@ export const EditZing = () => {
                 moveStudent={moveStudent}
                 matchStudents={matchStudents}
                 handleAddStudent={handleAddStudent}
+                updateNotes={updateNotes}
               />
             </Box>
             {studentGroups.map((studentGroup, index) => (
@@ -439,6 +476,7 @@ export const EditZing = () => {
                   editSelectedGroups(studentGroup, event.target.checked)
                 }}
                 handleAddStudent={handleAddStudent}
+                updateNotes={updateNotes}
               />
             ))}
           </Box>

@@ -1,6 +1,10 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
-import { createEmailAsJson, sendMails, updateEmailTimestamp } from './functions'
+import {
+  getEmailTemplates,
+  sendStudentEmails,
+  updateEmailTimestamp,
+} from './functions'
 
 const router = express()
 
@@ -28,33 +32,29 @@ router.post('/send', (req, res) => {
   const {
     emailAddress,
     authToken,
-    emailBody,
     emailSubject,
-    emailRcpts,
+    emailBody,
     courseId,
     group,
     template,
+    indivEmail,
   } = req.body
-  const message = createEmailAsJson(emailRcpts, emailSubject, emailBody)
 
-  sendMails(emailAddress, message, authToken, courseId, group, template)
-    .then((result) => {
-      if (result === 202) {
-        logger.info(
-          `Email sent successfully by ${emailAddress} to ${emailRcpts.toString()}`
-        )
-        res.json('Email send success.')
-      } else {
-        logger.error(
-          `** Likely auth error ** : Email failed to send by  ${emailAddress} to ${emailRcpts.toString()}`
-        )
-        res.json('Email send failure.')
-      }
-    })
-    .catch(() =>
-      logger.error(
-        `Email send request failed from ${emailAddress} to ${emailRcpts.toString()}`
-      )
+  sendStudentEmails(
+    emailAddress,
+    authToken,
+    emailSubject,
+    emailBody,
+    courseId,
+    group,
+    template,
+    indivEmail
+  )
+    .then(() =>
+      res.status(200).json({ success: true, message: 'Email send success' })
+    )
+    .catch((err) =>
+      res.status(400).json({ success: false, message: err.message })
     )
 })
 
@@ -80,6 +80,16 @@ router.post('/timestamp', (req, res) => {
         `Email time failed to update for groups ${groups.toString()} in course ${courseId}.`
       )
       res.status(400).json('ERROR: email Time update failure')
+    })
+})
+
+/** Get all email template information */
+router.get('/templates', (req, res) => {
+  getEmailTemplates()
+    .then((data) => res.status(200).send({ success: true, data }))
+    .catch((err) => {
+      logger.error(`Unexpected error getting email templates: ${err.message}`)
+      res.status(500).send({ success: false, err: err.message })
     })
 })
 
