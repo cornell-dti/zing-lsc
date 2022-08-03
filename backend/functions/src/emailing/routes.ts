@@ -94,6 +94,7 @@ router.get('/templates', (req, res) => {
     })
 })
 
+/** Update information for an already existing email template */
 router.post('/templates/update', (req, res) => {
   const { id, name, type, subject } = req.body
   updateEmailTemplate(id, name, type, subject)

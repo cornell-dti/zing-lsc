@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios, { AxiosResponse } from 'axios'
-import { getDownloadURL, ref } from 'firebase/storage'
+import { getDownloadURL, ref, uploadString } from 'firebase/storage'
 import {
   Box,
   Button,
@@ -22,12 +22,14 @@ import {
 export const TemplateEditor = () => {
   const [templates, setTemplates] = useState<EmailTemplate[]>([])
   const [selectedTemplateId, setSelectedTemplateId] = useState('')
+  const [isSaving, setIsSaving] = useState(false)
 
   const [templateName, setTemplateName] = useState('')
   const [templateType, setTemplateType] = useState<'group' | 'student'>('group')
   const [templateSubject, setTemplateSubject] = useState('')
   const [templateHtml, setTemplateHtml] = useState('')
 
+  /** Reset form fields based on template */
   const resetForm = (template: EmailTemplate) => {
     setTemplateName(template.name)
     setTemplateType(template.type)
@@ -35,11 +37,59 @@ export const TemplateEditor = () => {
     setTemplateHtml(template.html)
   }
 
+  /** Change selected template and reset form if necessary */
   const changeSelectedTemplate = (template: EmailTemplate) => {
     // Don't reset form if currently selected list item is clicked
     if (template.id !== selectedTemplateId) {
       setSelectedTemplateId(template.id)
       resetForm(template)
+    }
+  }
+
+  /** Save form fields to local template to keep when changing template */
+  const keepForm = () =>
+    setTemplates(
+      templates.map((template) =>
+        template.id === selectedTemplateId
+          ? {
+              ...template,
+              name: templateName,
+              type: templateType,
+              subject: templateSubject,
+              modifyTime: new Date(),
+              html: templateHtml,
+            }
+          : template
+      )
+    )
+
+  /** Save selected template to storage */
+  const saveSelectedTemplate = () => {
+    if (selectedTemplateId) {
+      setIsSaving(true)
+      axios
+        .post(`${API_ROOT}${EMAIL_PATH}/templates/update`, {
+          id: selectedTemplateId,
+          name: templateName,
+          type: templateType,
+          subject: templateSubject,
+        })
+        .then(() =>
+          uploadString(
+            ref(
+              templatesBucket,
+              templates.find((t) => t.id === selectedTemplateId)!.body
+            ),
+            templateHtml,
+            'raw',
+            { contentType: 'text/html' }
+          )
+        )
+        .then(() => {
+          keepForm()
+          setIsSaving(false)
+        })
+        .catch((error) => console.error('Failed to save', error))
     }
   }
 
@@ -149,7 +199,8 @@ export const TemplateEditor = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => alert('TODO implement saving')}
+                onClick={saveSelectedTemplate}
+                disabled={isSaving}
               >
                 Save changes
               </Button>
