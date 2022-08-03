@@ -34,7 +34,7 @@ templates.forEach((template) =>
 )
 
 // Storage emulator will automatically create bucket on first write
-const templatesBucket = storage.bucket('zing-lsc-templates')
+const templatesBucket = storage.bucket('zing-lsc-prod-templates')
 
 templates.forEach((template) =>
   templatesBucket
