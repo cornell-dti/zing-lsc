@@ -90,7 +90,7 @@ router.get('/templates', (req, res) => {
   getEmailTemplates()
     .then((data) => res.status(200).send({ success: true, data }))
     .catch((err) => {
-      logger.error(`Unexpected error getting email templates: ${err.message}`)
+      logger.error(`Error getting email templates: ${err.message}`)
       res.status(500).send({ success: false, err: err.message })
     })
 })
@@ -106,6 +106,9 @@ router.post('/templates/update', (req, res) => {
         err.message.includes('No email template with id')
           ? 400
           : 500
+      if (code !== 400) {
+        logger.error(`Error updating email template ${id}: ${err.message}`)
+      }
       res.status(code).send({ success: false, err: err.message })
     })
 })
@@ -117,6 +120,9 @@ router.post('/templates/add', (req, res) => {
     .then((id) => res.status(200).send({ success: true, data: id }))
     .catch((err) => {
       const code = err.message.includes('Unrecognized email type') ? 400 : 500
+      if (code !== 400) {
+        logger.error(`Error adding email template ${err.message}`)
+      }
       res.status(code).send({ success: false, err: err.message })
     })
 })

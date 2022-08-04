@@ -312,7 +312,7 @@ const assertValidEmailType = (type: string) => {
 }
 
 /** Update an email template with new name, type, and subject */
-export const updateEmailTemplate = (
+export const updateEmailTemplate = async (
   id: string,
   name: string,
   type: 'group' | 'student',
@@ -346,7 +346,7 @@ export const updateEmailTemplate = (
  * Add a new email template with name, type, and subject.
  * @returns id of the newly created template
  */
-export const addEmailTemplate = (
+export const addEmailTemplate = async (
   name: string,
   type: 'group' | 'student',
   subject: string
@@ -367,9 +367,5 @@ export const addEmailTemplate = (
         `Added new email template ${templateDoc.id} with name ${name}, type ${type}, subject ${subject}`
       )
       return templateDoc.id
-    })
-    .catch((err) => {
-      logger.error(`Unexpected error adding email template: ${err}`)
-      throw err
     })
 }
