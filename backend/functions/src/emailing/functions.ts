@@ -281,7 +281,10 @@ export const sendStudentEmails = async (
     })
 }
 
-/** Get all email template information from Firestore */
+/**
+ * Get all email template information from Firestore
+ * @returns list of email template information
+ */
 export const getEmailTemplates = async () => {
   const templateCollection = await templateRef.get()
   return templateCollection.docs
@@ -295,6 +298,19 @@ export const getEmailTemplates = async () => {
     )
 }
 
+/**
+ * Verify that an email template type is valid
+ * @param type the type of email template
+ * @throws exception if email type is unrecognized
+ */
+const assertValidEmailType = (type: string) => {
+  const types = ['group', 'student']
+  if (!types.includes(type)) {
+    logger.error(`Email type ${type} is not in types [${types.join(', ')}]`)
+    throw new Error(`Unrecognized email type ${type}`)
+  }
+}
+
 /** Update an email template with new name, type, and subject */
 export const updateEmailTemplate = (
   id: string,
@@ -302,12 +318,7 @@ export const updateEmailTemplate = (
   type: 'group' | 'student',
   subject: string
 ) => {
-  const types = ['group', 'student']
-  if (!types.includes(type)) {
-    logger.error(`Email type ${type} is not in types [${types.join(', ')}]`)
-    throw new Error(`Unrecognized email type ${type}`)
-  }
-
+  assertValidEmailType(type)
   return templateRef
     .doc(id)
     .update({
@@ -328,5 +339,37 @@ export const updateEmailTemplate = (
       } else {
         throw err
       }
+    })
+}
+
+/**
+ * Add a new email template with name, type, and subject.
+ * @returns id of the newly created template
+ */
+export const addEmailTemplate = (
+  name: string,
+  type: 'group' | 'student',
+  subject: string
+) => {
+  assertValidEmailType(type)
+  const templateDoc = templateRef.doc() // Needed to get the id
+  return templateDoc
+    .set({
+      id: templateDoc.id,
+      name,
+      type,
+      subject,
+      body: `${templateDoc.id}.html`,
+      modifyTime: admin.firestore.Timestamp.now(),
+    })
+    .then(() => {
+      logger.info(
+        `Added new email template ${templateDoc.id} with name ${name}, type ${type}, subject ${subject}`
+      )
+      return templateDoc.id
+    })
+    .catch((err) => {
+      logger.error(`Unexpected error adding email template: ${err}`)
+      throw err
     })
 }

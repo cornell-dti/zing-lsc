@@ -1,6 +1,7 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
 import {
+  addEmailTemplate,
   getEmailTemplates,
   sendStudentEmails,
   updateEmailTemplate,
@@ -105,6 +106,17 @@ router.post('/templates/update', (req, res) => {
         err.message.includes('No email template with id')
           ? 400
           : 500
+      res.status(code).send({ success: false, err: err.message })
+    })
+})
+
+/** Add a new template and get its automatically generated id */
+router.post('/templates/add', (req, res) => {
+  const { name, type, subject } = req.body
+  addEmailTemplate(name, type, subject)
+    .then((id) => res.status(200).send({ success: true, data: id }))
+    .catch((err) => {
+      const code = err.message.includes('Unrecognized email type') ? 400 : 500
       res.status(code).send({ success: false, err: err.message })
     })
 })
