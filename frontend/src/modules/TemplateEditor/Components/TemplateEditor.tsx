@@ -6,11 +6,13 @@ import {
   Button,
   List,
   ListItemButton,
+  ListItemIcon,
   ListItemText,
   MenuItem,
   TextField,
   Typography,
 } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
 import { templatesBucket } from '@fire/firebase'
 import { API_ROOT, EMAIL_PATH } from '@core/Constants'
 import {
@@ -23,6 +25,7 @@ export const TemplateEditor = () => {
   const [templates, setTemplates] = useState<EmailTemplate[]>([])
   const [selectedTemplateId, setSelectedTemplateId] = useState('')
   const [isSaving, setIsSaving] = useState(false)
+  const isAddingTemplate = selectedTemplateId === ''
 
   const [templateName, setTemplateName] = useState('')
   const [templateType, setTemplateType] = useState<'group' | 'student'>('group')
@@ -46,6 +49,15 @@ export const TemplateEditor = () => {
     }
   }
 
+  /** Change the form to add new template mode and prefill with defaults */
+  const changeToAddNewTemplate = () => {
+    setSelectedTemplateId('')
+    setTemplateName('')
+    setTemplateType('group')
+    setTemplateSubject('')
+    setTemplateHtml('')
+  }
+
   /** Save form fields to local template to keep when changing template */
   const keepForm = () =>
     setTemplates(
@@ -63,34 +75,77 @@ export const TemplateEditor = () => {
       )
     )
 
+  /** Append form fields to local templates for local update on add new form */
+  const appendForm = (id: string) =>
+    setTemplates([
+      ...templates,
+      {
+        id,
+        name: templateName,
+        type: templateType,
+        subject: templateSubject,
+        modifyTime: new Date(),
+        body: `${id}.html`,
+        html: templateHtml,
+      },
+    ])
+
   /** Save selected template to storage */
   const saveSelectedTemplate = () => {
-    if (selectedTemplateId) {
-      setIsSaving(true)
-      axios
-        .post(`${API_ROOT}${EMAIL_PATH}/templates/update`, {
-          id: selectedTemplateId,
-          name: templateName,
-          type: templateType,
-          subject: templateSubject,
-        })
-        .then(() =>
-          uploadString(
-            ref(
-              templatesBucket,
-              templates.find((t) => t.id === selectedTemplateId)!.body
-            ),
-            templateHtml,
-            'raw',
-            { contentType: 'text/html' }
-          )
+    setIsSaving(true)
+    axios
+      .post(`${API_ROOT}${EMAIL_PATH}/templates/update`, {
+        id: selectedTemplateId,
+        name: templateName,
+        type: templateType,
+        subject: templateSubject,
+      })
+      .then(() =>
+        uploadString(
+          ref(
+            templatesBucket,
+            templates.find((t) => t.id === selectedTemplateId)!.body
+          ),
+          templateHtml,
+          'raw',
+          { contentType: 'text/html' }
         )
-        .then(() => {
-          keepForm()
-          setIsSaving(false)
-        })
-        .catch((error) => console.error('Failed to save', error))
-    }
+      )
+      .then(() => {
+        keepForm()
+        setIsSaving(false)
+      })
+      .catch((error) => console.error('Failed to save', error))
+  }
+
+  /** Add new template to storage */
+  const addNewTemplate = () => {
+    setIsSaving(true)
+    axios
+      .post(`${API_ROOT}${EMAIL_PATH}/templates/add`, {
+        name: templateName,
+        type: templateType,
+        subject: templateSubject,
+      })
+      .then((response) => {
+        const id = response.data.data as string
+        uploadString(
+          ref(
+            templatesBucket,
+            `${id}.html` // body is id.html the new template was created with
+          ),
+          templateHtml,
+          'raw',
+          { contentType: 'text/html' }
+        )
+        return id
+      })
+      .then((id) => {
+        appendForm(id)
+        setSelectedTemplateId(id)
+        setIsSaving(false)
+      })
+      .catch((error) => console.error('Failed to save', error))
   }
 
   useEffect(() => {
@@ -126,6 +181,15 @@ export const TemplateEditor = () => {
       </Typography>
       <Box component="main" display="flex" gap={4}>
         <List sx={{ minWidth: 400 }}>
+          <ListItemButton
+            selected={isAddingTemplate}
+            onClick={changeToAddNewTemplate}
+          >
+            <ListItemIcon>
+              <AddIcon />
+            </ListItemIcon>
+            <ListItemText>Add Template</ListItemText>
+          </ListItemButton>
           {[...templates]
             .sort((a, b) => b.modifyTime.valueOf() - a.modifyTime.valueOf())
             .map((template) => (
@@ -187,23 +251,40 @@ export const TemplateEditor = () => {
               InputProps={{ sx: { fontFamily: 'monospace' } }}
             />
             <Box display="flex" justifyContent="right" gap={2} mt={2}>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() =>
-                  resetForm(templates.find((t) => t.id === selectedTemplateId)!)
-                }
-              >
-                Cancel changes
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={saveSelectedTemplate}
-                disabled={isSaving}
-              >
-                Save changes
-              </Button>
+              {isAddingTemplate ? (
+                <Button
+                  key="primary" // Otherwise React will smooth-transition to the other button
+                  variant="contained"
+                  color="primary"
+                  onClick={addNewTemplate}
+                  disabled={isSaving}
+                >
+                  Create template
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() =>
+                      resetForm(
+                        templates.find((t) => t.id === selectedTemplateId)!
+                      )
+                    }
+                  >
+                    Cancel changes
+                  </Button>
+                  <Button
+                    key="primary"
+                    variant="contained"
+                    color="primary"
+                    onClick={saveSelectedTemplate}
+                    disabled={isSaving}
+                  >
+                    Save changes
+                  </Button>
+                </>
+              )}
             </Box>
           </Box>
           <Box sx={{ gridColumn: 2, display: 'flex', flexDirection: 'column' }}>
