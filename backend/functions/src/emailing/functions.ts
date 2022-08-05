@@ -16,22 +16,6 @@ const templateRef = db.collection('email_templates')
 
 // ==== Timestamp helper functions
 
-type timestampsType = { [key: string]: string }
-
-const timestamps: timestampsType = {
-  'Share matched results': 'shareMatchEmailTimestamp',
-  'First no match notification': 'firstNoMatchEmailTimestamp',
-  'Second no match notification': 'secondNoMatchEmailTimestamp',
-  'Request to add student to group': 'addStudentEmailTimestamp',
-  'Request to add student to group (late)': 'lateAddStudentEmailTimestamp',
-  'Ask to join group': 'askJoinGroupEmailTimestamp',
-  'Check in with groups': 'checkInEmailTimestamp',
-}
-
-const getTimestampField = (template: string) => {
-  return timestamps[template]
-}
-
 /** Updating Email Sent Timestap:
  * @param courseId is the string courseId usually in the form of a roster and six-digit number such as SU22-358546.
  * @param group is the group for the given course that emails were sent to.
@@ -41,19 +25,22 @@ const getTimestampField = (template: string) => {
 export const updateEmailTimestamp = (
   courseId: string,
   group: string,
-  template: string
+  templateID: string
 ) => {
   const time = admin.firestore.FieldValue.serverTimestamp()
-  const timestampField = getTimestampField(template)
   // must be string format -> parse here or when calling function
   return courseRef
     .doc(courseId)
     .collection('groups')
     .doc(group)
-    .update({ [timestampField]: time })
+    .update({ [templateID]: time })
 }
 
-export const updateIndivTimestamp = async (courseId: string, email: string) => {
+export const updateIndivTimestamp = async (
+  courseId: string,
+  email: string,
+  templateID: string
+) => {
   const studentDocRef = studentRef.doc(email)
   const studentDoc = await studentDocRef.get()
 
@@ -68,7 +55,8 @@ export const updateIndivTimestamp = async (courseId: string, email: string) => {
     throw new Error(`Student ${email} does not have membership in ${courseId}`)
   }
 
-  groupMembership.firstNoMatchEmailTime = admin.firestore.Timestamp.now()
+  groupMembership.templateTimestamps[templateID] =
+    admin.firestore.Timestamp.now()
 
   await studentDocRef.update({ groups })
 }
@@ -218,7 +206,7 @@ export const sendMails = async (
       }
 
       if (indivEmail) {
-        await updateIndivTimestamp(courseId, indivEmail)
+        await updateIndivTimestamp(courseId, indivEmail, template)
           .then(() =>
             logger.info(
               `Added no match timestamp for course ${courseId} for student with email ${indivEmail}`
