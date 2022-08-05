@@ -127,9 +127,9 @@ export const TemplateEditor = () => {
         type: templateType,
         subject: templateSubject,
       })
-      .then((response) => {
+      .then(async (response) => {
         const id = response.data.data as string
-        uploadString(
+        await uploadString(
           ref(
             templatesBucket,
             `${id}.html` // body is id.html the new template was created with
@@ -179,7 +179,7 @@ export const TemplateEditor = () => {
       <Typography variant="h4" component="h1" mb={4}>
         Template Editor
       </Typography>
-      <Box component="main" display="flex" gap={4}>
+      <Box component="main" display="flex" alignItems="flex-start" gap={4}>
         <List sx={{ minWidth: 400 }}>
           <ListItemButton
             selected={isAddingTemplate}
