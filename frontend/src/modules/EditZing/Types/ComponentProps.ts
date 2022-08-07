@@ -2,6 +2,7 @@ import { GridSize } from '@mui/material'
 import { Student } from './Student'
 import { Group } from './CourseInfo'
 import { TemplateName } from 'EditZing/utils/emailTemplates'
+import { EmailTemplate } from '@core/Types'
 
 export interface UnmatchedGridProps {
   courseId: string
@@ -75,8 +76,9 @@ export interface NotesModalProps {
 }
 
 export interface TemplateRadioButtonsProps {
-  selectedTemplate: string
-  setSelectedTemplate: (value: TemplateName) => void
+  selectedTemplate: EmailTemplate
+  setSelectedTemplate: (value: EmailTemplate) => void
+  templates: EmailTemplate[]
 }
 
 export interface EmailModalContentProps {
@@ -87,6 +89,6 @@ export interface EmailModalContentProps {
 }
 
 export interface EmailPreviewProps {
-  templateName: TemplateName
+  template: EmailTemplate
   courseNames: string[]
 }

@@ -1,5 +1,5 @@
 // external imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useParams } from 'react-router-dom'
@@ -13,6 +13,17 @@ import { EmailPreview } from 'EditZing/Components/EmailPreview'
 import { sendEmail } from 'Emailing/Components/Emailing'
 import { adminSignIn } from '@fire/firebase'
 
+// template editor
+import { templatesBucket } from '@fire/firebase'
+import { API_ROOT, EMAIL_PATH } from '@core/Constants'
+import {
+  EmailTemplate,
+  EmailTemplatesResponse,
+  responseEmailTemplateToEmailTemplate,
+} from '@core/Types'
+import axios, { AxiosResponse } from 'axios'
+import { getDownloadURL, ref } from 'firebase/storage'
+
 export const EmailModal = ({
   selectedGroups,
   selectedStudents,
@@ -23,8 +34,39 @@ export const EmailModal = ({
   setEmailSentError,
   handleEmailTimestamp,
 }: EmailModalProps) => {
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(
-    '' as TemplateName
+  // template editor logic
+
+  const [templates, setTemplates] = useState<EmailTemplate[]>([])
+  const [selectedTemplateId, setSelectedTemplateId] = useState('')
+
+  useEffect(() => {
+    axios
+      .get(`${API_ROOT}${EMAIL_PATH}/templates`)
+      .then(async (res: AxiosResponse<EmailTemplatesResponse>) => {
+        const templates = await Promise.all(
+          res.data.data
+            .map(responseEmailTemplateToEmailTemplate)
+            .map(async (template: EmailTemplate) => {
+              // Download the HTML for the email body in Cloud Storage bucket
+              const url = await getDownloadURL(
+                ref(templatesBucket, template.body)
+              )
+              const html = (await axios.get(url)).data as string
+              return { ...template, html }
+            })
+        )
+        console.log(templates)
+        setTemplates(templates)
+        const mostRecentModifiedTemplate = templates.reduce((p, c) =>
+          p.modifyTime.valueOf() > c.modifyTime.valueOf() ? p : c
+        )
+        setSelectedTemplateId(mostRecentModifiedTemplate.id)
+      })
+      .catch((error) => console.error(error))
+  }, [])
+
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>(
+    templates[0]
   )
 
   const { courseId } = useParams<{ courseId: string }>()
@@ -60,12 +102,12 @@ export const EmailModal = ({
     await Promise.all(
       selectedStudents.map((student: string) => {
         const emailRcpts = [student, 'lscstudypartners@cornell.edu']
-        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+        // const emailBody = getBody(selectedTemplate, courseNames.join(', '))
         const emailSubject = 'Study Partners!'
         const emailItems = {
           emailSubject,
           emailRcpts,
-          emailBody,
+          emailBody: selectedTemplate.html,
           courseId,
           groupNum: -1,
           selectedTemplate,
@@ -84,13 +126,13 @@ export const EmailModal = ({
     await Promise.all(
       selectedGroups.map((group) => {
         const emailRcpts = groupEmails(group)
-        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
+        // const emailBody = getBody(selectedTemplate, courseNames.join(', '))
         const emailSubject = 'Study Partners!'
         const groupNum = group.groupNumber.toString()
         const emailItems = {
           emailSubject,
           emailRcpts,
-          emailBody,
+          emailBody: selectedTemplate.html,
           courseId,
           groupNum,
           selectedTemplate,
@@ -123,7 +165,7 @@ export const EmailModal = ({
         <Typography variant="h5" component="h5">
           Template:
           <Box component="span" sx={{ fontWeight: 800 }}>
-            {selectedTemplate}
+            {selectedTemplate.name}
           </Box>
         </Typography>
       </Box>
@@ -134,7 +176,8 @@ export const EmailModal = ({
     return (
       <Box>
         <EmailTemplateButtons
-          selectedTemplate={selectedTemplate || ''}
+          templates={templates}
+          selectedTemplate={templates[0]}
           setSelectedTemplate={setSelectedTemplate}
         />
       </Box>
@@ -145,10 +188,7 @@ export const EmailModal = ({
     return (
       <Box>
         <TemplateSelectedComponent />
-        <EmailPreview
-          templateName={selectedTemplate}
-          courseNames={courseNames}
-        />
+        <EmailPreview template={selectedTemplate} courseNames={courseNames} />
       </Box>
     )
   }
