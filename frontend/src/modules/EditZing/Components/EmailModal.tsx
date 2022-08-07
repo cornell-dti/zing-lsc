@@ -108,8 +108,7 @@ export const EmailModal = ({
     await Promise.all(
       selectedStudents.map((student: string) => {
         const emailRcpts = [student, 'lscstudypartners@cornell.edu']
-        // const emailBody = getBody(selectedTemplate, courseNames.join(', '))
-        const emailSubject = 'Study Partners!'
+        const emailSubject = selectedTemplate.subject
         const emailItems = {
           emailSubject,
           emailRcpts,
@@ -132,8 +131,7 @@ export const EmailModal = ({
     await Promise.all(
       selectedGroups.map((group) => {
         const emailRcpts = groupEmails(group)
-        // const emailBody = getBody(selectedTemplate, courseNames.join(', '))
-        const emailSubject = 'Study Partners!'
+        const emailSubject = selectedTemplate.subject
         const groupNum = group.groupNumber.toString()
         const emailItems = {
           emailSubject,
