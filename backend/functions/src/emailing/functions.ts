@@ -16,10 +16,10 @@ const templateRef = db.collection('email_templates')
 
 // ==== Timestamp helper functions
 
-/** Updating Email Sent Timestap:
+/** Updating Group Email Sent Timestamp:
  * @param courseId is the string courseId usually in the form of a roster and six-digit number such as SU22-358546.
  * @param group is the group for the given course that emails were sent to.
- * @param template is the name of the template of the email being sent. Matched emailTemplates.js names made by sean. Currently is the string value, may change to the variable value in future (less wordy).
+ * @param template is the ID of the template of the email being sent.
  * @result updates database to have email sent timestamp to current time.
  *  */
 export const updateEmailTimestamp = (
@@ -36,6 +36,13 @@ export const updateEmailTimestamp = (
     .update({ [templateID]: time })
 }
 
+/**
+ * Updating Individual Email Sent Timestamp:
+ * @param courseId is the string courseId usually in the form of a roster and six-digit number such as SU22-358546.
+ * @param email is the cornell.edu email of the student that the email was sent to.
+ * @param templateID is the ID of the template of the email being sent.
+ * @result updates database by setting the email sent timestamp to the current time.
+ */
 export const updateIndivTimestamp = async (
   courseId: string,
   email: string,
@@ -64,7 +71,14 @@ export const updateIndivTimestamp = async (
 /* ==== Emailing Helper Functions ==== */
 const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
-export async function getRecipients(
+/**
+ * Returns the list of recipients of an email based on group/individual membership
+ * @param courseId is the string courseId usually in the form of a roster and six-digit number such as SU22-358546.
+ * @param group is the group recieving the email for the given course (if the email is being sent to a group)
+ * @param indivEmail is the email of the individual recipient recieving the email (if the email is being sent to an individual)
+ * @returns an array of email recipients based on the given group/individual
+ */
+async function getRecipients(
   courseId: string,
   group?: string,
   indivEmail?: string
@@ -141,14 +155,15 @@ export const createEmailAsJson = (
   return messageAsJson
 }
 
-/** Send Mails is takes the 
+/** Send Mails takes the 
     @param from: sender (admin's email)
     @param message: graph api request body data
     @param authToken: string that must match the [from] email and 
       logged in user
     @param courseId: roster and 6-digit course id 
-    @param group: group number that email is being sent to
-    @param template: string of template name
+    @param template: string of template ID
+    @param group: group number that email is being sent to (if the email is being sent to a group)
+    @param indivEmail: email of the individual recipient (if the email is being sent to an individual)
     
     Sends a POST request to the GRAPH API and updates the database with the timestamp of when the email was sent. 
     
@@ -158,13 +173,13 @@ export const createEmailAsJson = (
         - Bad AUTH or else. Frontend will then parse this response 
         and render "Try Again" button or equivalent => User logs in and calls function again. 
        */
-export const sendMails = async (
+const sendMails = async (
   from: string,
   message: any,
   authToken: string,
   courseId: string,
+  template: string,
   group?: string,
-  template = 'Share matched results',
   indivEmail?: string
 ) => {
   //not sure if this check is necessary, since emailRcpts already checks for this
@@ -225,14 +240,34 @@ export const sendMails = async (
   }
 }
 
+/**
+ * Send Student Emails takes
+ * @param from sender (admin's email)
+ * @param authToken string that must match the [from] email and 
+      logged in user
+ * @param subject is the subject line. Usually "Study Partners!"
+ * @param body is the HTML body of the email
+ * @param courseId roster and 6-digit course id 
+ * @param template string of template ID
+ * @param group group number that email is being sent to (if the email is being sent to a group)
+ * @param indivEmail  email of the individual recipient (if the meail is being sent to an individual)
+ * 
+ * Sends a POST request to the GRAPH API and updates the database with the timestamp of when the email was sent. 
+ * 
+ * @returns
+ * 202 (:number) if successfully sent. 
+      Other if email failed to send. 
+        - Bad AUTH or else. Frontend will then parse this response 
+        and render "Try Again" button or equivalent => User logs in and calls function again. 
+ */
 export const sendStudentEmails = async (
   from: string,
   authToken: string,
   subject: string,
   body: string,
   courseId: string,
+  template: string,
   group?: string,
-  template = 'Share matched results',
   indivEmail?: string
 ) => {
   const emailRcpts = await getRecipients(courseId, group, indivEmail)
@@ -243,8 +278,8 @@ export const sendStudentEmails = async (
     message,
     authToken,
     courseId,
-    group,
     template,
+    group,
     indivEmail
   )
     .then((result) => {

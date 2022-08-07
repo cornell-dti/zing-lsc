@@ -21,7 +21,7 @@ const router = express()
 
       @param courseId roster and 6-digit course id
       @param group group number 
-      @param template string name
+      @param template string ID
 
     @returns: 
       SUCC -> res.data = 'Email send success.' 
@@ -35,8 +35,8 @@ router.post('/send', (req, res) => {
     emailSubject,
     emailBody,
     courseId,
-    group,
     template,
+    group,
     indivEmail,
   } = req.body
 
@@ -46,8 +46,8 @@ router.post('/send', (req, res) => {
     emailSubject,
     emailBody,
     courseId,
-    group,
     template,
+    group,
     indivEmail
   )
     .then(() =>
@@ -62,7 +62,7 @@ router.post('/send', (req, res) => {
  *
  * @param courseId = string of 6-digit course code
  * @param groups = string [] of groups to be sent emails
- * @param template = is the name of the template of the email being sent. Matched emailTemplates.js names made by sean. Currently is the string value, may change to the variable value in future (less wordy).
+ * @param template = is the ID of the template of the email being sent.
  *
  * @yeilds email sent timestamp update in database
  */
