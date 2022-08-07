@@ -34,6 +34,9 @@ export const EmailModal = ({
   setEmailSentError,
   handleEmailTimestamp,
 }: EmailModalProps) => {
+  // check if emailing students or groups
+  const recipientType = selectedStudents.length > 0 ? 'student' : 'group'
+
   // template editor logic
 
   const [templates, setTemplates] = useState<EmailTemplate[]>([])
@@ -56,7 +59,10 @@ export const EmailModal = ({
             })
         )
         console.log(templates)
-        setTemplates(templates)
+        const filteredTemplates = templates.filter(
+          (template) => template.type === recipientType
+        )
+        setTemplates(filteredTemplates)
         const mostRecentModifiedTemplate = templates.reduce((p, c) =>
           p.modifyTime.valueOf() > c.modifyTime.valueOf() ? p : c
         )
