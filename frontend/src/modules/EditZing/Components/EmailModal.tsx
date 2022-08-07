@@ -41,6 +41,7 @@ export const EmailModal = ({
 
   const [templates, setTemplates] = useState<EmailTemplate[]>([])
   const [selectedTemplateId, setSelectedTemplateId] = useState('')
+  const [templateName, setTemplateName] = useState('')
 
   useEffect(() => {
     axios
@@ -183,6 +184,8 @@ export const EmailModal = ({
           templates={templates}
           selectedTemplate={templates[0]}
           setSelectedTemplate={setSelectedTemplate}
+          templateName={templateName}
+          setTemplateName={setTemplateName}
         />
       </Box>
     )

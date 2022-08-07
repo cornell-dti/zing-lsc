@@ -79,6 +79,8 @@ export interface TemplateRadioButtonsProps {
   selectedTemplate: EmailTemplate
   setSelectedTemplate: (value: EmailTemplate) => void
   templates: EmailTemplate[]
+  templateName: string
+  setTemplateName: (value: string) => void
 }
 
 export interface EmailModalContentProps {

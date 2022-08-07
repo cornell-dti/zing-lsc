@@ -8,6 +8,8 @@ export const EmailTemplateButtons = ({
   templates,
   selectedTemplate,
   setSelectedTemplate,
+  templateName,
+  setTemplateName,
 }: TemplateRadioButtonsProps) => {
   // we could include all, but designers advise to limit it to just these few for now
   // const activeTemplates = [
@@ -16,17 +18,16 @@ export const EmailTemplateButtons = ({
   //   TemplateName.ADD_STUDENT,
   // ]
 
-  const [templateName, setTemplateName] = useState('')
   const templateNames = templates.map((template) => template.name)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const choice = event.target.value
-    setTemplateName(choice)
     templates.forEach((template) => {
       if (template.name === choice) {
         setSelectedTemplate(template)
       }
     })
+    setTemplateName(selectedTemplate.name)
   }
 
   return (
