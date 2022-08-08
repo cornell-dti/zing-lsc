@@ -1,4 +1,4 @@
-import { ResponseStudent, Student } from './Student'
+import { ResponseStudent, Student } from '@core/Types'
 
 // This interface does not contain all of the fields that are returned
 export interface CourseInfo {

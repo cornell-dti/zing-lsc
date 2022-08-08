@@ -17,8 +17,14 @@ import {
   API_ROOT,
   TEMPLATE_EDITOR_PATH,
   COURSE_API,
+  STUDENT_API,
 } from '@core/Constants'
-import { Course, responseCourseToCourse } from '@core/Types'
+import {
+  Course,
+  responseCourseToCourse,
+  responseStudentToStudent,
+  Student,
+} from '@core/Types'
 import { Home } from 'Home'
 import { Survey } from 'Survey'
 import { CreateZingForm } from 'CreateZing'
@@ -32,7 +38,7 @@ import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
 import axios from 'axios'
-import { CourseProvider } from '@context'
+import { CourseProvider, StudentProvider } from '@context'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -68,6 +74,7 @@ const App = () => {
                 )
                 if (res.data.data.isAuthed) {
                   loadCourses()
+                  loadStudents()
                 }
               },
               (error) => setNetworkError(error.message)
@@ -96,6 +103,16 @@ const App = () => {
     )
   }
 
+  // Application-wide students are only loaded when user is authorized
+  const [students, setStudents] = useState<Student[]>([])
+
+  const loadStudents = () => {
+    axios.get(`${API_ROOT}${STUDENT_API}`).then(
+      (res) => setStudents(res.data.map(responseStudentToStudent)),
+      (error) => console.log(error)
+    )
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -109,31 +126,33 @@ const App = () => {
             }}
           >
             <CourseProvider value={{ courses }}>
-              <Switch>
-                <PublicRoute exact path={HOME_PATH} component={Home} />
-                <Route exact path={SURVEY_PATH} component={Survey} />
-                <Route
-                  exact
-                  path={CREATE_ZING_PATH}
-                  component={CreateZingForm}
-                />
-                <PrivateRoute
-                  exact
-                  path={DASHBOARD_PATH}
-                  component={Dashboard}
-                />
-                <PrivateRoute exact path={EMAIL_PATH} component={Emailing} />
-                <PrivateRoute
-                  exact
-                  path={`${EDIT_ZING_PATH}/:courseId`}
-                  component={EditZing}
-                />
-                <PrivateRoute
-                  exact
-                  path={TEMPLATE_EDITOR_PATH}
-                  component={TemplateEditor}
-                />
-              </Switch>
+              <StudentProvider value={{ students }}>
+                <Switch>
+                  <PublicRoute exact path={HOME_PATH} component={Home} />
+                  <Route exact path={SURVEY_PATH} component={Survey} />
+                  <Route
+                    exact
+                    path={CREATE_ZING_PATH}
+                    component={CreateZingForm}
+                  />
+                  <PrivateRoute
+                    exact
+                    path={DASHBOARD_PATH}
+                    component={Dashboard}
+                  />
+                  <PrivateRoute exact path={EMAIL_PATH} component={Emailing} />
+                  <PrivateRoute
+                    exact
+                    path={`${EDIT_ZING_PATH}/:courseId`}
+                    component={EditZing}
+                  />
+                  <PrivateRoute
+                    exact
+                    path={TEMPLATE_EDITOR_PATH}
+                    component={TemplateEditor}
+                  />
+                </Switch>
+              </StudentProvider>
             </CourseProvider>
           </AuthProvider>
         </Router>

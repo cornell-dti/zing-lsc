@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios, { AxiosResponse } from 'axios'
 import GroupCard from 'EditZing/Components/GroupCard'
 import { UnmatchedGrid } from './UnmatchedGrid'
-import { responseStudentToStudent, Student } from 'EditZing/Types/Student'
+import { responseStudentToStudent, Student } from '@core/Types'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import {

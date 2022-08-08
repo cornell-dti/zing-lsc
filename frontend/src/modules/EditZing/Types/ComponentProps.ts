@@ -1,5 +1,5 @@
 import { GridSize } from '@mui/material'
-import { Student } from './Student'
+import { Student } from '@core/Types'
 import { Group } from './CourseInfo'
 import { TemplateName } from 'EditZing/utils/emailTemplates'
 
