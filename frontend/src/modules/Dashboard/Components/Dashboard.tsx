@@ -14,7 +14,9 @@ import { useAuthValue } from '@auth'
 import { Box, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
+import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
+import { CSVLink } from 'react-csv'
 
 type SortOrder =
   | 'newest-requests-first'
@@ -27,6 +29,7 @@ type SortOrder =
 export const Dashboard = () => {
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
+  const { students } = useStudentValue()
 
   const [sortedOrder, setSortedOrder] = useState<SortOrder>(
     'newest-requests-first'
@@ -40,6 +43,36 @@ export const Dashboard = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  const csvStudents =
+    courses.length && students.length // Just making sure this isn't calculated until the data is available
+      ? students.flatMap((student) =>
+          student.groups.map((membership) => {
+            const course = courses.find(
+              (c) => c.courseId === membership.courseId
+            )!
+            const group = course.groups.find(
+              // undefined if student is unmatched
+              (g) => g.groupNumber === membership.groupNumber
+            )
+            return {
+              dateRequested: membership.submissionTime.toLocaleString(),
+              email: student.email,
+              name: student.name,
+              college: student.college,
+              year: student.year,
+              course: course.names.join('/'),
+              groupNumber: `${course.names.join('/')}_${
+                membership.groupNumber
+              }`,
+              dateShareMatchEmail: group?.shareMatchEmailTimestamp?.toLocaleString(),
+              dateCheckInEmail: group?.checkInEmailTimestamp?.toLocaleString(),
+              dateAddStudentEmail: group?.addStudentEmailTimestamp?.toLocaleString(),
+              notes: membership.notes,
+            }
+          })
+        )
+      : []
 
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
   function sorted(courseInfo: Course[], menuValue: SortOrder) {
@@ -161,6 +194,12 @@ export const Dashboard = () => {
             horizontal: 'right',
           }}
         >
+          <CSVLink
+            data={csvStudents}
+            filename={`export-students-${Date.now()}`}
+          >
+            <MenuItem>Export CSV (Students)</MenuItem>
+          </CSVLink>
           <MenuItem
             onClick={() => {
               handleClose()
