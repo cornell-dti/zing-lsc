@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   Alert,
@@ -15,7 +16,9 @@ import {
   EMAIL_PATH,
   API_ROOT,
   TEMPLATE_EDITOR_PATH,
-} from '@core'
+  COURSE_API,
+} from '@core/Constants'
+import { Course, responseCourseToCourse } from '@core/Types'
 import { Home } from 'Home'
 import { Survey } from 'Survey'
 import { CreateZingForm } from 'CreateZing'
@@ -25,11 +28,11 @@ import { Emailing } from 'Emailing'
 import { TemplateEditor } from 'TemplateEditor'
 import './App.css'
 import theme from '@core/Constants/Theme'
-import { useEffect, useRef, useState } from 'react'
 import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
 import axios from 'axios'
+import { CourseProvider } from '@context'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -63,6 +66,9 @@ const App = () => {
                 setAuthState(
                   res.data.data.isAuthed ? 'authorized' : 'unauthorized'
                 )
+                if (res.data.data.isAuthed) {
+                  loadCourses()
+                }
               },
               (error) => setNetworkError(error.message)
             )
@@ -80,6 +86,16 @@ const App = () => {
     })
   }, [])
 
+  // Application-wide courses are only loaded when user is authorized
+  const [courses, setCourses] = useState<Course[]>([])
+
+  const loadCourses = () => {
+    axios.get(`${API_ROOT}${COURSE_API}`).then(
+      (res) => setCourses(res.data.map(responseCourseToCourse)),
+      (error) => console.log(error)
+    )
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -92,23 +108,33 @@ const App = () => {
               displayNetworkError: setNetworkError,
             }}
           >
-            <Switch>
-              <PublicRoute exact path={HOME_PATH} component={Home} />
-              <Route exact path={SURVEY_PATH} component={Survey} />
-              <Route exact path={CREATE_ZING_PATH} component={CreateZingForm} />
-              <PrivateRoute exact path={DASHBOARD_PATH} component={Dashboard} />
-              <PrivateRoute exact path={EMAIL_PATH} component={Emailing} />
-              <PrivateRoute
-                exact
-                path={`${EDIT_ZING_PATH}/:courseId`}
-                component={EditZing}
-              />
-              <PrivateRoute
-                exact
-                path={TEMPLATE_EDITOR_PATH}
-                component={TemplateEditor}
-              />
-            </Switch>
+            <CourseProvider value={{ courses }}>
+              <Switch>
+                <PublicRoute exact path={HOME_PATH} component={Home} />
+                <Route exact path={SURVEY_PATH} component={Survey} />
+                <Route
+                  exact
+                  path={CREATE_ZING_PATH}
+                  component={CreateZingForm}
+                />
+                <PrivateRoute
+                  exact
+                  path={DASHBOARD_PATH}
+                  component={Dashboard}
+                />
+                <PrivateRoute exact path={EMAIL_PATH} component={Emailing} />
+                <PrivateRoute
+                  exact
+                  path={`${EDIT_ZING_PATH}/:courseId`}
+                  component={EditZing}
+                />
+                <PrivateRoute
+                  exact
+                  path={TEMPLATE_EDITOR_PATH}
+                  component={TemplateEditor}
+                />
+              </Switch>
+            </CourseProvider>
           </AuthProvider>
         </Router>
         <Snackbar open={networkError !== null}>

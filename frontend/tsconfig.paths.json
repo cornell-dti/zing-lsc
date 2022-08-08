@@ -5,6 +5,8 @@
       "@assets/*": ["src/assets/*"],
       "@auth": ["src/auth/"],
       "@auth/*": ["src/auth/*"],
+      "@context": ["src/context/"],
+      "@context/*": ["src/context/*"],
       "@core": ["src/modules/Core/"],
       "@core/*": ["src/modules/Core/*"],
       "@fire": ["src/firebase/"],
