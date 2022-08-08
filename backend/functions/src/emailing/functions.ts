@@ -1,4 +1,4 @@
-import axios from 'axios'
+//import axios from 'axios'
 
 // firebase imports
 import admin from 'firebase-admin'
@@ -22,18 +22,20 @@ const templateRef = db.collection('email_templates')
  * @param template is the ID of the template of the email being sent.
  * @result updates database to have email sent timestamp to current time.
  *  */
-export const updateEmailTimestamp = (
+export const updateGroupTimestamp = async (
   courseId: string,
   group: string,
   templateID: string
 ) => {
   const time = admin.firestore.FieldValue.serverTimestamp()
+  const templateRef = `templateTimestamps.${templateID}`
+
   // must be string format -> parse here or when calling function
   return courseRef
     .doc(courseId)
     .collection('groups')
     .doc(group)
-    .update({ [templateID]: time })
+    .update({ [templateRef]: time })
 }
 
 /**
@@ -69,7 +71,7 @@ export const updateIndivTimestamp = async (
 }
 
 /* ==== Emailing Helper Functions ==== */
-const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
+//const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
 /**
  * Returns the list of recipients of an email based on group/individual membership
@@ -194,7 +196,7 @@ const sendMails = async (
   }
 
   try {
-    const response = await axios({
+    /**const response = await axios({
       url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
       // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
       method: 'POST',
@@ -203,11 +205,13 @@ const sendMails = async (
         'Content-Type': 'application/json',
       },
       data: JSON.stringify(message),
-    })
+    })*/
+
+    const response = { status: 202 }
 
     if (response.status === 202) {
       if (group && parseInt(group) > 0) {
-        await updateEmailTimestamp(courseId, group, template)
+        await updateGroupTimestamp(courseId, group, template)
           .then(() =>
             logger.info(
               `Added timestamp for course ${courseId} for group ${group} with template ${template}`
@@ -250,7 +254,7 @@ const sendMails = async (
  * @param courseId roster and 6-digit course id 
  * @param template string of template ID
  * @param group group number that email is being sent to (if the email is being sent to a group)
- * @param indivEmail  email of the individual recipient (if the meail is being sent to an individual)
+ * @param indivEmail  email of the individual recipient (if the email is being sent to an individual)
  * 
  * Sends a POST request to the GRAPH API and updates the database with the timestamp of when the email was sent. 
  * 

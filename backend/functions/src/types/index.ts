@@ -42,6 +42,9 @@ export type FirestoreStudent = {
   groups: FirestoreGroupMembership[]
 }
 
+/* Timestamps for different email templates */
+type EmailTimestamps = { [key: string]: Timestamp }
+
 /** How group membership for students is stored in the database */
 export type FirestoreGroupMembership = {
   courseId: string
@@ -49,7 +52,7 @@ export type FirestoreGroupMembership = {
   notes: string
   notesModifyTime: Timestamp
   submissionTime: Timestamp
-  templateTimestamps: { [key: string]: Timestamp }
+  templateTimestamps: EmailTimestamps
 }
 
 /** How email template data is stored in the database */
@@ -60,4 +63,13 @@ export type FirestoreEmailTemplate = {
   subject: string
   body: string
   modifyTime: Timestamp
+}
+
+/** How group data is stored in the database */
+export type FirestoreGroup = {
+  groupNumber: number
+  members: string[]
+  createTime: Timestamp
+  updateTime: Timestamp
+  templateTimestamps: EmailTimestamps
 }

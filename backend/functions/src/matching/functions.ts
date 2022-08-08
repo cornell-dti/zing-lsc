@@ -105,9 +105,6 @@ async function makeMatches(courseId: string) {
       memberData: newGroup,
       createTime: new Date(),
       updateTime: new Date(),
-      shareMatchEmailTimestamp: null,
-      checkInEmailTimestamp: null,
-      addStudentEmailTimestamp: null,
     })
   }
   for (let i = 0; i < studentDataDoubles.length; i += 2) {
@@ -118,9 +115,6 @@ async function makeMatches(courseId: string) {
       memberData: newGroup,
       createTime: new Date(),
       updateTime: new Date(),
-      shareMatchEmailTimestamp: null,
-      checkInEmailTimestamp: null,
-      addStudentEmailTimestamp: null,
     })
   }
 
@@ -130,9 +124,7 @@ async function makeMatches(courseId: string) {
     members: group.memberData.map((member) => member.email),
     createTime: admin.firestore.FieldValue.serverTimestamp(),
     updateTime: admin.firestore.FieldValue.serverTimestamp(),
-    shareMatchEmailTimestamp: group.shareMatchEmailTimestamp,
-    checkInEmailTimestamp: group.checkInEmailTimestamp,
-    addStudentEmailTimestamp: group.addStudentEmailTimestamp,
+    templateTimestamps: {},
   }))
 
   // lastly, update the collections to reflect this matching
@@ -318,6 +310,7 @@ async function createEmptyGroup(courseId: string) {
       members: [],
       createTime: admin.firestore.FieldValue.serverTimestamp(),
       updateTime: admin.firestore.FieldValue.serverTimestamp(),
+      templateTimestamps: {},
     })
     .catch((err) => {
       console.log(err)

@@ -3,7 +3,7 @@ import { logger } from 'firebase-functions'
 import {
   getEmailTemplates,
   sendStudentEmails,
-  updateEmailTimestamp,
+  updateGroupTimestamp,
 } from './functions'
 
 const router = express()
@@ -68,7 +68,7 @@ router.post('/send', (req, res) => {
  */
 router.post('/timestamp', (req, res) => {
   const { courseId, groups, template } = req.body
-  updateEmailTimestamp(courseId, groups, template)
+  updateGroupTimestamp(courseId, groups, template)
     .then(() => {
       logger.info(
         `Email time updated for groups ${groups.toString()} in course ${courseId}.`
