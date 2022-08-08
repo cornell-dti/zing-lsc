@@ -127,7 +127,7 @@ export const StepBegin = ({
           <TextField
             id="name"
             variant="standard"
-            placeholder="Student Name"
+            placeholder="Full Name"
             sx={textInputStyle}
             value={name}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
