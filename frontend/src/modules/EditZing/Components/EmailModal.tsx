@@ -4,10 +4,8 @@ import { Box, Button, Typography } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useParams } from 'react-router-dom'
 // zing imports
-import { getBody } from '../utils/emailTemplates'
 import { ZingModal } from '@core/Components'
 import { EmailModalProps } from '../Types/ComponentProps'
-import { TemplateName } from 'EditZing/utils/emailTemplates'
 import { EmailTemplateButtons } from 'EditZing/Components/EmailTemplateButtons'
 import { EmailPreview } from 'EditZing/Components/EmailPreview'
 import { sendEmail } from 'Emailing/Components/Emailing'
@@ -40,17 +38,19 @@ export const EmailModal = ({
   // template editor logic
 
   const [templates, setTemplates] = useState<EmailTemplate[]>([])
-  const [selectedTemplateId, setSelectedTemplateId] = useState('')
   const [templateName, setTemplateName] = useState('')
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>(
+    templates[0]
+  )
 
   useEffect(() => {
     axios
       .get(`${API_ROOT}${EMAIL_PATH}/templates`)
       .then(async (res: AxiosResponse<EmailTemplatesResponse>) => {
-        const templates = await Promise.all(
+        const allTemplates = await Promise.all(
           res.data.data
             .map(responseEmailTemplateToEmailTemplate)
-            .map(async (template: EmailTemplate) => {
+            .map(async (template: EmailTemplate, i) => {
               // Download the HTML for the email body in Cloud Storage bucket
               const url = await getDownloadURL(
                 ref(templatesBucket, template.body)
@@ -59,22 +59,14 @@ export const EmailModal = ({
               return { ...template, html }
             })
         )
-        console.log(templates)
-        const filteredTemplates = templates.filter(
+        const filteredTemplates = allTemplates.filter(
           (template) => template.type === recipientType
         )
         setTemplates(filteredTemplates)
-        const mostRecentModifiedTemplate = templates.reduce((p, c) =>
-          p.modifyTime.valueOf() > c.modifyTime.valueOf() ? p : c
-        )
-        setSelectedTemplateId(mostRecentModifiedTemplate.id)
+        setSelectedTemplate(filteredTemplates[0])
       })
       .catch((error) => console.error(error))
-  }, [])
-
-  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>(
-    templates[0]
-  )
+  }, [recipientType])
 
   const { courseId } = useParams<{ courseId: string }>()
   const [step, setStep] = useState<number>(0)

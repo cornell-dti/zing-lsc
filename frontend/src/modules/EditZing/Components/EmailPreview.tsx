@@ -1,4 +1,3 @@
-import { getBody } from '../utils/emailTemplates'
 import { EmailPreviewProps } from 'EditZing/Types/ComponentProps'
 import { Box } from '@mui/material'
 import { Typography } from '@mui/material'

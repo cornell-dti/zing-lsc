@@ -1,8 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { RadioButtons } from '@core/Components'
-import { TemplateName } from 'EditZing/utils/emailTemplates'
 import { TemplateRadioButtonsProps } from 'EditZing/Types/ComponentProps'
-import { useState } from 'react'
 
 export const EmailTemplateButtons = ({
   templates,
