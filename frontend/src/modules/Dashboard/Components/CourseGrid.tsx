@@ -7,11 +7,11 @@ import {
   StyledNoClasses,
 } from 'Dashboard/Styles/Groups.style'
 
-import { GroupCard } from 'Dashboard/Components/GroupCard'
-import { CourseInfo } from 'Dashboard/Types/CourseInfo'
+import { CourseCard } from 'Dashboard/Components/CourseCard'
 import { Box } from '@mui/material'
+import { Course } from '@core/Types'
 
-export const Groups = ({ groups }: GroupsProps) => {
+export const CourseGrid = ({ courses }: CourseGridProps) => {
   return (
     <Box
       sx={{
@@ -21,14 +21,14 @@ export const Groups = ({ groups }: GroupsProps) => {
         overflow: 'auto',
       }}
     >
-      {groups.length === 0 ? (
+      {courses.length === 0 ? (
         <>
           <StyledTextBox>
-            <h2>No Classes to Show</h2>
+            <h2>No Courses to Show</h2>
           </StyledTextBox>
           <StyledSmallText>
             Once students request study partners, they'll automatically be
-            placed into classes on this page!
+            placed into courses on this page!
           </StyledSmallText>
           <StyledClassesContainer>
             {[...Array(8)].map((_, i) => (
@@ -48,13 +48,13 @@ export const Groups = ({ groups }: GroupsProps) => {
             py: 4,
           }}
         >
-          {groups.map((g) => (
-            <GroupCard
-              key={g.courseId}
-              id={g.courseId}
-              name={g.names[0]}
-              newStudents={g.unmatched.length}
-              groupsFormed={g.lastGroupNumber}
+          {courses.map((c) => (
+            <CourseCard
+              key={c.courseId}
+              id={c.courseId}
+              name={c.names[0]}
+              newStudents={c.unmatched.length}
+              groupsFormed={c.lastGroupNumber}
             />
           ))}
         </Box>
@@ -63,6 +63,6 @@ export const Groups = ({ groups }: GroupsProps) => {
   )
 }
 
-interface GroupsProps {
-  groups: CourseInfo[]
+interface CourseGridProps {
+  courses: Course[]
 }

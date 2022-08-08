@@ -7,7 +7,7 @@ import {
   StyledContainer,
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
-import { Groups } from 'Dashboard/Components/Groups'
+import { CourseGrid } from 'Dashboard/Components/CourseGrid'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
@@ -171,7 +171,7 @@ export const Dashboard = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      <Groups groups={sortedCourses} />
+      <CourseGrid courses={sortedCourses} />
     </StyledContainer>
   )
 }

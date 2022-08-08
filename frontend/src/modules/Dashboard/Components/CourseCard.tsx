@@ -7,12 +7,12 @@ import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
 import { ReactComponent as WarningIcon } from '@assets/img/warning.svg'
 import { useHistory } from 'react-router'
 
-export const GroupCard = ({
+export const CourseCard = ({
   id,
   name,
   newStudents,
   groupsFormed,
-}: GroupCardProps) => {
+}: CourseCardProps) => {
   const history = useHistory()
 
   const handleClickView = () => {
@@ -101,7 +101,7 @@ export const GroupCard = ({
   )
 }
 
-interface GroupCardProps {
+interface CourseCardProps {
   id: string
   name: string
   newStudents: number
