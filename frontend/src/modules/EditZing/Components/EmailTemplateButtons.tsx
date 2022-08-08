@@ -25,7 +25,7 @@ export const EmailTemplateButtons = ({
         setSelectedTemplate(template)
       }
     })
-    setTemplateName(selectedTemplate.name)
+    setTemplateName(event.target.value)
   }
 
   return (
