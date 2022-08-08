@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -9,13 +8,13 @@ import {
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
 import { Groups } from 'Dashboard/Components/Groups'
-import { CourseInfo } from 'Dashboard/Types/CourseInfo'
-import { API_ROOT, COURSE_API } from '@core/Constants'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
-import { Box, CircularProgress, SelectChangeEvent } from '@mui/material'
+import { Box, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
+import { useCourseValue } from '@context/CourseContext'
+import { Course } from '@core/Types'
 
 type SortOrder =
   | 'newest-requests-first'
@@ -26,6 +25,9 @@ type SortOrder =
   | 'classes-z-a'
 
 export const Dashboard = () => {
+  const { user } = useAuthValue()
+  const { courses } = useCourseValue()
+
   const [sortedOrder, setSortedOrder] = useState<SortOrder>(
     'newest-requests-first'
   )
@@ -39,31 +41,8 @@ export const Dashboard = () => {
     setAnchorEl(null)
   }
 
-  const [courses, setCourses] = useState<CourseInfo[]>([])
-  const [hasLoadedCourseData, setHasLoadedCourseData] = useState(false)
-
-  const { user, displayNetworkError } = useAuthValue()
-
-  useEffect(() => {
-    axios.get(`${API_ROOT}${COURSE_API}`).then(
-      (res) => {
-        setCourses(
-          res.data.data.map((course: any) => ({
-            ...course,
-            latestSubmissionTime: new Date(course.latestSubmissionTime),
-          }))
-        )
-        setHasLoadedCourseData(true)
-      },
-      (error) => displayNetworkError(error.message)
-    )
-    return () => {
-      setAnchorEl(null) // clean state for anchorEl on unmount
-    }
-  }, [displayNetworkError])
-
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
-  function sorted(courseInfo: CourseInfo[], menuValue: SortOrder) {
+  function sorted(courseInfo: Course[], menuValue: SortOrder) {
     switch (menuValue) {
       case 'newest-requests-first':
         return [...courseInfo].sort(
@@ -192,13 +171,7 @@ export const Dashboard = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      {hasLoadedCourseData ? (
-        <Groups groups={sortedCourses} />
-      ) : (
-        <Box display="flex" justifyContent="center" padding={4}>
-          <CircularProgress size={50} />
-        </Box>
-      )}
+      <Groups groups={sortedCourses} />
     </StyledContainer>
   )
 }
