@@ -50,12 +50,8 @@ router.post('/send', (req, res) => {
     group,
     indivEmail
   )
-    .then(() =>
-      res.status(200).json({ success: true, message: 'Email send success' })
-    )
-    .catch((err) =>
-      res.status(400).json({ success: false, message: err.message })
-    )
+    .then(() => res.status(200).json('Email send success'))
+    .catch((err) => res.status(400).json(err.message))
 })
 
 /** @.com/api root/email/timestamp

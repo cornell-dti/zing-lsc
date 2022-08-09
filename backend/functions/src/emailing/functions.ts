@@ -19,15 +19,15 @@ const templateRef = db.collection('email_templates')
 /** Updating Group Email Sent Timestamp:
  * @param courseId is the string courseId usually in the form of a roster and six-digit number such as SU22-358546.
  * @param group is the group for the given course that emails were sent to.
- * @param template is the ID of the template of the email being sent.
+ * @param templateId is the ID of the template of the email being sent.
  * @result updates database to have email sent timestamp to current time.
  *  */
 export const updateGroupTimestamp = async (
   courseId: string,
   group: string,
-  templateID: string
+  templateId: string
 ) => {
-  const templateRef = `templateTimestamps.${templateID}`
+  const templateRef = `templateTimestamps.${templateId}`
 
   // must be string format -> parse here or when calling function
   return courseRef
@@ -41,13 +41,13 @@ export const updateGroupTimestamp = async (
  * Updating Individual Email Sent Timestamp:
  * @param courseId is the string courseId usually in the form of a roster and six-digit number such as SU22-358546.
  * @param email is the cornell.edu email of the student that the email was sent to.
- * @param templateID is the ID of the template of the email being sent.
+ * @param templateId is the ID of the template of the email being sent.
  * @result updates database by setting the email sent timestamp to the current time.
  */
 export const updateIndivTimestamp = async (
   courseId: string,
   email: string,
-  templateID: string
+  templateId: string
 ) => {
   const studentDocRef = studentRef.doc(email)
   const studentDoc = await studentDocRef.get()
@@ -63,7 +63,7 @@ export const updateIndivTimestamp = async (
     throw new Error(`Student ${email} does not have membership in ${courseId}`)
   }
 
-  groupMembership.templateTimestamps[templateID] =
+  groupMembership.templateTimestamps[templateId] =
     admin.firestore.Timestamp.now()
 
   await studentDocRef.update({ groups })
