@@ -27,7 +27,6 @@ export const updateGroupTimestamp = async (
   group: string,
   templateID: string
 ) => {
-  const time = admin.firestore.FieldValue.serverTimestamp()
   const templateRef = `templateTimestamps.${templateID}`
 
   // must be string format -> parse here or when calling function
@@ -35,7 +34,7 @@ export const updateGroupTimestamp = async (
     .doc(courseId)
     .collection('groups')
     .doc(group)
-    .update({ [templateRef]: time })
+    .update({ [templateRef]: admin.firestore.Timestamp.now() })
 }
 
 /**
