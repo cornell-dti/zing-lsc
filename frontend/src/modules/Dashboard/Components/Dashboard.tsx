@@ -44,6 +44,11 @@ export const Dashboard = () => {
     setAnchorEl(null)
   }
 
+  const csvCourses = courses.map((course) => ({
+    semester: course.roster,
+    course: course.names.join('/'),
+  }))
+
   const csvStudents =
     courses.length && students.length // Just making sure this isn't calculated until the data is available
       ? students.flatMap((student) =>
@@ -56,15 +61,17 @@ export const Dashboard = () => {
               (g) => g.groupNumber === membership.groupNumber
             )
             return {
+              semester: course.roster,
               dateRequested: membership.submissionTime.toLocaleString(),
-              email: student.email,
+              cornellEmail: student.email,
               name: student.name,
               college: student.college,
               year: student.year,
               course: course.names.join('/'),
-              groupNumber: `${course.names.join('/')}_${
-                membership.groupNumber
-              }`,
+              groupNumber:
+                membership.groupNumber !== -1
+                  ? `${course.names.join('/')}_${membership.groupNumber}`
+                  : undefined,
               dateShareMatchEmail: group?.shareMatchEmailTimestamp?.toLocaleString(),
               dateCheckInEmail: group?.checkInEmailTimestamp?.toLocaleString(),
               dateAddStudentEmail: group?.addStudentEmailTimestamp?.toLocaleString(),
@@ -194,6 +201,9 @@ export const Dashboard = () => {
             horizontal: 'right',
           }}
         >
+          <CSVLink data={csvCourses} filename={`export-courses-${Date.now()}`}>
+            <MenuItem>Export CSV (Courses)</MenuItem>
+          </CSVLink>
           <CSVLink
             data={csvStudents}
             filename={`export-students-${Date.now()}`}
