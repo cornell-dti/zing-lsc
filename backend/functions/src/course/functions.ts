@@ -1,5 +1,6 @@
 import { db } from '../config'
 import { getStudentsData } from '../student/functions'
+import admin from 'firebase-admin'
 const courseRef = db.collection('courses')
 
 async function getCourseInfo(courseId: string) {
@@ -18,6 +19,17 @@ async function getAllCourses() {
     obj.latestSubmissionTime = obj.latestSubmissionTime.toDate()
     return obj
   })
+}
+
+/**
+ * Helper function to convert all timestamps in a templateTimestamps object into Dates
+ * @param obj the templateTimestamps object containing templateId : timestamp pairs
+ * @returns obj with all timestamps converted into Date objects
+ */
+function mapDate(obj: { [key: string]: admin.firestore.Timestamp }) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([k, v]) => [k, v.toDate()])
+  )
 }
 
 async function getStudentsForCourse(courseId: string) {
@@ -42,15 +54,7 @@ async function getStudentsForCourse(courseId: string) {
     groupNumber: data[index].groupNumber,
     createTime: data[index].createTime.toDate(),
     updateTime: data[index].updateTime.toDate(),
-    shareMatchEmailTimestamp: data[index].shareMatchEmailTimestamp
-      ? data[index].shareMatchEmailTimestamp.toDate()
-      : null,
-    checkInEmailTimestamp: data[index].checkInEmailTimestamp
-      ? data[index].checkInEmailTimestamp.toDate()
-      : null,
-    addStudentEmailTimestamp: data[index].addStudentEmailTimestamp
-      ? data[index].addStudentEmailTimestamp.toDate()
-      : null,
+    templateTimestamps: mapDate(data[index].templateTimestamps),
   }))
 
   return {
