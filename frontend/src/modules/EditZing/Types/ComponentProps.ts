@@ -20,9 +20,9 @@ export interface GroupGridProps {
   courseId: string
   studentList: Student[]
   groupNumber: number
-  shareMatchEmailTimestamp: Date | null
-  checkInEmailTimestamp: Date | null
-  addStudentEmailTimestamp: Date | null
+  templateMap: {[key: string]: string}
+  groupTimestamps: {[key: string]: Date}
+  indivTimestamps:{[key: string]: Date}
   moveStudent: (
     studentToMove: Student,
     fromGroupNumber: number,

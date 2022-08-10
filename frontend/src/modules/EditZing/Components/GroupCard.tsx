@@ -14,29 +14,31 @@ const GroupCard = ({
   groupNumber,
   moveStudent,
   createTime,
-  updateTime,
-  shareMatchEmailTimestamp,
-  checkInEmailTimestamp,
-  addStudentEmailTimestamp,
+  templateMap,
+  groupTimestamps,
+  indivTimestamps,
   selected,
   handleChecked,
   handleAddStudent,
   updateNotes,
 }: GroupGridProps) => {
-  const tooltips = [
-    {
-      type: shareMatchEmailTimestamp,
-      text: 'Shared match results: ',
-    },
-    {
-      type: checkInEmailTimestamp,
-      text: 'Checked in: ',
-    },
-    {
-      type: addStudentEmailTimestamp,
-      text: 'Requested student add: ',
-    },
-  ]
+  /**
+   * Helper to format the timestamp data in a way that is helpful for displaying in tooltips
+   * @param timestamps the map of template ids and their timestamps
+   * @param templateMap the map from template ids to template names
+   */
+  const formatTooltipData = (
+    timestamps: { [key: string]: Date },
+    templateMap: { [key: string]: string }
+  ) => {
+    return (
+      Object.entries(timestamps)
+        //get the corresponding template name from each template id
+        .map(([k, v]) => ({ name: templateMap[k], timestamp: v }))
+        //sort timestamps alphabetically by template name
+        .sort((a, b) => a.name.localeCompare(b.name))
+    )
+  }
 
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,

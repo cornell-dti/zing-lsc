@@ -1,3 +1,4 @@
+import { string } from 'prop-types'
 import { ResponseStudent, Student } from './Student'
 
 // This interface does not contain all of the fields that are returned
@@ -7,14 +8,17 @@ export interface CourseInfo {
   unmatched: string[]
 }
 
+export interface Timestamp {
+  template: string
+  timestamp: Date
+}
+
 export interface Group {
   groupNumber: number
   memberData: Student[]
   createTime: Date
   updateTime: Date
-  shareMatchEmailTimestamp: Date | null
-  checkInEmailTimestamp: Date | null
-  addStudentEmailTimestamp: Date | null
+  templateTimestamps: {[key: string]: Date}
 }
 
 export interface ResponseGroup {
@@ -22,9 +26,7 @@ export interface ResponseGroup {
   memberData: ResponseStudent[]
   createTime: string
   updateTime: string
-  shareMatchEmailTimestamp: string | null
-  checkInEmailTimestamp: string | null
-  addStudentEmailTimestamp: string | null
+  templateTimestamps: {[key: string]: string}
 }
 
 export interface CourseInfoResponse {
@@ -39,3 +41,12 @@ export interface CourseStudentDataResponse {
     groups: ResponseGroup[]
   }
 }
+
+export type TemplateDataResponse = {
+  id: string
+  name: string
+  type: 'group' | 'student'
+  subject: string
+  body: string
+  modifyTime: Date
+}[]
