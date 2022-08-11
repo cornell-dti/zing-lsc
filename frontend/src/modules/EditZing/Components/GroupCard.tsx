@@ -26,6 +26,7 @@ const GroupCard = ({
    * Helper to format the timestamp data in a way that is helpful for displaying in tooltips
    * @param timestamps the map of template ids and their timestamps
    * @param templateMap the map from template ids to template names
+   * @return the timestamp data formatted as an alphabetically sorted array of name/timestamp pairs
    */
   const formatTooltipData = (
     timestamps: { [key: string]: Date },
@@ -39,6 +40,9 @@ const GroupCard = ({
         .sort((a, b) => a.name.localeCompare(b.name))
     )
   }
+
+  const groupTooltipData = formatTooltipData(groupTimestamps, templateMap)
+  const indivTooltipData = formatTooltipData(indivTimestamps, templateMap)
 
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -93,31 +97,28 @@ const GroupCard = ({
           >
             <StyledGroupText>{`Group ${groupNumber}`}</StyledGroupText>
           </Tooltip>
-          {tooltips.map((timestamp, index) => {
-            if (timestamp.type) {
-              const month = timestamp.type.getMonth() + 1
-              const day = timestamp.type.getDate()
-              return (
-                <Tooltip
-                  key={index}
-                  title={`${timestamp.text + month}/${day}`}
-                  placement="bottom-start"
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        bgcolor: 'essentials.main',
-                        color: 'white',
-                        fontWeight: 600,
-                        borderRadius: '10px',
-                      },
+          {groupTooltipData.map((timestamp, index) => {
+            const month = timestamp.timestamp.getMonth() + 1
+            const day = timestamp.timestamp.getDate()
+            return (
+              <Tooltip
+                key={index}
+                title={`${timestamp.name + ': ' + month}/${day}`}
+                placement="bottom-start"
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      bgcolor: 'essentials.main',
+                      color: 'white',
+                      fontWeight: 600,
+                      borderRadius: '10px',
                     },
-                  }}
-                >
-                  <CircleIcon sx={{ fontSize: 10 }} color="primary" />
-                </Tooltip>
-              )
-            }
-            return null
+                  },
+                }}
+              >
+                <CircleIcon sx={{ fontSize: 10 }} color="primary" />
+              </Tooltip>
+            )
           })}
           <Box flexGrow={2} />
           <Checkbox
