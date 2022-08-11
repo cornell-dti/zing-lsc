@@ -38,10 +38,8 @@ export const EmailModal = ({
   // template editor logic
 
   const [templates, setTemplates] = useState<EmailTemplate[]>([])
-  const [templateName, setTemplateName] = useState('')
-  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>(
-    templates[0]
-  )
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>()
+  const [templateName, setTemplateName] = useState(selectedTemplate?.id || '')
 
   useEffect(() => {
     axios
@@ -64,6 +62,7 @@ export const EmailModal = ({
         )
         setTemplates(filteredTemplates)
         setSelectedTemplate(filteredTemplates[0])
+        setTemplateName(selectedTemplate?.id || '')
       })
       .catch((error) => console.error(error))
   }, [recipientType])
@@ -101,11 +100,11 @@ export const EmailModal = ({
     await Promise.all(
       selectedStudents.map((student: string) => {
         const emailRcpts = [student, 'lscstudypartners@cornell.edu']
-        const emailSubject = selectedTemplate.subject
+        const emailSubject = selectedTemplate?.subject
         const emailItems = {
           emailSubject,
           emailRcpts,
-          emailBody: selectedTemplate.html,
+          emailBody: selectedTemplate?.html,
           courseId,
           groupNum: -1,
           selectedTemplate,
@@ -124,12 +123,12 @@ export const EmailModal = ({
     await Promise.all(
       selectedGroups.map((group) => {
         const emailRcpts = groupEmails(group)
-        const emailSubject = selectedTemplate.subject
+        const emailSubject = selectedTemplate?.subject
         const groupNum = group.groupNumber.toString()
         const emailItems = {
           emailSubject,
           emailRcpts,
-          emailBody: selectedTemplate.html,
+          emailBody: selectedTemplate?.html,
           courseId,
           groupNum,
           selectedTemplate,
@@ -162,7 +161,7 @@ export const EmailModal = ({
         <Typography variant="h5" component="h5">
           Template:
           <Box component="span" sx={{ fontWeight: 800 }}>
-            {selectedTemplate.name}
+            {selectedTemplate?.name}
           </Box>
         </Typography>
       </Box>
@@ -187,7 +186,7 @@ export const EmailModal = ({
     return (
       <Box>
         <TemplateSelectedComponent />
-        <EmailPreview template={selectedTemplate} courseNames={courseNames} />
+        <EmailPreview template={selectedTemplate!} courseNames={courseNames} />
       </Box>
     )
   }
@@ -331,39 +330,51 @@ export const EmailModal = ({
   }
 
   return (
-    <ZingModal
-      open={isEmailing}
-      onClose={() => setIsEmailing(!isEmailing)}
-      containerWidth={'800px'}
-      containerHeight={'630px'}
-    >
-      <ZingModal.Title onClose={() => setIsEmailing(!isEmailing)}>
-        <Box
-          display={'flex'}
-          justifyContent={'center'}
-          textAlign={'center'}
-          paddingTop="20px"
-        >
-          <Typography variant="h4" component="h4" fontWeight={'700'}>
-            {title}
-          </Typography>
-        </Box>
-      </ZingModal.Title>
-      <ZingModal.Body>
-        <Box sx={{ padding: '1rem 3.5rem 0 3.5rem' }}>
-          {step === 2 ? (
-            <StepFailure />
-          ) : step === 3 ? (
-            <StepFinalFailure />
+    <>
+      <ZingModal
+        open={isEmailing}
+        onClose={() => setIsEmailing(!isEmailing)}
+        containerWidth={'800px'}
+        containerHeight={'630px'}
+      >
+        <ZingModal.Title onClose={() => setIsEmailing(!isEmailing)}>
+          <Box
+            display={'flex'}
+            justifyContent={'center'}
+            textAlign={'center'}
+            paddingTop="20px"
+          >
+            <Typography variant="h4" component="h4" fontWeight={'700'}>
+              {title}
+            </Typography>
+          </Box>
+        </ZingModal.Title>
+        <ZingModal.Body>
+          {selectedTemplate ? (
+            <Box sx={{ padding: '1rem 3.5rem 0 3.5rem' }}>
+              {step <= 1 && <SelectTemplates />}
+              {step === 2 && <StepFailure />}
+              {step === 3 && <StepFinalFailure />}
+            </Box>
           ) : (
-            <SelectTemplates />
+            <Box
+              sx={{
+                padding: '1rem 3.5rem 0 3.5rem',
+                textAlign: 'center',
+              }}
+            >
+              <Typography> Loading...</Typography>No Templates for the selected
+              group. Please goto
+              <a href="/templates"> Templates</a> to add some.
+            </Box>
           )}
-        </Box>
-      </ZingModal.Body>
-      <ZingModal.Controls>
-        <BackButton />
-        <ProceedButton />
-      </ZingModal.Controls>
-    </ZingModal>
+        </ZingModal.Body>
+        <ZingModal.Controls>
+          <BackButton />
+          <ProceedButton />
+        </ZingModal.Controls>
+      </ZingModal>
+      )
+    </>
   )
 }

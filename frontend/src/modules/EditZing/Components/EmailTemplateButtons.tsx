@@ -17,17 +17,19 @@ export const EmailTemplateButtons = ({
   // ]
 
   const templateNames = templates.map((template) => template.name)
+  const templateIds = templates.map((template) => template.id)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const choice = event.target.value
     templates.forEach((template) => {
-      if (template.name === choice) {
+      if (template.id === choice) {
         setSelectedTemplate(template)
       }
     })
     setTemplateName(event.target.value)
   }
 
+  console.log('Selected template: ', templateName)
   return (
     <Box
       sx={{
@@ -40,6 +42,7 @@ export const EmailTemplateButtons = ({
         Use an existing template:
       </Typography>
       <RadioButtons
+        labels={templateIds}
         values={templateNames}
         onClick={handleChange}
         currentAnswer={templateName}
