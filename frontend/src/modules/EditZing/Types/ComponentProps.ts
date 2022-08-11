@@ -20,9 +20,9 @@ export interface GroupGridProps {
   courseId: string
   studentList: Student[]
   groupNumber: number
-  templateMap: {[key: string]: string}
-  groupTimestamps: {[key: string]: Date}
-  indivTimestamps:{[key: string]: Date}
+  templateMap: { [key: string]: string }
+  groupTimestamps: { [key: string]: Date }
+  indivTimestamps: { [key: string]: Date }
   moveStudent: (
     studentToMove: Student,
     fromGroupNumber: number,
@@ -41,6 +41,10 @@ export interface StudentGridProps {
   student: Student
   groupNumber: number
   xsSize?: GridSize
+  tooltipTimestamps?: {
+    name: string
+    timestamp: Date
+  }[]
   handleAddStudent: (student: string, selected: boolean) => void
   updateNotes: (student: string, notes: string) => void
 }

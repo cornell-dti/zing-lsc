@@ -18,7 +18,7 @@ export interface Group {
   memberData: Student[]
   createTime: Date
   updateTime: Date
-  templateTimestamps: {[key: string]: Date}
+  templateTimestamps: { [key: string]: Date }
 }
 
 export interface ResponseGroup {
@@ -26,7 +26,7 @@ export interface ResponseGroup {
   memberData: ResponseStudent[]
   createTime: string
   updateTime: string
-  templateTimestamps: {[key: string]: string}
+  templateTimestamps: { [key: string]: string }
 }
 
 export interface CourseInfoResponse {
@@ -43,10 +43,13 @@ export interface CourseStudentDataResponse {
 }
 
 export type TemplateDataResponse = {
-  id: string
-  name: string
-  type: 'group' | 'student'
-  subject: string
-  body: string
-  modifyTime: Date
-}[]
+  success: boolean
+  data: {
+    id: string
+    name: string
+    type: 'group' | 'student'
+    subject: string
+    body: string
+    modifyTime: Date
+  }[]
+}

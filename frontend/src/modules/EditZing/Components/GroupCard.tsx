@@ -24,8 +24,8 @@ const GroupCard = ({
 }: GroupGridProps) => {
   /**
    * Helper to format the timestamp data in a way that is helpful for displaying in tooltips
-   * @param timestamps the map of template ids and their timestamps
-   * @param templateMap the map from template ids to template names
+   * @param timestamps a map of template ids to their timestamps
+   * @param templateMap a map from template ids to their template names
    * @return the timestamp data formatted as an alphabetically sorted array of name/timestamp pairs
    */
   const formatTooltipData = (
@@ -144,6 +144,7 @@ const GroupCard = ({
               courseId={courseId}
               groupNumber={groupNumber}
               student={student}
+              tooltipTimestamps={indivTooltipData}
               handleAddStudent={handleAddStudent}
               updateNotes={updateNotes}
             />

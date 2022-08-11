@@ -25,6 +25,7 @@ const StudentCard = ({
   student,
   groupNumber,
   xsSize = 6,
+  tooltipTimestamps,
   handleAddStudent,
   updateNotes,
 }: StudentGridProps) => {

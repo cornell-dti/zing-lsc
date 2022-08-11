@@ -135,7 +135,7 @@ export const EditZing = () => {
       .then((res: AxiosResponse<TemplateDataResponse>) => {
         setTemplateNameMap(
           Object.fromEntries(
-            res.data.map((template) => [template.id, template.name])
+            res.data.data.map((template) => [template.id, template.name])
           )
         )
       })
