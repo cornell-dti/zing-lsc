@@ -62,7 +62,6 @@ export const EmailModal = ({
         )
         setTemplates(filteredTemplates)
         setSelectedTemplate(filteredTemplates[0])
-        setTemplateName(selectedTemplate?.id || '')
       })
       .catch((error) => console.error(error))
   }, [recipientType])

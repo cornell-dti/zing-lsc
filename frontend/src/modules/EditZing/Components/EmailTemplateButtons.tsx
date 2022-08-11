@@ -42,8 +42,8 @@ export const EmailTemplateButtons = ({
         Use an existing template:
       </Typography>
       <RadioButtons
-        labels={templateIds}
-        values={templateNames}
+        labels={templateNames}
+        values={templateIds}
         onClick={handleChange}
         currentAnswer={templateName}
       />
