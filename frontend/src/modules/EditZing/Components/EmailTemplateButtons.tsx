@@ -6,30 +6,21 @@ export const EmailTemplateButtons = ({
   templates,
   selectedTemplate,
   setSelectedTemplate,
-  templateName,
-  setTemplateName,
 }: TemplateRadioButtonsProps) => {
-  // we could include all, but designers advise to limit it to just these few for now
-  // const activeTemplates = [
-  //   TemplateName.MATCHED,
-  //   TemplateName.CHECK_IN,
-  //   TemplateName.ADD_STUDENT,
-  // ]
-
+  // labels and values fot the radio button
   const templateNames = templates.map((template) => template.name)
   const templateIds = templates.map((template) => template.id)
 
+  // changing the selected email template
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const choice = event.target.value
+    const newSelection = event.target.value
     templates.forEach((template) => {
-      if (template.id === choice) {
+      if (template.id === newSelection) {
         setSelectedTemplate(template)
       }
     })
-    setTemplateName(event.target.value)
   }
 
-  console.log('Selected template: ', templateName)
   return (
     <Box
       sx={{
@@ -45,7 +36,7 @@ export const EmailTemplateButtons = ({
         labels={templateNames}
         values={templateIds}
         onClick={handleChange}
-        currentAnswer={templateName}
+        currentAnswer={selectedTemplate.id}
       />
     </Box>
   )

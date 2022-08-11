@@ -23,7 +23,6 @@ export const EmailPreview = ({ template, courseNames }: EmailPreviewProps) => {
     padding: '16px',
   }
 
-  // const body = getBody(templateName, courseNames.join(', '))
   const body = template.html
   return (
     <Box>

@@ -36,10 +36,8 @@ export const EmailModal = ({
   const recipientType = selectedStudents.length > 0 ? 'student' : 'group'
 
   // template editor logic
-
   const [templates, setTemplates] = useState<EmailTemplate[]>([])
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>()
-  const [templateName, setTemplateName] = useState(selectedTemplate?.id || '')
 
   useEffect(() => {
     axios
@@ -172,10 +170,8 @@ export const EmailModal = ({
       <Box>
         <EmailTemplateButtons
           templates={templates}
-          selectedTemplate={templates[0]}
+          selectedTemplate={selectedTemplate!}
           setSelectedTemplate={setSelectedTemplate}
-          templateName={templateName}
-          setTemplateName={setTemplateName}
         />
       </Box>
     )
@@ -201,15 +197,21 @@ export const EmailModal = ({
           justifyContent: 'center',
           alignItems: 'center',
           paddingTop: '8%',
+          flexFlow: 'column nowrap',
+          gap: '1rem',
         }}
       >
         <Typography variant="h5" component="h5" fontWeight={'400'}>
           Uh oh... Something went wrong when trying to send the email. Try again
-          to reauthenticate. <br></br>
-          <br></br>
-          <em>
-            *This will automatically attempt to send the email one more time.
-          </em>
+          to reauthenticate.
+        </Typography>
+        <Typography
+          variant="h5"
+          component="h5"
+          fontWeight={'400'}
+          sx={{ fontStyle: 'italic' }}
+        >
+          *This will automatically attempt to send the email one more time.
         </Typography>
         <Button
           onClick={() => {
@@ -234,18 +236,22 @@ export const EmailModal = ({
           justifyContent: 'center',
           alignItems: 'center',
           paddingTop: '8%',
+          flexFlow: 'column nowrap',
+          gap: '2rem',
         }}
       >
         <Typography variant="h5" component="h5" fontWeight={'400'}>
           Looks like something went wrong. Please contact DTI with the following
-          error reference for more information.
-          <br />
-          <br />
-          <Typography variant="h5" fontWeight="700">
-            Error reference:
-          </Typography>
-          Email final auth failure step.
+          error reference for more information. Try reloading, reloggin in, or
+          try again later.
         </Typography>
+        <Typography variant="h5" fontWeight="700">
+          Error reference:
+          <Typography variant="h5" component="h5" fontWeight={'400'}>
+            Email final auth failure step.
+          </Typography>
+        </Typography>
+
         <Button
           onClick={() => {
             setIsEmailing(false)
@@ -360,11 +366,18 @@ export const EmailModal = ({
               sx={{
                 padding: '1rem 3.5rem 0 3.5rem',
                 textAlign: 'center',
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                gap: '10rem',
+                alignItems: 'center',
               }}
             >
-              <Typography> Loading...</Typography>No Templates for the selected
-              group. Please goto
-              <a href="/templates"> Templates</a> to add some.
+              <Typography variant="h5">
+                No Templates for the selected group.
+              </Typography>
+              <Button href="/templates" sx={{ width: '250px' }}>
+                Add Templates
+              </Button>
             </Box>
           )}
         </ZingModal.Body>
