@@ -259,9 +259,8 @@ export const EditZing = () => {
             memberData: group.memberData.map(responseStudentToStudent),
             createTime: new Date(group.createTime),
             updateTime: new Date(group.updateTime),
-            templateTimestamps: responseTimestampsToDate(
-              group.templateTimestamps
-            ),
+            //the group was just created so no emails have been sent yet
+            templateTimestamps: {},
           }))
         )
         setStudentGroups(groups)
@@ -475,7 +474,7 @@ export const EditZing = () => {
                 studentList={studentGroup.memberData}
                 groupNumber={studentGroup.groupNumber}
                 templateMap={templateNameMap}
-                groupTimestamps = {studentGroup.templateTimestamps}
+                groupTimestamps={studentGroup.templateTimestamps}
                 moveStudent={moveStudent}
                 createTime={studentGroup.createTime}
                 updateTime={studentGroup.updateTime}

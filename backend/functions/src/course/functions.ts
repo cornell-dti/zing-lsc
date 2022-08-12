@@ -49,6 +49,9 @@ async function getStudentsForCourse(courseId: string) {
     data.map((group) => getStudentsData(group.members))
   )
 
+  const a = groupStudentDataRaw.flat(1).map((student) => student.groups)
+  console.log(a)
+
   const groupStudentData = groupStudentDataRaw.map((groupData, index) => ({
     memberData: groupData,
     groupNumber: data[index].groupNumber,
