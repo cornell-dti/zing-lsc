@@ -26,7 +26,7 @@ async function getAllCourses() {
  * @param obj the templateTimestamps object containing templateId : timestamp pairs
  * @returns obj with all timestamps converted into Date objects
  */
-function mapDate(obj: { [key: string]: admin.firestore.Timestamp }) {
+export function mapDate(obj: { [key: string]: admin.firestore.Timestamp }) {
   return Object.fromEntries(
     Object.entries(obj).map(([k, v]) => [k, v.toDate()])
   )
@@ -49,7 +49,11 @@ async function getStudentsForCourse(courseId: string) {
     data.map((group) => getStudentsData(group.members))
   )
 
-  const a = groupStudentDataRaw.flat(1).map((student) => student.groups)
+  const a = groupStudentDataRaw
+    .flat(1)
+    .map((student) => student.groups)
+    .flat(1)
+    .map((s) => s.templateTimestamps)
   console.log(a)
 
   const groupStudentData = groupStudentDataRaw.map((groupData, index) => ({

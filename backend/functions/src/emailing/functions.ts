@@ -227,12 +227,12 @@ const sendMails = async (
         await updateIndivTimestamp(courseId, indivEmail, template)
           .then(() =>
             logger.info(
-              `Added no match timestamp for course ${courseId} for student with email ${indivEmail}`
+              `Added ${template} timestamp for course ${courseId} for student with email ${indivEmail}`
             )
           )
           .catch((err) =>
             logger.error(
-              `Failed to update no match timestamp for student with email ${indivEmail} for course ${courseId}. Resulted in err: ${err.message} `
+              `Failed to update ${template} timestamp for student with email ${indivEmail} for course ${courseId}. Resulted in err: ${err.message} `
             )
           )
       }

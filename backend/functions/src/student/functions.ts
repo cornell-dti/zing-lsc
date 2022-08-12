@@ -5,6 +5,7 @@ import {
   mapCatalogNameToCourseId,
   MissingCourseError,
 } from '../course/get_course_id'
+import { mapDate } from '../course/functions'
 import { FirestoreStudent, Student } from '../types'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
@@ -23,6 +24,7 @@ export const getStudentData = async (email: string) => {
       ...group,
       notesModifyTime: group.notesModifyTime.toDate(),
       submissionTime: group.submissionTime.toDate(),
+      templateTimestamps: mapDate(group.templateTimestamps),
     })),
   } as Student
 }

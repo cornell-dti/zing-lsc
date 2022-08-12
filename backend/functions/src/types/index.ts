@@ -22,6 +22,7 @@ export type GroupMembership = {
   notes: string
   notesModifyTime: Date
   submissionTime: Date
+  templateTimestamps: { [key: string]: Date }
 }
 
 /** Information about an email template */
