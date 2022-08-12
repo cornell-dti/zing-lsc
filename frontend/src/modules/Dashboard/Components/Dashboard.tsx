@@ -18,7 +18,7 @@ import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
 import { CSVLink } from 'react-csv'
 
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 
 type SortOrder =
   | 'newest-requests-first'
@@ -85,8 +85,8 @@ export const Dashboard = () => {
 
   const [rostorAnchorEl, setRosterAnchorEl] = useState<null | HTMLElement>(null)
   const openRoster = Boolean(rostorAnchorEl)
-  const handleRosterClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setRosterAnchorEl(rostorAnchorEl ? null : event.currentTarget)
+  const handleRosterClick = (event: React.MouseEvent<HTMLElement>) => {
+    setRosterAnchorEl(event.currentTarget)
   }
   const handleRosterClose = () => {
     setRosterAnchorEl(null)
@@ -244,35 +244,10 @@ export const Dashboard = () => {
           >
             <MenuItem>Export CSV (Students)</MenuItem>
           </CSVLink>
-
-          <Button
-            variant="text"
-            onClick={handleRosterClick}
-            disableRipple
-            sx={{
-              border: 'none',
-              width: '100%',
-              padding: '0',
-              margin: '0',
-              borderRadius: '0',
-              background: 'none',
-              color: '#000',
-              fontWeight: '400',
-              fontSize: '16px',
-              textAlign: 'left',
-            }}
-          >
-            <MenuItem
-              sx={{
-                width: '100%',
-              }}
-            >
-              <ArrowBackIosIcon
-                sx={{ fill: '#5C5B6A', padding: '0', margin: '0' }}
-              />
-              Switch Semester
-            </MenuItem>
-          </Button>
+          <MenuItem onClick={handleRosterClick}>
+            <ChevronLeftIcon sx={{ color: 'essentials.75', ml: -1 }} />
+            Switch Semester
+          </MenuItem>
           <MenuItem
             onClick={() => {
               handleClose()
@@ -287,15 +262,12 @@ export const Dashboard = () => {
           open={openRoster}
           onClick={handleRosterClose}
           anchorOrigin={{
-            vertical: 'bottom',
+            vertical: 'top',
             horizontal: 'left',
           }}
           transformOrigin={{
-            vertical: 'center',
+            vertical: 'top',
             horizontal: 'right',
-          }}
-          sx={{
-            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
           }}
         >
           <MenuItem onClick={() => handleRosterChange('SU22')}>
