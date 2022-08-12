@@ -35,7 +35,7 @@ export const EmailPreview = ({ template, courseNames }: EmailPreviewProps) => {
       >
         <Box display={'flex'} flexDirection={'row'}>
           <Typography fontWeight={800}>Subject: </Typography>&nbsp;
-          <Typography> {template.subject} </Typography>
+          <Typography>{template.subject}</Typography>
         </Box>
       </Box>
       <Box

@@ -335,58 +335,55 @@ export const EmailModal = ({
   }
 
   return (
-    <>
-      <ZingModal
-        open={isEmailing}
-        onClose={() => setIsEmailing(!isEmailing)}
-        containerWidth={'800px'}
-        containerHeight={'630px'}
-      >
-        <ZingModal.Title onClose={() => setIsEmailing(!isEmailing)}>
-          <Box
-            display={'flex'}
-            justifyContent={'center'}
-            textAlign={'center'}
-            paddingTop="20px"
-          >
-            <Typography variant="h4" component="h4" fontWeight={'700'}>
-              {title}
-            </Typography>
+    <ZingModal
+      open={isEmailing}
+      onClose={() => setIsEmailing(!isEmailing)}
+      containerWidth={'800px'}
+      containerHeight={'630px'}
+    >
+      <ZingModal.Title onClose={() => setIsEmailing(!isEmailing)}>
+        <Box
+          display={'flex'}
+          justifyContent={'center'}
+          textAlign={'center'}
+          paddingTop="20px"
+        >
+          <Typography variant="h4" component="h4" fontWeight={'700'}>
+            {title}
+          </Typography>
+        </Box>
+      </ZingModal.Title>
+      <ZingModal.Body>
+        {selectedTemplate ? (
+          <Box sx={{ padding: '1rem 3.5rem 0 3.5rem' }}>
+            {step <= 1 && <SelectTemplates />}
+            {step === 2 && <StepFailure />}
+            {step === 3 && <StepFinalFailure />}
           </Box>
-        </ZingModal.Title>
-        <ZingModal.Body>
-          {selectedTemplate ? (
-            <Box sx={{ padding: '1rem 3.5rem 0 3.5rem' }}>
-              {step <= 1 && <SelectTemplates />}
-              {step === 2 && <StepFailure />}
-              {step === 3 && <StepFinalFailure />}
-            </Box>
-          ) : (
-            <Box
-              sx={{
-                padding: '1rem 3.5rem 0 3.5rem',
-                textAlign: 'center',
-                display: 'flex',
-                flexFlow: 'column nowrap',
-                gap: '10rem',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="h5">
-                No Templates for the selected group.
-              </Typography>
-              <Button href="/templates" sx={{ width: '250px' }}>
-                Add Templates
-              </Button>
-            </Box>
-          )}
-        </ZingModal.Body>
-        <ZingModal.Controls>
-          <BackButton />
-          <ProceedButton />
-        </ZingModal.Controls>
-      </ZingModal>
-      )
-    </>
+        ) : (
+          <Box
+            sx={{
+              padding: '1rem 3.5rem 0 3.5rem',
+              textAlign: 'center',
+              display: 'flex',
+              flexFlow: 'column nowrap',
+              gap: '10rem',
+              alignItems: 'center',
+            }}
+          >
+            <Typography variant="h5">
+              No Templates for the selected group.
+            </Typography>
+            <Button href="/templates" sx={{ width: '250px' }}>
+              Add Templates
+            </Button>
+          </Box>
+        )}
+      </ZingModal.Body>
+      <ZingModal.Controls>
+        <BackButton />
+        <ProceedButton />
+      </ZingModal.Controls>
+    </ZingModal>
   )
 }

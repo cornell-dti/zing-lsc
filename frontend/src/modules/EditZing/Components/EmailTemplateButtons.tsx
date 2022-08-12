@@ -14,11 +14,9 @@ export const EmailTemplateButtons = ({
   // changing the selected email template
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSelection = event.target.value
-    templates.forEach((template) => {
-      if (template.id === newSelection) {
-        setSelectedTemplate(template)
-      }
-    })
+    setSelectedTemplate(
+      templates.find((template) => template.id === newSelection)!
+    )
   }
 
   return (
