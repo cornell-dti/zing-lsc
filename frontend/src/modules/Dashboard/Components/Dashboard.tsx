@@ -145,30 +145,12 @@ export const Dashboard = () => {
     setSortedOrder(event.target.value as SortOrder)
   }
 
-  const [currentCourses, setCurrentCourses] = useState<Course[]>(courses)
+  const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
 
-  const handleRosterChange = (roster: string) => {
-    setCurrentCourses(
-      sorted(
-        courses.filter((course) => course.roster === roster),
-        sortedOrder
-      )
-    )
-  }
-
-  const sortedCourses = sorted(currentCourses, sortedOrder)
-
-  useEffect(() => {
-    const currentSemesterCourses = courses.filter(
-      (course) => course.roster === 'FA22'
-    )
-    setCurrentCourses(currentSemesterCourses)
-  }, [courses])
-
-  // useEffect(() => {
-  //   const newCurrent = sorted(currentCourses, sortedOrder)
-  //   setCurrentCourses(newCurrent)
-  // }, [currentCourses, sortedOrder])
+  const sortedCourses = sorted(
+    courses.filter((course) => course.roster === selectedRoster),
+    sortedOrder
+  )
 
   return (
     <StyledContainer>
@@ -269,17 +251,20 @@ export const Dashboard = () => {
             vertical: 'top',
             horizontal: 'right',
           }}
+          sx={{
+            mt: -1.5,
+          }}
         >
-          <MenuItem onClick={() => handleRosterChange('SU22')}>
+          <MenuItem onClick={() => setSelectedRoster('SU22')}>
             Summer 2022
           </MenuItem>
-          <MenuItem onClick={() => handleRosterChange('FA22')}>
+          <MenuItem onClick={() => setSelectedRoster('FA22')}>
             Fall 2022
           </MenuItem>
-          <MenuItem onClick={() => handleRosterChange('WI22')}>
+          <MenuItem onClick={() => setSelectedRoster('WI22')}>
             Winter 2022
           </MenuItem>
-          <MenuItem onClick={() => handleRosterChange('SP23')}>
+          <MenuItem onClick={() => setSelectedRoster('SP23')}>
             Spring 2023
           </MenuItem>
         </Menu>

@@ -54,7 +54,6 @@ const App = () => {
         user
           .getIdToken(true)
           .then((idToken) => {
-            console.log('idToken', idToken)
             if (axiosAuthInterceptor.current === null) {
               // interceptor so that every axios request will have this header
               axiosAuthInterceptor.current = axios.interceptors.request.use(
