@@ -145,10 +145,10 @@ export const Dashboard = () => {
     setSortedOrder(event.target.value as SortOrder)
   }
 
-  const [sortedCourses, setSortedCourses] = useState<Course[]>(courses)
+  const [currentCourses, setCurrentCourses] = useState<Course[]>(courses)
 
   const handleRosterChange = (roster: string) => {
-    setSortedCourses(
+    setCurrentCourses(
       sorted(
         courses.filter((course) => course.roster === roster),
         sortedOrder
@@ -156,13 +156,16 @@ export const Dashboard = () => {
     )
   }
 
-  useEffect(() => {
-    setSortedCourses(courses)
-  }, [courses])
+  const sortedCourses = sorted(currentCourses, sortedOrder)
 
   useEffect(() => {
-    setSortedCourses(sorted(sortedCourses, sortedOrder))
-  }, [sortedOrder])
+    setCurrentCourses(courses)
+  }, [courses])
+
+  // useEffect(() => {
+  //   const newCurrent = sorted(currentCourses, sortedOrder)
+  //   setCurrentCourses(newCurrent)
+  // }, [currentCourses, sortedOrder])
 
   return (
     <StyledContainer>
@@ -301,7 +304,7 @@ export const Dashboard = () => {
           <MenuItem onClick={() => handleRosterChange('WI22')}>
             Winter 2022
           </MenuItem>
-          <MenuItem onClick={() => handleRosterChange('SP22')}>
+          <MenuItem onClick={() => handleRosterChange('SP23')}>
             Spring 2023
           </MenuItem>
         </Menu>
