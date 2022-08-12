@@ -1,5 +1,6 @@
 import { db } from '../config'
 import { getStudentsData } from '../student/functions'
+import { Course, FirestoreCourse, FirestoreGroup } from '../types'
 const courseRef = db.collection('courses')
 
 async function getCourseInfo(courseId: string) {
@@ -10,14 +11,31 @@ async function getCourseInfo(courseId: string) {
   return result
 }
 
-async function getAllCourses() {
-  const snapshot = await courseRef.get()
-  return snapshot.docs.map((doc) => {
-    const obj = doc.data()
-    obj.courseId = doc.id
-    obj.latestSubmissionTime = obj.latestSubmissionTime.toDate()
-    return obj
-  })
+export const getAllCourses = async (): Promise<Course[]> => {
+  const courseCollection = await courseRef.get()
+  return Promise.all(
+    courseCollection.docs.map(async (courseDoc) => {
+      const courseData = courseDoc.data() as FirestoreCourse
+      return {
+        ...courseData,
+        courseId: courseDoc.id,
+        latestSubmissionTime: courseData.latestSubmissionTime.toDate(),
+        groups: (await courseDoc.ref.collection('groups').get()).docs
+          .map((groupDoc) => groupDoc.data() as FirestoreGroup)
+          .map((groupData) => ({
+            ...groupData,
+            createTime: groupData.createTime.toDate(),
+            updateTime: groupData.updateTime.toDate(),
+            addStudentEmailTimestamp:
+              groupData.addStudentEmailTimestamp?.toDate() || null,
+            checkInEmailTimestamp:
+              groupData.checkInEmailTimestamp?.toDate() || null,
+            shareMatchEmailTimestamp:
+              groupData.shareMatchEmailTimestamp?.toDate() || null,
+          })),
+      }
+    })
+  )
 }
 
 async function getStudentsForCourse(courseId: string) {
@@ -59,4 +77,4 @@ async function getStudentsForCourse(courseId: string) {
   }
 }
 
-export { getCourseInfo, getAllCourses, getStudentsForCourse }
+export { getCourseInfo, getStudentsForCourse }

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -8,14 +7,16 @@ import {
   StyledContainer,
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
-import { Groups } from 'Dashboard/Components/Groups'
-import { CourseInfo } from 'Dashboard/Types/CourseInfo'
-import { API_ROOT, COURSE_API } from '@core/Constants'
+import { CourseGrid } from 'Dashboard/Components/CourseGrid'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
-import { Box, CircularProgress, SelectChangeEvent } from '@mui/material'
+import { Box, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
+import { useCourseValue } from '@context/CourseContext'
+import { useStudentValue } from '@context/StudentContext'
+import { Course } from '@core/Types'
+import { CSVLink } from 'react-csv'
 
 type SortOrder =
   | 'newest-requests-first'
@@ -26,6 +27,10 @@ type SortOrder =
   | 'classes-z-a'
 
 export const Dashboard = () => {
+  const { user } = useAuthValue()
+  const { courses } = useCourseValue()
+  const { students } = useStudentValue()
+
   const [sortedOrder, setSortedOrder] = useState<SortOrder>(
     'newest-requests-first'
   )
@@ -39,31 +44,45 @@ export const Dashboard = () => {
     setAnchorEl(null)
   }
 
-  const [courses, setCourses] = useState<CourseInfo[]>([])
-  const [hasLoadedCourseData, setHasLoadedCourseData] = useState(false)
+  const csvCourses = courses.map((course) => ({
+    semester: course.roster,
+    course: course.names.join('/'),
+  }))
 
-  const { user, displayNetworkError } = useAuthValue()
-
-  useEffect(() => {
-    axios.get(`${API_ROOT}${COURSE_API}`).then(
-      (res) => {
-        setCourses(
-          res.data.data.map((course: any) => ({
-            ...course,
-            latestSubmissionTime: new Date(course.latestSubmissionTime),
-          }))
+  const csvStudents =
+    courses.length && students.length // Just making sure this isn't calculated until the data is available
+      ? students.flatMap((student) =>
+          student.groups.map((membership) => {
+            const course = courses.find(
+              (c) => c.courseId === membership.courseId
+            )!
+            const group = course.groups.find(
+              // undefined if student is unmatched
+              (g) => g.groupNumber === membership.groupNumber
+            )
+            return {
+              semester: course.roster,
+              dateRequested: membership.submissionTime.toLocaleString(),
+              cornellEmail: student.email,
+              name: student.name,
+              college: student.college,
+              year: student.year,
+              course: course.names.join('/'),
+              groupNumber:
+                membership.groupNumber !== -1
+                  ? `${course.names.join('/')}_${membership.groupNumber}`
+                  : undefined,
+              dateShareMatchEmail: group?.shareMatchEmailTimestamp?.toLocaleString(),
+              dateCheckInEmail: group?.checkInEmailTimestamp?.toLocaleString(),
+              dateAddStudentEmail: group?.addStudentEmailTimestamp?.toLocaleString(),
+              notes: membership.notes,
+            }
+          })
         )
-        setHasLoadedCourseData(true)
-      },
-      (error) => displayNetworkError(error.message)
-    )
-    return () => {
-      setAnchorEl(null) // clean state for anchorEl on unmount
-    }
-  }, [displayNetworkError])
+      : []
 
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
-  function sorted(courseInfo: CourseInfo[], menuValue: SortOrder) {
+  function sorted(courseInfo: Course[], menuValue: SortOrder) {
     switch (menuValue) {
       case 'newest-requests-first':
         return [...courseInfo].sort(
@@ -182,6 +201,15 @@ export const Dashboard = () => {
             horizontal: 'right',
           }}
         >
+          <CSVLink data={csvCourses} filename={`export-courses-${Date.now()}`}>
+            <MenuItem>Export CSV (Courses)</MenuItem>
+          </CSVLink>
+          <CSVLink
+            data={csvStudents}
+            filename={`export-students-${Date.now()}`}
+          >
+            <MenuItem>Export CSV (Students)</MenuItem>
+          </CSVLink>
           <MenuItem
             onClick={() => {
               handleClose()
@@ -192,13 +220,7 @@ export const Dashboard = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      {hasLoadedCourseData ? (
-        <Groups groups={sortedCourses} />
-      ) : (
-        <Box display="flex" justifyContent="center" padding={4}>
-          <CircularProgress size={50} />
-        </Box>
-      )}
+      <CourseGrid courses={sortedCourses} />
     </StyledContainer>
   )
 }
