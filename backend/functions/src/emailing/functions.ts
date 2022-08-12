@@ -156,6 +156,17 @@ export const createEmailAsJson = (
   return messageAsJson
 }
 
+/**
+ * Returns the template associated with the given template id if it exists, undefined otherwise
+ * @param templateId the template id
+ */
+const isValidTemplate = async (templateId: string) => {
+  const templateCollection = await templateRef.get()
+  return templateCollection.docs
+    .map((templateDoc) => templateDoc.data() as FirestoreEmailTemplate)
+    .find((template) => template.id === templateId)
+}
+
 /** Send Mails takes the 
     @param from: sender (admin's email)
     @param message: graph api request body data
@@ -183,6 +194,11 @@ const sendMails = async (
   group?: string,
   indivEmail?: string
 ) => {
+  const validTemplate = await isValidTemplate(template)
+  if (!validTemplate) {
+    throw new Error(`Template with id ${template} doesn't exist`)
+  }
+
   //not sure if this check is necessary, since emailRcpts already checks for this
   if ((!group || parseInt(group) < 0) && !indivEmail) {
     logger.error(
@@ -239,7 +255,7 @@ const sendMails = async (
     }
     return response.status
   } catch (error) {
-    return error
+    throw error
   }
 }
 
@@ -302,7 +318,6 @@ export const sendStudentEmails = async (
       logger.error(
         `Email send request failed from ${from} to ${emailRcpts.toString()}`
       )
-
       throw err
     })
 }
