@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -145,16 +145,24 @@ export const Dashboard = () => {
     setSortedOrder(event.target.value as SortOrder)
   }
 
-  const [filteredCourses, setFilteredCourses] = useState<Course[]>(courses)
+  const [sortedCourses, setSortedCourses] = useState<Course[]>(courses)
 
   const handleRosterChange = (roster: string) => {
-    setFilteredCourses(
+    setSortedCourses(
       sorted(
         courses.filter((course) => course.roster === roster),
         sortedOrder
       )
     )
   }
+
+  useEffect(() => {
+    setSortedCourses(courses)
+  }, [courses])
+
+  useEffect(() => {
+    setSortedCourses(sorted(sortedCourses, sortedOrder))
+  }, [sortedOrder])
 
   return (
     <StyledContainer>
@@ -298,7 +306,7 @@ export const Dashboard = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      <CourseGrid courses={filteredCourses} />
+      <CourseGrid courses={sortedCourses} />
     </StyledContainer>
   )
 }
