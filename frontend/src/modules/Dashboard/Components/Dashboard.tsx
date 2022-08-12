@@ -14,7 +14,9 @@ import { useAuthValue } from '@auth'
 import { Box, SelectChangeEvent, Popper } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
+import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
+import { CSVLink } from 'react-csv'
 
 type SortOrder =
   | 'newest-requests-first'
@@ -27,6 +29,7 @@ type SortOrder =
 export const Dashboard = () => {
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
+  const { students } = useStudentValue()
 
   const [sortedOrder, setSortedOrder] = useState<SortOrder>(
     'newest-requests-first'
@@ -40,6 +43,43 @@ export const Dashboard = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  const csvCourses = courses.map((course) => ({
+    semester: course.roster,
+    course: course.names.join('/'),
+  }))
+
+  const csvStudents =
+    courses.length && students.length // Just making sure this isn't calculated until the data is available
+      ? students.flatMap((student) =>
+          student.groups.map((membership) => {
+            const course = courses.find(
+              (c) => c.courseId === membership.courseId
+            )!
+            const group = course.groups.find(
+              // undefined if student is unmatched
+              (g) => g.groupNumber === membership.groupNumber
+            )
+            return {
+              semester: course.roster,
+              dateRequested: membership.submissionTime.toLocaleString(),
+              cornellEmail: student.email,
+              name: student.name,
+              college: student.college,
+              year: student.year,
+              course: course.names.join('/'),
+              groupNumber:
+                membership.groupNumber !== -1
+                  ? `${course.names.join('/')}_${membership.groupNumber}`
+                  : undefined,
+              dateShareMatchEmail: group?.shareMatchEmailTimestamp?.toLocaleString(),
+              dateCheckInEmail: group?.checkInEmailTimestamp?.toLocaleString(),
+              dateAddStudentEmail: group?.addStudentEmailTimestamp?.toLocaleString(),
+              notes: membership.notes,
+            }
+          })
+        )
+      : []
 
   const [rostorAnchorEl, setRosterAnchorEl] = useState<null | HTMLElement>(null)
   const openRoster = Boolean(rostorAnchorEl)
@@ -170,6 +210,15 @@ export const Dashboard = () => {
             horizontal: 'right',
           }}
         >
+          <CSVLink data={csvCourses} filename={`export-courses-${Date.now()}`}>
+            <MenuItem>Export CSV (Courses)</MenuItem>
+          </CSVLink>
+          <CSVLink
+            data={csvStudents}
+            filename={`export-students-${Date.now()}`}
+          >
+            <MenuItem>Export CSV (Students)</MenuItem>
+          </CSVLink>
           <MenuItem sx={{ width: '100%', padding: '0', margin: '0' }}>
             <Button
               variant="text"
