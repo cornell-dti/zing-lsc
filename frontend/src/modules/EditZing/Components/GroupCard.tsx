@@ -132,7 +132,6 @@ const GroupCard = ({
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(112px, max-content))',
             gap: '16px',
-            justifyContent: 'center',
           }}
         >
           {studentList.map((student, index) => (

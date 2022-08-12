@@ -1,17 +1,26 @@
 // external imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useParams } from 'react-router-dom'
 // zing imports
-import { getBody } from '../utils/emailTemplates'
 import { ZingModal } from '@core/Components'
 import { EmailModalProps } from '../Types/ComponentProps'
-import { TemplateName } from 'EditZing/utils/emailTemplates'
 import { EmailTemplateButtons } from 'EditZing/Components/EmailTemplateButtons'
 import { EmailPreview } from 'EditZing/Components/EmailPreview'
 import { sendEmail } from 'Emailing/Components/Emailing'
 import { adminSignIn } from '@fire/firebase'
+
+// template editor
+import { templatesBucket } from '@fire/firebase'
+import { API_ROOT, EMAIL_PATH } from '@core/Constants'
+import {
+  EmailTemplate,
+  EmailTemplatesResponse,
+  responseEmailTemplateToEmailTemplate,
+} from '@core/Types'
+import axios, { AxiosResponse } from 'axios'
+import { getDownloadURL, ref } from 'firebase/storage'
 
 export const EmailModal = ({
   selectedGroups,
@@ -23,9 +32,37 @@ export const EmailModal = ({
   setEmailSentError,
   handleEmailTimestamp,
 }: EmailModalProps) => {
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateName>(
-    '' as TemplateName
-  )
+  // check if emailing students or groups
+  const recipientType = selectedStudents.length > 0 ? 'student' : 'group'
+
+  // template editor logic
+  const [templates, setTemplates] = useState<EmailTemplate[]>([])
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>()
+
+  useEffect(() => {
+    axios
+      .get(`${API_ROOT}${EMAIL_PATH}/templates`)
+      .then(async (res: AxiosResponse<EmailTemplatesResponse>) => {
+        const allTemplates = await Promise.all(
+          res.data.data
+            .map(responseEmailTemplateToEmailTemplate)
+            .map(async (template: EmailTemplate, i) => {
+              // Download the HTML for the email body in Cloud Storage bucket
+              const url = await getDownloadURL(
+                ref(templatesBucket, template.body)
+              )
+              const html = (await axios.get(url)).data as string
+              return { ...template, html }
+            })
+        )
+        const filteredTemplates = allTemplates.filter(
+          (template) => template.type === recipientType
+        )
+        setTemplates(filteredTemplates)
+        setSelectedTemplate(filteredTemplates[0])
+      })
+      .catch((error) => console.error(error))
+  }, [recipientType])
 
   const { courseId } = useParams<{ courseId: string }>()
   const [step, setStep] = useState<number>(0)
@@ -60,12 +97,11 @@ export const EmailModal = ({
     await Promise.all(
       selectedStudents.map((student: string) => {
         const emailRcpts = [student, 'lscstudypartners@cornell.edu']
-        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
-        const emailSubject = 'Study Partners!'
+        const emailSubject = selectedTemplate?.subject
         const emailItems = {
           emailSubject,
           emailRcpts,
-          emailBody,
+          emailBody: selectedTemplate?.html,
           courseId,
           groupNum: -1,
           selectedTemplate,
@@ -84,13 +120,12 @@ export const EmailModal = ({
     await Promise.all(
       selectedGroups.map((group) => {
         const emailRcpts = groupEmails(group)
-        const emailBody = getBody(selectedTemplate, courseNames.join(', '))
-        const emailSubject = 'Study Partners!'
+        const emailSubject = selectedTemplate?.subject
         const groupNum = group.groupNumber.toString()
         const emailItems = {
           emailSubject,
           emailRcpts,
-          emailBody,
+          emailBody: selectedTemplate?.html,
           courseId,
           groupNum,
           selectedTemplate,
@@ -123,7 +158,7 @@ export const EmailModal = ({
         <Typography variant="h5" component="h5">
           Template:
           <Box component="span" sx={{ fontWeight: 800 }}>
-            {selectedTemplate}
+            {selectedTemplate?.name}
           </Box>
         </Typography>
       </Box>
@@ -134,7 +169,8 @@ export const EmailModal = ({
     return (
       <Box>
         <EmailTemplateButtons
-          selectedTemplate={selectedTemplate || ''}
+          templates={templates}
+          selectedTemplate={selectedTemplate!}
           setSelectedTemplate={setSelectedTemplate}
         />
       </Box>
@@ -145,10 +181,7 @@ export const EmailModal = ({
     return (
       <Box>
         <TemplateSelectedComponent />
-        <EmailPreview
-          templateName={selectedTemplate}
-          courseNames={courseNames}
-        />
+        <EmailPreview template={selectedTemplate!} courseNames={courseNames} />
       </Box>
     )
   }
@@ -164,15 +197,21 @@ export const EmailModal = ({
           justifyContent: 'center',
           alignItems: 'center',
           paddingTop: '8%',
+          flexFlow: 'column nowrap',
+          gap: '1rem',
         }}
       >
         <Typography variant="h5" component="h5" fontWeight={'400'}>
           Uh oh... Something went wrong when trying to send the email. Try again
-          to reauthenticate. <br></br>
-          <br></br>
-          <em>
-            *This will automatically attempt to send the email one more time.
-          </em>
+          to reauthenticate.
+        </Typography>
+        <Typography
+          variant="h5"
+          component="h5"
+          fontWeight={'400'}
+          sx={{ fontStyle: 'italic' }}
+        >
+          *This will automatically attempt to send the email one more time.
         </Typography>
         <Button
           onClick={() => {
@@ -197,18 +236,22 @@ export const EmailModal = ({
           justifyContent: 'center',
           alignItems: 'center',
           paddingTop: '8%',
+          flexFlow: 'column nowrap',
+          gap: '2rem',
         }}
       >
         <Typography variant="h5" component="h5" fontWeight={'400'}>
           Looks like something went wrong. Please contact DTI with the following
-          error reference for more information.
-          <br />
-          <br />
-          <Typography variant="h5" fontWeight="700">
-            Error reference:
-          </Typography>
-          Email final auth failure step.
+          error reference for more information. Try reloading, reloggin in, or
+          try again later.
         </Typography>
+        <Typography variant="h5" fontWeight="700">
+          Error reference:
+          <Typography variant="h5" component="h5" fontWeight={'400'}>
+            Email final auth failure step.
+          </Typography>
+        </Typography>
+
         <Button
           onClick={() => {
             setIsEmailing(false)
@@ -311,15 +354,31 @@ export const EmailModal = ({
         </Box>
       </ZingModal.Title>
       <ZingModal.Body>
-        <Box sx={{ padding: '1rem 3.5rem 0 3.5rem' }}>
-          {step === 2 ? (
-            <StepFailure />
-          ) : step === 3 ? (
-            <StepFinalFailure />
-          ) : (
-            <SelectTemplates />
-          )}
-        </Box>
+        {selectedTemplate ? (
+          <Box sx={{ padding: '1rem 3.5rem 0 3.5rem' }}>
+            {step <= 1 && <SelectTemplates />}
+            {step === 2 && <StepFailure />}
+            {step === 3 && <StepFinalFailure />}
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              padding: '1rem 3.5rem 0 3.5rem',
+              textAlign: 'center',
+              display: 'flex',
+              flexFlow: 'column nowrap',
+              gap: '10rem',
+              alignItems: 'center',
+            }}
+          >
+            <Typography variant="h5">
+              No Templates for the selected group.
+            </Typography>
+            <Button href="/templates" sx={{ width: '250px' }}>
+              Add Templates
+            </Button>
+          </Box>
+        )}
       </ZingModal.Body>
       <ZingModal.Controls>
         <BackButton />

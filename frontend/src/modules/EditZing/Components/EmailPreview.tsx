@@ -1,13 +1,9 @@
-import { getBody } from '../utils/emailTemplates'
 import { EmailPreviewProps } from 'EditZing/Types/ComponentProps'
 import { Box } from '@mui/material'
 import { Typography } from '@mui/material'
 import { SxProps } from '@mui/material'
 
-export const EmailPreview = ({
-  templateName,
-  courseNames,
-}: EmailPreviewProps) => {
+export const EmailPreview = ({ template, courseNames }: EmailPreviewProps) => {
   const TitleSx: SxProps = {
     color: 'essentials.6',
     backgroundColor: 'essentials.75',
@@ -27,7 +23,7 @@ export const EmailPreview = ({
     padding: '16px',
   }
 
-  const body = getBody(templateName, courseNames.join(', '))
+  const body = template.html
   return (
     <Box>
       <Box sx={TitleSx}>Email Preview</Box>
@@ -39,7 +35,7 @@ export const EmailPreview = ({
       >
         <Box display={'flex'} flexDirection={'row'}>
           <Typography fontWeight={800}>Subject: </Typography>&nbsp;
-          <Typography>Study Partners!</Typography>
+          <Typography>{template.subject}</Typography>
         </Box>
       </Box>
       <Box
