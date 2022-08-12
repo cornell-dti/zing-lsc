@@ -11,12 +11,14 @@ import { CourseGrid } from 'Dashboard/Components/CourseGrid'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
-import { Box, SelectChangeEvent, Popper } from '@mui/material'
+import { Box, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
 import { CSVLink } from 'react-csv'
+
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 
 type SortOrder =
   | 'newest-requests-first'
@@ -143,7 +145,16 @@ export const Dashboard = () => {
     setSortedOrder(event.target.value as SortOrder)
   }
 
-  const sortedCourses = sorted(courses, sortedOrder)
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>(courses)
+
+  const handleRosterChange = (roster: string) => {
+    setFilteredCourses(
+      sorted(
+        courses.filter((course) => course.roster === roster),
+        sortedOrder
+      )
+    )
+  }
 
   return (
     <StyledContainer>
@@ -219,25 +230,35 @@ export const Dashboard = () => {
           >
             <MenuItem>Export CSV (Students)</MenuItem>
           </CSVLink>
-          <MenuItem sx={{ width: '100%', padding: '0', margin: '0' }}>
-            <Button
-              variant="text"
-              onClick={handleRosterClick}
-              disableRipple
+
+          <Button
+            variant="text"
+            onClick={handleRosterClick}
+            disableRipple
+            sx={{
+              border: 'none',
+              width: '100%',
+              padding: '0',
+              margin: '0',
+              borderRadius: '0',
+              background: 'none',
+              color: '#000',
+              fontWeight: '400',
+              fontSize: '16px',
+              textAlign: 'left',
+            }}
+          >
+            <MenuItem
               sx={{
-                border: 'none',
-                padding: '5px 15px',
-                borderRadius: '0',
-                background: 'none',
-                color: '#000',
                 width: '100%',
-                fontWeight: '400',
-                fontSize: '16px',
               }}
             >
-              Change Roster
-            </Button>
-          </MenuItem>
+              <ArrowBackIosIcon
+                sx={{ fill: '#5C5B6A', padding: '0', margin: '0' }}
+              />
+              Switch Semester
+            </MenuItem>
+          </Button>
           <MenuItem
             onClick={() => {
               handleClose()
@@ -259,21 +280,25 @@ export const Dashboard = () => {
             vertical: 'center',
             horizontal: 'right',
           }}
+          sx={{
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
+          }}
         >
-          <Box
-            sx={{
-              background: '#fff',
-              borderRadius: '8px',
-              boxShadow: '24px',
-            }}
-          >
-            <MenuItem onClick={handleRosterClose}>Summer 22</MenuItem>
-            <MenuItem onClick={handleRosterClose}>Spring 23 </MenuItem>
-            <MenuItem onClick={handleRosterClose}>Fall 22</MenuItem>
-          </Box>
+          <MenuItem onClick={() => handleRosterChange('SU22')}>
+            Summer 2022
+          </MenuItem>
+          <MenuItem onClick={() => handleRosterChange('FA22')}>
+            Fall 2022
+          </MenuItem>
+          <MenuItem onClick={() => handleRosterChange('WI22')}>
+            Winter 2022
+          </MenuItem>
+          <MenuItem onClick={() => handleRosterChange('SP22')}>
+            Spring 2023
+          </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      <CourseGrid courses={sortedCourses} />
+      <CourseGrid courses={filteredCourses} />
     </StyledContainer>
   )
 }
