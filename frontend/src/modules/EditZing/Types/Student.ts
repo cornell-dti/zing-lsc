@@ -12,6 +12,7 @@ export interface GroupMembership {
   notes: string
   notesModifyTime: Date
   submissionTime: Date
+  templateTimestamps: { [key: string]: Date }
 }
 
 export interface ResponseStudent {
@@ -28,6 +29,7 @@ export interface ResponseGroupMembership {
   notes: string
   notesModifyTime: string
   submissionTime: string
+  templateTimestamps: { [key: string]: string }
 }
 
 /** item type for drag and drop prop transfer via dnd */
@@ -42,14 +44,26 @@ export type DnDStudentTransferType = {
  */
 export const STUDENT_TYPE = 'Student'
 
-export const responseStudentToStudent = (
-  student: ResponseStudent
-): Student => ({
-  ...student,
-  groups: student.groups.map((groupMembership) => ({
-    ...groupMembership,
-    // Remember to convert the notesModifyTime too
-    notesModifyTime: new Date(groupMembership.notesModifyTime),
-    submissionTime: new Date(groupMembership.submissionTime),
-  })),
-})
+export const responseTimestampsToDate = (timestamp: {
+  [key: string]: string
+}) => {
+  return Object.fromEntries(
+    Object.entries(timestamp).map(([k, v]) => [k, new Date(v)])
+  )
+}
+
+export const responseStudentToStudent = (student: ResponseStudent): Student => {
+
+  return {
+    ...student,
+    groups: student.groups.map((groupMembership) => ({
+      ...groupMembership,
+      // Remember to convert the notesModifyTime too
+      notesModifyTime: new Date(groupMembership.notesModifyTime),
+      submissionTime: new Date(groupMembership.submissionTime),
+      templateTimestamps: responseTimestampsToDate(
+        groupMembership.templateTimestamps
+      ),
+    })),
+  }
+}

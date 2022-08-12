@@ -16,33 +16,30 @@ const GroupCard = ({
   createTime,
   templateMap,
   groupTimestamps,
-  indivTimestamps,
   selected,
   handleChecked,
   handleAddStudent,
   updateNotes,
 }: GroupGridProps) => {
-  /**
+
+   /**
    * Helper to format the timestamp data in a way that is helpful for displaying in tooltips
    * @param timestamps a map of template ids to their timestamps
    * @param templateMap a map from template ids to their template names
    * @return the timestamp data formatted as an alphabetically sorted array of name/timestamp pairs
    */
-  const formatTooltipData = (
-    timestamps: { [key: string]: Date },
-    templateMap: { [key: string]: string }
-  ) => {
-    return (
-      Object.entries(timestamps)
-        //get the corresponding template name from each template id
-        .map(([k, v]) => ({ name: templateMap[k], timestamp: v }))
-        //sort timestamps alphabetically by template name
-        .sort((a, b) => a.name.localeCompare(b.name))
-    )
-  }
-
-  const groupTooltipData = formatTooltipData(groupTimestamps, templateMap)
-  const indivTooltipData = formatTooltipData(indivTimestamps, templateMap)
+    const formatTooltipData = (timestamps: { [key: string]: Date }) => {
+      return (
+        //formats object into a sortable list
+        Object.entries(timestamps)
+          //get the corresponding template name from each template id
+          .map(([k, v]) => ({ name: templateMap[k], timestamp: v }))
+          //sort timestamps alphabetically by template name
+          .sort((a, b) => a.name.localeCompare(b.name))
+      )
+    }
+    
+    const tooltipTimestamps = formatTooltipData(groupTimestamps)
 
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -97,7 +94,7 @@ const GroupCard = ({
           >
             <StyledGroupText>{`Group ${groupNumber}`}</StyledGroupText>
           </Tooltip>
-          {groupTooltipData.map((timestamp, index) => {
+          {tooltipTimestamps.map((timestamp, index) => {
             const month = timestamp.timestamp.getMonth() + 1
             const day = timestamp.timestamp.getDate()
             return (
@@ -144,7 +141,7 @@ const GroupCard = ({
               courseId={courseId}
               groupNumber={groupNumber}
               student={student}
-              tooltipTimestamps={indivTooltipData}
+              templateMap={templateMap}
               handleAddStudent={handleAddStudent}
               updateNotes={updateNotes}
             />

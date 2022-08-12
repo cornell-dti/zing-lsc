@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react'
 import axios, { AxiosResponse } from 'axios'
 import GroupCard from 'EditZing/Components/GroupCard'
 import { UnmatchedGrid } from './UnmatchedGrid'
-import { responseStudentToStudent, Student } from 'EditZing/Types/Student'
+import {
+  responseStudentToStudent,
+  responseTimestampsToDate,
+  Student,
+} from 'EditZing/Types/Student'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import {
@@ -89,12 +93,25 @@ export const EditZing = () => {
     }
   }
 
-  // Helper to convert the timestamps from the response into Dates
-  const responseTimestampsToDate = (timestamp: { [key: string]: string }) => {
-    return Object.fromEntries(
-      Object.entries(timestamp).map(([k, v], i) => [k, new Date(v)])
-    )
-  }
+  //Map for getting the names of templates based on ID for rendering tooltips
+  const [templateNameMap, setTemplateNameMap] = useState<{
+    [key: string]: string
+  }>({})
+  useEffect(() => {
+    axios
+      .get(`${API_ROOT}${EMAIL_PATH}/templates`)
+      .then((res: AxiosResponse<TemplateDataResponse>) => {
+        setTemplateNameMap(
+          Object.fromEntries(
+            res.data.data.map((template) => [template.id, template.name])
+          )
+        )
+      })
+      .catch((error) => {
+        console.error(error)
+        setShowError(true)
+      })
+  }, [courseId])
 
   const [unmatchedStudents, setUnmatchedStudents] = useState<Student[]>([])
   const [studentGroups, setStudentGroups] = useState<Group[]>([])
@@ -118,26 +135,6 @@ export const EditZing = () => {
           }))
         )
         setHasLoadedStudentData(true)
-      })
-      .catch((error) => {
-        console.error(error)
-        setShowError(true)
-      })
-  }, [courseId])
-
-  //Map for getting the names of templates based on ID for rendering tooltips
-  const [templateNameMap, setTemplateNameMap] = useState<{
-    [key: string]: string
-  }>({})
-  useEffect(() => {
-    axios
-      .get(`${API_ROOT}${EMAIL_PATH}/templates`)
-      .then((res: AxiosResponse<TemplateDataResponse>) => {
-        setTemplateNameMap(
-          Object.fromEntries(
-            res.data.data.map((template) => [template.id, template.name])
-          )
-        )
       })
       .catch((error) => {
         console.error(error)
@@ -466,6 +463,7 @@ export const EditZing = () => {
                 unmatchedStudents={unmatchedStudents}
                 moveStudent={moveStudent}
                 matchStudents={matchStudents}
+                templateMap={templateNameMap}
                 handleAddStudent={handleAddStudent}
                 updateNotes={updateNotes}
               />
@@ -477,8 +475,7 @@ export const EditZing = () => {
                 studentList={studentGroup.memberData}
                 groupNumber={studentGroup.groupNumber}
                 templateMap={templateNameMap}
-                groupTimestamps={studentGroup.templateTimestamps}
-                indivTimestamps={{}}
+                groupTimestamps = {studentGroup.templateTimestamps}
                 moveStudent={moveStudent}
                 createTime={studentGroup.createTime}
                 updateTime={studentGroup.updateTime}
