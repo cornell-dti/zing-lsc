@@ -11,7 +11,7 @@ import { CourseGrid } from 'Dashboard/Components/CourseGrid'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
-import { Box, SelectChangeEvent } from '@mui/material'
+import { Box, SelectChangeEvent, Popper } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { Course } from '@core/Types'
@@ -39,6 +39,15 @@ export const Dashboard = () => {
   }
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const [rostorAnchorEl, setRosterAnchorEl] = useState<null | HTMLElement>(null)
+  const openRoster = Boolean(rostorAnchorEl)
+  const handleRosterClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setRosterAnchorEl(rostorAnchorEl ? null : event.currentTarget)
+  }
+  const handleRosterClose = () => {
+    setRosterAnchorEl(null)
   }
 
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
@@ -161,6 +170,25 @@ export const Dashboard = () => {
             horizontal: 'right',
           }}
         >
+          <MenuItem sx={{ width: '100%', padding: '0', margin: '0' }}>
+            <Button
+              variant="text"
+              onClick={handleRosterClick}
+              disableRipple
+              sx={{
+                border: 'none',
+                padding: '5px 15px',
+                borderRadius: '0',
+                background: 'none',
+                color: '#000',
+                width: '100%',
+                fontWeight: '400',
+                fontSize: '16px',
+              }}
+            >
+              Change Roster
+            </Button>
+          </MenuItem>
           <MenuItem
             onClick={() => {
               handleClose()
@@ -169,6 +197,31 @@ export const Dashboard = () => {
           >
             Log Out
           </MenuItem>
+        </Menu>
+        <Menu
+          anchorEl={rostorAnchorEl}
+          open={openRoster}
+          onClick={handleRosterClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'center',
+            horizontal: 'right',
+          }}
+        >
+          <Box
+            sx={{
+              background: '#fff',
+              borderRadius: '8px',
+              boxShadow: '24px',
+            }}
+          >
+            <MenuItem onClick={handleRosterClose}>Summer 22</MenuItem>
+            <MenuItem onClick={handleRosterClose}>Spring 23 </MenuItem>
+            <MenuItem onClick={handleRosterClose}>Fall 22</MenuItem>
+          </Box>
         </Menu>
       </StyledHeaderMenu>
       <CourseGrid courses={sortedCourses} />
