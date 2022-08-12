@@ -159,7 +159,10 @@ export const Dashboard = () => {
   const sortedCourses = sorted(currentCourses, sortedOrder)
 
   useEffect(() => {
-    setCurrentCourses(courses)
+    const currentSemesterCourses = courses.filter(
+      (course) => course.roster === 'FA22'
+    )
+    setCurrentCourses(currentSemesterCourses)
   }, [courses])
 
   // useEffect(() => {
