@@ -278,10 +278,11 @@ theme = createTheme(theme, {
       },
       styleOverrides: {
         root: {
-          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
+          '& .MuiPaper-root': {
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
+          },
         },
         list: {
-          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
           '& .MuiMenuItem-root': {
             '&:hover': {
               backgroundColor: theme.palette.purple[16],
@@ -289,7 +290,6 @@ theme = createTheme(theme, {
           },
         },
         paper: {
-          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
           marginTop: '4px',
         },
       },
