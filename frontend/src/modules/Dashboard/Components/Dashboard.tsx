@@ -18,6 +18,8 @@ import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
 import { CSVLink } from 'react-csv'
 
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+
 type SortOrder =
   | 'newest-requests-first'
   | 'unmatchable-first'
@@ -81,6 +83,15 @@ export const Dashboard = () => {
         )
       : []
 
+  const [rostorAnchorEl, setRosterAnchorEl] = useState<null | HTMLElement>(null)
+  const openRoster = Boolean(rostorAnchorEl)
+  const handleRosterClick = (event: React.MouseEvent<HTMLElement>) => {
+    setRosterAnchorEl(event.currentTarget)
+  }
+  const handleRosterClose = () => {
+    setRosterAnchorEl(null)
+  }
+
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
   function sorted(courseInfo: Course[], menuValue: SortOrder) {
     switch (menuValue) {
@@ -134,7 +145,12 @@ export const Dashboard = () => {
     setSortedOrder(event.target.value as SortOrder)
   }
 
-  const sortedCourses = sorted(courses, sortedOrder)
+  const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
+
+  const sortedCourses = sorted(
+    courses.filter((course) => course.roster === selectedRoster),
+    sortedOrder
+  )
 
   return (
     <StyledContainer>
@@ -210,6 +226,10 @@ export const Dashboard = () => {
           >
             <MenuItem>Export CSV (Students)</MenuItem>
           </CSVLink>
+          <MenuItem onClick={handleRosterClick}>
+            <ChevronLeftIcon sx={{ color: 'essentials.75', ml: -1 }} />
+            Switch Semester
+          </MenuItem>
           <MenuItem
             onClick={() => {
               handleClose()
@@ -217,6 +237,35 @@ export const Dashboard = () => {
             }}
           >
             Log Out
+          </MenuItem>
+        </Menu>
+        <Menu
+          anchorEl={rostorAnchorEl}
+          open={openRoster}
+          onClick={handleRosterClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          sx={{
+            mt: -1.5,
+          }}
+        >
+          <MenuItem onClick={() => setSelectedRoster('SU22')}>
+            Summer 2022
+          </MenuItem>
+          <MenuItem onClick={() => setSelectedRoster('FA22')}>
+            Fall 2022
+          </MenuItem>
+          <MenuItem onClick={() => setSelectedRoster('WI22')}>
+            Winter 2022
+          </MenuItem>
+          <MenuItem onClick={() => setSelectedRoster('SP23')}>
+            Spring 2023
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>

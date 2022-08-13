@@ -277,6 +277,11 @@ theme = createTheme(theme, {
         },
       },
       styleOverrides: {
+        root: {
+          '& .MuiPaper-root': {
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
+          },
+        },
         list: {
           '& .MuiMenuItem-root': {
             '&:hover': {
