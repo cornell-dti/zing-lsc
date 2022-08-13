@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -8,14 +7,18 @@ import {
   StyledContainer,
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
-import { Groups } from 'Dashboard/Components/Groups'
-import { CourseInfo } from 'Dashboard/Types/CourseInfo'
-import { API_ROOT, COURSE_API } from '@core/Constants'
+import { CourseGrid } from 'Dashboard/Components/CourseGrid'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
-import { Box, CircularProgress, SelectChangeEvent } from '@mui/material'
+import { Box, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
+import { useCourseValue } from '@context/CourseContext'
+import { useStudentValue } from '@context/StudentContext'
+import { Course } from '@core/Types'
+import { CSVLink } from 'react-csv'
+
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 
 type SortOrder =
   | 'newest-requests-first'
@@ -26,6 +29,10 @@ type SortOrder =
   | 'classes-z-a'
 
 export const Dashboard = () => {
+  const { user } = useAuthValue()
+  const { courses } = useCourseValue()
+  const { students } = useStudentValue()
+
   const [sortedOrder, setSortedOrder] = useState<SortOrder>(
     'newest-requests-first'
   )
@@ -39,31 +46,62 @@ export const Dashboard = () => {
     setAnchorEl(null)
   }
 
-  const [courses, setCourses] = useState<CourseInfo[]>([])
-  const [hasLoadedCourseData, setHasLoadedCourseData] = useState(false)
+  const csvCourses = courses.map((course) => ({
+    semester: course.roster,
+    course: course.names.join('/'),
+  }))
 
-  const { user, displayNetworkError } = useAuthValue()
-
-  useEffect(() => {
-    axios.get(`${API_ROOT}${COURSE_API}`).then(
-      (res) => {
-        setCourses(
-          res.data.data.map((course: any) => ({
-            ...course,
-            latestSubmissionTime: new Date(course.latestSubmissionTime),
-          }))
-        )
-        setHasLoadedCourseData(true)
-      },
-      (error) => displayNetworkError(error.message)
-    )
-    return () => {
-      setAnchorEl(null) // clean state for anchorEl on unmount
+  //this can be removed if there is a place to store an objectMap() function
+  const localeMap = (obj: { [key: string]: Date } | undefined) => {
+    if (!obj) {
+      return undefined
     }
-  }, [displayNetworkError])
+    return Object.fromEntries(
+      Object.entries(obj).map(([k, v]) => [k, v.toLocaleString()])
+    )
+  }
+
+  const csvStudents =
+    courses.length && students.length // Just making sure this isn't calculated until the data is available
+      ? students.flatMap((student) =>
+          student.groups.map((membership) => {
+            const course = courses.find(
+              (c) => c.courseId === membership.courseId
+            )!
+            const group = course.groups.find(
+              // undefined if student is unmatched
+              (g) => g.groupNumber === membership.groupNumber
+            )
+            return {
+              semester: course.roster,
+              dateRequested: membership.submissionTime.toLocaleString(),
+              cornellEmail: student.email,
+              name: student.name,
+              college: student.college,
+              year: student.year,
+              course: course.names.join('/'),
+              groupNumber:
+                membership.groupNumber !== -1
+                  ? `${course.names.join('/')}_${membership.groupNumber}`
+                  : undefined,
+              dateTemplateEmails: localeMap(group?.templateTimestamps),
+              notes: membership.notes,
+            }
+          })
+        )
+      : []
+
+  const [rostorAnchorEl, setRosterAnchorEl] = useState<null | HTMLElement>(null)
+  const openRoster = Boolean(rostorAnchorEl)
+  const handleRosterClick = (event: React.MouseEvent<HTMLElement>) => {
+    setRosterAnchorEl(event.currentTarget)
+  }
+  const handleRosterClose = () => {
+    setRosterAnchorEl(null)
+  }
 
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
-  function sorted(courseInfo: CourseInfo[], menuValue: SortOrder) {
+  function sorted(courseInfo: Course[], menuValue: SortOrder) {
     switch (menuValue) {
       case 'newest-requests-first':
         return [...courseInfo].sort(
@@ -115,7 +153,12 @@ export const Dashboard = () => {
     setSortedOrder(event.target.value as SortOrder)
   }
 
-  const sortedCourses = sorted(courses, sortedOrder)
+  const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
+
+  const sortedCourses = sorted(
+    courses.filter((course) => course.roster === selectedRoster),
+    sortedOrder
+  )
 
   return (
     <StyledContainer>
@@ -182,6 +225,19 @@ export const Dashboard = () => {
             horizontal: 'right',
           }}
         >
+          <CSVLink data={csvCourses} filename={`export-courses-${Date.now()}`}>
+            <MenuItem>Export CSV (Courses)</MenuItem>
+          </CSVLink>
+          <CSVLink
+            data={csvStudents}
+            filename={`export-students-${Date.now()}`}
+          >
+            <MenuItem>Export CSV (Students)</MenuItem>
+          </CSVLink>
+          <MenuItem onClick={handleRosterClick}>
+            <ChevronLeftIcon sx={{ color: 'essentials.75', ml: -1 }} />
+            Switch Semester
+          </MenuItem>
           <MenuItem
             onClick={() => {
               handleClose()
@@ -191,14 +247,37 @@ export const Dashboard = () => {
             Log Out
           </MenuItem>
         </Menu>
+        <Menu
+          anchorEl={rostorAnchorEl}
+          open={openRoster}
+          onClick={handleRosterClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          sx={{
+            mt: -1.5,
+          }}
+        >
+          <MenuItem onClick={() => setSelectedRoster('SU22')}>
+            Summer 2022
+          </MenuItem>
+          <MenuItem onClick={() => setSelectedRoster('FA22')}>
+            Fall 2022
+          </MenuItem>
+          <MenuItem onClick={() => setSelectedRoster('WI22')}>
+            Winter 2022
+          </MenuItem>
+          <MenuItem onClick={() => setSelectedRoster('SP23')}>
+            Spring 2023
+          </MenuItem>
+        </Menu>
       </StyledHeaderMenu>
-      {hasLoadedCourseData ? (
-        <Groups groups={sortedCourses} />
-      ) : (
-        <Box display="flex" justifyContent="center" padding={4}>
-          <CircularProgress size={50} />
-        </Box>
-      )}
+      <CourseGrid courses={sortedCourses} />
     </StyledContainer>
   )
 }

@@ -20,7 +20,7 @@ import axios from 'axios'
 import { API_ROOT, STUDENT_API } from '@core/Constants'
 import CircleIcon from '@mui/icons-material/Circle'
 
-import { Student } from 'EditZing/Types/Student'
+import { Student } from '@core/Types'
 
 /** the equivalent of MoveableItem */
 const StudentCard = ({
@@ -88,7 +88,6 @@ const StudentCard = ({
   const submissionTime = student.groups.find(
     (groupMembership) => groupMembership.courseId === courseId
   )!.submissionTime
-
 
   const formatTooltipData = (timestamps: { [key: string]: Date }) => {
     return (
@@ -187,8 +186,8 @@ const StudentCard = ({
                     fontWeight: '800',
                     fontSize: '0.875rem',
                     wordBreak: 'break-word',
-                    display:'inline',
-                    marginRight: "0.5rem"
+                    display: 'inline',
+                    marginRight: '0.5rem',
                   }}
                 >
                   {student.name}

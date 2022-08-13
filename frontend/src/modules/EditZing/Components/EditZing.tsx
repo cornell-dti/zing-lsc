@@ -4,9 +4,9 @@ import GroupCard from 'EditZing/Components/GroupCard'
 import { UnmatchedGrid } from './UnmatchedGrid'
 import {
   responseStudentToStudent,
-  responseTimestampsToDate,
   Student,
-} from 'EditZing/Types/Student'
+  responseTimestampsToDate,
+} from '@core/Types'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import {

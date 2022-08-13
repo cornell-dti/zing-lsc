@@ -5,6 +5,28 @@ type Timestamp = admin.firestore.Timestamp
 // For now this exists in the backend folder only
 // Future: become a cool monorepo and have shared types backend/frontend
 
+/** Course */
+export type Course = {
+  names: string[]
+  roster: string
+  courseNumber: string
+  courseId: string // Computed as {roster}-{courseNumber}
+  unmatched: string[]
+  groups: Group[]
+  lastGroupNumber: number
+  latestSubmissionTime: Date
+}
+
+/** Group of students in a class */
+export type Group = {
+  groupNumber: number
+  members: string[]
+  createTime: Date
+  updateTime: Date
+  // TODO replace the below with the new template timestamps
+  templateTimestamps: { [key: string]: Date }
+}
+
 /** Student data. This is not exactly how it's stored in the database, since
  *  email is the document ID but not actually in the doc. Don't write to db */
 export type Student = {
@@ -33,6 +55,16 @@ export type EmailTemplate = {
   subject: string
   body: string
   modifyTime: Date
+}
+
+/** How courses are stored in the database */
+export type FirestoreCourse = {
+  names: string[]
+  roster: string
+  courseNumber: string
+  unmatched: string[]
+  lastGroupNumber: number
+  latestSubmissionTime: Timestamp
 }
 
 /** How student data is stored in the database */

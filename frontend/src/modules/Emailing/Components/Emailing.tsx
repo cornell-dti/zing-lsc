@@ -167,27 +167,20 @@ export const sendEmail = async (emailItems: any) => {
       template: selectedTemplate,
       authToken: msAuthToken,
     },
-  }).then(async (res) => {
+  }).then((res) => {
     // 4. reading response for success or failure
     console.log(res)
-    if (res.data === 'Email send success.') {
+    if (res.data.success === true) {
       emailSent = true
     } else {
       // handle error
       emailSent = false
       console.log('Email send error. Please try again.')
-      console.log(res)
+      console.log(res.data)
       throw new Error(`API call to send email failed.`)
-
-      /* firebase login requires user action (ie. press button) will throw error 
-          if we try to call it straight up. 
-          
-          option1: 
-          set email send error to true 
-          frontend: if (err) { render try again button onClick => { adminLogin().then(sendEmail())} } */
     }
   })
 
-  // bool true if succ false if fail
+  // bool true if succ false if fail (just a current safeguard return for now, should be handled by a try catch)
   return emailSent
 }

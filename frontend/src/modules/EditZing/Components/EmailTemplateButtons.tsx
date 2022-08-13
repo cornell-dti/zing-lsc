@@ -1,21 +1,22 @@
 import { Box, Typography } from '@mui/material'
 import { RadioButtons } from '@core/Components'
-import { TemplateName } from 'EditZing/utils/emailTemplates'
 import { TemplateRadioButtonsProps } from 'EditZing/Types/ComponentProps'
 
 export const EmailTemplateButtons = ({
+  templates,
   selectedTemplate,
   setSelectedTemplate,
 }: TemplateRadioButtonsProps) => {
-  // we could include all, but designers advise to limit it to just these few for now
-  const activeTemplates = [
-    TemplateName.MATCHED,
-    TemplateName.CHECK_IN,
-    TemplateName.ADD_STUDENT,
-  ]
+  // labels and values fot the radio button
+  const templateNames = templates.map((template) => template.name)
+  const templateIds = templates.map((template) => template.id)
 
+  // changing the selected email template
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedTemplate(event.target.value as TemplateName)
+    const newSelection = event.target.value
+    setSelectedTemplate(
+      templates.find((template) => template.id === newSelection)!
+    )
   }
 
   return (
@@ -30,9 +31,10 @@ export const EmailTemplateButtons = ({
         Use an existing template:
       </Typography>
       <RadioButtons
-        values={activeTemplates}
+        labels={templateNames}
+        values={templateIds}
         onClick={handleChange}
-        currentAnswer={selectedTemplate}
+        currentAnswer={selectedTemplate.id}
       />
     </Box>
   )

@@ -1,6 +1,7 @@
 import { db } from '../config'
 import { getStudentsData } from '../student/functions'
 import admin from 'firebase-admin'
+import { Course, FirestoreCourse, FirestoreGroup } from '../types'
 const courseRef = db.collection('courses')
 
 async function getCourseInfo(courseId: string) {
@@ -11,14 +12,26 @@ async function getCourseInfo(courseId: string) {
   return result
 }
 
-async function getAllCourses() {
-  const snapshot = await courseRef.get()
-  return snapshot.docs.map((doc) => {
-    const obj = doc.data()
-    obj.courseId = doc.id
-    obj.latestSubmissionTime = obj.latestSubmissionTime.toDate()
-    return obj
-  })
+export const getAllCourses = async (): Promise<Course[]> => {
+  const courseCollection = await courseRef.get()
+  return Promise.all(
+    courseCollection.docs.map(async (courseDoc) => {
+      const courseData = courseDoc.data() as FirestoreCourse
+      return {
+        ...courseData,
+        courseId: courseDoc.id,
+        latestSubmissionTime: courseData.latestSubmissionTime.toDate(),
+        groups: (await courseDoc.ref.collection('groups').get()).docs
+          .map((groupDoc) => groupDoc.data() as FirestoreGroup)
+          .map((groupData) => ({
+            ...groupData,
+            createTime: groupData.createTime.toDate(),
+            updateTime: groupData.updateTime.toDate(),
+            templateTimestamps: mapDate(groupData.templateTimestamps),
+          })),
+      }
+    })
+  )
 }
 
 /**
@@ -49,13 +62,6 @@ async function getStudentsForCourse(courseId: string) {
     data.map((group) => getStudentsData(group.members))
   )
 
-  const a = groupStudentDataRaw
-    .flat(1)
-    .map((student) => student.groups)
-    .flat(1)
-    .map((s) => s.templateTimestamps)
-  console.log(a)
-
   const groupStudentData = groupStudentDataRaw.map((groupData, index) => ({
     memberData: groupData,
     groupNumber: data[index].groupNumber,
@@ -70,4 +76,4 @@ async function getStudentsForCourse(courseId: string) {
   }
 }
 
-export { getCourseInfo, getAllCourses, getStudentsForCourse }
+export { getCourseInfo, getStudentsForCourse }

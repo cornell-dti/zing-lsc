@@ -10,8 +10,27 @@ import { FirestoreStudent, Student } from '../types'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
 
+/** Get all students in the student collection */
+export const getAllStudents = async (): Promise<Student[]> => {
+  const studentCollection = await studentRef.get()
+  return studentCollection.docs.map((studentDoc) => {
+    const email = studentDoc.id
+    const studentData = studentDoc.data() as FirestoreStudent
+    return {
+      ...studentData,
+      email,
+      groups: studentData.groups.map((group) => ({
+        ...group,
+        notesModifyTime: group.notesModifyTime.toDate(),
+        submissionTime: group.submissionTime.toDate(),
+        templateTimestamps: mapDate(group.templateTimestamps),
+      })),
+    }
+  })
+}
+
 /** Get student data as Student type (with email and timestamps as Date) */
-export const getStudentData = async (email: string) => {
+export const getStudentData = async (email: string): Promise<Student> => {
   const studentDoc = await studentRef.doc(email).get()
   if (!studentDoc.exists) {
     throw new Error(`Student document for ${email} does not exist`)
@@ -26,7 +45,7 @@ export const getStudentData = async (email: string) => {
       submissionTime: group.submissionTime.toDate(),
       templateTimestamps: mapDate(group.templateTimestamps),
     })),
-  } as Student
+  }
 }
 
 /** Get multiple student data as Student type (email + timestamps as Date) */
@@ -63,7 +82,7 @@ export const addStudentSurveyResponse = async (
   year: string,
   courseCatalogNames: string[]
 ) => {
-  const roster = 'SU22' // Summer 2022 for LSC launch
+  const roster = 'FA22' // Fall 2022
 
   // 0. Check if email is valid cornell.edu email.
   const emailRegex = /^\w+@cornell.edu$/

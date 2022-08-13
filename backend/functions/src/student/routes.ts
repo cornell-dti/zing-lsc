@@ -6,9 +6,19 @@ const router = Router()
 
 import {
   addStudentSurveyResponse,
+  getAllStudents,
   removeStudent,
   updateStudentNotes,
 } from './functions'
+
+router.get('/', (_, res) => {
+  getAllStudents()
+    .then((data) => res.status(200).send(data))
+    .catch((err) => {
+      logger.error(`Unexpected error getting all students: ${err.message}`)
+      res.status(500).send({ message: err.message })
+    })
+})
 
 router.post('/survey', (req, res) => {
   const { name, email, college, year, courseCatalogNames } = req.body

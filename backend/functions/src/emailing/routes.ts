@@ -1,9 +1,11 @@
 import express from 'express'
 import { logger } from 'firebase-functions'
 import {
+  addEmailTemplate,
   getEmailTemplates,
   sendStudentEmails,
   updateGroupTimestamp,
+  updateEmailTemplate,
 } from './functions'
 
 const router = express()
@@ -84,8 +86,40 @@ router.get('/templates', (req, res) => {
   getEmailTemplates()
     .then((data) => res.status(200).send({ success: true, data }))
     .catch((err) => {
-      logger.error(`Unexpected error getting email templates: ${err.message}`)
+      logger.error(`Error getting email templates: ${err.message}`)
       res.status(500).send({ success: false, err: err.message })
+    })
+})
+
+/** Update information for an already existing email template */
+router.post('/templates/update', (req, res) => {
+  const { id, name, type, subject } = req.body
+  updateEmailTemplate(id, name, type, subject)
+    .then(() => res.status(200).send({ success: true }))
+    .catch((err) => {
+      const code =
+        err.message.includes('Unrecognized email type') ||
+        err.message.includes('No email template with id')
+          ? 400
+          : 500
+      if (code !== 400) {
+        logger.error(`Error updating email template ${id}: ${err.message}`)
+      }
+      res.status(code).send({ success: false, err: err.message })
+    })
+})
+
+/** Add a new template and get its automatically generated id */
+router.post('/templates/add', (req, res) => {
+  const { name, type, subject } = req.body
+  addEmailTemplate(name, type, subject)
+    .then((id) => res.status(200).send({ success: true, data: id }))
+    .catch((err) => {
+      const code = err.message.includes('Unrecognized email type') ? 400 : 500
+      if (code !== 400) {
+        logger.error(`Error adding email template ${err.message}`)
+      }
+      res.status(code).send({ success: false, err: err.message })
     })
 })
 
