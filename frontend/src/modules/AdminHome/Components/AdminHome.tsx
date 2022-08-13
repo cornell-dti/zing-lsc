@@ -1,10 +1,9 @@
 import { StyledBackground } from 'Home/Styles/Home.style'
+import { adminSignIn } from '@fire'
 import { Box, Button, Typography } from '@mui/material'
 import matchimg from '@assets/img/matching.svg'
-import { Link } from 'react-router-dom'
-import { SURVEY_PATH } from '@core/Constants'
 
-export const Home = () => {
+export const AdminHome = () => {
   return (
     <StyledBackground>
       <Box
@@ -42,17 +41,18 @@ export const Home = () => {
           Create groups.
         </Typography>
         <Button
+          color="secondary"
           variant="outlined"
-          component={Link}
-          to={SURVEY_PATH}
-          color="primary"
           sx={{
             width: '14em',
             fontSize: '22px',
             mb: '1.25em',
           }}
+          onClick={() => {
+            adminSignIn().catch(() => {})
+          }}
         >
-          I'm a Student
+          LSC Admin Login
         </Button>
       </Box>
       <Box
@@ -69,7 +69,11 @@ export const Home = () => {
           marginLeft: '5rem',
         }}
       >
-        <Box sx={{ mt: '12rem' }}>
+        <Box
+          sx={{
+            mt: '12rem',
+          }}
+        >
           <img src={matchimg} alt="matching" width="65%" />
         </Box>
       </Box>
