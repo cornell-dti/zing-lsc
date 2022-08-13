@@ -26,6 +26,7 @@ import {
   Typography,
   Snackbar,
   Alert,
+  IconButton,
 } from '@mui/material'
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
@@ -392,7 +393,17 @@ export const EditZing = () => {
           borderBottomColor: 'essentials.12',
         }}
       >
-        <LscIcon sx={{ height: '50px', width: '50px' }} />
+        <IconButton
+          color="secondary"
+          href="/dashboard"
+          sx={{
+            border: 'none',
+          }}
+          disableRipple
+          disableFocusRipple
+        >
+          <LscIcon sx={{ height: '50px', width: '50px' }} />
+        </IconButton>
         <Typography variant="h4" component="h1">
           {courseInfo.names.join(', ')} ({courseInfo.roster})
         </Typography>
