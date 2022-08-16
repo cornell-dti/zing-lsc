@@ -4,6 +4,8 @@ import matchimg from '@assets/img/matching.svg'
 import { Link } from 'react-router-dom'
 import { SURVEY_PATH } from '@core/Constants'
 
+import { ReactComponent as CornellSeal } from '@assets/img/CornellSealWhite.svg'
+
 export const Home = () => {
   return (
     <StyledBackground>
@@ -15,28 +17,46 @@ export const Home = () => {
           height: '100%',
           width: {
             xs: '100%',
-            md: '50%',
+            md: '70%',
           },
           alignItems: 'left',
-          margin: '0 3rem',
+          padding: '0 2rem',
         }}
       >
-        <Typography
-          variant="h4"
-          component="h1"
-          fontWeight={'500'}
+        <Box
           sx={{
-            color: 'white',
-            width: '100%',
-            fontFamily: 'palatino-roman',
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            gap: '1rem',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
-          <em>The</em> Learning Strategies Center
-        </Typography>
+          <Box
+            sx={{
+              width: '100%',
+              maxWidth: '50px',
+            }}
+          >
+            <CornellSeal />
+          </Box>
+
+          <Typography
+            variant="h4"
+            component="h1"
+            fontWeight={'500'}
+            sx={{
+              color: 'white',
+              width: '100%',
+            }}
+          >
+            Cornell Learning Strategies Center
+          </Typography>
+        </Box>
         <Typography
           variant="h2"
           fontWeight={'600'}
-          sx={{ mb: '3rem', color: 'white', fontSize: '3.25rem' }}
+          sx={{ mb: '3rem', color: 'white', fontSize: '2.75rem' }}
         >
           Connect students. <br />
           Create groups.
@@ -52,7 +72,7 @@ export const Home = () => {
             mb: '1.25em',
           }}
         >
-          I'm a Student
+          I'm a Cornell Student
         </Button>
       </Box>
       <Box
@@ -64,13 +84,13 @@ export const Home = () => {
           flexFlow: 'column nowrap',
           justifyContent: 'center',
           height: '100%',
-          width: '50%',
+          width: '30%',
           alignItems: 'left',
-          marginLeft: '5rem',
+          margin: '0 2rem',
         }}
       >
         <Box sx={{ mt: '12rem' }}>
-          <img src={matchimg} alt="matching" width="65%" />
+          <img src={matchimg} alt="matching" width="90%" />
         </Box>
       </Box>
     </StyledBackground>
