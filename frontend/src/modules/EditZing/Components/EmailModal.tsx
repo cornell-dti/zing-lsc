@@ -103,8 +103,8 @@ export const EmailModal = ({
           emailRcpts,
           emailBody: selectedTemplate?.html,
           courseId,
-          groupNum: -1,
-          selectedTemplate,
+          groupNum: undefined,
+          selectedTemplate: selectedTemplate?.id,
         }
         return sendEmail(emailItems)
       })
@@ -128,7 +128,7 @@ export const EmailModal = ({
           emailBody: selectedTemplate?.html,
           courseId,
           groupNum,
-          selectedTemplate,
+          selectedTemplate: selectedTemplate?.id,
         }
         return sendEmail(emailItems)
       })

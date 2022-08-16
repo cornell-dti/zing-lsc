@@ -84,7 +84,7 @@ export const Dashboard = () => {
                 membership.groupNumber !== -1
                   ? `${course.names.join('/')}_${membership.groupNumber}`
                   : undefined,
-              dateTemplateEmails: localeMap(group?.templateTimestamps),
+              ...localeMap(group?.templateTimestamps),
               notes: membership.notes,
             }
           })
