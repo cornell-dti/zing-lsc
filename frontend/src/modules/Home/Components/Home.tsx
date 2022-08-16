@@ -20,7 +20,7 @@ export const Home = () => {
             md: '70%',
           },
           alignItems: 'left',
-          padding: '0 2rem',
+          padding: '0 0 0 4rem',
         }}
       >
         <Box
@@ -86,7 +86,6 @@ export const Home = () => {
           height: '100%',
           width: '30%',
           alignItems: 'left',
-          margin: '0 2rem',
         }}
       >
         <Box sx={{ mt: '12rem' }}>
