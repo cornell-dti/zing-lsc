@@ -77,18 +77,6 @@ export const EmailModal = ({
   // ======= Send Email Helper Functions =======
 
   /**
-   *
-   * @param group object
-   * @returns the student emails for a given group in a string array.
-   */
-  const groupEmails = (group: any) => {
-    return [
-      'lscstudypartners@cornell.edu',
-      ...group.memberData.map((mem: any) => mem.email),
-    ]
-  }
-
-  /**
    * promise that sends emails to each individual student.
    *
    * @throws error if there are any errors in sending the email
