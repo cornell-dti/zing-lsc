@@ -96,7 +96,7 @@ export const EmailModal = ({
   const sendIndividualEmails = async () => {
     await Promise.all(
       selectedStudents.map((student: string) => {
-        const emailRcpts = [student, 'lscstudypartners@cornell.edu']
+        const emailRcpts = student
         const emailSubject = selectedTemplate?.subject
         const emailItems = {
           emailSubject,
@@ -119,12 +119,11 @@ export const EmailModal = ({
   const sendGroupEmails = async () => {
     await Promise.all(
       selectedGroups.map((group) => {
-        const emailRcpts = groupEmails(group)
         const emailSubject = selectedTemplate?.subject
         const groupNum = group.groupNumber.toString()
         const emailItems = {
           emailSubject,
-          emailRcpts,
+          emailRcpts: undefined,
           emailBody: selectedTemplate?.html,
           courseId,
           groupNum,

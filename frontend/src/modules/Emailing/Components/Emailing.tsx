@@ -161,7 +161,7 @@ export const sendEmail = async (emailItems: any) => {
       emailAddress: email,
       emailBody: emailBody,
       emailSubject: emailSubject,
-      emailRcpts: emailRcpts,
+      indivEmail: emailRcpts,
       courseId: courseId,
       group: groupNum,
       template: selectedTemplate,
