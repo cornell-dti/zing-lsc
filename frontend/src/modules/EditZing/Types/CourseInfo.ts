@@ -7,11 +7,6 @@ export interface CourseInfo {
   unmatched: string[]
 }
 
-export interface Timestamp {
-  template: string
-  timestamp: Date
-}
-
 export interface Group {
   groupNumber: number
   memberData: Student[]
@@ -39,16 +34,4 @@ export interface CourseStudentDataResponse {
     unmatched: ResponseStudent[]
     groups: ResponseGroup[]
   }
-}
-
-export type TemplateDataResponse = {
-  success: boolean
-  data: {
-    id: string
-    name: string
-    type: 'group' | 'student'
-    subject: string
-    body: string
-    modifyTime: Date
-  }[]
 }

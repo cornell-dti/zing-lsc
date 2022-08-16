@@ -105,6 +105,7 @@ async function makeMatches(courseId: string) {
       memberData: newGroup,
       createTime: new Date(),
       updateTime: new Date(),
+      templateTimestamps: {},
     })
   }
   for (let i = 0; i < studentDataDoubles.length; i += 2) {
@@ -115,6 +116,7 @@ async function makeMatches(courseId: string) {
       memberData: newGroup,
       createTime: new Date(),
       updateTime: new Date(),
+      templateTimestamps: {},
     })
   }
 

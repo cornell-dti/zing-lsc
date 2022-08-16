@@ -6,6 +6,7 @@ import {
   responseStudentToStudent,
   Student,
   responseTimestampsToDate,
+  EmailTemplatesResponse,
 } from '@core/Types'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -15,7 +16,6 @@ import {
   CourseStudentDataResponse,
   Group,
   ResponseGroup,
-  TemplateDataResponse,
 } from 'EditZing/Types/CourseInfo'
 import { API_ROOT, COURSE_API, MATCHING_API, EMAIL_PATH } from '@core/Constants'
 import { useParams } from 'react-router-dom'
@@ -99,7 +99,7 @@ export const EditZing = () => {
   useEffect(() => {
     axios
       .get(`${API_ROOT}${EMAIL_PATH}/templates`)
-      .then((res: AxiosResponse<TemplateDataResponse>) => {
+      .then((res: AxiosResponse<EmailTemplatesResponse>) => {
         setTemplateNameMap(
           Object.fromEntries(
             res.data.data.map((template) => [template.id, template.name])

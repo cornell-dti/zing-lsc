@@ -23,7 +23,6 @@ export type Group = {
   members: string[]
   createTime: Date
   updateTime: Date
-  // TODO replace the below with the new template timestamps
   templateTimestamps: { [key: string]: Date }
 }
 

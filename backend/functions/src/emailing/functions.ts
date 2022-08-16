@@ -210,51 +210,47 @@ const sendMails = async (
     throw new Error('Both group and individual email are specified')
   }
 
-  try {
-    const response = await axios({
-      url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
-      // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + authToken,
-        'Content-Type': 'application/json',
-      },
-      data: JSON.stringify(message),
-    })
+  const response = await axios({
+    url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
+    // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + authToken,
+      'Content-Type': 'application/json',
+    },
+    data: JSON.stringify(message),
+  })
 
-    if (response.status === 202) {
-      if (group && parseInt(group) > 0) {
-        await updateGroupTimestamp(courseId, group, template)
-          .then(() =>
-            logger.info(
-              `Added timestamp for course ${courseId} for group ${group} with template ${template}`
-            )
+  if (response.status === 202) {
+    if (group && parseInt(group) > 0) {
+      await updateGroupTimestamp(courseId, group, template)
+        .then(() =>
+          logger.info(
+            `Added timestamp for course ${courseId} for group ${group} with template ${template}`
           )
-          .catch((err) =>
-            logger.error(
-              `Failed to update timestamp for course ${courseId} for group ${group} with template ${template}. Resulted in err: ${err.message} `
-            )
+        )
+        .catch((err) =>
+          logger.error(
+            `Failed to update timestamp for course ${courseId} for group ${group} with template ${template}. Resulted in err: ${err.message} `
           )
-      }
-
-      if (indivEmail) {
-        await updateIndivTimestamp(courseId, indivEmail, template)
-          .then(() =>
-            logger.info(
-              `Added ${template} timestamp for course ${courseId} for student with email ${indivEmail}`
-            )
-          )
-          .catch((err) =>
-            logger.error(
-              `Failed to update ${template} timestamp for student with email ${indivEmail} for course ${courseId}. Resulted in err: ${err.message} `
-            )
-          )
-      }
+        )
     }
-    return response.status
-  } catch (error) {
-    throw error
+
+    if (indivEmail) {
+      await updateIndivTimestamp(courseId, indivEmail, template)
+        .then(() =>
+          logger.info(
+            `Added ${template} timestamp for course ${courseId} for student with email ${indivEmail}`
+          )
+        )
+        .catch((err) =>
+          logger.error(
+            `Failed to update ${template} timestamp for student with email ${indivEmail} for course ${courseId}. Resulted in err: ${err.message} `
+          )
+        )
+    }
   }
+  return response.status
 }
 
 /**
