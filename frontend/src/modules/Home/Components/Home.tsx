@@ -35,7 +35,7 @@ export const Home = () => {
           <Box
             sx={{
               width: '100%',
-              maxWidth: '50px',
+              maxWidth: '73px',
             }}
           >
             <CornellSeal />
@@ -65,7 +65,7 @@ export const Home = () => {
           variant="outlined"
           component={Link}
           to={SURVEY_PATH}
-          color="primary"
+          color="secondary"
           sx={{
             width: '14em',
             fontSize: '22px',

@@ -34,7 +34,7 @@ export const AdminHome = () => {
           <Box
             sx={{
               width: '100%',
-              maxWidth: '50px',
+              maxWidth: '73px',
             }}
           >
             <CornellSeal />
@@ -55,7 +55,7 @@ export const AdminHome = () => {
         <Typography
           variant="h2"
           fontWeight={'600'}
-          sx={{ mb: '3rem', color: 'white', fontSize: '3.25rem' }}
+          sx={{ mb: '3rem', color: 'white', fontSize: '2.75rem' }}
         >
           Connect students. <br />
           Create groups.

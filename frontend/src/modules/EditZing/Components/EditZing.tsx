@@ -13,7 +13,7 @@ import {
   ResponseGroup,
 } from 'EditZing/Types/CourseInfo'
 import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { EmailModal } from 'EditZing/Components/EmailModal'
 import { MatchLoading } from './MatchLoading'
 import {
@@ -31,6 +31,8 @@ import {
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 import { useAuthValue } from '@auth/AuthContext'
+
+import { DASHBOARD_PATH } from '@core/Constants'
 
 const LscIcon = (props: SvgIconProps) => {
   return <SvgIcon inheritViewBox component={Lsc} {...props} />
@@ -395,7 +397,8 @@ export const EditZing = () => {
       >
         <IconButton
           color="secondary"
-          href="/dashboard"
+          component={Link}
+          to={DASHBOARD_PATH}
           sx={{
             border: 'none',
           }}
