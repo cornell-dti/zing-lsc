@@ -312,6 +312,7 @@ export const sendStudentEmails = async (
       logger.error(
         `Email send request failed from ${from} to ${emailRcpts.toString()}`
       )
+      logger.error(err.message)
       throw err
     })
 }
