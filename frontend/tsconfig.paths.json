@@ -11,6 +11,8 @@
       "@core/*": ["src/modules/Core/*"],
       "@fire": ["src/firebase/"],
       "@fire/*": ["src/firebase/*"],
+      "AdminHome": ["src/modules/AdminHome/"],
+      "AdminHome/*": ["src/modules/AdminHome/*"],
       "Home": ["src/modules/Home/"],
       "Home/*": ["src/modules/Home/*"],
       "CreateZing": ["src/modules/CreateZing/"],

@@ -10,6 +10,7 @@ module.exports = override(
     ['@auth']: path.resolve(__dirname, './src/auth'),
     ['@context']: path.resolve(__dirname, './src/context'),
     ['Home']: path.resolve(__dirname, './src/modules/Home'),
+    ['AdminHome']: path.resolve(__dirname, './src/modules/AdminHome'),
     ['EditZing']: path.resolve(__dirname, './src/modules/EditZing'),
     ['Login']: path.resolve(__dirname, './src/modules/Login'),
     ['Signup']: path.resolve(__dirname, './src/modules/Signup'),
