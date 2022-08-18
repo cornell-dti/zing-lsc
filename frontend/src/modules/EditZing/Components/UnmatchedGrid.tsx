@@ -18,6 +18,7 @@ export const UnmatchedGrid = ({
   moveStudent,
   matchStudents,
   handleAddStudent,
+  templateMap,
   updateNotes,
 }: UnmatchedGridProps) => {
   const [{ isOver }, drop] = useDrop({
@@ -51,6 +52,7 @@ export const UnmatchedGrid = ({
               groupNumber={-1}
               student={student}
               xsSize={xsSize}
+              templateMap= {templateMap}
               handleAddStudent={handleAddStudent}
               updateNotes={updateNotes}
             />

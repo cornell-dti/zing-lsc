@@ -77,18 +77,6 @@ export const EmailModal = ({
   // ======= Send Email Helper Functions =======
 
   /**
-   *
-   * @param group object
-   * @returns the student emails for a given group in a string array.
-   */
-  const groupEmails = (group: any) => {
-    return [
-      'lscstudypartners@cornell.edu',
-      ...group.memberData.map((mem: any) => mem.email),
-    ]
-  }
-
-  /**
    * promise that sends emails to each individual student.
    *
    * @throws error if there are any errors in sending the email
@@ -96,15 +84,15 @@ export const EmailModal = ({
   const sendIndividualEmails = async () => {
     await Promise.all(
       selectedStudents.map((student: string) => {
-        const emailRcpts = [student, 'lscstudypartners@cornell.edu']
+        const indivEmail = student
         const emailSubject = selectedTemplate?.subject
         const emailItems = {
           emailSubject,
-          emailRcpts,
+          indivEmail,
           emailBody: selectedTemplate?.html,
           courseId,
-          groupNum: -1,
-          selectedTemplate,
+          groupNum: undefined,
+          selectedTemplate: selectedTemplate?.id,
         }
         return sendEmail(emailItems)
       })
@@ -119,16 +107,15 @@ export const EmailModal = ({
   const sendGroupEmails = async () => {
     await Promise.all(
       selectedGroups.map((group) => {
-        const emailRcpts = groupEmails(group)
         const emailSubject = selectedTemplate?.subject
         const groupNum = group.groupNumber.toString()
         const emailItems = {
           emailSubject,
-          emailRcpts,
+          indivEmail: undefined,
           emailBody: selectedTemplate?.html,
           courseId,
           groupNum,
-          selectedTemplate,
+          selectedTemplate: selectedTemplate?.id,
         }
         return sendEmail(emailItems)
       })

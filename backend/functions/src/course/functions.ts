@@ -1,5 +1,6 @@
 import { db } from '../config'
 import { getStudentsData } from '../student/functions'
+import admin from 'firebase-admin'
 import { Course, FirestoreCourse, FirestoreGroup } from '../types'
 const courseRef = db.collection('courses')
 
@@ -26,15 +27,21 @@ export const getAllCourses = async (): Promise<Course[]> => {
             ...groupData,
             createTime: groupData.createTime.toDate(),
             updateTime: groupData.updateTime.toDate(),
-            addStudentEmailTimestamp:
-              groupData.addStudentEmailTimestamp?.toDate() || null,
-            checkInEmailTimestamp:
-              groupData.checkInEmailTimestamp?.toDate() || null,
-            shareMatchEmailTimestamp:
-              groupData.shareMatchEmailTimestamp?.toDate() || null,
+            templateTimestamps: mapDate(groupData.templateTimestamps),
           })),
       }
     })
+  )
+}
+
+/**
+ * Helper function to convert all timestamps in a templateTimestamps object into Dates
+ * @param obj the templateTimestamps object containing templateId : timestamp pairs
+ * @returns obj with all timestamps converted into Date objects
+ */
+export function mapDate(obj: { [key: string]: admin.firestore.Timestamp }) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([k, v]) => [k, v.toDate()])
   )
 }
 
@@ -60,15 +67,7 @@ async function getStudentsForCourse(courseId: string) {
     groupNumber: data[index].groupNumber,
     createTime: data[index].createTime.toDate(),
     updateTime: data[index].updateTime.toDate(),
-    shareMatchEmailTimestamp: data[index].shareMatchEmailTimestamp
-      ? data[index].shareMatchEmailTimestamp.toDate()
-      : null,
-    checkInEmailTimestamp: data[index].checkInEmailTimestamp
-      ? data[index].checkInEmailTimestamp.toDate()
-      : null,
-    addStudentEmailTimestamp: data[index].addStudentEmailTimestamp
-      ? data[index].addStudentEmailTimestamp.toDate()
-      : null,
+    templateTimestamps: mapDate(data[index].templateTimestamps),
   }))
 
   return {

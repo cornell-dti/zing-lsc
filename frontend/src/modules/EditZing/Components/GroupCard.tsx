@@ -14,29 +14,31 @@ const GroupCard = ({
   groupNumber,
   moveStudent,
   createTime,
-  updateTime,
-  shareMatchEmailTimestamp,
-  checkInEmailTimestamp,
-  addStudentEmailTimestamp,
+  templateMap,
+  groupTimestamps,
   selected,
   handleChecked,
   handleAddStudent,
   updateNotes,
 }: GroupGridProps) => {
-  const tooltips = [
-    {
-      type: shareMatchEmailTimestamp,
-      text: 'Shared match results: ',
-    },
-    {
-      type: checkInEmailTimestamp,
-      text: 'Checked in: ',
-    },
-    {
-      type: addStudentEmailTimestamp,
-      text: 'Requested student add: ',
-    },
-  ]
+  /**
+   * Helper to format the timestamp data in a way that is helpful for displaying in tooltips
+   * @param timestamps a map of template ids to their timestamps
+   * @param templateMap a map from template ids to their template names
+   * @return the timestamp data formatted as an alphabetically sorted array of name/timestamp pairs
+   */
+  const formatTooltipData = (timestamps: { [key: string]: Date }) => {
+    return (
+      //formats object into a sortable list
+      Object.entries(timestamps)
+        //get the corresponding template name from each template id
+        .map(([k, v]) => ({ name: templateMap[k], timestamp: v }))
+        //sort timestamps alphabetically by template name
+        .sort((a, b) => a.name.localeCompare(b.name))
+    )
+  }
+
+  const tooltipTimestamps = formatTooltipData(groupTimestamps)
 
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
@@ -91,31 +93,28 @@ const GroupCard = ({
           >
             <StyledGroupText>{`Group ${groupNumber}`}</StyledGroupText>
           </Tooltip>
-          {tooltips.map((timestamp, index) => {
-            if (timestamp.type) {
-              const month = timestamp.type.getMonth() + 1
-              const day = timestamp.type.getDate()
-              return (
-                <Tooltip
-                  key={index}
-                  title={`${timestamp.text + month}/${day}`}
-                  placement="bottom-start"
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        bgcolor: 'essentials.main',
-                        color: 'white',
-                        fontWeight: 600,
-                        borderRadius: '10px',
-                      },
+          {tooltipTimestamps.map((timestamp, index) => {
+            const month = timestamp.timestamp.getMonth() + 1
+            const day = timestamp.timestamp.getDate()
+            return (
+              <Tooltip
+                key={index}
+                title={`${timestamp.name + ': ' + month}/${day}`}
+                placement="bottom-start"
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      bgcolor: 'essentials.main',
+                      color: 'white',
+                      fontWeight: 600,
+                      borderRadius: '10px',
                     },
-                  }}
-                >
-                  <CircleIcon sx={{ fontSize: 10 }} color="primary" />
-                </Tooltip>
-              )
-            }
-            return null
+                  },
+                }}
+              >
+                <CircleIcon sx={{ fontSize: 10 }} color="primary" />
+              </Tooltip>
+            )
           })}
           <Box flexGrow={2} />
           <Checkbox
@@ -140,6 +139,7 @@ const GroupCard = ({
               courseId={courseId}
               groupNumber={groupNumber}
               student={student}
+              templateMap={templateMap}
               handleAddStudent={handleAddStudent}
               updateNotes={updateNotes}
             />

@@ -1,3 +1,5 @@
+import { responseTimestampsToDate } from './Student'
+
 export interface Course {
   names: string[]
   roster: string
@@ -15,9 +17,7 @@ export interface Group {
   createTime: Date
   updateTime: Date
   // TODO replace the below with the new template timestamps
-  addStudentEmailTimestamp: Date | null
-  checkInEmailTimestamp: Date | null
-  shareMatchEmailTimestamp: Date | null
+  templateTimestamps: { [key: string]: Date }
 }
 
 export interface ResponseCourse {
@@ -37,9 +37,7 @@ export interface ResponseGroup {
   createTime: string
   updateTime: string
   // TODO replace the below with the new template timestamps
-  addStudentEmailTimestamp: string | null
-  checkInEmailTimestamp: string | null
-  shareMatchEmailTimestamp: string | null
+  templateTimestamps: { [key: string]: string }
 }
 
 // TODO update this with new email template timestamp stuff
@@ -50,14 +48,6 @@ export const responseCourseToCourse = (course: ResponseCourse): Course => ({
     ...group,
     createTime: new Date(group.createTime),
     updateTime: new Date(group.updateTime),
-    addStudentEmailTimestamp: group.addStudentEmailTimestamp
-      ? new Date(group.createTime)
-      : null,
-    checkInEmailTimestamp: group.checkInEmailTimestamp
-      ? new Date(group.createTime)
-      : null,
-    shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
-      ? new Date(group.shareMatchEmailTimestamp)
-      : null,
+    templateTimestamps: responseTimestampsToDate(group.templateTimestamps),
   })),
 })

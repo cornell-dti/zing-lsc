@@ -16,44 +16,39 @@ const templateRef = db.collection('email_templates')
 
 // ==== Timestamp helper functions
 
-type timestampsType = { [key: string]: string }
-
-const timestamps: timestampsType = {
-  'Share matched results': 'shareMatchEmailTimestamp',
-  'First no match notification': 'firstNoMatchEmailTimestamp',
-  'Second no match notification': 'secondNoMatchEmailTimestamp',
-  'Request to add student to group': 'addStudentEmailTimestamp',
-  'Request to add student to group (late)': 'lateAddStudentEmailTimestamp',
-  'Ask to join group': 'askJoinGroupEmailTimestamp',
-  'Check in with groups': 'checkInEmailTimestamp',
-}
-
-const getTimestampField = (template: string) => {
-  return timestamps[template]
-}
-
-/** Updating Email Sent Timestap:
+/** Updating Group Email Sent Timestamp:
  * @param courseId is the string courseId usually in the form of a roster and six-digit number such as SU22-358546.
  * @param group is the group for the given course that emails were sent to.
- * @param template is the name of the template of the email being sent. Matched emailTemplates.js names made by sean. Currently is the string value, may change to the variable value in future (less wordy).
+ * @param templateId is the ID of the template of the email being sent.
  * @result updates database to have email sent timestamp to current time.
  *  */
-export const updateEmailTimestamp = (
+export const updateGroupTimestamp = async (
   courseId: string,
   group: string,
-  template: string
+  templateId: string
 ) => {
-  const time = admin.firestore.FieldValue.serverTimestamp()
-  const timestampField = getTimestampField(template)
+  const templateRef = `templateTimestamps.${templateId}`
+
   // must be string format -> parse here or when calling function
   return courseRef
     .doc(courseId)
     .collection('groups')
     .doc(group)
-    .update({ [timestampField]: time })
+    .update({ [templateRef]: admin.firestore.Timestamp.now() })
 }
 
-export const updateIndivTimestamp = async (courseId: string, email: string) => {
+/**
+ * Updating Individual Email Sent Timestamp:
+ * @param courseId is the string courseId usually in the form of a roster and six-digit number such as SU22-358546.
+ * @param email is the cornell.edu email of the student that the email was sent to.
+ * @param templateId is the ID of the template of the email being sent.
+ * @result updates database by setting the email sent timestamp to the current time.
+ */
+export const updateIndivTimestamp = async (
+  courseId: string,
+  email: string,
+  templateId: string
+) => {
   const studentDocRef = studentRef.doc(email)
   const studentDoc = await studentDocRef.get()
 
@@ -68,7 +63,8 @@ export const updateIndivTimestamp = async (courseId: string, email: string) => {
     throw new Error(`Student ${email} does not have membership in ${courseId}`)
   }
 
-  groupMembership.firstNoMatchEmailTime = admin.firestore.Timestamp.now()
+  groupMembership.templateTimestamps[templateId] =
+    admin.firestore.Timestamp.now()
 
   await studentDocRef.update({ groups })
 }
@@ -76,7 +72,14 @@ export const updateIndivTimestamp = async (courseId: string, email: string) => {
 /* ==== Emailing Helper Functions ==== */
 const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
-export async function getRecipients(
+/**
+ * Returns the list of recipients of an email based on group/individual membership
+ * @param courseId is the string courseId usually in the form of a roster and six-digit number such as SU22-358546.
+ * @param group is the group recieving the email for the given course (if the email is being sent to a group)
+ * @param indivEmail is the email of the individual recipient recieving the email (if the email is being sent to an individual)
+ * @returns an array of email recipients based on the given group/individual
+ */
+async function getRecipients(
   courseId: string,
   group?: string,
   indivEmail?: string
@@ -153,14 +156,26 @@ export const createEmailAsJson = (
   return messageAsJson
 }
 
-/** Send Mails is takes the 
+/**
+ * Returns the template associated with the given template id if it exists, undefined otherwise
+ * @param templateId the template id
+ */
+const isValidTemplate = async (templateId: string) => {
+  const templateCollection = await templateRef.get()
+  return templateCollection.docs
+    .map((templateDoc) => templateDoc.data() as FirestoreEmailTemplate)
+    .find((template) => template.id === templateId)
+}
+
+/** Send Mails takes the 
     @param from: sender (admin's email)
     @param message: graph api request body data
     @param authToken: string that must match the [from] email and 
       logged in user
     @param courseId: roster and 6-digit course id 
-    @param group: group number that email is being sent to
-    @param template: string of template name
+    @param template: string of template ID
+    @param group: group number that email is being sent to (if the email is being sent to a group)
+    @param indivEmail: email of the individual recipient (if the email is being sent to an individual)
     
     Sends a POST request to the GRAPH API and updates the database with the timestamp of when the email was sent. 
     
@@ -170,15 +185,20 @@ export const createEmailAsJson = (
         - Bad AUTH or else. Frontend will then parse this response 
         and render "Try Again" button or equivalent => User logs in and calls function again. 
        */
-export const sendMails = async (
+const sendMails = async (
   from: string,
   message: any,
   authToken: string,
   courseId: string,
+  template: string,
   group?: string,
-  template = 'Share matched results',
   indivEmail?: string
 ) => {
+  const validTemplate = await isValidTemplate(template)
+  if (!validTemplate) {
+    throw new Error(`Template with id ${template} doesn't exist`)
+  }
+
   //not sure if this check is necessary, since emailRcpts already checks for this
   if ((!group || parseInt(group) < 0) && !indivEmail) {
     logger.error(
@@ -190,61 +210,77 @@ export const sendMails = async (
     throw new Error('Both group and individual email are specified')
   }
 
-  try {
-    const response = await axios({
-      url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
-      // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + authToken,
-        'Content-Type': 'application/json',
-      },
-      data: JSON.stringify(message),
-    })
+  const response = await axios({
+    url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
+    // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + authToken,
+      'Content-Type': 'application/json',
+    },
+    data: JSON.stringify(message),
+  })
 
-    if (response.status === 202) {
-      if (group && parseInt(group) > 0) {
-        await updateEmailTimestamp(courseId, group, template)
-          .then(() =>
-            logger.info(
-              `Added timestamp for course ${courseId} for group ${group} with template ${template}`
-            )
+  if (response.status === 202) {
+    if (group && parseInt(group) > 0) {
+      await updateGroupTimestamp(courseId, group, template)
+        .then(() =>
+          logger.info(
+            `Added timestamp for course ${courseId} for group ${group} with template ${template}`
           )
-          .catch((err) =>
-            logger.error(
-              `Failed to update timestamp for course ${courseId} for group ${group} with template ${template}. Resulted in err: ${err.message} `
-            )
+        )
+        .catch((err) =>
+          logger.error(
+            `Failed to update timestamp for course ${courseId} for group ${group} with template ${template}. Resulted in err: ${err.message} `
           )
-      }
-
-      if (indivEmail) {
-        await updateIndivTimestamp(courseId, indivEmail)
-          .then(() =>
-            logger.info(
-              `Added no match timestamp for course ${courseId} for student with email ${indivEmail}`
-            )
-          )
-          .catch((err) =>
-            logger.error(
-              `Failed to update no match timestamp for student with email ${indivEmail} for course ${courseId}. Resulted in err: ${err.message} `
-            )
-          )
-      }
+        )
     }
-    return response.status
-  } catch (error) {
-    return error
+
+    if (indivEmail) {
+      await updateIndivTimestamp(courseId, indivEmail, template)
+        .then(() =>
+          logger.info(
+            `Added ${template} timestamp for course ${courseId} for student with email ${indivEmail}`
+          )
+        )
+        .catch((err) =>
+          logger.error(
+            `Failed to update ${template} timestamp for student with email ${indivEmail} for course ${courseId}. Resulted in err: ${err.message} `
+          )
+        )
+    }
   }
+  return response.status
 }
 
+/**
+ * Send Student Emails takes
+ * @param from sender (admin's email)
+ * @param authToken string that must match the [from] email and 
+      logged in user
+ * @param subject is the subject line. Usually "Study Partners!"
+ * @param body is the HTML body of the email
+ * @param courseId roster and 6-digit course id 
+ * @param template string of template ID
+ * @param group group number that email is being sent to (if the email is being sent to a group)
+ * @param indivEmail  email of the individual recipient (if the email is being sent to an individual)
+ * 
+ * Sends a POST request to the GRAPH API and updates the database with the timestamp of when the email was sent. 
+ * 
+ * @returns
+ * 202 (:number) if successfully sent. 
+      Other if email failed to send. 
+        - Bad AUTH or else. Frontend will then parse this response 
+        and render "Try Again" button or equivalent => User logs in and calls function again. 
+ */
 export const sendStudentEmails = async (
   from: string,
   authToken: string,
   subject: string,
   body: string,
   courseId: string,
+  template: string,
   group?: string,
-  template = 'Share matched results',
   indivEmail?: string
 ) => {
   const emailRcpts = await getRecipients(courseId, group, indivEmail)
@@ -255,8 +291,8 @@ export const sendStudentEmails = async (
     message,
     authToken,
     courseId,
-    group,
     template,
+    group,
     indivEmail
   )
     .then((result) => {
@@ -276,7 +312,7 @@ export const sendStudentEmails = async (
       logger.error(
         `Email send request failed from ${from} to ${emailRcpts.toString()}`
       )
-
+      logger.error(err.message)
       throw err
     })
 }
