@@ -1,6 +1,5 @@
-import React from 'react'
 import { Redirect, Route } from 'react-router'
-import { HOME_PATH } from '@core/Constants'
+import { ADMIN_PATH } from '@core/Constants'
 import { useAuthValue } from './AuthContext'
 import { RouteProps } from '@core'
 import { RouteLoading } from './RouteLoading'
@@ -22,7 +21,7 @@ export const PrivateRoute = ({
         <Route
           {...routeProps}
           render={() => {
-            return <Redirect to={HOME_PATH} />
+            return <Redirect to={ADMIN_PATH} />
           }}
         />
       )

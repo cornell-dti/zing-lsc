@@ -164,6 +164,7 @@ export const Dashboard = () => {
     <StyledContainer>
       <StyledHeaderMenu>
         <LogoImg />
+
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
           <Box
             sx={{

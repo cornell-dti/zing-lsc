@@ -9,6 +9,7 @@ import {
 import { CssBaseline } from '@mui/material'
 import {
   HOME_PATH,
+  ADMIN_PATH,
   SURVEY_PATH,
   CREATE_ZING_PATH,
   EDIT_ZING_PATH,
@@ -26,6 +27,7 @@ import {
   Student,
 } from '@core/Types'
 import { Home } from 'Home'
+import { AdminHome } from 'AdminHome'
 import { Survey } from 'Survey'
 import { CreateZingForm } from 'CreateZing'
 import { EditZing } from 'EditZing'
@@ -129,6 +131,7 @@ const App = () => {
               <StudentProvider value={{ students }}>
                 <Switch>
                   <PublicRoute exact path={HOME_PATH} component={Home} />
+                  <PublicRoute exact path={ADMIN_PATH} component={AdminHome} />
                   <Route exact path={SURVEY_PATH} component={Survey} />
                   <Route
                     exact

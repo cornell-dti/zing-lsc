@@ -18,7 +18,7 @@ import {
   ResponseGroup,
 } from 'EditZing/Types/CourseInfo'
 import { API_ROOT, COURSE_API, MATCHING_API, EMAIL_PATH } from '@core/Constants'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { EmailModal } from 'EditZing/Components/EmailModal'
 import { MatchLoading } from './MatchLoading'
 import {
@@ -31,10 +31,13 @@ import {
   Typography,
   Snackbar,
   Alert,
+  IconButton,
 } from '@mui/material'
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 import { useAuthValue } from '@auth/AuthContext'
+
+import { DASHBOARD_PATH } from '@core/Constants'
 
 const LscIcon = (props: SvgIconProps) => {
   return <SvgIcon inheritViewBox component={Lsc} {...props} />
@@ -400,7 +403,18 @@ export const EditZing = () => {
           borderBottomColor: 'essentials.12',
         }}
       >
-        <LscIcon sx={{ height: '50px', width: '50px' }} />
+        <IconButton
+          color="secondary"
+          component={Link}
+          to={DASHBOARD_PATH}
+          sx={{
+            border: 'none',
+          }}
+          disableRipple
+          disableFocusRipple
+        >
+          <LscIcon sx={{ height: '50px', width: '50px' }} />
+        </IconButton>
         <Typography variant="h4" component="h1">
           {courseInfo.names.join(', ')} ({courseInfo.roster})
         </Typography>

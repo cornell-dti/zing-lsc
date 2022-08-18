@@ -1,12 +1,11 @@
 import { StyledBackground } from 'Home/Styles/Home.style'
+import { adminSignIn } from '@fire'
 import { Box, Button, Typography } from '@mui/material'
 import matchimg from '@assets/img/matching.svg'
-import { Link } from 'react-router-dom'
-import { SURVEY_PATH } from '@core/Constants'
 
 import { ReactComponent as CornellSeal } from '@assets/img/CornellSealWhite.svg'
 
-export const Home = () => {
+export const AdminHome = () => {
   return (
     <StyledBackground>
       <Box
@@ -62,17 +61,18 @@ export const Home = () => {
           Create groups.
         </Typography>
         <Button
-          variant="outlined"
-          component={Link}
-          to={SURVEY_PATH}
           color="secondary"
+          variant="outlined"
           sx={{
             width: '14em',
             fontSize: '22px',
             mb: '1.25em',
           }}
+          onClick={() => {
+            adminSignIn().catch(() => {})
+          }}
         >
-          I'm a Cornell Student
+          LSC Admin Login
         </Button>
       </Box>
       <Box
