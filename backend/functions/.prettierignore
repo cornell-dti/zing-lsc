@@ -3,5 +3,8 @@ build
 coverage
 lib
 
+# Ignore emulator
+emulator
+
 # Ignore email template HTML
 src/utils/*.html
