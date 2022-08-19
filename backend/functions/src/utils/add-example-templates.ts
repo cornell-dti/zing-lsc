@@ -7,13 +7,39 @@ const Timestamp = admin.firestore.Timestamp
 // When Jen sent the Slack message
 const modifyTime = Timestamp.fromDate(new Date('2022-08-08T19:20:56Z'))
 
+// Subjects start with TEST since there is no separate test inbox
+// In production the TEST part of the subject will be manually removed
 const templates: FirestoreEmailTemplate[] = [
   {
     id: 'share-match',
     name: 'Matching',
     type: 'group',
-    subject: 'Study Partners!',
+    subject: 'TEST Study Partners!',
     body: 'share-match.html',
+    modifyTime,
+  },
+  {
+    id: 'no-match-yet',
+    name: 'No match yet',
+    type: 'student',
+    subject: 'TEST Update about your study partner request',
+    body: 'no-match-yet.html',
+    modifyTime,
+  },
+  {
+    id: 'add-student',
+    name: 'Add student to established group',
+    type: 'group',
+    subject: 'TEST Adding a student to your study group',
+    body: 'add-student.html',
+    modifyTime,
+  },
+  {
+    id: 'check-in',
+    name: 'Check-in with group',
+    type: 'group',
+    subject: 'TEST Checking in about your study group',
+    body: 'check-in.html',
     modifyTime,
   },
 ]

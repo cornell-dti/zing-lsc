@@ -321,9 +321,7 @@ export const EditZing = () => {
   const handleSelectNewlyMatched = () => {
     setSelectedGroupNumbers(
       studentGroups
-        .filter(
-          (group) => group.templateTimestamps['share-match-email'] == null
-        )
+        .filter((group) => group.templateTimestamps['share-match'] == null)
         .map((group) => group.groupNumber)
     )
     handleMenuClose()
