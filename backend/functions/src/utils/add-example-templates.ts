@@ -4,22 +4,17 @@ import admin from 'firebase-admin'
 
 const Timestamp = admin.firestore.Timestamp
 
+// When Jen sent the Slack message
+const modifyTime = Timestamp.fromDate(new Date('2022-08-08T19:20:56Z'))
+
 const templates: FirestoreEmailTemplate[] = [
   {
-    id: 'example-1',
-    name: 'Example 1',
-    type: 'student',
-    subject: 'Subject 1',
-    body: 'example-1.html',
-    modifyTime: Timestamp.fromDate(new Date('2022-07-23T12:00:00')),
-  },
-  {
-    id: 'example-2',
-    name: 'Example 2',
+    id: 'share-match',
+    name: 'Matching',
     type: 'group',
-    subject: 'Subject 2',
-    body: 'example-2.html',
-    modifyTime: Timestamp.fromDate(new Date('2022-07-23T13:00:00')),
+    subject: 'Study Partners!',
+    body: 'share-match.html',
+    modifyTime,
   },
 ]
 

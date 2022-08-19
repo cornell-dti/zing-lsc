@@ -2,3 +2,6 @@
 build
 coverage
 lib
+
+# Ignore email template HTML
+src/utils/*.html
