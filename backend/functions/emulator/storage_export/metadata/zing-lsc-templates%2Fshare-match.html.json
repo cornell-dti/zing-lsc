@@ -1,0 +1,20 @@
+{
+  "name": "share-match.html",
+  "bucket": "zing-lsc-templates",
+  "contentType": "text/html",
+  "metageneration": 1,
+  "generation": 1660895551456,
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "cacheControl": "public, max-age=3600",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "91bb4978-8843-4da7-9508-d23bbad0484f"
+  ],
+  "etag": "6qng2TqVDrA+WcMCXzwhTpojSoc",
+  "timeCreated": "2022-08-19T07:52:31.455Z",
+  "updated": "2022-08-19T07:52:31.455Z",
+  "size": 2068,
+  "md5Hash": "AmXTSkO1UiDKboRZUEc6kQ==",
+  "crc32c": "995119762"
+}

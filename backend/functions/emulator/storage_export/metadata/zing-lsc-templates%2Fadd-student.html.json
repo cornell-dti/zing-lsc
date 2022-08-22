@@ -1,0 +1,20 @@
+{
+  "name": "add-student.html",
+  "bucket": "zing-lsc-templates",
+  "contentType": "text/html",
+  "metageneration": 1,
+  "generation": 1660895551449,
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "cacheControl": "public, max-age=3600",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "66e8e21f-d118-40aa-bce3-0ea347cfe1a8"
+  ],
+  "etag": "qWjaYtAeLOnn/b67hlBpE2Cscww",
+  "timeCreated": "2022-08-19T07:52:31.448Z",
+  "updated": "2022-08-19T07:52:31.448Z",
+  "size": 619,
+  "md5Hash": "4p4SYirNxT8B2p6Q/hyheQ==",
+  "crc32c": "469119302"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "no-match-yet.html",
+  "bucket": "zing-lsc-templates",
+  "contentType": "text/html",
+  "metageneration": 1,
+  "generation": 1660895551452,
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "cacheControl": "public, max-age=3600",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "c0df9d0e-5f81-42d7-b3ba-f25d92323e22"
+  ],
+  "etag": "putHlso6fSfgbFDkeQXtLH60hlY",
+  "timeCreated": "2022-08-19T07:52:31.451Z",
+  "updated": "2022-08-19T07:52:31.451Z",
+  "size": 435,
+  "md5Hash": "hujL8WWY/lr3cpmXXjjFTw==",
+  "crc32c": "4180507609"
+}
