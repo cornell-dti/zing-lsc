@@ -4,6 +4,8 @@ import { Group } from './CourseInfo'
 import { TemplateName } from 'EditZing/utils/emailTemplates'
 import { EmailTemplate } from '@core/Types'
 
+type IdMap = { [key: string]: string }
+
 export interface UnmatchedGridProps {
   courseId: string
   unmatchedStudents: Student[]
@@ -13,6 +15,7 @@ export interface UnmatchedGridProps {
     toGroupNumber: number
   ) => void
   matchStudents: () => void
+  templateMap: IdMap
   handleAddStudent: (student: string, selected: boolean) => void
   updateNotes: (student: string, notes: string) => void
 }
@@ -21,9 +24,8 @@ export interface GroupGridProps {
   courseId: string
   studentList: Student[]
   groupNumber: number
-  shareMatchEmailTimestamp: Date | null
-  checkInEmailTimestamp: Date | null
-  addStudentEmailTimestamp: Date | null
+  templateMap: IdMap
+  groupTimestamps: { [key: string]: Date }
   moveStudent: (
     studentToMove: Student,
     fromGroupNumber: number,
@@ -42,6 +44,7 @@ export interface StudentGridProps {
   student: Student
   groupNumber: number
   xsSize?: GridSize
+  templateMap: IdMap
   handleAddStudent: (student: string, selected: boolean) => void
   updateNotes: (student: string, notes: string) => void
 }

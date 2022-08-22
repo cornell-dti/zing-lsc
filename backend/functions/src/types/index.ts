@@ -23,10 +23,7 @@ export type Group = {
   members: string[]
   createTime: Date
   updateTime: Date
-  // TODO replace the below with the new template timestamps
-  addStudentEmailTimestamp: Date | null
-  checkInEmailTimestamp: Date | null
-  shareMatchEmailTimestamp: Date | null
+  templateTimestamps: { [key: string]: Date }
 }
 
 /** Student data. This is not exactly how it's stored in the database, since
@@ -46,6 +43,7 @@ export type GroupMembership = {
   notes: string
   notesModifyTime: Date
   submissionTime: Date
+  templateTimestamps: { [key: string]: Date }
 }
 
 /** Information about an email template */
@@ -68,18 +66,6 @@ export type FirestoreCourse = {
   latestSubmissionTime: Timestamp
 }
 
-/** How groups are stored in the database */
-export type FirestoreGroup = {
-  groupNumber: number
-  members: string[]
-  createTime: Timestamp
-  updateTime: Timestamp
-  // TODO replace the below with the new template timestamps
-  addStudentEmailTimestamp: Timestamp | null
-  checkInEmailTimestamp: Timestamp | null
-  shareMatchEmailTimestamp: Timestamp | null
-}
-
 /** How student data is stored in the database */
 export type FirestoreStudent = {
   name: string
@@ -88,6 +74,9 @@ export type FirestoreStudent = {
   groups: FirestoreGroupMembership[]
 }
 
+/* Timestamps for different email templates */
+type EmailTimestamps = { [key: string]: Timestamp }
+
 /** How group membership for students is stored in the database */
 export type FirestoreGroupMembership = {
   courseId: string
@@ -95,7 +84,7 @@ export type FirestoreGroupMembership = {
   notes: string
   notesModifyTime: Timestamp
   submissionTime: Timestamp
-  firstNoMatchEmailTime: Timestamp
+  templateTimestamps: EmailTimestamps
 }
 
 /** How email template data is stored in the database */
@@ -106,4 +95,13 @@ export type FirestoreEmailTemplate = {
   subject: string
   body: string
   modifyTime: Timestamp
+}
+
+/** How group data is stored in the database */
+export type FirestoreGroup = {
+  groupNumber: number
+  members: string[]
+  createTime: Timestamp
+  updateTime: Timestamp
+  templateTimestamps: EmailTimestamps
 }

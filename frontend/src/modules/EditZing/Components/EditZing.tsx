@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react'
 import axios, { AxiosResponse } from 'axios'
 import GroupCard from 'EditZing/Components/GroupCard'
 import { UnmatchedGrid } from './UnmatchedGrid'
-import { responseStudentToStudent, Student } from '@core/Types'
+import {
+  responseStudentToStudent,
+  Student,
+  responseTimestampsToDate,
+  EmailTemplatesResponse,
+} from '@core/Types'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import {
@@ -12,7 +17,7 @@ import {
   Group,
   ResponseGroup,
 } from 'EditZing/Types/CourseInfo'
-import { API_ROOT, COURSE_API, MATCHING_API } from '@core/Constants'
+import { API_ROOT, COURSE_API, MATCHING_API, EMAIL_PATH } from '@core/Constants'
 import { Link, useParams } from 'react-router-dom'
 import { EmailModal } from 'EditZing/Components/EmailModal'
 import { MatchLoading } from './MatchLoading'
@@ -90,6 +95,26 @@ export const EditZing = () => {
     }
   }
 
+  //Map for getting the names of templates based on ID for rendering tooltips
+  const [templateNameMap, setTemplateNameMap] = useState<{
+    [key: string]: string
+  }>({})
+  useEffect(() => {
+    axios
+      .get(`${API_ROOT}${EMAIL_PATH}/templates`)
+      .then((res: AxiosResponse<EmailTemplatesResponse>) => {
+        setTemplateNameMap(
+          Object.fromEntries(
+            res.data.data.map((template) => [template.id, template.name])
+          )
+        )
+      })
+      .catch((error) => {
+        console.error(error)
+        setShowError(true)
+      })
+  }, [courseId])
+
   const [unmatchedStudents, setUnmatchedStudents] = useState<Student[]>([])
   const [studentGroups, setStudentGroups] = useState<Group[]>([])
   const [hasLoadedStudentData, setHasLoadedStudentData] = useState(false)
@@ -106,15 +131,9 @@ export const EditZing = () => {
             memberData: group.memberData.map(responseStudentToStudent),
             createTime: new Date(group.createTime),
             updateTime: new Date(group.updateTime),
-            shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
-              ? new Date(group.shareMatchEmailTimestamp)
-              : null,
-            checkInEmailTimestamp: group.checkInEmailTimestamp
-              ? new Date(group.checkInEmailTimestamp)
-              : null,
-            addStudentEmailTimestamp: group.addStudentEmailTimestamp
-              ? new Date(group.addStudentEmailTimestamp)
-              : null,
+            templateTimestamps: responseTimestampsToDate(
+              group.templateTimestamps
+            ),
           }))
         )
         setHasLoadedStudentData(true)
@@ -242,15 +261,8 @@ export const EditZing = () => {
             memberData: group.memberData.map(responseStudentToStudent),
             createTime: new Date(group.createTime),
             updateTime: new Date(group.updateTime),
-            shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
-              ? new Date(group.shareMatchEmailTimestamp)
-              : null,
-            checkInEmailTimestamp: group.checkInEmailTimestamp
-              ? new Date(group.checkInEmailTimestamp)
-              : null,
-            addStudentEmailTimestamp: group.addStudentEmailTimestamp
-              ? new Date(group.addStudentEmailTimestamp)
-              : null,
+            //the group was just created so no emails have been sent yet
+            templateTimestamps: {},
           }))
         )
         setStudentGroups(groups)
@@ -274,15 +286,9 @@ export const EditZing = () => {
             memberData: group.memberData.map(responseStudentToStudent),
             createTime: new Date(group.createTime),
             updateTime: new Date(group.updateTime),
-            shareMatchEmailTimestamp: group.shareMatchEmailTimestamp
-              ? new Date(group.shareMatchEmailTimestamp)
-              : null,
-            checkInEmailTimestamp: group.checkInEmailTimestamp
-              ? new Date(group.checkInEmailTimestamp)
-              : null,
-            addStudentEmailTimestamp: group.addStudentEmailTimestamp
-              ? new Date(group.addStudentEmailTimestamp)
-              : null,
+            templateTimestamps: responseTimestampsToDate(
+              group.templateTimestamps
+            ),
           }))
         )
       })
@@ -315,7 +321,7 @@ export const EditZing = () => {
   const handleSelectNewlyMatched = () => {
     setSelectedGroupNumbers(
       studentGroups
-        .filter((group) => group.shareMatchEmailTimestamp === null)
+        .filter((group) => group.templateTimestamps['share-match'] == null)
         .map((group) => group.groupNumber)
     )
     handleMenuClose()
@@ -467,6 +473,7 @@ export const EditZing = () => {
                 unmatchedStudents={unmatchedStudents}
                 moveStudent={moveStudent}
                 matchStudents={matchStudents}
+                templateMap={templateNameMap}
                 handleAddStudent={handleAddStudent}
                 updateNotes={updateNotes}
               />
@@ -477,9 +484,8 @@ export const EditZing = () => {
                 courseId={courseId}
                 studentList={studentGroup.memberData}
                 groupNumber={studentGroup.groupNumber}
-                shareMatchEmailTimestamp={studentGroup.shareMatchEmailTimestamp}
-                checkInEmailTimestamp={studentGroup.checkInEmailTimestamp}
-                addStudentEmailTimestamp={studentGroup.addStudentEmailTimestamp}
+                templateMap={templateNameMap}
+                groupTimestamps={studentGroup.templateTimestamps}
                 moveStudent={moveStudent}
                 createTime={studentGroup.createTime}
                 updateTime={studentGroup.updateTime}

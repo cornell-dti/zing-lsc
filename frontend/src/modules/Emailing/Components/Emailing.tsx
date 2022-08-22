@@ -146,7 +146,7 @@ export const sendEmail = async (emailItems: any) => {
   const msAuthToken = localStorage.getItem('authToken') || ' '
   const {
     emailSubject,
-    emailRcpts,
+    indivEmail,
     emailBody,
     courseId,
     groupNum,
@@ -161,7 +161,7 @@ export const sendEmail = async (emailItems: any) => {
       emailAddress: email,
       emailBody: emailBody,
       emailSubject: emailSubject,
-      emailRcpts: emailRcpts,
+      indivEmail: indivEmail,
       courseId: courseId,
       group: groupNum,
       template: selectedTemplate,
@@ -170,7 +170,7 @@ export const sendEmail = async (emailItems: any) => {
   }).then((res) => {
     // 4. reading response for success or failure
     console.log(res)
-    if (res.data.success === true) {
+    if (res.data === 'Email send success') {
       emailSent = true
     } else {
       // handle error

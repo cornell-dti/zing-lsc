@@ -18,6 +18,9 @@ import { ReactComponent as EditIcon } from '@assets/img/EditIcon.svg'
 
 import axios from 'axios'
 import { API_ROOT, STUDENT_API } from '@core/Constants'
+import CircleIcon from '@mui/icons-material/Circle'
+
+import { Student } from '@core/Types'
 
 /** the equivalent of MoveableItem */
 const StudentCard = ({
@@ -25,6 +28,7 @@ const StudentCard = ({
   student,
   groupNumber,
   xsSize = 6,
+  templateMap,
   handleAddStudent,
   updateNotes,
 }: StudentGridProps) => {
@@ -84,6 +88,28 @@ const StudentCard = ({
   const submissionTime = student.groups.find(
     (groupMembership) => groupMembership.courseId === courseId
   )!.submissionTime
+
+  const formatTooltipData = (timestamps: { [key: string]: Date }) => {
+    return (
+      //formats object into a sortable list
+      Object.entries(timestamps)
+        //get the corresponding template name from each template id
+        .map(([k, v]) => ({ name: templateMap[k], timestamp: v }))
+        //sort timestamps alphabetically by template name
+        .sort((a, b) => a.name.localeCompare(b.name))
+    )
+  }
+
+  //Helper to extract and format the individual timestamps from a student
+  const studentToTimestamps = (s: Student) => {
+    const groupMem = s.groups.find((group) => group.courseId === courseId)
+    if (!groupMem) {
+      throw Error(`${s.email} not found in group membership`)
+    }
+    return formatTooltipData(groupMem.templateTimestamps)
+  }
+
+  const tooltipTimestamps = studentToTimestamps(student)
 
   return (
     <Box
@@ -160,11 +186,36 @@ const StudentCard = ({
                     fontWeight: '800',
                     fontSize: '0.875rem',
                     wordBreak: 'break-word',
+                    display: 'inline',
+                    marginRight: '0.5rem',
                   }}
                 >
                   {student.name}
                 </Typography>
               </Tooltip>
+              {tooltipTimestamps.map((timestamp, index) => {
+                const month = timestamp.timestamp.getMonth() + 1
+                const day = timestamp.timestamp.getDate()
+                return (
+                  <Tooltip
+                    key={index}
+                    title={`${timestamp.name + ': ' + month}/${day}`}
+                    placement="bottom-start"
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          bgcolor: 'essentials.main',
+                          color: 'white',
+                          fontWeight: 600,
+                          borderRadius: '10px',
+                        },
+                      },
+                    }}
+                  >
+                    <CircleIcon sx={{ fontSize: 10 }} color="primary" />
+                  </Tooltip>
+                )
+              })}
               <Typography sx={{ fontWeight: '400', fontSize: '0.875rem' }}>
                 {student.email.replace('@cornell.edu', '')}
               </Typography>

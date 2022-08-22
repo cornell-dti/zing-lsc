@@ -51,6 +51,16 @@ export const Dashboard = () => {
     course: course.names.join('/'),
   }))
 
+  //this can be removed if there is a place to store an objectMap() function
+  const localeMap = (obj: { [key: string]: Date } | undefined) => {
+    if (!obj) {
+      return undefined
+    }
+    return Object.fromEntries(
+      Object.entries(obj).map(([k, v]) => [k, v.toLocaleString()])
+    )
+  }
+
   const csvStudents =
     courses.length && students.length // Just making sure this isn't calculated until the data is available
       ? students.flatMap((student) =>
@@ -74,9 +84,7 @@ export const Dashboard = () => {
                 membership.groupNumber !== -1
                   ? `${course.names.join('/')}_${membership.groupNumber}`
                   : undefined,
-              dateShareMatchEmail: group?.shareMatchEmailTimestamp?.toLocaleString(),
-              dateCheckInEmail: group?.checkInEmailTimestamp?.toLocaleString(),
-              dateAddStudentEmail: group?.addStudentEmailTimestamp?.toLocaleString(),
+              ...localeMap(group?.templateTimestamps),
               notes: membership.notes,
             }
           })

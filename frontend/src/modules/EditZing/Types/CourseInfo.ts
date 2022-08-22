@@ -12,9 +12,7 @@ export interface Group {
   memberData: Student[]
   createTime: Date
   updateTime: Date
-  shareMatchEmailTimestamp: Date | null
-  checkInEmailTimestamp: Date | null
-  addStudentEmailTimestamp: Date | null
+  templateTimestamps: { [key: string]: Date }
 }
 
 export interface ResponseGroup {
@@ -22,9 +20,7 @@ export interface ResponseGroup {
   memberData: ResponseStudent[]
   createTime: string
   updateTime: string
-  shareMatchEmailTimestamp: string | null
-  checkInEmailTimestamp: string | null
-  addStudentEmailTimestamp: string | null
+  templateTimestamps: { [key: string]: string }
 }
 
 export interface CourseInfoResponse {

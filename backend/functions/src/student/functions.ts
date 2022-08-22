@@ -5,6 +5,7 @@ import {
   mapCatalogNameToCourseId,
   MissingCourseError,
 } from '../course/get_course_id'
+import { mapDate } from '../course/functions'
 import { FirestoreStudent, Student } from '../types'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
@@ -22,6 +23,7 @@ export const getAllStudents = async (): Promise<Student[]> => {
         ...group,
         notesModifyTime: group.notesModifyTime.toDate(),
         submissionTime: group.submissionTime.toDate(),
+        templateTimestamps: mapDate(group.templateTimestamps),
       })),
     }
   })
@@ -41,6 +43,7 @@ export const getStudentData = async (email: string): Promise<Student> => {
       ...group,
       notesModifyTime: group.notesModifyTime.toDate(),
       submissionTime: group.submissionTime.toDate(),
+      templateTimestamps: mapDate(group.templateTimestamps),
     })),
   }
 }
@@ -164,6 +167,7 @@ export const addStudentSurveyResponse = async (
     notes: '',
     notesModifyTime: surveyTimestamp, // Can't use serverTimestamp in arrays...
     submissionTime: surveyTimestamp,
+    templateTimestamps: {},
   }))
 
   // First, update the [student] collection to include the data for the new student
