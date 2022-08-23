@@ -103,10 +103,7 @@ export const Dashboard = () => {
 
   //Helper function to check if a given course has any groups without check-in emails
   function hasUnsentCheckIns(c: Course) {
-    return c.groups.some(
-      //checks whether a group has a check-in timestamp
-      (group) => !group.templateTimestamps['check-in']
-    )
+    return c.groups.some((group) => !group.templateTimestamps['check-in'])
   }
 
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
@@ -207,7 +204,7 @@ export const Dashboard = () => {
             <MenuItem value="classes-a-z">Classes A-Z</MenuItem>
             <MenuItem value="classes-z-a">Classes Z-A</MenuItem>
             <MenuItem value="no-check-in-email">
-              Unsent Check-in Emails{' '}
+              Unsent Check-in Emails
             </MenuItem>
           </DropdownSelect>
         </Box>
