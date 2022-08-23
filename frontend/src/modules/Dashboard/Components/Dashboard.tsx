@@ -27,6 +27,7 @@ type SortOrder =
   | 'matchable-first'
   | 'classes-a-z'
   | 'classes-z-a'
+  | 'no-check-in-email'
 
 export const Dashboard = () => {
   const { user } = useAuthValue()
@@ -100,6 +101,14 @@ export const Dashboard = () => {
     setRosterAnchorEl(null)
   }
 
+  //Helper function to check if a given course has any groups without check-in emails
+  function hasUnsentCheckIns(c: Course) {
+    return c.groups.some(
+      //checks whether a group has a check-in timestamp
+      (group) => !group.templateTimestamps['check-in']
+    )
+  }
+
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
   function sorted(courseInfo: Course[], menuValue: SortOrder) {
     switch (menuValue) {
@@ -133,7 +142,7 @@ export const Dashboard = () => {
           } else return 1
         })
       case 'classes-a-z':
-        return [...courseInfo].sort((a, b) => {
+        return courseInfo.sort((a, b) => {
           return a.names[0].localeCompare(b.names[0], undefined, {
             numeric: true,
           })
@@ -144,6 +153,8 @@ export const Dashboard = () => {
             numeric: true,
           })
         })
+      case 'no-check-in-email':
+        return courseInfo.filter(hasUnsentCheckIns)
       default:
         return courseInfo
     }
@@ -195,6 +206,9 @@ export const Dashboard = () => {
             <MenuItem value="matchable-first">Matchable first</MenuItem>
             <MenuItem value="classes-a-z">Classes A-Z</MenuItem>
             <MenuItem value="classes-z-a">Classes Z-A</MenuItem>
+            <MenuItem value="no-check-in-email">
+              Unsent Check-in Emails{' '}
+            </MenuItem>
           </DropdownSelect>
         </Box>
         <Button
