@@ -139,7 +139,7 @@ export const Dashboard = () => {
           } else return 1
         })
       case 'classes-a-z':
-        return courseInfo.sort((a, b) => {
+        return [...courseInfo].sort((a, b) => {
           return a.names[0].localeCompare(b.names[0], undefined, {
             numeric: true,
           })
