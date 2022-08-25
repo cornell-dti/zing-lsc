@@ -28,7 +28,7 @@ type SortOrder =
   | 'classes-a-z'
   | 'classes-z-a'
   | 'no-check-in-email'
-  | 'no-match-email'
+  | 'no-no-match-email'
 
 export const Dashboard = () => {
   const { user } = useAuthValue()
@@ -173,7 +173,7 @@ export const Dashboard = () => {
         })
       case 'no-check-in-email':
         return courseInfo.filter(hasUnsentCheckIns)
-      case 'no-match-email':
+      case 'no-no-match-email':
         return courseInfo.filter(hasUnsentNoMatch)
       default:
         return courseInfo
