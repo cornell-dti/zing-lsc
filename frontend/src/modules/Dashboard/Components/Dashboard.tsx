@@ -27,6 +27,8 @@ type SortOrder =
   | 'matchable-first'
   | 'classes-a-z'
   | 'classes-z-a'
+  | 'no-check-in-email'
+  | 'no-no-match-email'
 
 export const Dashboard = () => {
   const { user } = useAuthValue()
@@ -100,6 +102,31 @@ export const Dashboard = () => {
     setRosterAnchorEl(null)
   }
 
+  //Helper function to check if a given course has any groups without check-in emails
+  function hasUnsentCheckIns(c: Course) {
+    return c.groups.some((group) => !group.templateTimestamps['check-in'])
+  }
+
+  //Helper function that returns true if the student doesn't have a no match email
+  function studentHasUnsentNoMatch(smail: string, courseId: string) {
+    const student = students.find((s) => s.email === smail)
+    if (!student) {
+      throw Error(`Student with email ${smail} not found`)
+    }
+    const group = student.groups.find((g) => g.courseId === courseId)
+    if (!group) {
+      throw Error(`Student with email ${smail} not found in course ${courseId}`)
+    }
+    return !group.templateTimestamps['no-match-yet']
+  }
+
+  //Helper function that returns true if an unmatched student in a course doesn't have a no match email
+  function hasUnsentNoMatch(c: Course) {
+    return c.unmatched.some((email) =>
+      studentHasUnsentNoMatch(email, c.courseId)
+    )
+  }
+
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
   function sorted(courseInfo: Course[], menuValue: SortOrder) {
     switch (menuValue) {
@@ -144,6 +171,10 @@ export const Dashboard = () => {
             numeric: true,
           })
         })
+      case 'no-check-in-email':
+        return courseInfo.filter(hasUnsentCheckIns)
+      case 'no-no-match-email':
+        return courseInfo.filter(hasUnsentNoMatch)
       default:
         return courseInfo
     }
@@ -195,6 +226,10 @@ export const Dashboard = () => {
             <MenuItem value="matchable-first">Matchable first</MenuItem>
             <MenuItem value="classes-a-z">Classes A-Z</MenuItem>
             <MenuItem value="classes-z-a">Classes Z-A</MenuItem>
+            <MenuItem value="no-check-in-email">
+              Unsent Check-in Emails
+            </MenuItem>
+            <MenuItem value="no-match-email">Unsent No Match Emails</MenuItem>
           </DropdownSelect>
         </Box>
         <Button
