@@ -9,6 +9,11 @@ import {
   ListItemIcon,
   ListItemText,
   MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from '@mui/material'
@@ -31,6 +36,23 @@ export const TemplateEditor = () => {
   const [templateType, setTemplateType] = useState<'group' | 'student'>('group')
   const [templateSubject, setTemplateSubject] = useState('')
   const [templateHtml, setTemplateHtml] = useState('')
+
+  // Special value substitution in template HTML
+  const replaceMapShared = {
+    '{{COURSE_NAME}}': 'ABC 1100',
+  }
+  const replaceMapGroup = {}
+  const replaceMapStudent = {
+    '{{STUDENT_NAME}}': 'Jane Doe',
+  }
+  const replaceMap = {
+    ...replaceMapShared,
+    ...(templateType === 'group' ? replaceMapGroup : replaceMapStudent),
+  }
+  const replacedHtml = Object.entries(replaceMap).reduce(
+    (prev, [key, value]) => prev.replaceAll(key, value),
+    templateHtml
+  )
 
   /** Reset form fields based on template */
   const resetForm = (template: EmailTemplate) => {
@@ -216,6 +238,34 @@ export const TemplateEditor = () => {
             onChange={(event) => setTemplateName(event.target.value)}
             sx={{ gridColumn: 1 }}
           />
+          <Box
+            sx={{
+              gridColumn: 2,
+              gridRow: '1 / 3',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography sx={{ fontWeight: 'bold' }}>
+              Available Substitutions:
+            </Typography>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell width="50%">Key</TableCell>
+                  <TableCell width="50%">Example Value</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Object.entries(replaceMap).map(([key, value]) => (
+                  <TableRow>
+                    <TableCell>{key}</TableCell>
+                    <TableCell>{value}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
           <TextField
             label="Type"
             select
@@ -290,7 +340,7 @@ export const TemplateEditor = () => {
           <Box sx={{ gridColumn: 2, display: 'flex', flexDirection: 'column' }}>
             <Typography sx={{ fontWeight: 'bold', mb: 1 }}>Body:</Typography>
             <Typography
-              dangerouslySetInnerHTML={{ __html: templateHtml }}
+              dangerouslySetInnerHTML={{ __html: replacedHtml }}
               sx={{ gridColumn: 2 }}
             />
           </Box>
