@@ -16,6 +16,7 @@ export interface UnmatchedGridProps {
   ) => void
   matchStudents: () => void
   templateMap: IdMap
+  selectedStudents: string[]
   handleAddStudent: (student: string, selected: boolean) => void
   updateNotes: (student: string, notes: string) => void
 }
@@ -34,6 +35,7 @@ export interface GroupGridProps {
   createTime: Date
   updateTime: Date
   selected: boolean
+  selectedStudents: string[]
   handleChecked: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleAddStudent: (student: string, selected: boolean) => void
   updateNotes: (student: string, notes: string) => void
@@ -45,6 +47,7 @@ export interface StudentGridProps {
   groupNumber: number
   xsSize?: GridSize
   templateMap: IdMap
+  selected: boolean
   handleAddStudent: (student: string, selected: boolean) => void
   updateNotes: (student: string, notes: string) => void
 }

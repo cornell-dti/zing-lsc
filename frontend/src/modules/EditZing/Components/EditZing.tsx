@@ -321,8 +321,22 @@ export const EditZing = () => {
   const handleSelectNewlyMatched = () => {
     setSelectedGroupNumbers(
       studentGroups
-        .filter((group) => group.templateTimestamps['share-match'] == null)
+        .filter((group) => !group.templateTimestamps['share-match'])
         .map((group) => group.groupNumber)
+    )
+    handleMenuClose()
+  }
+
+  const handleSelectNoMatchYet = () => {
+    setSelectedStudents(
+      unmatchedStudents
+        .filter(
+          (student) =>
+            !student.groups.find(
+              (membership) => membership.courseId === courseId
+            )?.templateTimestamps['no-match-yet']
+        )
+        .map((student) => student.email)
     )
     handleMenuClose()
   }
@@ -441,6 +455,7 @@ export const EditZing = () => {
               <MenuItem onClick={handleSelectNewlyMatched}>
                 Newly Matched
               </MenuItem>
+              <MenuItem onClick={handleSelectNoMatchYet}>No Match Yet</MenuItem>
             </Menu>
           </>
         ) : (
@@ -474,6 +489,7 @@ export const EditZing = () => {
                 moveStudent={moveStudent}
                 matchStudents={matchStudents}
                 templateMap={templateNameMap}
+                selectedStudents={selectedStudents}
                 handleAddStudent={handleAddStudent}
                 updateNotes={updateNotes}
               />
@@ -492,6 +508,7 @@ export const EditZing = () => {
                 selected={selectedGroupNumbers.includes(
                   studentGroup.groupNumber
                 )}
+                selectedStudents={selectedStudents}
                 handleChecked={(event) => {
                   editSelectedGroups(studentGroup, event.target.checked)
                 }}
