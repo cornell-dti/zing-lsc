@@ -3,18 +3,18 @@
   "bucket": "zing-lsc-templates",
   "contentType": "text/html",
   "metageneration": 1,
-  "generation": 1660895551452,
+  "generation": 1661907030073,
   "storageClass": "STANDARD",
   "contentDisposition": "inline",
   "cacheControl": "public, max-age=3600",
   "contentEncoding": "identity",
   "downloadTokens": [
-    "c0df9d0e-5f81-42d7-b3ba-f25d92323e22"
+    "bceaf140-016d-4c5c-87c8-8ad290066ea1"
   ],
-  "etag": "putHlso6fSfgbFDkeQXtLH60hlY",
-  "timeCreated": "2022-08-19T07:52:31.451Z",
-  "updated": "2022-08-19T07:52:31.451Z",
-  "size": 435,
-  "md5Hash": "hujL8WWY/lr3cpmXXjjFTw==",
-  "crc32c": "4180507609"
+  "etag": "fPZdnc/eOhJsDC0jyvpHPZ3j58A",
+  "timeCreated": "2022-08-31T00:50:30.072Z",
+  "updated": "2022-08-31T00:50:30.072Z",
+  "size": 451,
+  "md5Hash": "rFdN1nVhxS07nTFm6TcT6A==",
+  "crc32c": "1050927594"
 }

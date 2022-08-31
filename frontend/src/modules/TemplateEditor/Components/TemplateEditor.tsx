@@ -250,7 +250,7 @@ export const TemplateEditor = () => {
               </TableHead>
               <TableBody>
                 {Object.entries(replaceMap).map(([key, value]) => (
-                  <TableRow>
+                  <TableRow key={key}>
                     <TableCell>{key}</TableCell>
                     <TableCell>{value}</TableCell>
                   </TableRow>
