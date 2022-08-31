@@ -93,5 +93,5 @@ export interface EmailModalContentProps {
 
 export interface EmailPreviewProps {
   template: EmailTemplate
-  courseNames: string[]
+  replacedHtml: string
 }

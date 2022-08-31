@@ -38,16 +38,8 @@ export const TemplateEditor = () => {
   const [templateHtml, setTemplateHtml] = useState('')
 
   // Special value substitution in template HTML
-  const replaceMapShared = {
-    '{{COURSE_NAME}}': 'ABC 1100',
-  }
-  const replaceMapGroup = {}
-  const replaceMapStudent = {
-    '{{STUDENT_NAME}}': 'Jane Doe',
-  }
   const replaceMap = {
-    ...replaceMapShared,
-    ...(templateType === 'group' ? replaceMapGroup : replaceMapStudent),
+    '{{COURSE_NAME}}': 'ABC 1100',
   }
   const replacedHtml = Object.entries(replaceMap).reduce(
     (prev, [key, value]) => prev.replaceAll(key, value),
