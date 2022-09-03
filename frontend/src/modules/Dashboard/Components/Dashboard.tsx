@@ -229,7 +229,9 @@ export const Dashboard = () => {
             <MenuItem value="no-check-in-email">
               Unsent Check-in Emails
             </MenuItem>
-            <MenuItem value="no-match-email">Unsent No Match Emails</MenuItem>
+            <MenuItem value="no-no-match-email">
+              Unsent No Match Emails
+            </MenuItem>
           </DropdownSelect>
         </Box>
         <Button

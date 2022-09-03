@@ -29,6 +29,7 @@ const StudentCard = ({
   groupNumber,
   xsSize = 6,
   templateMap,
+  selected,
   handleAddStudent,
   updateNotes,
 }: StudentGridProps) => {
@@ -45,10 +46,8 @@ const StudentCard = ({
   })
 
   const [isHovering, setIsHovering] = useState(false)
-  const [selected, setSelected] = useState(false)
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleAddStudent(student.email, e.target.checked)
-    setSelected(!selected)
   }
 
   const studentNotes = student.groups.find((g) => g.courseId === courseId)!

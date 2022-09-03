@@ -18,6 +18,7 @@ export const UnmatchedGrid = ({
   moveStudent,
   matchStudents,
   handleAddStudent,
+  selectedStudents,
   templateMap,
   updateNotes,
 }: UnmatchedGridProps) => {
@@ -52,7 +53,8 @@ export const UnmatchedGrid = ({
               groupNumber={-1}
               student={student}
               xsSize={xsSize}
-              templateMap= {templateMap}
+              templateMap={templateMap}
+              selected={selectedStudents.includes(student.email)}
               handleAddStudent={handleAddStudent}
               updateNotes={updateNotes}
             />
