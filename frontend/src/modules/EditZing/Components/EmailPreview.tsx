@@ -3,7 +3,7 @@ import { Box } from '@mui/material'
 import { Typography } from '@mui/material'
 import { SxProps } from '@mui/material'
 
-export const EmailPreview = ({ template, courseNames }: EmailPreviewProps) => {
+export const EmailPreview = ({ template, replacedHtml }: EmailPreviewProps) => {
   const TitleSx: SxProps = {
     color: 'essentials.6',
     backgroundColor: 'essentials.75',
@@ -23,7 +23,6 @@ export const EmailPreview = ({ template, courseNames }: EmailPreviewProps) => {
     padding: '16px',
   }
 
-  const body = template.html
   return (
     <Box>
       <Box sx={TitleSx}>Email Preview</Box>
@@ -46,7 +45,7 @@ export const EmailPreview = ({ template, courseNames }: EmailPreviewProps) => {
           ...BodyAndSubjectSx,
         }}
       >
-        <div dangerouslySetInnerHTML={{ __html: body }}></div>
+        <div dangerouslySetInnerHTML={{ __html: replacedHtml }}></div>
       </Box>
     </Box>
   )

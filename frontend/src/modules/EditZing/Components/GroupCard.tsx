@@ -17,6 +17,7 @@ const GroupCard = ({
   templateMap,
   groupTimestamps,
   selected,
+  selectedStudents,
   handleChecked,
   handleAddStudent,
   updateNotes,
@@ -140,6 +141,7 @@ const GroupCard = ({
               groupNumber={groupNumber}
               student={student}
               templateMap={templateMap}
+              selected={selectedStudents.includes(student.email)}
               handleAddStudent={handleAddStudent}
               updateNotes={updateNotes}
             />

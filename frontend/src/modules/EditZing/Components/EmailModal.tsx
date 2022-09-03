@@ -39,6 +39,15 @@ export const EmailModal = ({
   const [templates, setTemplates] = useState<EmailTemplate[]>([])
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>()
 
+  // Special value substitution in template HTML
+  const replaceMap = {
+    '{{COURSE_NAME}}': courseNames.join('/'),
+  }
+  const replacedHtml = Object.entries(replaceMap).reduce(
+    (prev, [key, value]) => prev.replaceAll(key, value),
+    selectedTemplate?.html || ''
+  )
+
   useEffect(() => {
     axios
       .get(`${API_ROOT}${EMAIL_PATH}/templates`)
@@ -89,7 +98,7 @@ export const EmailModal = ({
         const emailItems = {
           emailSubject,
           indivEmail,
-          emailBody: selectedTemplate?.html,
+          emailBody: replacedHtml,
           courseId,
           groupNum: undefined,
           selectedTemplate: selectedTemplate?.id,
@@ -112,7 +121,7 @@ export const EmailModal = ({
         const emailItems = {
           emailSubject,
           indivEmail: undefined,
-          emailBody: selectedTemplate?.html,
+          emailBody: replacedHtml,
           courseId,
           groupNum,
           selectedTemplate: selectedTemplate?.id,
@@ -168,7 +177,10 @@ export const EmailModal = ({
     return (
       <Box>
         <TemplateSelectedComponent />
-        <EmailPreview template={selectedTemplate!} courseNames={courseNames} />
+        <EmailPreview
+          template={selectedTemplate!}
+          replacedHtml={replacedHtml}
+        />
       </Box>
     )
   }
