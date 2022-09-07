@@ -11,7 +11,6 @@ import {
   HOME_PATH,
   ADMIN_PATH,
   SURVEY_PATH,
-  CREATE_ZING_PATH,
   EDIT_ZING_PATH,
   DASHBOARD_PATH,
   EMAIL_PATH,
@@ -29,7 +28,6 @@ import {
 import { Home } from 'Home'
 import { AdminHome } from 'AdminHome'
 import { Survey } from 'Survey'
-import { CreateZingForm } from 'CreateZing'
 import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
 import { Emailing } from 'Emailing'
@@ -96,22 +94,36 @@ const App = () => {
   }, [])
 
   // Application-wide courses are only loaded when user is authorized
+  const [hasLoadedCourses, setHasLoadedCourses] = useState(false)
   const [courses, setCourses] = useState<Course[]>([])
 
   const loadCourses = () => {
     axios.get(`${API_ROOT}${COURSE_API}`).then(
-      (res) => setCourses(res.data.map(responseCourseToCourse)),
-      (error) => console.log(error)
+      (res) => {
+        setCourses(res.data.map(responseCourseToCourse))
+        setHasLoadedCourses(true)
+      },
+      (error) => {
+        console.log(error)
+        setNetworkError(error.message)
+      }
     )
   }
 
   // Application-wide students are only loaded when user is authorized
+  const [hasLoadedStudents, setHasLoadedStudents] = useState(false)
   const [students, setStudents] = useState<Student[]>([])
 
   const loadStudents = () => {
     axios.get(`${API_ROOT}${STUDENT_API}`).then(
-      (res) => setStudents(res.data.map(responseStudentToStudent)),
-      (error) => console.log(error)
+      (res) => {
+        setStudents(res.data.map(responseStudentToStudent))
+        setHasLoadedStudents(true)
+      },
+      (error) => {
+        console.log(error)
+        setNetworkError(error.message)
+      }
     )
   }
 
@@ -127,17 +139,12 @@ const App = () => {
               displayNetworkError: setNetworkError,
             }}
           >
-            <CourseProvider value={{ courses }}>
-              <StudentProvider value={{ students }}>
+            <CourseProvider value={{ hasLoadedCourses, courses }}>
+              <StudentProvider value={{ hasLoadedStudents, students }}>
                 <Switch>
                   <PublicRoute exact path={HOME_PATH} component={Home} />
                   <PublicRoute exact path={ADMIN_PATH} component={AdminHome} />
                   <Route exact path={SURVEY_PATH} component={Survey} />
-                  <Route
-                    exact
-                    path={CREATE_ZING_PATH}
-                    component={CreateZingForm}
-                  />
                   <PrivateRoute
                     exact
                     path={DASHBOARD_PATH}

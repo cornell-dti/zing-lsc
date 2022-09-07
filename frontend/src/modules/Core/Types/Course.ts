@@ -16,7 +16,6 @@ export interface Group {
   members: string[]
   createTime: Date
   updateTime: Date
-  // TODO replace the below with the new template timestamps
   templateTimestamps: { [key: string]: Date }
 }
 
@@ -36,11 +35,9 @@ export interface ResponseGroup {
   members: string[]
   createTime: string
   updateTime: string
-  // TODO replace the below with the new template timestamps
   templateTimestamps: { [key: string]: string }
 }
 
-// TODO update this with new email template timestamp stuff
 export const responseCourseToCourse = (course: ResponseCourse): Course => ({
   ...course,
   latestSubmissionTime: new Date(course.latestSubmissionTime),

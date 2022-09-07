@@ -2,10 +2,12 @@ import React, { useContext } from 'react'
 import { Course } from '@core/Types'
 
 interface CourseContextType {
+  hasLoadedCourses: boolean
   courses: Course[]
 }
 
 const CourseContext = React.createContext<CourseContextType>({
+  hasLoadedCourses: false,
   courses: [],
 } as CourseContextType)
 
