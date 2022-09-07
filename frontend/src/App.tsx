@@ -127,6 +127,22 @@ const App = () => {
     )
   }
 
+  /** Update notes for a student */
+  const updateNotes = (student: string, courseId: string, notes: string) => {
+    setStudents(
+      students.map((s) =>
+        s.email === student
+          ? {
+              ...s,
+              groups: s.groups.map((group) =>
+                group.courseId === courseId ? { ...group, notes } : group
+              ),
+            }
+          : s
+      )
+    )
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -140,7 +156,9 @@ const App = () => {
             }}
           >
             <CourseProvider value={{ hasLoadedCourses, courses }}>
-              <StudentProvider value={{ hasLoadedStudents, students }}>
+              <StudentProvider
+                value={{ hasLoadedStudents, students, updateNotes }}
+              >
                 <Switch>
                   <PublicRoute exact path={HOME_PATH} component={Home} />
                   <PublicRoute exact path={ADMIN_PATH} component={AdminHome} />

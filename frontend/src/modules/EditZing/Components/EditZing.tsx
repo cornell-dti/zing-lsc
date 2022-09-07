@@ -38,7 +38,7 @@ export const EditZing = () => {
 
   const { displayNetworkError } = useAuthValue()
   const { courses } = useCourseValue()
-  const { students } = useStudentValue()
+  const { students, updateNotes } = useStudentValue()
 
   const course = courses.find((course) => course.courseId === courseId)
 
@@ -306,42 +306,6 @@ export const EditZing = () => {
         .map((student) => student.email)
     )
     handleMenuClose()
-  }
-
-  /** Helper: return a new Student with the specified notes for particular courseId */
-  const studentWithNotes = (
-    student: Student,
-    courseId: string,
-    notes: string
-  ): Student => ({
-    ...student,
-    groups: student.groups.map((group) =>
-      group.courseId === courseId ? { ...group, notes } : group
-    ),
-  })
-
-  /** Update notes for a student in some group or unmatched */
-  const updateNotes = (student: string, notes: string) => {
-    // if (unmatchedStudents.some((s) => s.email === student)) {
-    //   setUnmatchedStudents(
-    //     unmatchedStudents.map((s) =>
-    //       s.email === student ? studentWithNotes(s, courseId, notes) : s
-    //     )
-    //   )
-    // } else {
-    //   setStudentGroups(
-    //     studentGroups.map((g) =>
-    //       g.memberData.some((s) => s.email === student)
-    //         ? {
-    //             ...g,
-    //             memberData: g.memberData.map((s) =>
-    //               s.email === student ? studentWithNotes(s, courseId, notes) : s
-    //             ),
-    //           }
-    //         : g
-    //     )
-    //   )
-    // }
   }
 
   return course ? (

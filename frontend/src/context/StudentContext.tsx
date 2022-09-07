@@ -4,11 +4,13 @@ import { Student } from '@core/Types'
 interface StudentContextType {
   hasLoadedStudents: boolean
   students: Student[]
+  updateNotes: (student: string, courseId: string, notes: string) => void
 }
 
 const StudentContext = React.createContext<StudentContextType>({
   hasLoadedStudents: false,
   students: [],
+  updateNotes: () => {},
 } as StudentContextType)
 
 export function StudentProvider({

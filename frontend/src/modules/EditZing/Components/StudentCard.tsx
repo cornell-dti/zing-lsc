@@ -74,7 +74,7 @@ const StudentCard = ({
         notes: modalNotes,
       })
       .then(() => {
-        updateNotes(student.email, modalNotes) // Share the changes to rest of the page
+        updateNotes(student.email, courseId, modalNotes) // Share the changes to rest of the app
         setShowNotesSaveSuccess(true)
       })
       .catch(() => setShowNotesSaveFailure(true))
