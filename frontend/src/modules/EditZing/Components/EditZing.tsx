@@ -42,17 +42,11 @@ export const EditZing = () => {
 
   const course = courses.find((course) => course.courseId === courseId)
 
-  /** Return an array of Students in a certain group (-1 for unmatched) */
-  const studentsForGroup = (groupNumber: number) =>
-    students.filter((student) =>
-      student.groups.some(
-        (membership) =>
-          membership.courseId === courseId &&
-          membership.groupNumber === groupNumber
-      )
-    )
+  /** Return an ordered array of Students from student emails */
+  const getStudentsFromEmails = (emails: string[]) =>
+    emails.map((email) => students.find((student) => student.email === email)!)
 
-  const unmatchedStudents = studentsForGroup(-1)
+  const unmatchedStudents = getStudentsFromEmails(course?.unmatched ?? [])
   const studentGroups = course?.groups ?? []
 
   const [isEmailing, setIsEmailing] = useState<boolean>(false)
@@ -331,7 +325,7 @@ export const EditZing = () => {
               <GroupCard
                 key={studentGroup.groupNumber}
                 courseId={courseId}
-                studentList={studentsForGroup(studentGroup.groupNumber)}
+                studentList={getStudentsFromEmails(studentGroup.members)}
                 groupNumber={studentGroup.groupNumber}
                 templateMap={templateNameMap}
                 groupTimestamps={studentGroup.templateTimestamps}
