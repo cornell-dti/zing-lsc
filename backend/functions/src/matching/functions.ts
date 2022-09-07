@@ -295,7 +295,9 @@ async function unmatchStudent(
       throw new Error(`error in adding ${studentEmail} to unmatched students.`)
     })
 
-  await Promise.all([groupUpdate, unmatchedUpdate])
+  const studentRecordUpdate = updateStudentGroup(studentEmail, courseId, -1)
+
+  await Promise.all([groupUpdate, unmatchedUpdate, studentRecordUpdate])
 }
 
 async function createEmptyGroup(courseId: string) {

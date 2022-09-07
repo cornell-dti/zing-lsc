@@ -14,10 +14,11 @@ import {
   EDIT_ZING_PATH,
   DASHBOARD_PATH,
   EMAIL_PATH,
-  API_ROOT,
   TEMPLATE_EDITOR_PATH,
+  API_ROOT,
   COURSE_API,
   STUDENT_API,
+  MATCHING_API,
 } from '@core/Constants'
 import {
   Course,
@@ -127,18 +128,192 @@ const App = () => {
     )
   }
 
-  /** Update notes for a student */
-  const updateNotes = (student: string, courseId: string, notes: string) => {
-    setStudents(
-      students.map((s) =>
-        s.email === student
+  /** Add an unmatched student to a group */
+  const moveStudentFromUnmatched = (
+    studentEmail: string,
+    courseId: string,
+    toGroupNumber: number
+  ) => {
+    setCourses(
+      courses.map((course) =>
+        course.courseId === courseId
           ? {
-              ...s,
-              groups: s.groups.map((group) =>
+              ...course,
+              unmatched: course.unmatched.filter(
+                (student) => student !== studentEmail
+              ),
+              groups: course.groups.map((group) =>
+                group.groupNumber === toGroupNumber
+                  ? { ...group, members: [...group.members, studentEmail] }
+                  : group
+              ),
+            }
+          : course
+      )
+    )
+    setStudents(
+      students.map((student) =>
+        student.email === studentEmail
+          ? {
+              ...student,
+              groups: student.groups.map((membership) =>
+                membership.courseId === courseId
+                  ? { ...membership, groupNumber: toGroupNumber }
+                  : membership
+              ),
+            }
+          : student
+      )
+    )
+    axios
+      .post(`${API_ROOT}${MATCHING_API}/transfer/unmatched`, {
+        courseId: courseId,
+        studentEmail: studentEmail,
+        groupNumber: toGroupNumber,
+      })
+      .catch((error) => setNetworkError(error.message))
+  }
+
+  /** Move a student already in a group back to unmatched */
+  const moveStudentToUnmatched = (
+    studentEmail: string,
+    courseId: string,
+    fromGroupNumber: number
+  ) => {
+    setCourses(
+      courses.map((course) =>
+        course.courseId === courseId
+          ? {
+              ...course,
+              unmatched: [...course.unmatched, studentEmail],
+              groups: course.groups.map((group) =>
+                group.groupNumber === fromGroupNumber
+                  ? {
+                      ...group,
+                      members: group.members.filter(
+                        (student) => student !== studentEmail
+                      ),
+                    }
+                  : group
+              ),
+            }
+          : course
+      )
+    )
+    setStudents(
+      students.map((student) =>
+        student.email === studentEmail
+          ? {
+              ...student,
+              groups: student.groups.map((membership) =>
+                membership.courseId === courseId
+                  ? { ...membership, groupNumber: -1 }
+                  : membership
+              ),
+            }
+          : student
+      )
+    )
+    axios
+      .post(`${API_ROOT}${MATCHING_API}/transfer/unmatch`, {
+        courseId: courseId,
+        studentEmail: studentEmail,
+        groupNumber: fromGroupNumber,
+      })
+      .catch((error) => setNetworkError(error.message))
+  }
+
+  /** Transfer a student from a group to another group */
+  const moveStudentIntergroup = (
+    studentEmail: string,
+    courseId: string,
+    fromGroupNumber: number,
+    toGroupNumber: number
+  ) => {
+    setCourses(
+      courses.map((course) =>
+        course.courseId === courseId
+          ? {
+              ...course,
+              groups: course.groups.map((group) =>
+                group.groupNumber === toGroupNumber
+                  ? { ...group, members: [...group.members, studentEmail] }
+                  : group.groupNumber === fromGroupNumber
+                  ? {
+                      ...group,
+                      members: group.members.filter(
+                        (student) => student !== studentEmail
+                      ),
+                    }
+                  : group
+              ),
+            }
+          : course
+      )
+    )
+    setStudents(
+      students.map((student) =>
+        student.email === studentEmail
+          ? {
+              ...student,
+              groups: student.groups.map((membership) =>
+                membership.courseId === courseId
+                  ? { ...membership, groupNumber: toGroupNumber }
+                  : membership
+              ),
+            }
+          : student
+      )
+    )
+    axios
+      .post(`${API_ROOT}${MATCHING_API}/transfer/intergroup`, {
+        courseId: courseId,
+        studentEmail: studentEmail,
+        group1: fromGroupNumber,
+        group2: toGroupNumber,
+      })
+      .catch((error) => setNetworkError(error.message))
+  }
+
+  /** Move a student from some group (existing/unmatched) to a group */
+  const moveStudent = (
+    studentEmail: string,
+    courseId: string,
+    fromGroupNumber: number,
+    toGroupNumber: number
+  ) => {
+    if (fromGroupNumber !== toGroupNumber) {
+      if (fromGroupNumber === -1) {
+        moveStudentFromUnmatched(studentEmail, courseId, toGroupNumber)
+      } else if (toGroupNumber === -1) {
+        moveStudentToUnmatched(studentEmail, courseId, fromGroupNumber)
+      } else {
+        moveStudentIntergroup(
+          studentEmail,
+          courseId,
+          fromGroupNumber,
+          toGroupNumber
+        )
+      }
+    }
+  }
+
+  /** Update notes for a student */
+  const updateNotes = (
+    studentEmail: string,
+    courseId: string,
+    notes: string
+  ) => {
+    setStudents(
+      students.map((student) =>
+        student.email === studentEmail
+          ? {
+              ...student,
+              groups: student.groups.map((group) =>
                 group.courseId === courseId ? { ...group, notes } : group
               ),
             }
-          : s
+          : student
       )
     )
   }
@@ -155,7 +330,7 @@ const App = () => {
               displayNetworkError: setNetworkError,
             }}
           >
-            <CourseProvider value={{ hasLoadedCourses, courses }}>
+            <CourseProvider value={{ hasLoadedCourses, courses, moveStudent }}>
               <StudentProvider
                 value={{ hasLoadedStudents, students, updateNotes }}
               >

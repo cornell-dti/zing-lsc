@@ -10,7 +10,8 @@ export interface UnmatchedGridProps {
   courseId: string
   unmatchedStudents: Student[]
   moveStudent: (
-    studentToMove: Student,
+    studentEmail: string,
+    courseId: string,
     fromGroupNumber: number,
     toGroupNumber: number
   ) => void
@@ -18,7 +19,7 @@ export interface UnmatchedGridProps {
   templateMap: IdMap
   selectedStudents: string[]
   handleAddStudent: (student: string, selected: boolean) => void
-  updateNotes: (student: string, courseId: string, notes: string) => void
+  updateNotes: (studentEmail: string, courseId: string, notes: string) => void
 }
 
 export interface GroupGridProps {
@@ -28,7 +29,8 @@ export interface GroupGridProps {
   templateMap: IdMap
   groupTimestamps: { [key: string]: Date }
   moveStudent: (
-    studentToMove: Student,
+    studentEmail: string,
+    courseId: string,
     fromGroupNumber: number,
     toGroupNumber: number
   ) => void
@@ -38,7 +40,7 @@ export interface GroupGridProps {
   selectedStudents: string[]
   handleChecked: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleAddStudent: (student: string, selected: boolean) => void
-  updateNotes: (student: string, courseId: string, notes: string) => void
+  updateNotes: (studentEmail: string, courseId: string, notes: string) => void
 }
 
 export interface StudentGridProps {
@@ -49,7 +51,7 @@ export interface StudentGridProps {
   templateMap: IdMap
   selected: boolean
   handleAddStudent: (student: string, selected: boolean) => void
-  updateNotes: (student: string, courseId: string, notes: string) => void
+  updateNotes: (studentEmail: string, courseId: string, notes: string) => void
 }
 
 export interface MatchLoadingProps {

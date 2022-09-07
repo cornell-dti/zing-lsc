@@ -37,7 +37,7 @@ export const EditZing = () => {
   const [showError, setShowError] = useState(false)
 
   const { displayNetworkError } = useAuthValue()
-  const { courses } = useCourseValue()
+  const { courses, moveStudent } = useCourseValue()
   const { students, updateNotes } = useStudentValue()
 
   const course = courses.find((course) => course.courseId === courseId)
@@ -126,104 +126,6 @@ export const EditZing = () => {
 
   const [showMatchLoading, setShowMatchLoading] = useState(false)
   const [isCurrentlyGrouping, setIsCurrentlyGrouping] = useState(false)
-
-  /** Add an unmatched student to a group */
-  const moveStudentFromUnmatched = (
-    student: Student,
-    toGroupNumber: number
-  ) => {
-    // setUnmatchedStudents(
-    //   unmatchedStudents.filter((s) => s.email !== student.email)
-    // )
-    // setStudentGroups(
-    //   studentGroups.map((group) =>
-    //     group.groupNumber === toGroupNumber
-    //       ? { ...group, memberData: [...group.memberData, student] }
-    //       : group
-    //   )
-    // )
-    // axios
-    //   .post(`${API_ROOT}${MATCHING_API}/transfer/unmatched`, {
-    //     courseId: courseId,
-    //     studentEmail: student.email,
-    //     groupNumber: toGroupNumber,
-    //   })
-    //   .catch((error) => displayNetworkError(error.message))
-  }
-
-  /** Move a student already in a group back to unmatched */
-  const moveStudentToUnmatched = (
-    student: Student,
-    fromGroupNumber: number
-  ) => {
-    // setUnmatchedStudents([...unmatchedStudents, student])
-    // setStudentGroups(
-    //   studentGroups.map((group) =>
-    //     group.groupNumber === fromGroupNumber
-    //       ? {
-    //           ...group,
-    //           memberData: group.memberData.filter(
-    //             (s) => s.email !== student.email
-    //           ),
-    //         }
-    //       : group
-    //   )
-    // )
-    // axios
-    //   .post(`${API_ROOT}${MATCHING_API}/transfer/unmatch`, {
-    //     courseId: courseId,
-    //     studentEmail: student.email,
-    //     groupNumber: fromGroupNumber,
-    //   })
-    //   .catch((error) => displayNetworkError(error.message))
-  }
-
-  /** Transfer a student from a group to another group */
-  const moveStudentIntergroup = (
-    student: Student,
-    fromGroupNumber: number,
-    toGroupNumber: number
-  ) => {
-    // setStudentGroups(
-    //   studentGroups.map((group) =>
-    //     group.groupNumber === toGroupNumber
-    //       ? { ...group, memberData: [...group.memberData, student] }
-    //       : group.groupNumber === fromGroupNumber
-    //       ? {
-    //           ...group,
-    //           memberData: group.memberData.filter(
-    //             (s) => s.email !== student.email
-    //           ),
-    //         }
-    //       : group
-    //   )
-    // )
-    // axios
-    //   .post(`${API_ROOT}${MATCHING_API}/transfer/intergroup`, {
-    //     courseId: courseId,
-    //     studentEmail: student.email,
-    //     group1: fromGroupNumber,
-    //     group2: toGroupNumber,
-    //   })
-    //   .catch((error) => displayNetworkError(error.message))
-  }
-
-  /** Move a student from some group (existing/unmatched) to a group */
-  const moveStudent = (
-    student: Student,
-    fromGroupNumber: number,
-    toGroupNumber: number
-  ) => {
-    // if (fromGroupNumber !== toGroupNumber) {
-    //   if (fromGroupNumber === -1) {
-    //     moveStudentFromUnmatched(student, toGroupNumber)
-    //   } else if (toGroupNumber === -1) {
-    //     moveStudentToUnmatched(student, fromGroupNumber)
-    //   } else {
-    //     moveStudentIntergroup(student, fromGroupNumber, toGroupNumber)
-    //   }
-    // }
-  }
 
   /** called by the match button to match the unmatched students */
   const matchStudents = () => {

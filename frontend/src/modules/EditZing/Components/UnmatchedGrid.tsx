@@ -25,7 +25,7 @@ export const UnmatchedGrid = ({
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
     drop: (item: DnDStudentTransferType) => {
-      moveStudent(item.studentToMove, item.groupNumber, -1)
+      moveStudent(item.studentToMove.email, courseId, item.groupNumber, -1)
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
