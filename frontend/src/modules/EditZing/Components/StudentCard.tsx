@@ -15,11 +15,7 @@ import {
 import NotesModal from './NotesModal'
 import { ReactComponent as FilledEditIcon } from '@assets/img/FilledEditIcon.svg'
 import { ReactComponent as EditIcon } from '@assets/img/EditIcon.svg'
-
-import axios from 'axios'
-import { API_ROOT, STUDENT_API } from '@core/Constants'
 import CircleIcon from '@mui/icons-material/Circle'
-
 import { Student } from '@core/Types'
 
 /** the equivalent of MoveableItem */
@@ -65,19 +61,14 @@ const StudentCard = ({
   const handleCloseNotes = () => setOpenNotesModal(false)
 
   // saving notes to db
-  const saveModalNotes = () => {
+  const saveModalNotes = async () => {
     setIsNotesSaving(true)
-    axios
-      .post(`${API_ROOT}${STUDENT_API}/notes`, {
-        email: student.email,
-        courseId: courseId,
-        notes: modalNotes,
-      })
-      .then(() => {
-        updateNotes(student.email, courseId, modalNotes) // Share the changes to rest of the app
-        setShowNotesSaveSuccess(true)
-      })
-      .catch(() => setShowNotesSaveFailure(true))
+    try {
+      await updateNotes(student.email, courseId, modalNotes)
+      setShowNotesSaveSuccess(true)
+    } catch (error: any) {
+      setShowNotesSaveFailure(true)
+    }
     setIsNotesSaving(false)
     setOpenNotesModal(false)
   }

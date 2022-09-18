@@ -19,7 +19,11 @@ export interface UnmatchedGridProps {
   templateMap: IdMap
   selectedStudents: string[]
   handleAddStudent: (student: string, selected: boolean) => void
-  updateNotes: (studentEmail: string, courseId: string, notes: string) => void
+  updateNotes: (
+    studentEmail: string,
+    courseId: string,
+    notes: string
+  ) => Promise<void>
 }
 
 export interface GroupGridProps {
@@ -40,7 +44,11 @@ export interface GroupGridProps {
   selectedStudents: string[]
   handleChecked: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleAddStudent: (student: string, selected: boolean) => void
-  updateNotes: (studentEmail: string, courseId: string, notes: string) => void
+  updateNotes: (
+    studentEmail: string,
+    courseId: string,
+    notes: string
+  ) => Promise<void>
 }
 
 export interface StudentGridProps {
@@ -51,7 +59,11 @@ export interface StudentGridProps {
   templateMap: IdMap
   selected: boolean
   handleAddStudent: (student: string, selected: boolean) => void
-  updateNotes: (studentEmail: string, courseId: string, notes: string) => void
+  updateNotes: (
+    studentEmail: string,
+    courseId: string,
+    notes: string
+  ) => Promise<void>
 }
 
 export interface MatchLoadingProps {
@@ -79,7 +91,7 @@ export interface NotesModalProps {
   name: string
   modalNotes: string
   setModalNotes: (arg: string) => void
-  saveModalNotes: () => void
+  saveModalNotes: () => Promise<void>
   handleClose: () => void
 }
 

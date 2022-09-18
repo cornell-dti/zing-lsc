@@ -299,23 +299,33 @@ const App = () => {
   }
 
   /** Update notes for a student */
-  const updateNotes = (
+  const updateNotes = async (
     studentEmail: string,
     courseId: string,
     notes: string
   ) => {
-    setStudents(
-      students.map((student) =>
-        student.email === studentEmail
-          ? {
-              ...student,
-              groups: student.groups.map((group) =>
-                group.courseId === courseId ? { ...group, notes } : group
-              ),
-            }
-          : student
+    try {
+      await axios.post(`${API_ROOT}${STUDENT_API}/notes`, {
+        email: studentEmail,
+        courseId: courseId,
+        notes: notes,
+      })
+      setStudents(
+        students.map((student) =>
+          student.email === studentEmail
+            ? {
+                ...student,
+                groups: student.groups.map((group) =>
+                  group.courseId === courseId ? { ...group, notes } : group
+                ),
+              }
+            : student
+        )
       )
-    )
+    } catch (error: any) {
+      setNetworkError(error.message)
+      throw error
+    }
   }
 
   return (
