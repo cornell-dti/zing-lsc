@@ -16,7 +16,7 @@ export const UnmatchedGrid = ({
   courseId,
   unmatchedStudents,
   moveStudent,
-  matchStudents,
+  handleMatchStudents,
   handleAddStudent,
   selectedStudents,
   templateMap,
@@ -43,7 +43,7 @@ export const UnmatchedGrid = ({
           <StyledUnmatchedText>
             Unmatched Students ({unmatchedStudents.length})
           </StyledUnmatchedText>
-          <MatchButton label="Match" onClick={matchStudents} />
+          <MatchButton label="Match" onClick={handleMatchStudents} />
         </StyledUnmatchedTextWrapper>
         <Box sx={{ display: 'flex', flexFlow: 'row wrap', gap: '8px' }}>
           {unmatchedStudents.map((student, index) => (

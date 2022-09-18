@@ -22,7 +22,9 @@ import {
 } from '@core/Constants'
 import {
   Course,
+  Group,
   responseCourseToCourse,
+  responseGroupToGroup,
   responseStudentToStudent,
   Student,
 } from '@core/Types'
@@ -298,6 +300,50 @@ const App = () => {
     }
   }
 
+  /** Make matches of all unmatched students in a course */
+  const matchStudents = async (courseId: string) => {
+    try {
+      const response = await axios.post(`${API_ROOT}${MATCHING_API}/make`, {
+        courseId: courseId,
+      })
+      const newGroups: Group[] = response.data.groups.map(responseGroupToGroup)
+      const updatedStudents = newGroups.flatMap((group) => group.members)
+      setCourses(
+        courses.map((course) =>
+          course.courseId === courseId
+            ? {
+                ...course,
+                unmatched: response.data.unmatched,
+                groups: [...course.groups, ...newGroups],
+              }
+            : course
+        )
+      )
+      setStudents(
+        students.map((student) =>
+          updatedStudents.includes(student.email)
+            ? {
+                ...student,
+                groups: student.groups.map((membership) =>
+                  membership.courseId === courseId
+                    ? {
+                        ...membership,
+                        groupNumber: newGroups.find((group) =>
+                          group.members.includes(student.email)
+                        )!.groupNumber,
+                      }
+                    : membership
+                ),
+              }
+            : student
+        )
+      )
+    } catch (error: any) {
+      setNetworkError(error.message)
+      throw error
+    }
+  }
+
   /** Update notes for a student */
   const updateNotes = async (
     studentEmail: string,
@@ -340,7 +386,9 @@ const App = () => {
               displayNetworkError: setNetworkError,
             }}
           >
-            <CourseProvider value={{ hasLoadedCourses, courses, moveStudent }}>
+            <CourseProvider
+              value={{ hasLoadedCourses, courses, moveStudent, matchStudents }}
+            >
               <StudentProvider
                 value={{ hasLoadedStudents, students, updateNotes }}
               >

@@ -37,7 +37,7 @@ export const EditZing = () => {
   const [showError, setShowError] = useState(false)
 
   const { displayNetworkError } = useAuthValue()
-  const { courses, moveStudent } = useCourseValue()
+  const { courses, moveStudent, matchStudents } = useCourseValue()
   const { students, updateNotes } = useStudentValue()
 
   const course = courses.find((course) => course.courseId === courseId)
@@ -122,29 +122,12 @@ export const EditZing = () => {
   const [isCurrentlyGrouping, setIsCurrentlyGrouping] = useState(false)
 
   /** called by the match button to match the unmatched students */
-  const matchStudents = () => {
-    // setShowMatchLoading(true)
-    // setIsCurrentlyGrouping(true)
-    // axios
-    //   .post(`${API_ROOT}${MATCHING_API}/make`, { courseId: courseId })
-    //   .then((response) => {
-    //     setUnmatchedStudents(
-    //       response.data.data.unmatched.map(responseStudentToStudent)
-    //     )
-    //     const groups = studentGroups.concat(
-    //       response.data.data.groups.map((group: ResponseGroup) => ({
-    //         ...group,
-    //         memberData: group.memberData.map(responseStudentToStudent),
-    //         createTime: new Date(group.createTime),
-    //         updateTime: new Date(group.updateTime),
-    //         //the group was just created so no emails have been sent yet
-    //         templateTimestamps: {},
-    //       }))
-    //     )
-    //     setStudentGroups(groups)
-    //     setIsCurrentlyGrouping(false)
-    //   })
-    //   .catch((error) => displayNetworkError(error.message))
+  const handleMatchStudents = () => {
+    setShowMatchLoading(true)
+    setIsCurrentlyGrouping(true)
+    matchStudents(courseId)
+      .then(() => setIsCurrentlyGrouping(false))
+      .catch((error) => console.error(error))
   }
 
   /** Handles updating the groups state when we send an email so timestamp shows directly after email is sent without requiring page refresh. */
@@ -314,7 +297,7 @@ export const EditZing = () => {
                 courseId={courseId}
                 unmatchedStudents={unmatchedStudents}
                 moveStudent={moveStudent}
-                matchStudents={matchStudents}
+                handleMatchStudents={handleMatchStudents}
                 templateMap={templateNameMap}
                 selectedStudents={selectedStudents}
                 handleAddStudent={handleAddStudent}

@@ -10,12 +10,14 @@ interface CourseContextType {
     fromGroupNumber: number,
     toGroupNumber: number
   ) => void
+  matchStudents: (courseId: string) => Promise<void>
 }
 
 const CourseContext = React.createContext<CourseContextType>({
   hasLoadedCourses: false,
   courses: [],
   moveStudent: () => {},
+  matchStudents: async () => {},
 } as CourseContextType)
 
 export function CourseProvider({

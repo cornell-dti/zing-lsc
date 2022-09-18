@@ -15,7 +15,7 @@ export interface UnmatchedGridProps {
     fromGroupNumber: number,
     toGroupNumber: number
   ) => void
-  matchStudents: () => void
+  handleMatchStudents: () => void
   templateMap: IdMap
   selectedStudents: string[]
   handleAddStudent: (student: string, selected: boolean) => void
