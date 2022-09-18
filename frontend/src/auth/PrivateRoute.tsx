@@ -52,7 +52,11 @@ export const PrivateRoute = ({
           }}
         />
       ) : (
-        <RouteLoading isLoading={true} />
+        <RouteLoading
+          isLoading={true}
+          hasLoadedCourses={hasLoadedCourses}
+          hasLoadedStudents={hasLoadedStudents}
+        />
       )
   }
 }
