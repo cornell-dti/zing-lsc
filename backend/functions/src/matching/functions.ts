@@ -1,7 +1,6 @@
 import { db } from '../config'
 import admin from 'firebase-admin'
-import { getStudentsData } from '../student/functions'
-import { Student } from '../types'
+import { FirestoreGroup, Group } from '../types'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
 
@@ -19,15 +18,7 @@ async function assertIsExistingCourse(courseId: string) {
     })
 }
 
-async function updateStudentReferencesForGroup(
-  group: {
-    groupNumber: number
-    members: string[]
-    createTime?: FirebaseFirestore.FieldValue
-    updateTime?: FirebaseFirestore.FieldValue
-  },
-  courseId: string
-) {
+async function updateStudentReferencesForGroup(group: Group, courseId: string) {
   return group.members.map((member) =>
     updateStudentGroup(member, courseId, group.groupNumber)
   )
@@ -69,64 +60,63 @@ async function makeMatches(courseId: string) {
   const unmatchedEmails: string[] = data.unmatched
   const lastGroupNumber: number = data.lastGroupNumber
 
-  // get relevant student data
-  const studentData = await getStudentsData(unmatchedEmails)
-
   // Zero students can't be matched
   if (unmatchedEmails.length === 0) {
     return { unmatched: [], groups: [] }
   }
   // One student can't be matched
   if (unmatchedEmails.length === 1) {
-    return { unmatched: studentData, groups: [] }
+    return { unmatched: unmatchedEmails, groups: [] }
   }
 
   // Fairly naive group matching code but it's written for clarity
-  let studentDataTriples: Student[]
-  let studentDataDoubles: Student[]
+  let groupTriples: string[]
+  let groupDoubles: string[]
   if (unmatchedEmails.length % 3 === 0) {
-    studentDataTriples = studentData
-    studentDataDoubles = []
+    groupTriples = unmatchedEmails
+    groupDoubles = []
   } else if (unmatchedEmails.length % 3 === 1) {
-    studentDataTriples = studentData.slice(0, -4)
-    studentDataDoubles = studentData.slice(-4)
+    groupTriples = unmatchedEmails.slice(0, -4)
+    groupDoubles = unmatchedEmails.slice(-4)
   } else {
-    studentDataTriples = studentData.slice(0, -2)
-    studentDataDoubles = studentData.slice(-2)
+    groupTriples = unmatchedEmails.slice(0, -2)
+    groupDoubles = unmatchedEmails.slice(-2)
   }
+
+  const nowTimestamp = admin.firestore.Timestamp.now()
+  const nowDate = nowTimestamp.toDate()
 
   let groupCounter = 0
-  const newGroups = []
-  for (let i = 0; i < studentDataTriples.length; i += 3) {
+  const newGroups: Group[] = []
+  for (let i = 0; i < groupTriples.length; i += 3) {
     groupCounter += 1
-    const newGroup = studentDataTriples.slice(i, i + 3)
+    const newGroup = groupTriples.slice(i, i + 3)
     newGroups.push({
       groupNumber: groupCounter + lastGroupNumber,
-      memberData: newGroup,
-      createTime: new Date(),
-      updateTime: new Date(),
+      members: newGroup,
+      createTime: nowDate,
+      updateTime: nowDate,
       templateTimestamps: {},
     })
   }
-  for (let i = 0; i < studentDataDoubles.length; i += 2) {
+  for (let i = 0; i < groupDoubles.length; i += 2) {
     groupCounter += 1
-    const newGroup = studentDataDoubles.slice(i, i + 2)
+    const newGroup = groupDoubles.slice(i, i + 2)
     newGroups.push({
       groupNumber: groupCounter + lastGroupNumber,
-      memberData: newGroup,
-      createTime: new Date(),
-      updateTime: new Date(),
+      members: newGroup,
+      createTime: nowDate,
+      updateTime: nowDate,
       templateTimestamps: {},
     })
   }
 
-  // map for specific firebase data (just emails, as preserved from the previous function)
-  const groupsWithMembersEmail = newGroups.map((group) => ({
-    groupNumber: group.groupNumber,
-    members: group.memberData.map((member) => member.email),
-    createTime: admin.firestore.FieldValue.serverTimestamp(),
-    updateTime: admin.firestore.FieldValue.serverTimestamp(),
-    templateTimestamps: {},
+  // map for specific firebase data (native database timestamp format)
+  const newGroupsFirestore: FirestoreGroup[] = newGroups.map((group) => ({
+    ...group,
+    createTime: nowTimestamp,
+    updateTime: nowTimestamp,
+    templateTimestamps: {}, // Groups have this typed differently though it's just empty object
   }))
 
   // lastly, update the collections to reflect this matching
@@ -139,7 +129,7 @@ async function makeMatches(courseId: string) {
           lastGroupNumber: lastGroupNumber + groupCounter,
         })
         .catch((err) => console.log(err)),
-      groupsWithMembersEmail.map((group) =>
+      newGroupsFirestore.map((group) =>
         courseRef
           .doc(courseId)
           .collection('groups')
@@ -147,16 +137,13 @@ async function makeMatches(courseId: string) {
           .set(group)
           .catch((err) => console.log(err))
       ),
-      groupsWithMembersEmail.map((group) =>
+      newGroups.map((group) =>
         updateStudentReferencesForGroup(group, courseId)
       ),
     ].flat()
   )
 
-  return {
-    unmatched: [],
-    groups: newGroups,
-  }
+  return { unmatched: [], groups: newGroups }
 }
 
 async function getGroups(courseId: string) {
