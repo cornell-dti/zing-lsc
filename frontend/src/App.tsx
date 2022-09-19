@@ -361,8 +361,10 @@ const App = () => {
           student.email === studentEmail
             ? {
                 ...student,
-                groups: student.groups.map((group) =>
-                  group.courseId === courseId ? { ...group, notes } : group
+                groups: student.groups.map((membership) =>
+                  membership.courseId === courseId
+                    ? { ...membership, notes }
+                    : membership
                 ),
               }
             : student
@@ -372,6 +374,35 @@ const App = () => {
       setNetworkError(error.message)
       throw error
     }
+  }
+
+  /** Add a new timestamp to the student's email timestamps */
+  const addStudentEmailTimestamp = (
+    studentEmail: string,
+    courseId: string,
+    templateId: string,
+    timestamp: Date
+  ) => {
+    setStudents(
+      students.map((student) =>
+        student.email === studentEmail
+          ? {
+              ...student,
+              groups: student.groups.map((membership) =>
+                membership.courseId === courseId
+                  ? {
+                      ...membership,
+                      templateTimestamps: {
+                        ...membership.templateTimestamps,
+                        [templateId]: timestamp,
+                      },
+                    }
+                  : membership
+              ),
+            }
+          : student
+      )
+    )
   }
 
   return (
@@ -390,7 +421,12 @@ const App = () => {
               value={{ hasLoadedCourses, courses, moveStudent, matchStudents }}
             >
               <StudentProvider
-                value={{ hasLoadedStudents, students, updateNotes }}
+                value={{
+                  hasLoadedStudents,
+                  students,
+                  updateNotes,
+                  addStudentEmailTimestamp,
+                }}
               >
                 <Switch>
                   <PublicRoute exact path={HOME_PATH} component={Home} />

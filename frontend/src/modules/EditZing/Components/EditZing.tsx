@@ -113,11 +113,6 @@ export const EditZing = () => {
       })
   }, [courseId])
 
-  // const [unmatchedStudents, setUnmatchedStudents] = useState<Student[]>([])
-  const setUnmatchedStudents = (...args: any[]) => {} // TODO delete
-  // const [studentGroups, setStudentGroups] = useState<Group[]>([])
-  const setStudentGroups = (...args: any[]) => {} // TODO delete
-
   const [showMatchLoading, setShowMatchLoading] = useState(false)
   const [isCurrentlyGrouping, setIsCurrentlyGrouping] = useState(false)
 
@@ -193,7 +188,7 @@ export const EditZing = () => {
         paddingBottom: '100px',
       }}
     >
-      {/* {isEmailing && (
+      {isEmailing && (
         <EmailModal
           selectedGroups={selectedGroups}
           selectedStudents={selectedStudents}
@@ -202,9 +197,8 @@ export const EditZing = () => {
           setEmailSent={setEmailSent}
           setEmailSentError={setEmailSentError}
           courseNames={course.names}
-          handleEmailTimestamp={handleEmailTimestamp}
         />
-      )} */}
+      )}
       <MatchLoading
         showMatchLoading={showMatchLoading}
         isCurrentlyGrouping={isCurrentlyGrouping}

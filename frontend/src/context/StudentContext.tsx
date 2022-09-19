@@ -5,16 +5,23 @@ interface StudentContextType {
   hasLoadedStudents: boolean
   students: Student[]
   updateNotes: (
-    student: string,
+    studentEmail: string,
     courseId: string,
     notes: string
   ) => Promise<void>
+  addStudentEmailTimestamp: (
+    studentEmail: string,
+    courseId: string,
+    templateId: string,
+    timestamp: Date
+  ) => void
 }
 
 const StudentContext = React.createContext<StudentContextType>({
   hasLoadedStudents: false,
   students: [],
   updateNotes: async () => {},
+  addStudentEmailTimestamp: () => {},
 } as StudentContextType)
 
 export function StudentProvider({

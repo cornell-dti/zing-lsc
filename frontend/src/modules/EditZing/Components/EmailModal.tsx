@@ -21,6 +21,7 @@ import {
 } from '@core/Types'
 import axios, { AxiosResponse } from 'axios'
 import { getDownloadURL, ref } from 'firebase/storage'
+import { useStudentValue } from '@context/StudentContext'
 
 export const EmailModal = ({
   selectedGroups,
@@ -30,8 +31,10 @@ export const EmailModal = ({
   courseNames,
   setEmailSent,
   setEmailSentError,
-  handleEmailTimestamp,
 }: EmailModalProps) => {
+  const { courseId } = useParams<{ courseId: string }>()
+  const { addStudentEmailTimestamp } = useStudentValue()
+
   // check if emailing students or groups
   const recipientType = selectedStudents.length > 0 ? 'student' : 'group'
 
@@ -73,7 +76,6 @@ export const EmailModal = ({
       .catch((error) => console.error(error))
   }, [recipientType])
 
-  const { courseId } = useParams<{ courseId: string }>()
   const [step, setStep] = useState<number>(0)
   const titles = [
     'Select email template',
@@ -136,11 +138,21 @@ export const EmailModal = ({
    */
   const handleEmailSend = async () => {
     try {
-      await sendGroupEmails()
-      await sendIndividualEmails()
+      if (recipientType === 'student') {
+        await sendIndividualEmails()
+        selectedStudents.forEach((studentEmail) =>
+          addStudentEmailTimestamp(
+            studentEmail,
+            courseId,
+            selectedTemplate!.id,
+            new Date()
+          )
+        )
+      } else {
+        await sendGroupEmails()
+      }
       setEmailSent(true)
       setIsEmailing(false)
-      handleEmailTimestamp()
     } catch (e) {
       step === 2 ? setStep(3) : setStep(2)
       setEmailSentError(true)

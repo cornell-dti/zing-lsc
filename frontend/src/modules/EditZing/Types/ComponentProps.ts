@@ -2,7 +2,6 @@ import { GridSize } from '@mui/material'
 import { Group, Student } from '@core/Types'
 import { TemplateName } from 'EditZing/utils/emailTemplates'
 import { EmailTemplate } from '@core/Types'
-console.log('hello')
 
 type IdMap = { [key: string]: string }
 
@@ -82,7 +81,6 @@ export interface EmailModalProps {
   courseNames: string[]
   setEmailSent: (arg: boolean) => void
   setEmailSentError: (arg: boolean) => void
-  handleEmailTimestamp: () => void
 }
 
 export interface NotesModalProps {
