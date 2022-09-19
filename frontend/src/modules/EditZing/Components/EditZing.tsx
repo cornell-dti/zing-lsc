@@ -70,25 +70,29 @@ export const EditZing = () => {
     </Button>
   )
 
-  const [selectedStudents, setSelectedStudents] = useState<string[]>([])
-  const handleAddStudent = (student: string, selected: boolean) => {
+  const [selectedStudentEmails, setSelectedStudentEmails] = useState<string[]>(
+    []
+  )
+  const editSelectedStudentEmails = (
+    studentEmail: string,
+    selected: boolean
+  ) => {
     if (selected) {
-      setSelectedStudents((arr) => [...arr, student])
+      setSelectedStudentEmails((arr) => [...arr, studentEmail])
     } else {
-      setSelectedStudents(selectedStudents.filter((item) => item !== student))
+      setSelectedStudentEmails(
+        selectedStudentEmails.filter((item) => item !== studentEmail)
+      )
     }
   }
 
   const [selectedGroupNumbers, setSelectedGroupNumbers] = useState<number[]>([])
-  const selectedGroups = studentGroups.filter((group) =>
-    selectedGroupNumbers.includes(group.groupNumber)
-  )
-  const editSelectedGroups = (group: Group, selected: boolean) => {
+  const editSelectedGroupNumbers = (groupNumber: number, selected: boolean) => {
     if (selected) {
-      setSelectedGroupNumbers([...selectedGroupNumbers, group.groupNumber])
+      setSelectedGroupNumbers([...selectedGroupNumbers, groupNumber])
     } else {
       setSelectedGroupNumbers(
-        selectedGroupNumbers.filter((g) => g !== group.groupNumber)
+        selectedGroupNumbers.filter((g) => g !== groupNumber)
       )
     }
   }
@@ -125,30 +129,6 @@ export const EditZing = () => {
       .catch((error) => console.error(error))
   }
 
-  /** Handles updating the groups state when we send an email so timestamp shows directly after email is sent without requiring page refresh. */
-  const handleEmailTimestamp = () => {
-    // this is not efficient, you can just update the groups locally
-    // axios
-    //   .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
-    //   .then((res: AxiosResponse<CourseStudentDataResponse>) => {
-    //     setUnmatchedStudents(
-    //       res.data.data.unmatched.map(responseStudentToStudent)
-    //     )
-    //     setStudentGroups(
-    //       res.data.data.groups.map((group) => ({
-    //         ...group,
-    //         memberData: group.memberData.map(responseStudentToStudent),
-    //         createTime: new Date(group.createTime),
-    //         updateTime: new Date(group.updateTime),
-    //         templateTimestamps: responseTimestampsToDate(
-    //           group.templateTimestamps
-    //         ),
-    //       }))
-    //     )
-    //   })
-    //   .catch((error) => displayNetworkError(error.message))
-  }
-
   // Open and close the 'Send email to' menu drop down
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const menuOpen = Boolean(anchorEl)
@@ -169,7 +149,7 @@ export const EditZing = () => {
   }
 
   const handleSelectNoMatchYet = () => {
-    setSelectedStudents(
+    setSelectedStudentEmails(
       unmatchedStudents
         .filter(
           (student) =>
@@ -190,8 +170,8 @@ export const EditZing = () => {
     >
       {isEmailing && (
         <EmailModal
-          selectedGroups={selectedGroups}
-          selectedStudents={selectedStudents}
+          selectedGroupNumbers={selectedGroupNumbers}
+          selectedStudentEmails={selectedStudentEmails}
           isEmailing={isEmailing}
           setIsEmailing={setIsEmailing}
           setEmailSent={setEmailSent}
@@ -235,7 +215,8 @@ export const EditZing = () => {
           {course.names.join(', ')} ({course.roster})
         </Typography>
         <Box flexGrow={2} />
-        {selectedGroupNumbers.length === 0 && selectedStudents.length === 0 ? (
+        {selectedGroupNumbers.length === 0 &&
+        selectedStudentEmails.length === 0 ? (
           <>
             <Button
               onClick={handleMenuOpen}
@@ -265,7 +246,8 @@ export const EditZing = () => {
         ) : (
           <Button
             disabled={
-              selectedGroupNumbers.length > 0 && selectedStudents.length > 0
+              selectedGroupNumbers.length > 0 &&
+              selectedStudentEmails.length > 0
             }
             onClick={() => setIsEmailing(!isEmailing)}
           >
@@ -293,8 +275,8 @@ export const EditZing = () => {
                 moveStudent={moveStudent}
                 handleMatchStudents={handleMatchStudents}
                 templateMap={templateNameMap}
-                selectedStudents={selectedStudents}
-                handleAddStudent={handleAddStudent}
+                selectedStudents={selectedStudentEmails}
+                handleAddStudent={editSelectedStudentEmails}
                 updateNotes={updateNotes}
               />
             </Box>
@@ -312,11 +294,14 @@ export const EditZing = () => {
                 selected={selectedGroupNumbers.includes(
                   studentGroup.groupNumber
                 )}
-                selectedStudents={selectedStudents}
+                selectedStudents={selectedStudentEmails}
                 handleChecked={(event) => {
-                  editSelectedGroups(studentGroup, event.target.checked)
+                  editSelectedGroupNumbers(
+                    studentGroup.groupNumber,
+                    event.target.checked
+                  )
                 }}
-                handleAddStudent={handleAddStudent}
+                handleAddStudent={editSelectedStudentEmails}
                 updateNotes={updateNotes}
               />
             ))}

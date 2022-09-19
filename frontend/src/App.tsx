@@ -376,16 +376,16 @@ const App = () => {
     }
   }
 
-  /** Add a new timestamp to the student's email timestamps */
-  const addStudentEmailTimestamp = (
-    studentEmail: string,
+  /** Add a new timestamp to multiple students' email timestamps */
+  const addStudentEmailTimestamps = (
+    studentEmails: string[],
     courseId: string,
     templateId: string,
     timestamp: Date
   ) => {
     setStudents(
       students.map((student) =>
-        student.email === studentEmail
+        studentEmails.includes(student.email)
           ? {
               ...student,
               groups: student.groups.map((membership) =>
@@ -405,6 +405,35 @@ const App = () => {
     )
   }
 
+  /** Add a new timestamp to multiple groups' email timestamps */
+  const addGroupEmailTimestamps = (
+    groupNumbers: number[],
+    courseId: string,
+    templateId: string,
+    timestamp: Date
+  ) => {
+    setCourses(
+      courses.map((course) =>
+        course.courseId === courseId
+          ? {
+              ...course,
+              groups: course.groups.map((group) =>
+                groupNumbers.includes(group.groupNumber)
+                  ? {
+                      ...group,
+                      templateTimestamps: {
+                        ...group.templateTimestamps,
+                        [templateId]: timestamp,
+                      },
+                    }
+                  : group
+              ),
+            }
+          : course
+      )
+    )
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -418,14 +447,20 @@ const App = () => {
             }}
           >
             <CourseProvider
-              value={{ hasLoadedCourses, courses, moveStudent, matchStudents }}
+              value={{
+                hasLoadedCourses,
+                courses,
+                moveStudent,
+                matchStudents,
+                addGroupEmailTimestamps,
+              }}
             >
               <StudentProvider
                 value={{
                   hasLoadedStudents,
                   students,
                   updateNotes,
-                  addStudentEmailTimestamp,
+                  addStudentEmailTimestamps,
                 }}
               >
                 <Switch>

@@ -11,6 +11,12 @@ interface CourseContextType {
     toGroupNumber: number
   ) => void
   matchStudents: (courseId: string) => Promise<void>
+  addGroupEmailTimestamps: (
+    groupNumbers: number[],
+    courseId: string,
+    templateId: string,
+    timestamp: Date
+  ) => void
 }
 
 const CourseContext = React.createContext<CourseContextType>({
@@ -18,6 +24,7 @@ const CourseContext = React.createContext<CourseContextType>({
   courses: [],
   moveStudent: () => {},
   matchStudents: async () => {},
+  addGroupEmailTimestamps: () => {},
 } as CourseContextType)
 
 export function CourseProvider({

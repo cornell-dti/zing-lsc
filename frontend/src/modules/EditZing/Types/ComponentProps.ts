@@ -74,8 +74,8 @@ export interface MatchLoadingProps {
 }
 
 export interface EmailModalProps {
-  selectedStudents: string[]
-  selectedGroups: Group[]
+  selectedStudentEmails: string[]
+  selectedGroupNumbers: number[]
   isEmailing: boolean
   setIsEmailing: (arg: boolean) => void
   courseNames: string[]

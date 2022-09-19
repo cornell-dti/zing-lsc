@@ -9,8 +9,8 @@ interface StudentContextType {
     courseId: string,
     notes: string
   ) => Promise<void>
-  addStudentEmailTimestamp: (
-    studentEmail: string,
+  addStudentEmailTimestamps: (
+    studentEmails: string[],
     courseId: string,
     templateId: string,
     timestamp: Date
@@ -21,7 +21,7 @@ const StudentContext = React.createContext<StudentContextType>({
   hasLoadedStudents: false,
   students: [],
   updateNotes: async () => {},
-  addStudentEmailTimestamp: () => {},
+  addStudentEmailTimestamps: () => {},
 } as StudentContextType)
 
 export function StudentProvider({
