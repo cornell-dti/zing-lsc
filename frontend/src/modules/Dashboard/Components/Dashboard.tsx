@@ -12,7 +12,7 @@ import { CourseGrid } from 'Dashboard/Components/CourseGrid'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
-import { Box, SelectChangeEvent } from '@mui/material'
+import { Box, IconButton, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
@@ -20,6 +20,7 @@ import { Course } from '@core/Types'
 import { CSVLink } from 'react-csv'
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ClearIcon from '@mui/icons-material/Clear'
 
 type SortOrder =
   | 'newest-requests-first'
@@ -264,6 +265,13 @@ export const Dashboard = () => {
             }}
             value={message}
             onChange={handleSearch}
+            InputProps={{
+              endAdornment: message ? (
+                <IconButton size="small" onClick={() => setMessage('')}>
+                  <ClearIcon />
+                </IconButton>
+              ) : undefined,
+            }}
           />
         </Box>
         <Button
