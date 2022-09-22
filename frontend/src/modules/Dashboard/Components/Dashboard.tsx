@@ -87,6 +87,7 @@ export const Dashboard = () => {
                   ? `${course.names.join('/')}_${membership.groupNumber}`
                   : undefined,
               ...localeMap(group?.templateTimestamps),
+              ...localeMap(membership.templateTimestamps),
               notes: membership.notes,
             }
           })
