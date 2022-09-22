@@ -256,12 +256,14 @@ export const Dashboard = () => {
           </Box>
           <TextField
             id="search-bar"
-            label="Search for a class"
+            label="Search for a course"
             variant="outlined"
             sx={{
               padding: 0,
               margin: 0,
+              ml: 3,
               fontWeight: 'bold',
+              width: 200,
             }}
             value={message}
             onChange={handleSearch}
