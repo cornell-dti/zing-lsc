@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import TextField from '@mui/material/TextField'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import {
   StyledContainer,
@@ -244,6 +245,16 @@ export const Dashboard = () => {
             Search:
           </Box>
         </Box>
+        <TextField
+          id="search-bar"
+          label="Search"
+          variant="outlined"
+          sx={{
+            padding: 0,
+            margin: 0,
+            fontWeight: 'bold',
+          }}
+        />
         <Button
           id="logout-button"
           aria-controls="logout-menu"
