@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -192,6 +192,15 @@ export const Dashboard = () => {
     sortedOrder
   )
 
+  const [message, setMessage] = useState('')
+
+  const handleSearch = (event: {
+    target: { value: React.SetStateAction<string> }
+  }) => {
+    setMessage(event.target.value)
+    console.log('search is:', event.target.value)
+  }
+
   return (
     <StyledContainer>
       <StyledHeaderMenu>
@@ -238,13 +247,15 @@ export const Dashboard = () => {
           </Box>
           <TextField
             id="search-bar"
-            label="Search"
+            label="Search for a class"
             variant="outlined"
             sx={{
               padding: 0,
               margin: 0,
               fontWeight: 'bold',
             }}
+            value={message}
+            onChange={handleSearch}
           />
         </Box>
         <Button
