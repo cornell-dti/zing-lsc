@@ -200,6 +200,7 @@ export const Dashboard = () => {
     setMessage(event.target.value)
     console.log('search is:', event.target.value)
   }
+  console.log(courses.filter((e) => e.names.includes(message)))
 
   return (
     <StyledContainer>
