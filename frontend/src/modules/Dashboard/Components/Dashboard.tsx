@@ -188,11 +188,6 @@ export const Dashboard = () => {
 
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
 
-  const sortedCourses = sorted(
-    courses.filter((course) => course.roster === selectedRoster),
-    sortedOrder
-  )
-
   const [message, setMessage] = useState('')
 
   const handleSearch = (event: {
@@ -262,7 +257,6 @@ export const Dashboard = () => {
               padding: 0,
               margin: 0,
               ml: 3,
-              fontWeight: 'bold',
               width: 200,
             }}
             value={message}
