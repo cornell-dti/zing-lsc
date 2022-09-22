@@ -1,4 +1,4 @@
-//import axios from 'axios'
+import axios from 'axios'
 
 // firebase imports
 import admin from 'firebase-admin'
@@ -70,7 +70,7 @@ export const updateIndivTimestamp = async (
 }
 
 /* ==== Emailing Helper Functions ==== */
-//const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
+const GRAPH_ENDPOINT = 'https://graph.microsoft.com'
 
 /**
  * Returns the list of recipients of an email based on group/individual membership
@@ -210,7 +210,7 @@ const sendMails = async (
     throw new Error('Both group and individual email are specified')
   }
 
-  /* const response = await axios({
+  const response = await axios({
     url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
     // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
     method: 'POST',
@@ -219,9 +219,7 @@ const sendMails = async (
       'Content-Type': 'application/json',
     },
     data: JSON.stringify(message),
-  }) */
-
-  const response = { status: 202 }
+  })
 
   if (response.status === 202) {
     if (group && parseInt(group) > 0) {
