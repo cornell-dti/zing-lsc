@@ -233,6 +233,16 @@ export const Dashboard = () => {
               Unsent No Match Emails
             </MenuItem>
           </DropdownSelect>
+          <Box
+            sx={{
+              fontWeight: 'bold',
+              color: 'essentials.75',
+              padding: 1,
+              margin: 1,
+            }}
+          >
+            Search:
+          </Box>
         </Box>
         <Button
           id="logout-button"
