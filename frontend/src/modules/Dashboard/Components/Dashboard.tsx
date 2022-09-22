@@ -201,13 +201,13 @@ export const Dashboard = () => {
     console.log('search is:', event.target.value)
   }
 
-  console.log(
-    courses.filter((e) =>
-      e.names.find((element) => {
-        return element.includes(message.toUpperCase())
+  const filteredCourses = courses
+    .filter((c) => c.roster === selectedRoster)
+    .filter((d) =>
+      d.names.find((e) => {
+        return e.includes(message.toUpperCase())
       })
     )
-  )
 
   return (
     <StyledContainer>
@@ -347,7 +347,7 @@ export const Dashboard = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      <CourseGrid courses={sortedCourses} />
+      <CourseGrid courses={filteredCourses} />
     </StyledContainer>
   )
 }
