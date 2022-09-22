@@ -198,63 +198,55 @@ export const Dashboard = () => {
         <LogoImg />
 
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <Box
-            sx={{
-              fontWeight: 'bold',
-              color: 'essentials.75',
-              padding: 1,
-              margin: 1,
-            }}
-          >
-            Sort by:
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box
+              sx={{
+                fontWeight: 'bold',
+                color: 'essentials.75',
+                padding: 1,
+                margin: 1,
+              }}
+            >
+              Sort by:
+            </Box>
+            <DropdownSelect
+              value={sortedOrder}
+              onChange={handleChange}
+              sx={{
+                padding: 0,
+                margin: 0,
+                fontWeight: 'bold',
+              }}
+            >
+              <MenuItem value="newest-requests-first">
+                Newest requests first
+              </MenuItem>
+              <MenuItem value="unmatchable-first">Unmatchable first</MenuItem>
+              <MenuItem value="newly-matchable-first">
+                Newly matchable first
+              </MenuItem>
+              <MenuItem value="matchable-first">Matchable first</MenuItem>
+              <MenuItem value="classes-a-z">Classes A-Z</MenuItem>
+              <MenuItem value="classes-z-a">Classes Z-A</MenuItem>
+              <MenuItem value="no-check-in-email">
+                Unsent Check-in Emails
+              </MenuItem>
+              <MenuItem value="no-no-match-email">
+                Unsent No Match Emails
+              </MenuItem>
+            </DropdownSelect>
           </Box>
-          <DropdownSelect
-            value={sortedOrder}
-            onChange={handleChange}
+          <TextField
+            id="search-bar"
+            label="Search"
+            variant="outlined"
             sx={{
               padding: 0,
               margin: 0,
               fontWeight: 'bold',
             }}
-          >
-            <MenuItem value="newest-requests-first">
-              Newest requests first
-            </MenuItem>
-            <MenuItem value="unmatchable-first">Unmatchable first</MenuItem>
-            <MenuItem value="newly-matchable-first">
-              Newly matchable first
-            </MenuItem>
-            <MenuItem value="matchable-first">Matchable first</MenuItem>
-            <MenuItem value="classes-a-z">Classes A-Z</MenuItem>
-            <MenuItem value="classes-z-a">Classes Z-A</MenuItem>
-            <MenuItem value="no-check-in-email">
-              Unsent Check-in Emails
-            </MenuItem>
-            <MenuItem value="no-no-match-email">
-              Unsent No Match Emails
-            </MenuItem>
-          </DropdownSelect>
-          <Box
-            sx={{
-              fontWeight: 'bold',
-              color: 'essentials.75',
-              padding: 1,
-              margin: 1,
-            }}
-          >
-            Search:
-          </Box>
+          />
         </Box>
-        <TextField
-          id="search-bar"
-          label="Search"
-          variant="outlined"
-          sx={{
-            padding: 0,
-            margin: 0,
-            fontWeight: 'bold',
-          }}
-        />
         <Button
           id="logout-button"
           aria-controls="logout-menu"
