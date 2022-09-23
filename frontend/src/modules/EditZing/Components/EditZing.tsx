@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import axios, { AxiosResponse } from 'axios'
 import GroupCard from 'EditZing/Components/GroupCard'
 import { UnmatchedGrid } from './UnmatchedGrid'
-import { Student, Group, EmailTemplatesResponse } from '@core/Types'
+import { EmailTemplatesResponse } from '@core/Types'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { API_ROOT, COURSE_API, MATCHING_API, EMAIL_PATH } from '@core/Constants'
+import { API_ROOT, EMAIL_PATH } from '@core/Constants'
 import { Link, useParams } from 'react-router-dom'
 import { EmailModal } from 'EditZing/Components/EmailModal'
 import { MatchLoading } from './MatchLoading'
@@ -23,7 +23,6 @@ import {
 } from '@mui/material'
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
-import { useAuthValue } from '@auth/AuthContext'
 import { DASHBOARD_PATH } from '@core/Constants'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
@@ -34,9 +33,7 @@ const LscIcon = (props: SvgIconProps) => {
 
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
-  const [showError, setShowError] = useState(false)
 
-  const { displayNetworkError } = useAuthValue()
   const { courses, moveStudent, matchStudents } = useCourseValue()
   const { students, updateNotes } = useStudentValue()
 
@@ -113,7 +110,6 @@ export const EditZing = () => {
       })
       .catch((error) => {
         console.error(error)
-        setShowError(true)
       })
   }, [courseId])
 
