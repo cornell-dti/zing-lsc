@@ -315,6 +315,7 @@ const App = () => {
                 ...course,
                 unmatched: response.data.unmatched,
                 groups: [...course.groups, ...newGroups],
+                lastGroupNumber: course.groups.length + newGroups.length,
               }
             : course
         )
