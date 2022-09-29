@@ -250,7 +250,7 @@ export const Dashboard = () => {
               fontWeight: 'bold',
             }}
           >
-            <MenuItem value="no-filter">None</MenuItem>
+            <MenuItem value="no-filter">All Classes</MenuItem>
             <MenuItem value="unmatchable">Unmatchable</MenuItem>
             <MenuItem value="newly-matchable">Newly matchable</MenuItem>
             <MenuItem value="matchable">Matchable</MenuItem>
