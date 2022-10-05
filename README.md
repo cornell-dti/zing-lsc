@@ -14,6 +14,16 @@
 - **Justin Kong** - Developer
 - **Richard Gu** - Developer
 
+### Summer 2022
+
+- **Annie Zhou** - Product Manager
+- **Sean Yu** - Product Manager 
+- **Changyuan Lin** - Technical Product Manager
+- **Alyssa Zhang** - Designer
+- **Prachi Kelkar** - Designer 
+- **Colin Wu** - Developer
+- **Will Zhang** - Developer 
+
 
 ### Spring 2022
 
