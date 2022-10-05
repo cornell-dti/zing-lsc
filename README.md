@@ -6,12 +6,14 @@
 - **Mikayla Lin** - Product Manager
 - **Changyuan Lin** - Co-Technical Product Manager
 - **Miranda Luo** - Co-Technical Product Manager
-- **Jessica Wang** - Developer
-- **Benjamin Tang** - Developer
-- **Colin Wu** - Developer
-- **Richard Gu** - Developer
 - **Jenny Zhang** - Designer 
 - **Prachi Kelkar** - Designer 
+- **Benjamin Tang** - Developer
+- **Colin Wu** - Developer
+- **Jessica Wang** - Developer
+- **Justin Kong** - Developer
+- **Richard Gu** - Developer
+
 
 ### Spring 2022
 
