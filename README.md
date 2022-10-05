@@ -2,6 +2,15 @@
 
 ## Contributors
 
+### Fall 2022 
+- **Mikayla Lin** - Product Manager
+- **Changyuan Lin** - Co-Technical Product Manager
+- **Miranda Luo** - Co-Technical Product Manager
+- **Jessica Wang** - Developer
+- **Benjamin Tang** - Developer
+- **Colin Wu** - Developer
+- **Richard Gu** - Developer
+
 ### Spring 2022
 
 - **Annie Zhou** - Product Manager
