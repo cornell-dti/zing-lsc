@@ -10,6 +10,8 @@
 - **Benjamin Tang** - Developer
 - **Colin Wu** - Developer
 - **Richard Gu** - Developer
+- **Jenny Zhang** - Designer 
+- **Prachi Kelkar** - Designer 
 
 ### Spring 2022
 
