@@ -31,6 +31,9 @@
 - **Sean Yu** - Product Manager
 - **Changyuan Lin** - Technical Product Manager
 - **Alyssa Zhang** - Designer
+- **Becky Han** - Designer
+- **Jahin Aishee** - Designer 
+- **Prachi Kelkar** - Designer 
 - **Benjamin Tang** - Developer
 - **Colin Wu** - Developer
 - **Grace Han** - Developer
