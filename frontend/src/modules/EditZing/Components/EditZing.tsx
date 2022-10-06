@@ -38,7 +38,6 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 import { useAuthValue } from '@auth/AuthContext'
 
 import { DASHBOARD_PATH } from '@core/Constants'
-import { forEachChild } from 'typescript'
 
 const LscIcon = (props: SvgIconProps) => {
   return <SvgIcon inheritViewBox component={Lsc} {...props} />
