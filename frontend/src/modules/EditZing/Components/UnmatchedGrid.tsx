@@ -43,7 +43,11 @@ export const UnmatchedGrid = ({
           <StyledUnmatchedText>
             Unmatched Students ({unmatchedStudents.length})
           </StyledUnmatchedText>
-          <MatchButton label="Match" onClick={matchStudents} />
+          <MatchButton
+            label="Match"
+            onClick={matchStudents}
+            disabled={unmatchedStudents.length < 2}
+          />
         </StyledUnmatchedTextWrapper>
         <Box sx={{ display: 'flex', flexFlow: 'row wrap', gap: '8px' }}>
           {unmatchedStudents.map((student, index) => (
