@@ -38,6 +38,7 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 import { useAuthValue } from '@auth/AuthContext'
 
 import { DASHBOARD_PATH } from '@core/Constants'
+import { forEachChild } from 'typescript'
 
 const LscIcon = (props: SvgIconProps) => {
   return <SvgIcon inheritViewBox component={Lsc} {...props} />
@@ -499,7 +500,7 @@ export const EditZing = () => {
                 key={studentGroup.groupNumber}
                 courseId={courseId}
                 studentList={studentGroup.memberData}
-                groupNumber={studentGroup.groupNumber}
+                groupNumber={index + 1}
                 templateMap={templateNameMap}
                 groupTimestamps={studentGroup.templateTimestamps}
                 moveStudent={moveStudent}
