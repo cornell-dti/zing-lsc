@@ -16,7 +16,7 @@ export const UnmatchedGrid = ({
   courseId,
   unmatchedStudents,
   moveStudent,
-  matchStudents,
+  handleMatchStudents,
   handleAddStudent,
   selectedStudents,
   templateMap,
@@ -25,7 +25,7 @@ export const UnmatchedGrid = ({
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
     drop: (item: DnDStudentTransferType) => {
-      moveStudent(item.studentToMove, item.groupNumber, -1)
+      moveStudent(item.studentToMove.email, courseId, item.groupNumber, -1)
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -43,7 +43,7 @@ export const UnmatchedGrid = ({
           <StyledUnmatchedText>
             Unmatched Students ({unmatchedStudents.length})
           </StyledUnmatchedText>
-          <MatchButton label="Match" onClick={matchStudents} />
+          <MatchButton label="Match" onClick={handleMatchStudents} />
         </StyledUnmatchedTextWrapper>
         <Box sx={{ display: 'flex', flexFlow: 'row wrap', gap: '8px' }}>
           {unmatchedStudents.map((student, index) => (
