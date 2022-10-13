@@ -470,6 +470,50 @@ const App = () => {
     )
   }
 
+  /** Save form fields to local template to keep when changing template */
+  const keepForm = (
+    selectedTemplateId: string,
+    templateName: string,
+    templateType: 'group' | 'student',
+    templateSubject: string,
+    templateHtml: string
+  ) =>
+    setTemplates(
+      templates.map((template) =>
+        template.id === selectedTemplateId
+          ? {
+              ...template,
+              name: templateName,
+              type: templateType,
+              subject: templateSubject,
+              modifyTime: new Date(),
+              html: templateHtml,
+            }
+          : template
+      )
+    )
+
+  /** Append form fields to local templates for local update on add new form */
+  const appendForm = (
+    id: string,
+    templateName: string,
+    templateType: 'group' | 'student',
+    templateSubject: string,
+    templateHtml: string
+  ) =>
+    setTemplates([
+      ...templates,
+      {
+        id,
+        name: templateName,
+        type: templateType,
+        subject: templateSubject,
+        modifyTime: new Date(),
+        body: `${id}.html`,
+        html: templateHtml,
+      },
+    ])
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -503,6 +547,8 @@ const App = () => {
                   value={{
                     hasLoadedTemplates,
                     templates,
+                    keepForm,
+                    appendForm,
                   }}
                 >
                   <Switch>

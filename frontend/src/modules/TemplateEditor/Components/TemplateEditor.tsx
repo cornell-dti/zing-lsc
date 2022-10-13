@@ -25,9 +25,10 @@ import {
   EmailTemplatesResponse,
   responseEmailTemplateToEmailTemplate,
 } from '@core/Types'
+import { useTemplateValue } from '@context/TemplateContext'
 
 export const TemplateEditor = () => {
-  const [templates, setTemplates] = useState<EmailTemplate[]>([])
+  const { templates, keepForm, appendForm } = useTemplateValue()
   const [selectedTemplateId, setSelectedTemplateId] = useState('')
   const [isSaving, setIsSaving] = useState(false)
   const isAddingTemplate = selectedTemplateId === ''
@@ -72,38 +73,6 @@ export const TemplateEditor = () => {
     setTemplateHtml('')
   }
 
-  /** Save form fields to local template to keep when changing template */
-  const keepForm = () =>
-    setTemplates(
-      templates.map((template) =>
-        template.id === selectedTemplateId
-          ? {
-              ...template,
-              name: templateName,
-              type: templateType,
-              subject: templateSubject,
-              modifyTime: new Date(),
-              html: templateHtml,
-            }
-          : template
-      )
-    )
-
-  /** Append form fields to local templates for local update on add new form */
-  const appendForm = (id: string) =>
-    setTemplates([
-      ...templates,
-      {
-        id,
-        name: templateName,
-        type: templateType,
-        subject: templateSubject,
-        modifyTime: new Date(),
-        body: `${id}.html`,
-        html: templateHtml,
-      },
-    ])
-
   /** Save selected template to storage */
   const saveSelectedTemplate = () => {
     setIsSaving(true)
@@ -126,7 +95,13 @@ export const TemplateEditor = () => {
         )
       )
       .then(() => {
-        keepForm()
+        keepForm(
+          selectedTemplateId,
+          templateName,
+          templateType,
+          templateSubject,
+          templateHtml
+        )
         setIsSaving(false)
       })
       .catch((error) => console.error('Failed to save', error))
@@ -155,7 +130,13 @@ export const TemplateEditor = () => {
         return id
       })
       .then((id) => {
-        appendForm(id)
+        appendForm(
+          id,
+          templateName,
+          templateType,
+          templateSubject,
+          templateHtml
+        )
         setSelectedTemplateId(id)
         setIsSaving(false)
       })
@@ -163,30 +144,12 @@ export const TemplateEditor = () => {
   }
 
   useEffect(() => {
-    axios
-      .get(`${API_ROOT}${EMAIL_PATH}/templates`)
-      .then(async (res: AxiosResponse<EmailTemplatesResponse>) => {
-        const templates = await Promise.all(
-          res.data.data
-            .map(responseEmailTemplateToEmailTemplate)
-            .map(async (template) => {
-              // Download the HTML for the email body in Cloud Storage bucket
-              const url = await getDownloadURL(
-                ref(templatesBucket, template.body)
-              )
-              const html = (await axios.get(url)).data as string
-              return { ...template, html }
-            })
-        )
-        setTemplates(templates)
-        const mostRecentModifiedTemplate = templates.reduce((p, c) =>
-          p.modifyTime.valueOf() > c.modifyTime.valueOf() ? p : c
-        )
-        setSelectedTemplateId(mostRecentModifiedTemplate.id)
-        resetForm(mostRecentModifiedTemplate)
-      })
-      .catch((error) => console.error(error))
-  }, [])
+    const mostRecentModifiedTemplate = templates.reduce((p, c) =>
+      p.modifyTime.valueOf() > c.modifyTime.valueOf() ? p : c
+    )
+    setSelectedTemplateId(mostRecentModifiedTemplate.id)
+    resetForm(mostRecentModifiedTemplate)
+  }, [templates])
 
   return (
     <Box p={4}>
