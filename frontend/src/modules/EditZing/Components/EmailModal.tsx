@@ -34,7 +34,9 @@ export const EmailModal = ({
   // check if emailing students or groups
   const recipientType = selectedStudentEmails.length > 0 ? 'student' : 'group'
 
-  const [filteredTemplates, setFilteredTemplates] = useState<EmailTemplate[]>()
+  const [filteredTemplates, setFilteredTemplates] = useState<EmailTemplate[]>(
+    []
+  )
 
   // template editor logic
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>()
@@ -159,7 +161,7 @@ export const EmailModal = ({
     return (
       <Box>
         <EmailTemplateButtons
-          templates={templates}
+          templates={filteredTemplates}
           selectedTemplate={selectedTemplate!}
           setSelectedTemplate={setSelectedTemplate}
         />
