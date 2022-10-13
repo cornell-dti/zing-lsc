@@ -22,11 +22,14 @@ import {
 } from '@core/Constants'
 import {
   Course,
-  Group,
   responseCourseToCourse,
+  Group,
   responseGroupToGroup,
-  responseStudentToStudent,
   Student,
+  responseStudentToStudent,
+  EmailTemplate,
+  EmailTemplatesResponse,
+  responseEmailTemplateToEmailTemplate,
 } from '@core/Types'
 import { Home } from 'Home'
 import { AdminHome } from 'AdminHome'
@@ -40,7 +43,9 @@ import theme from '@core/Constants/Theme'
 import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
-import axios from 'axios'
+import { templatesBucket } from '@fire/firebase'
+import { getDownloadURL, ref } from 'firebase/storage'
+import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
 
 const App = () => {
@@ -432,6 +437,34 @@ const App = () => {
             }
           : course
       )
+    )
+  }
+
+  const [templates, setTemplates] = useState<EmailTemplate[]>([])
+  const [hasLoadedTemplates, setHasLoadedTemplates] = useState(false)
+
+  const loadTemplates = () => {
+    axios.get(`${API_ROOT}${EMAIL_PATH}/templates`).then(
+      async (res: AxiosResponse<EmailTemplatesResponse>) => {
+        const templates = await Promise.all(
+          res.data.data
+            .map(responseEmailTemplateToEmailTemplate)
+            .map(async (template) => {
+              // Download the HTML for the email body in Cloud Storage bucket
+              const url = await getDownloadURL(
+                ref(templatesBucket, template.body)
+              )
+              const html = (await axios.get(url)).data as string
+              return { ...template, html }
+            })
+        )
+        setTemplates(templates)
+        setHasLoadedTemplates(true)
+      },
+      (error) => {
+        console.log(error)
+        setNetworkError(error.message)
+      }
     )
   }
 
