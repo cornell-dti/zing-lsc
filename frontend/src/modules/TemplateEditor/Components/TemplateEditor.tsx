@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import axios, { AxiosResponse } from 'axios'
-import { getDownloadURL, ref, uploadString } from 'firebase/storage'
+import axios from 'axios'
+import { ref, uploadString } from 'firebase/storage'
 import {
   Box,
   Button,
@@ -20,11 +20,7 @@ import {
 import AddIcon from '@mui/icons-material/Add'
 import { templatesBucket } from '@fire/firebase'
 import { API_ROOT, EMAIL_PATH } from '@core/Constants'
-import {
-  EmailTemplate,
-  EmailTemplatesResponse,
-  responseEmailTemplateToEmailTemplate,
-} from '@core/Types'
+import { EmailTemplate } from '@core/Types'
 import { useTemplateValue } from '@context/TemplateContext'
 
 export const TemplateEditor = () => {
