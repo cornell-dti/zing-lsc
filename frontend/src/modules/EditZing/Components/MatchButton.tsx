@@ -9,7 +9,7 @@ export const MatchButton = ({
   ...buttonProps
 }: ButtonProps) => {
   const buttonContainerStyle = {
-    background: disabled ? colors.lightgreen : colors.darkgreen,
+    background: disabled ? colors.verylightblack : colors.darkgreen,
     boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.1)',
     padding: '0 10px',
     height: '40px',
