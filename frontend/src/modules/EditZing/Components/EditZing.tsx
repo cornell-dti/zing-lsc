@@ -111,7 +111,6 @@ export const EditZing = () => {
       })
       .catch((error) => {
         console.error(error)
-        setShowError(true)
       })
   }, [courseId])
 
