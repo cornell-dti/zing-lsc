@@ -10,6 +10,7 @@ import {
 import { useDrop } from 'react-dnd'
 import { DnDStudentTransferType, STUDENT_TYPE } from 'EditZing/Types/Student'
 import { MatchButton } from './MatchButton'
+import { colors } from '@core/Constants'
 
 /** Where unmatched students live in the grid */
 export const UnmatchedGrid = ({
@@ -32,6 +33,14 @@ export const UnmatchedGrid = ({
     }),
   })
   const xsSize: GridSize = 1
+
+  // const [disabled, setDisabled] = useState(false);
+  // const handleSetDisabled = () => {
+  //   matchStudents;
+  //   if (unmatchedStudents.length < 2) {
+  //     setDisabled(true);
+  //   }
+  // }
 
   return (
     <Grid item xs={12}>
