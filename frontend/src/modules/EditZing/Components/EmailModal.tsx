@@ -12,17 +12,10 @@ import { sendEmail } from 'Emailing/Components/Emailing'
 import { adminSignIn } from '@fire/firebase'
 
 // template editor
-import { templatesBucket } from '@fire/firebase'
-import { API_ROOT, EMAIL_PATH } from '@core/Constants'
-import {
-  EmailTemplate,
-  EmailTemplatesResponse,
-  responseEmailTemplateToEmailTemplate,
-} from '@core/Types'
-import axios, { AxiosResponse } from 'axios'
-import { getDownloadURL, ref } from 'firebase/storage'
+import { EmailTemplate } from '@core/Types'
 import { useStudentValue } from '@context/StudentContext'
 import { useCourseValue } from '@context/CourseContext'
+import { useTemplateValue } from '@context/TemplateContext'
 
 export const EmailModal = ({
   selectedGroupNumbers,
@@ -36,12 +29,14 @@ export const EmailModal = ({
   const { courseId } = useParams<{ courseId: string }>()
   const { addGroupEmailTimestamps } = useCourseValue()
   const { addStudentEmailTimestamps } = useStudentValue()
+  const { templates } = useTemplateValue()
 
   // check if emailing students or groups
   const recipientType = selectedStudentEmails.length > 0 ? 'student' : 'group'
 
+  const [filteredTemplates, setFilteredTemplates] = useState<EmailTemplate[]>()
+
   // template editor logic
-  const [templates, setTemplates] = useState<EmailTemplate[]>([])
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>()
 
   // Special value substitution in template HTML
@@ -54,29 +49,12 @@ export const EmailModal = ({
   )
 
   useEffect(() => {
-    axios
-      .get(`${API_ROOT}${EMAIL_PATH}/templates`)
-      .then(async (res: AxiosResponse<EmailTemplatesResponse>) => {
-        const allTemplates = await Promise.all(
-          res.data.data
-            .map(responseEmailTemplateToEmailTemplate)
-            .map(async (template: EmailTemplate, i) => {
-              // Download the HTML for the email body in Cloud Storage bucket
-              const url = await getDownloadURL(
-                ref(templatesBucket, template.body)
-              )
-              const html = (await axios.get(url)).data as string
-              return { ...template, html }
-            })
-        )
-        const filteredTemplates = allTemplates.filter(
-          (template) => template.type === recipientType
-        )
-        setTemplates(filteredTemplates)
-        setSelectedTemplate(filteredTemplates[0])
-      })
-      .catch((error) => console.error(error))
-  }, [recipientType])
+    const filteredTemplates = templates.filter(
+      (template) => template.type === recipientType
+    )
+    setFilteredTemplates(filteredTemplates)
+    setSelectedTemplate(filteredTemplates[0])
+  }, [recipientType, templates])
 
   const [step, setStep] = useState<number>(0)
   const titles = [
