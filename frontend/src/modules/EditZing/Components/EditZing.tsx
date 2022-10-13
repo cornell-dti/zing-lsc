@@ -118,6 +118,7 @@ export const EditZing = () => {
   const [unmatchedStudents, setUnmatchedStudents] = useState<Student[]>([])
   const [studentGroups, setStudentGroups] = useState<Group[]>([])
   const [hasLoadedStudentData, setHasLoadedStudentData] = useState(false)
+
   useEffect(() => {
     axios
       .get(`${API_ROOT}${COURSE_API}/students/${courseId}`)
@@ -125,17 +126,23 @@ export const EditZing = () => {
         setUnmatchedStudents(
           res.data.data.unmatched.map(responseStudentToStudent)
         )
-        setStudentGroups(
-          res.data.data.groups.map((group) => ({
-            ...group,
-            memberData: group.memberData.map(responseStudentToStudent),
-            createTime: new Date(group.createTime),
-            updateTime: new Date(group.updateTime),
-            templateTimestamps: responseTimestampsToDate(
-              group.templateTimestamps
-            ),
-          }))
-        )
+        let orderedGroups: Group[] = []
+        for (let i = 1; i <= res.data.data.groups.length; i++) {
+          res.data.data.groups.forEach((group) => {
+            if (group.groupNumber === i) {
+              orderedGroups.push({
+                ...group,
+                memberData: group.memberData.map(responseStudentToStudent),
+                createTime: new Date(group.createTime),
+                updateTime: new Date(group.updateTime),
+                templateTimestamps: responseTimestampsToDate(
+                  group.templateTimestamps
+                ),
+              })
+            }
+          })
+        }
+        setStudentGroups(orderedGroups)
         setHasLoadedStudentData(true)
       })
       .catch((error) => {
@@ -499,7 +506,7 @@ export const EditZing = () => {
                 key={studentGroup.groupNumber}
                 courseId={courseId}
                 studentList={studentGroup.memberData}
-                groupNumber={index + 1}
+                groupNumber={studentGroup.groupNumber}
                 templateMap={templateNameMap}
                 groupTimestamps={studentGroup.templateTimestamps}
                 moveStudent={moveStudent}
