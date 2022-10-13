@@ -47,9 +47,7 @@ export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
   const [showError, setShowError] = useState(false)
   const history = useHistory()
-  console.log(history.location.state)
   const state = history.location.state as any
-  console.log(state.sortedOrder)
   const { displayNetworkError } = useAuthValue()
 
   const [courseInfo, setCourseInfo] = useState<CourseInfo>()
