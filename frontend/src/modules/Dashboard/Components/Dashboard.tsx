@@ -28,7 +28,6 @@ type FilterOption =
   | 'matchable'
   | 'no-check-in-email'
   | 'no-no-match-email'
-
 const filterOptionDisplay = [
   ['no-filter', 'All Classes'],
   ['unmatchable', 'Unmatchable'],
@@ -37,7 +36,6 @@ const filterOptionDisplay = [
   ['no-check-in-email', 'No Check In Email'],
   ['no-no-match-email', 'No No Match Email'],
 ]
-
 const sortOrderDisplay = [
   ['newest-requests-first', 'Newest Requests First'],
   ['classes-a-z', 'Classes A-Z'],
@@ -49,16 +47,13 @@ export const Dashboard = () => {
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
-
   const state = history.location.state as {
     sortedOrder: SortOrder
     filterOption: FilterOption
   }
-
   const [sortedOrder, setSortedOrder] = useState<SortOrder>(() =>
     state?.sortedOrder ? state.sortedOrder : 'newest-requests-first'
   )
-
   const [filteredOption, setFilteredOption] = useState<FilterOption>(() =>
     state?.filterOption ? state.filterOption : 'no-filter'
   )
@@ -212,7 +207,6 @@ export const Dashboard = () => {
         filterOption: state.filterOption,
       },
     })
-    console.log(history.location.state)
   }
   const handleFilterChange = (event: SelectChangeEvent) => {
     setFilteredOption(event.target.value as FilterOption)
@@ -222,7 +216,6 @@ export const Dashboard = () => {
         filterOption: event.target.value as FilterOption,
       },
     })
-    console.log(history.location.state)
   }
 
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
