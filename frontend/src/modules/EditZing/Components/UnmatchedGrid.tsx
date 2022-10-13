@@ -34,14 +34,6 @@ export const UnmatchedGrid = ({
   })
   const xsSize: GridSize = 1
 
-  // const [disabled, setDisabled] = useState(false);
-  // const handleSetDisabled = () => {
-  //   matchStudents;
-  //   if (unmatchedStudents.length < 2) {
-  //     setDisabled(true);
-  //   }
-  // }
-
   return (
     <Grid item xs={12}>
       <StyledUnmatchedContainer
