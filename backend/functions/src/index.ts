@@ -6,6 +6,7 @@ import {
   checkAuth,
   checkIsAuthorized,
   checkIsAuthorizedFromToken,
+  logReqBody,
 } from './middleware/auth-middleware'
 import { unless } from './middleware/unless'
 
@@ -28,6 +29,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
+app.use(logReqBody)
 
 // auth middleware before router
 app.use(

@@ -1,6 +1,7 @@
 const { db } = require('../config')
 import * as admin from 'firebase-admin'
 import { Request, Response, NextFunction } from 'express'
+import { logger } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import QuerySnapshot = firestore.QuerySnapshot
 
@@ -43,10 +44,22 @@ export function checkAuth(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export function logReqBody(req: Request, res: Response, next: NextFunction) {
+  // TODO (richardgu): find a way to also log which endpoint is being hit
+  logger.info(`Request params: `)
+  for (const key in req.params) {
+    const value = req.params[key]
+    logger.info(`Param ${key} = ${value}`)
+  }
+  logger.info(`Request body: ${req.body}`)
+  next()
+}
+
 export async function checkIsAuthorizedFromToken(idToken: string) {
   const decodedToken = await admin.auth().verifyIdToken(idToken)
   const uid = decodedToken.uid
   const user = await admin.auth().getUser(uid)
+  logger.info(`Called by user ${user.displayName} with uid ${user.uid}`)
   return !!(user.email && allowedUsers.includes(user.email))
 }
 
