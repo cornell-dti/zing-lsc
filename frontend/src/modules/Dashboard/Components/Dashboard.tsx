@@ -17,13 +17,7 @@ import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
 import { CSVLink } from 'react-csv'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useLocation,
-  useHistory,
-} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 
 type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
@@ -34,6 +28,22 @@ type FilterOption =
   | 'matchable'
   | 'no-check-in-email'
   | 'no-no-match-email'
+
+const filterOptionDisplay = [
+  ['no-filter', 'All Classes'],
+  ['unmatchable', 'Unmatchable'],
+  ['newly-matchable', 'Newly Matchable'],
+  ['matchable', 'Matchable'],
+  ['no-check-in-email', 'No Check In Email'],
+  ['no-no-match-email', 'No No Match Email'],
+]
+
+const sortOrderDisplay = [
+  ['newest-requests-first', 'Newest Requests First'],
+  ['classes-a-z', 'Classes A-Z'],
+  ['classes-z-a', 'Classes Z-A'],
+]
+
 export const Dashboard = () => {
   let history = useHistory()
   const { user } = useAuthValue()
@@ -44,13 +54,11 @@ export const Dashboard = () => {
     sortedOrder: SortOrder
     filterOption: FilterOption
   }
-  console.log(state)
-  console.log(state.sortedOrder)
+
   const [sortedOrder, setSortedOrder] = useState<SortOrder>(() =>
     state?.sortedOrder ? state.sortedOrder : 'newest-requests-first'
   )
 
-  console.log(sortedOrder)
   const [filteredOption, setFilteredOption] = useState<FilterOption>(() =>
     state?.filterOption ? state.filterOption : 'no-filter'
   )
@@ -198,24 +206,34 @@ export const Dashboard = () => {
   }
   const handleSortedChange = (event: SelectChangeEvent) => {
     setSortedOrder(event.target.value as SortOrder)
-    history.replace({ state: { sortedOrder: event.target.value as SortOrder } })
+    history.replace({
+      state: {
+        sortedOrder: event.target.value as SortOrder,
+        filterOption: state.filterOption,
+      },
+    })
     console.log(history.location.state)
   }
   const handleFilterChange = (event: SelectChangeEvent) => {
     setFilteredOption(event.target.value as FilterOption)
     history.replace({
-      state: { filterOption: event.target.value as FilterOption },
+      state: {
+        sortedOrder: state.sortedOrder,
+        filterOption: event.target.value as FilterOption,
+      },
     })
     console.log(history.location.state)
   }
 
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
 
-  const filteredCourses = filtered(
-    courses.filter((course) => course.roster === selectedRoster),
-    filteredOption
+  const sortedAndFilteredCourses = sorted(
+    filtered(
+      courses.filter((course) => course.roster === selectedRoster),
+      filteredOption
+    ),
+    sortedOrder
   )
-  const sortedCourses = sorted(filteredCourses, sortedOrder)
 
   return (
     <StyledContainer>
@@ -242,12 +260,9 @@ export const Dashboard = () => {
               fontWeight: 'bold',
             }}
           >
-            <MenuItem value="newest-requests-first">
-              Newest requests first
-            </MenuItem>
-
-            <MenuItem value="classes-a-z">Classes A-Z</MenuItem>
-            <MenuItem value="classes-z-a">Classes Z-A</MenuItem>
+            {sortOrderDisplay.map(([object, name]) => (
+              <MenuItem value={object}> {name}</MenuItem>
+            ))}
           </DropdownSelect>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -270,17 +285,9 @@ export const Dashboard = () => {
               fontWeight: 'bold',
             }}
           >
-            <MenuItem value="no-filter">All Classes</MenuItem>
-            <MenuItem value="unmatchable">Unmatchable</MenuItem>
-            <MenuItem value="newly-matchable">Newly matchable</MenuItem>
-            <MenuItem value="matchable">Matchable</MenuItem>
-
-            <MenuItem value="no-check-in-email">
-              Unsent Check-in Emails
-            </MenuItem>
-            <MenuItem value="no-no-match-email">
-              Unsent No Match Emails
-            </MenuItem>
+            {filterOptionDisplay.map(([object, name]) => (
+              <MenuItem value={object}> {name}</MenuItem>
+            ))}
           </DropdownSelect>
         </Box>
         <Button
@@ -364,7 +371,7 @@ export const Dashboard = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      <CourseGrid courses={sortedCourses} />
+      <CourseGrid courses={sortedAndFilteredCourses} />
     </StyledContainer>
   )
 }
