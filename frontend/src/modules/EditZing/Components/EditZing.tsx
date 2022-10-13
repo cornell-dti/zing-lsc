@@ -46,7 +46,7 @@ const LscIcon = (props: SvgIconProps) => {
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
   const [showError, setShowError] = useState(false)
-  let history = useHistory()
+  const history = useHistory()
   console.log(history.location.state)
   const state = history.location.state as any
   console.log(state.sortedOrder)

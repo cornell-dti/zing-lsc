@@ -43,7 +43,7 @@ const sortOrderDisplay = [
 ]
 
 export const Dashboard = () => {
-  let history = useHistory()
+  const history = useHistory()
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
