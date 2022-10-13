@@ -6,6 +6,7 @@ import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
 import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
 import { ReactComponent as WarningIcon } from '@assets/img/warning.svg'
 import { useHistory } from 'react-router'
+import { Collections } from '@mui/icons-material'
 
 export const CourseCard = ({
   id,
@@ -14,9 +15,16 @@ export const CourseCard = ({
   groupsFormed,
 }: CourseCardProps) => {
   const history = useHistory()
-
   const handleClickView = () => {
-    history.push(`${EDIT_ZING_PATH}/${id}`)
+    console.log(history.location.state)
+    const state = history.location.state as any
+    history.push({
+      pathname: `${EDIT_ZING_PATH}/${id}`,
+      state: {
+        sortedOrder: state.sortedOrder,
+        filterOption: state.filterOption,
+      },
+    })
   }
 
   // returns color of background, button, and if newly matchable

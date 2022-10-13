@@ -17,7 +17,13 @@ import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
 import { CSVLink } from 'react-csv'
-
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useLocation,
+  useHistory,
+} from 'react-router-dom'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 
 type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
@@ -28,17 +34,25 @@ type FilterOption =
   | 'matchable'
   | 'no-check-in-email'
   | 'no-no-match-email'
-
 export const Dashboard = () => {
+  let history = useHistory()
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
 
-  const [filteredOption, setFilteredOption] = useState<FilterOption>(
-    'no-filter'
+  const state = history.location.state as {
+    sortedOrder: SortOrder
+    filterOption: FilterOption
+  }
+  console.log(state)
+  console.log(state.sortedOrder)
+  const [sortedOrder, setSortedOrder] = useState<SortOrder>(() =>
+    state?.sortedOrder ? state.sortedOrder : 'newest-requests-first'
   )
-  const [sortedOrder, setSortedOrder] = useState<SortOrder>(
-    'newest-requests-first'
+
+  console.log(sortedOrder)
+  const [filteredOption, setFilteredOption] = useState<FilterOption>(() =>
+    state?.filterOption ? state.filterOption : 'no-filter'
   )
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -184,9 +198,15 @@ export const Dashboard = () => {
   }
   const handleSortedChange = (event: SelectChangeEvent) => {
     setSortedOrder(event.target.value as SortOrder)
+    history.replace({ state: { sortedOrder: event.target.value as SortOrder } })
+    console.log(history.location.state)
   }
   const handleFilterChange = (event: SelectChangeEvent) => {
     setFilteredOption(event.target.value as FilterOption)
+    history.replace({
+      state: { filterOption: event.target.value as FilterOption },
+    })
+    console.log(history.location.state)
   }
 
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')

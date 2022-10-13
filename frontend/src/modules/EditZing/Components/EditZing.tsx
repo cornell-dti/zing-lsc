@@ -36,7 +36,7 @@ import {
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 import { useAuthValue } from '@auth/AuthContext'
-
+import { useHistory } from 'react-router-dom'
 import { DASHBOARD_PATH } from '@core/Constants'
 
 const LscIcon = (props: SvgIconProps) => {
@@ -46,7 +46,10 @@ const LscIcon = (props: SvgIconProps) => {
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
   const [showError, setShowError] = useState(false)
-
+  let history = useHistory()
+  console.log(history.location.state)
+  const state = history.location.state as any
+  console.log(state.sortedOrder)
   const { displayNetworkError } = useAuthValue()
 
   const [courseInfo, setCourseInfo] = useState<CourseInfo>()
@@ -418,7 +421,13 @@ export const EditZing = () => {
         <IconButton
           color="secondary"
           component={Link}
-          to={DASHBOARD_PATH}
+          to={{
+            pathname: DASHBOARD_PATH,
+            state: {
+              sortedOrder: state.sortedOrder,
+              filterOption: state.filterOption,
+            },
+          }}
           sx={{
             border: 'none',
           }}
