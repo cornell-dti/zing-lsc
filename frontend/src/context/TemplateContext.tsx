@@ -2,10 +2,12 @@ import React, { useContext } from 'react'
 import { EmailTemplate } from '@core/Types'
 
 interface TemplateContextType {
+  hasLoadedTemplates: boolean
   templates: EmailTemplate[]
 }
 
 const TemplateContext = React.createContext<TemplateContextType>({
+  hasLoadedTemplates: false,
   templates: [],
 })
 

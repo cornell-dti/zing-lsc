@@ -7,10 +7,12 @@ export const RouteLoading = ({
   isLoading,
   hasLoadedCourses,
   hasLoadedStudents,
+  hasLoadedTemplates,
 }: {
   isLoading: boolean
   hasLoadedCourses?: boolean
   hasLoadedStudents?: boolean
+  hasLoadedTemplates?: boolean
 }) => {
   return (
     <Fade
@@ -37,6 +39,11 @@ export const RouteLoading = ({
           <Typography>Loaded students ✅</Typography>
         ) : (
           <Typography>Loading students ⏳</Typography>
+        )}
+        {hasLoadedTemplates !== undefined && hasLoadedTemplates ? (
+          <Typography>Loaded templates ✅</Typography>
+        ) : (
+          <Typography>Loading templates ⏳</Typography>
         )}
       </Box>
     </Fade>

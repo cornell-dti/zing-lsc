@@ -47,6 +47,7 @@ import { templatesBucket } from '@fire/firebase'
 import { getDownloadURL, ref } from 'firebase/storage'
 import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
+import { TemplateProvider } from '@context/TemplateContext'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -83,6 +84,7 @@ const App = () => {
                 if (res.data.data.isAuthed) {
                   loadCourses()
                   loadStudents()
+                  loadTemplates()
                 }
               },
               (error) => setNetworkError(error.message)
@@ -497,27 +499,42 @@ const App = () => {
                   addStudentEmailTimestamps,
                 }}
               >
-                <Switch>
-                  <PublicRoute exact path={HOME_PATH} component={Home} />
-                  <PublicRoute exact path={ADMIN_PATH} component={AdminHome} />
-                  <Route exact path={SURVEY_PATH} component={Survey} />
-                  <PrivateRoute
-                    exact
-                    path={DASHBOARD_PATH}
-                    component={Dashboard}
-                  />
-                  <PrivateRoute exact path={EMAIL_PATH} component={Emailing} />
-                  <PrivateRoute
-                    exact
-                    path={`${EDIT_ZING_PATH}/:courseId`}
-                    component={EditZing}
-                  />
-                  <PrivateRoute
-                    exact
-                    path={TEMPLATE_EDITOR_PATH}
-                    component={TemplateEditor}
-                  />
-                </Switch>
+                <TemplateProvider
+                  value={{
+                    hasLoadedTemplates,
+                    templates,
+                  }}
+                >
+                  <Switch>
+                    <PublicRoute exact path={HOME_PATH} component={Home} />
+                    <PublicRoute
+                      exact
+                      path={ADMIN_PATH}
+                      component={AdminHome}
+                    />
+                    <Route exact path={SURVEY_PATH} component={Survey} />
+                    <PrivateRoute
+                      exact
+                      path={DASHBOARD_PATH}
+                      component={Dashboard}
+                    />
+                    <PrivateRoute
+                      exact
+                      path={EMAIL_PATH}
+                      component={Emailing}
+                    />
+                    <PrivateRoute
+                      exact
+                      path={`${EDIT_ZING_PATH}/:courseId`}
+                      component={EditZing}
+                    />
+                    <PrivateRoute
+                      exact
+                      path={TEMPLATE_EDITOR_PATH}
+                      component={TemplateEditor}
+                    />
+                  </Switch>
+                </TemplateProvider>
               </StudentProvider>
             </CourseProvider>
           </AuthProvider>
