@@ -46,12 +46,29 @@ export function checkAuth(req: Request, res: Response, next: NextFunction) {
 
 export function logReqBody(req: Request, res: Response, next: NextFunction) {
   // TODO (richardgu): find a way to also log which endpoint is being hit
-  logger.info(`Request params: `)
-  for (const key in req.params) {
-    const value = req.params[key]
-    logger.info(`Param ${key} = ${value}`)
+  let output = `Request Endpoint: ${req.originalUrl}\n
+  Request Params: ${JSON.stringify(req.params)}\nRequest Body: ${JSON.stringify(
+    req.body
+  )}\n`
+  if (Object.keys(req.params).length > 0) {
+    output += 'REQUEST PARAMS...\n'
+    for (const key in req.params) {
+      const val = req.params[key]
+      output += `${JSON.stringify(key)}: ${JSON.stringify(val)}\n`
+    }
+  } else {
+    output += 'Request params is empty\n'
   }
-  logger.info(`Request body: ${req.body}`)
+  if (Object.keys(req.body).length > 0) {
+    output += 'REQUEST BODY...\n'
+    for (const key in req.body) {
+      const val = req.body[key]
+      output += `${JSON.stringify(key)}: ${JSON.stringify(val)}\n`
+    }
+  } else {
+    output += 'Request body is empty'
+  }
+  logger.info(output)
   next()
 }
 
