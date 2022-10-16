@@ -46,27 +46,38 @@ export function checkAuth(req: Request, res: Response, next: NextFunction) {
 
 export function logReqBody(req: Request, res: Response, next: NextFunction) {
   // TODO (richardgu): find a way to also log which endpoint is being hit
-  let output = `Request Endpoint: ${req.originalUrl}\n
-  Request Params: ${JSON.stringify(req.params)}\nRequest Body: ${JSON.stringify(
-    req.body
-  )}\n`
+  let output = `Request Endpoint: ${req.originalUrl}  `
   if (Object.keys(req.params).length > 0) {
-    output += 'REQUEST PARAMS...\n'
+    output += 'REQUEST PARAMS: {'
+    let ind = 0
     for (const key in req.params) {
       const val = req.params[key]
-      output += `${JSON.stringify(key)}: ${JSON.stringify(val)}\n`
+      output += `${JSON.stringify(key).substring(
+        1,
+        JSON.stringify(key).length - 1
+      )}: ${JSON.stringify(val).substring(1, JSON.stringify(val).length - 1)}`
+      if (ind < Object.keys(req.params).length - 1) output += ', '
+      ind++
     }
+    output += '}'
   } else {
-    output += 'Request params is empty\n'
+    output += 'Request params is empty.  '
   }
   if (Object.keys(req.body).length > 0) {
-    output += 'REQUEST BODY...\n'
+    output += 'REQUEST BODY: {'
+    let ind = 0
     for (const key in req.body) {
       const val = req.body[key]
-      output += `${JSON.stringify(key)}: ${JSON.stringify(val)}\n`
+      output += `${JSON.stringify(key).substring(
+        1,
+        JSON.stringify(key).length - 1
+      )}: ${JSON.stringify(val).substring(1, JSON.stringify(val).length - 1)}`
+      if (ind < Object.keys(req.body).length - 1) output += ', '
+      ind++
     }
+    output += '}'
   } else {
-    output += 'Request body is empty'
+    output += 'Request body is empty.  '
   }
   logger.info(output)
   next()
