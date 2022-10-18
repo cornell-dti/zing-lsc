@@ -80,7 +80,7 @@ export const CourseCard = ({
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <GroupsIcon />
           <Typography>
-            {groupsFormed}
+            {groupsFormed}{' '}
             {groupsFormed === 1 ? 'Group Formed' : 'Groups Formed'}
           </Typography>
         </Box>

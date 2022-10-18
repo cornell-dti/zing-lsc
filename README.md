@@ -2,12 +2,38 @@
 
 ## Contributors
 
+### Fall 2022 
+- **Mikayla Lin** - Product Manager
+- **Changyuan Lin** - Co-Technical Product Manager
+- **Miranda Luo** - Co-Technical Product Manager
+- **Jenny Zhang** - Designer 
+- **Prachi Kelkar** - Designer 
+- **Benjamin Tang** - Developer
+- **Colin Wu** - Developer
+- **Jessica Wang** - Developer
+- **Justin Kong** - Developer
+- **Richard Gu** - Developer
+
+### Summer 2022
+
+- **Annie Zhou** - Product Manager
+- **Sean Yu** - Product Manager 
+- **Changyuan Lin** - Technical Product Manager
+- **Alyssa Zhang** - Designer
+- **Prachi Kelkar** - Designer 
+- **Colin Wu** - Developer
+- **Will Zhang** - Developer 
+
+
 ### Spring 2022
 
 - **Annie Zhou** - Product Manager
 - **Sean Yu** - Product Manager
 - **Changyuan Lin** - Technical Product Manager
 - **Alyssa Zhang** - Designer
+- **Becky Han** - Designer
+- **Jahin Aishee** - Designer 
+- **Prachi Kelkar** - Designer 
 - **Benjamin Tang** - Developer
 - **Colin Wu** - Developer
 - **Grace Han** - Developer

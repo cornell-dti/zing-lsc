@@ -4,6 +4,7 @@ import { db } from '../config'
 const usersRef = db.collection('allowed_users')
 
 // put whoever is allowed to access the product in this array and then run the script
+// updated as of 9/28
 const allowedUsers = [
   'mml267@cornell.edu',
   'cl859@cornell.edu',
@@ -19,9 +20,11 @@ const allowedUsers = [
   'pak226@cornell.edu',
   'bh449@cornell.edu',
   'ml953@cornell.edu',
-  'cal18@cornell.edu',
   'jcb13@cornell.edu',
   'ama36@cornell.edu',
+  'nk11@cornell.edu',
+  'jk2338@cornell.edu',
+  'rg779@cornell.edu',
 ]
 
 const addUsers = async () => {
