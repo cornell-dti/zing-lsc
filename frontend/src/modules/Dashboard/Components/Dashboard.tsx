@@ -22,12 +22,13 @@ import { CSVLink } from 'react-csv'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ClearIcon from '@mui/icons-material/Clear'
 
-type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
-type FilterOption =
-  | 'no-filter'
-  | 'unmatchable'
-  | 'newly-matchable'
-  | 'matchable'
+type SortOrder =
+  | 'newest-requests-first'
+  | 'unmatchable-first'
+  | 'newly-matchable-first'
+  | 'matchable-first'
+  | 'classes-a-z'
+  | 'classes-z-a'
   | 'no-check-in-email'
   | 'no-no-match-email'
 
@@ -36,9 +37,6 @@ export const Dashboard = () => {
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
 
-  const [filteredOption, setFilteredOption] = useState<FilterOption>(
-    'no-filter'
-  )
   const [sortedOrder, setSortedOrder] = useState<SortOrder>(
     'newest-requests-first'
   )
@@ -91,7 +89,6 @@ export const Dashboard = () => {
                   ? `${course.names.join('/')}_${membership.groupNumber}`
                   : undefined,
               ...localeMap(group?.templateTimestamps),
-              ...localeMap(membership.templateTimestamps),
               notes: membership.notes,
             }
           })
@@ -133,35 +130,6 @@ export const Dashboard = () => {
   }
 
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
-  function filtered(courseInfo: Course[], menuValue: FilterOption) {
-    switch (menuValue) {
-      case 'no-filter':
-        return courseInfo
-      case 'unmatchable':
-        return [...courseInfo].filter(
-          (course, _) =>
-            course.lastGroupNumber === 0 && course.unmatched.length === 1
-        )
-      case 'newly-matchable':
-        return [...courseInfo].filter(
-          (course, _) =>
-            course.lastGroupNumber === 0 && course.unmatched.length > 1
-        )
-      case 'matchable':
-        return [...courseInfo].filter(
-          (course, _) =>
-            (course.lastGroupNumber > 0 && course.unmatched.length > 0) ||
-            (course.lastGroupNumber === 0 && course.unmatched.length > 1)
-        )
-      case 'no-check-in-email':
-        return courseInfo.filter(hasUnsentCheckIns)
-      case 'no-no-match-email':
-        return courseInfo.filter(hasUnsentNoMatch)
-      default:
-        return courseInfo
-    }
-  }
-  // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
   function sorted(courseInfo: Course[], menuValue: SortOrder) {
     switch (menuValue) {
       case 'newest-requests-first':
@@ -169,6 +137,30 @@ export const Dashboard = () => {
           (a, b) =>
             b.latestSubmissionTime.valueOf() - a.latestSubmissionTime.valueOf()
         )
+      case 'unmatchable-first':
+        return [...courseInfo].sort((a, _) => {
+          //-1 if a unmatchable and b isn't
+          if (a.lastGroupNumber === 0 && a.unmatched.length === 1) {
+            return -1
+          } else return 1
+        })
+      case 'newly-matchable-first':
+        return [...courseInfo].sort((a, _) => {
+          //-1 if a newly matchable and b isn't
+          if (a.lastGroupNumber === 0 && a.unmatched.length > 1) {
+            return -1
+          } else return 1
+        })
+      case 'matchable-first':
+        return [...courseInfo].sort((a, _) => {
+          //-1 if a matchable and b isn't
+          if (
+            (a.lastGroupNumber > 0 && a.unmatched.length > 0) ||
+            (a.lastGroupNumber === 0 && a.unmatched.length > 1)
+          ) {
+            return -1
+          } else return 1
+        })
       case 'classes-a-z':
         return [...courseInfo].sort((a, b) => {
           return a.names[0].localeCompare(b.names[0], undefined, {
@@ -181,15 +173,17 @@ export const Dashboard = () => {
             numeric: true,
           })
         })
+      case 'no-check-in-email':
+        return courseInfo.filter(hasUnsentCheckIns)
+      case 'no-no-match-email':
+        return courseInfo.filter(hasUnsentNoMatch)
       default:
         return courseInfo
     }
   }
-  const handleSortedChange = (event: SelectChangeEvent) => {
+
+  const handleChange = (event: SelectChangeEvent) => {
     setSortedOrder(event.target.value as SortOrder)
-  }
-  const handleFilterChange = (event: SelectChangeEvent) => {
-    setFilteredOption(event.target.value as FilterOption)
   }
 
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
@@ -211,7 +205,6 @@ export const Dashboard = () => {
       return e.includes(message.toUpperCase())
     })
   )
-  const sortedCourses = sorted(filteredCourses, sortedOrder)
 
   return (
     <StyledContainer>
