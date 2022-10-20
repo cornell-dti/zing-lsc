@@ -45,49 +45,25 @@ export function checkAuth(req: Request, res: Response, next: NextFunction) {
 }
 
 export function logReqBody(req: Request, res: Response, next: NextFunction) {
-  // TODO (richardgu): find a way to also log which endpoint is being hit
-  let output = `Request Endpoint: ${req.originalUrl}  `
-  if (Object.keys(req.params).length > 0) {
-    output += 'REQUEST PARAMS: {'
-    let ind = 0
-    for (const key in req.params) {
-      const val = req.params[key]
-      output += `${JSON.stringify(key).substring(
-        1,
-        JSON.stringify(key).length - 1
-      )}: ${JSON.stringify(val).substring(1, JSON.stringify(val).length - 1)}`
-      if (ind < Object.keys(req.params).length - 1) output += ', '
-      ind++
-    }
-    output += '}'
-  } else {
-    output += 'Request params is empty.  '
-  }
-  if (Object.keys(req.body).length > 0) {
-    output += 'REQUEST BODY: {'
-    let ind = 0
-    for (const key in req.body) {
-      const val = req.body[key]
-      output += `${JSON.stringify(key).substring(
-        1,
-        JSON.stringify(key).length - 1
-      )}: ${JSON.stringify(val).substring(1, JSON.stringify(val).length - 1)}`
-      if (ind < Object.keys(req.body).length - 1) output += ', '
-      ind++
-    }
-    output += '}'
-  } else {
-    output += 'Request body is empty.  '
-  }
-  logger.info(output)
+  logger.info({
+    request_type: req.method,
+    endpoint: req.originalUrl,
+    params: JSON.stringify(req.params),
+    body: req.body,
+  })
   next()
 }
 
-export async function checkIsAuthorizedFromToken(idToken: string) {
+export async function checkIsAuthorizedFromToken(
+  req: Request,
+  idToken: string
+) {
   const decodedToken = await admin.auth().verifyIdToken(idToken)
   const uid = decodedToken.uid
   const user = await admin.auth().getUser(uid)
-  logger.info(`Called by user ${user.displayName} with uid ${user.uid}`)
+  logger.info(
+    `${req.method} request on endpoint ${req.originalUrl} called by user ${user.displayName} with uid ${user.uid}`
+  )
   return !!(user.email && allowedUsers.includes(user.email))
 }
 
@@ -98,7 +74,7 @@ export function checkIsAuthorized(
 ) {
   const idToken = req.headers?.authorization?.split('Bearer ')[1]
   if (idToken) {
-    checkIsAuthorizedFromToken(idToken)
+    checkIsAuthorizedFromToken(req, idToken)
       .then((isAuth) => {
         if (isAuth) next()
         else res.status(403).send('Unauthorized: not correct permissions')
