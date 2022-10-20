@@ -19,8 +19,10 @@ export const CourseCard = ({
     history.push({
       pathname: `${EDIT_ZING_PATH}/${id}`,
       state: {
-        sortedOrder: state.sortedOrder,
-        filterOption: state.filterOption,
+        sortedOrder: state?.sortedOrder
+          ? state.sortedOrder
+          : 'newest-requests-first',
+        filterOption: state?.filterOption ? state.filterOption : 'no-filter',
       },
     })
   }
