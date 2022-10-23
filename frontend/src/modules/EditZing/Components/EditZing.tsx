@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios, { AxiosResponse } from 'axios'
 import GroupCard from 'EditZing/Components/GroupCard'
 import { UnmatchedGrid } from './UnmatchedGrid'
-import { EmailTemplatesResponse } from '@core/Types'
+import { EmailTemplatesResponse, Group } from '@core/Types'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { API_ROOT, EMAIL_PATH } from '@core/Constants'
@@ -45,6 +45,8 @@ export const EditZing = () => {
 
   const unmatchedStudents = getStudentsFromEmails(course?.unmatched ?? [])
   const studentGroups = course?.groups ?? []
+  const copyStudentGroups: Group[] = [...studentGroups]
+  copyStudentGroups.sort((a, b) => a.groupNumber - b.groupNumber)
 
   const [isEmailing, setIsEmailing] = useState<boolean>(false)
 
@@ -276,7 +278,7 @@ export const EditZing = () => {
                 updateNotes={updateNotes}
               />
             </Box>
-            {studentGroups.map((studentGroup) => (
+            {copyStudentGroups.map((studentGroup) => (
               <GroupCard
                 key={studentGroup.groupNumber}
                 courseId={courseId}
