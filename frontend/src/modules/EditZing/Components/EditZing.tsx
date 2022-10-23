@@ -44,6 +44,8 @@ export const EditZing = () => {
 
   const unmatchedStudents = getStudentsFromEmails(course?.unmatched ?? [])
   const studentGroups = course?.groups ?? []
+  const copyStudentGroups: Group[] = [...studentGroups]
+  copyStudentGroups.sort((a, b) => a.groupNumber - b.groupNumber)
 
   const [isEmailing, setIsEmailing] = useState<boolean>(false)
 
@@ -261,7 +263,7 @@ export const EditZing = () => {
                 updateNotes={updateNotes}
               />
             </Box>
-            {studentGroups.map((studentGroup) => (
+            {copyStudentGroups.map((studentGroup) => (
               <GroupCard
                 key={studentGroup.groupNumber}
                 courseId={courseId}
