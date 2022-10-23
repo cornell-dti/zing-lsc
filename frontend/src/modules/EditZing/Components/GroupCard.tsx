@@ -44,7 +44,12 @@ const GroupCard = ({
   const [{ isOver }, drop] = useDrop({
     accept: STUDENT_TYPE,
     drop: (item: DnDStudentTransferType) => {
-      moveStudent(item.studentToMove, item.groupNumber, groupNumber)
+      moveStudent(
+        item.studentToMove.email,
+        courseId,
+        item.groupNumber,
+        groupNumber
+      )
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),

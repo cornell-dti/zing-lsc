@@ -2,11 +2,26 @@ import React, { useContext } from 'react'
 import { Student } from '@core/Types'
 
 interface StudentContextType {
+  hasLoadedStudents: boolean
   students: Student[]
+  updateNotes: (
+    studentEmail: string,
+    courseId: string,
+    notes: string
+  ) => Promise<void>
+  addStudentEmailTimestamps: (
+    studentEmails: string[],
+    courseId: string,
+    templateId: string,
+    timestamp: Date
+  ) => void
 }
 
 const StudentContext = React.createContext<StudentContextType>({
+  hasLoadedStudents: false,
   students: [],
+  updateNotes: async () => {},
+  addStudentEmailTimestamps: () => {},
 } as StudentContextType)
 
 export function StudentProvider({
