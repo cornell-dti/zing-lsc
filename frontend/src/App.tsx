@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   Alert,
+  Button,
   Snackbar,
   StyledEngineProvider,
   ThemeProvider,
@@ -37,12 +38,12 @@ import { Emailing } from 'Emailing'
 import { TemplateEditor } from 'TemplateEditor'
 import './App.css'
 import theme from '@core/Constants/Theme'
-import { User, onAuthStateChanged } from 'firebase/auth'
+import { User, onAuthStateChanged, reload } from 'firebase/auth'
 import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
 import axios from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
-import { Box } from '@mui/material'
+import React from 'react'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -51,27 +52,44 @@ const App = () => {
   const [networkError, setNetworkError] = useState<string | null>(null)
 
   const [needsRefresh, setNeedsRefresh] = useState(false)
-  const tenMinutesMilli = 20000 //600000
-  const reloadMessage = () => (
-    <Box
-      sx={{
-        display: 'flex',
-        backgroundColor: 'lightblue',
-        width: 'fit-content',
-        marginTop: '0.5rem',
-        marginLeft: '0.5rem',
-      }}
+  const checkRefreshDuration = 10000 //600000 (10 min)
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setNeedsRefresh(false)
+  }
+
+  const ReloadMessage = () => (
+    <Alert
+      onClose={handleClose}
+      severity="info"
+      sx={{ width: '100%' }}
+      variant="filled"
+      action={
+        <Button
+          variant="contained"
+          size="small"
+          // onClick={document.location.reload()}
+        >
+          Reload
+        </Button>
+      }
     >
-      It's been a while since you reloaded the page and there may be updated
-      information.
-    </Box>
+      You haven't reloaded in a while and there may be updated information
+    </Alert>
   )
 
   useEffect(() => {
     const interval = setInterval(() => {
       console.log('10 seconds have passed')
       setNeedsRefresh(true)
-    }, tenMinutesMilli)
+    }, checkRefreshDuration)
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
       // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
@@ -487,7 +505,13 @@ const App = () => {
                   addStudentEmailTimestamps,
                 }}
               >
-                {needsRefresh ? reloadMessage() : ''}
+                <Snackbar
+                  open={needsRefresh}
+                  autoHideDuration={10000}
+                  onClose={handleClose}
+                >
+                  {ReloadMessage()}
+                </Snackbar>
                 <Switch>
                   <PublicRoute exact path={HOME_PATH} component={Home} />
                   <PublicRoute exact path={ADMIN_PATH} component={AdminHome} />
