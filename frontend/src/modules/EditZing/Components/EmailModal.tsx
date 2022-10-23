@@ -1,5 +1,5 @@
 // external imports
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useParams } from 'react-router-dom'
