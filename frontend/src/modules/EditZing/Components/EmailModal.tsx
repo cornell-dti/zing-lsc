@@ -34,12 +34,14 @@ export const EmailModal = ({
   // check if emailing students or groups
   const recipientType = selectedStudentEmails.length > 0 ? 'student' : 'group'
 
-  const [filteredTemplates, setFilteredTemplates] = useState<EmailTemplate[]>(
-    []
+  const filteredTemplates = templates.filter(
+    (template) => template.type === recipientType
   )
 
   // template editor logic
-  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>()
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>(
+    filteredTemplates[0]
+  )
 
   // Special value substitution in template HTML
   const replaceMap = {
@@ -49,14 +51,6 @@ export const EmailModal = ({
     (prev, [key, value]) => prev.replaceAll(key, value),
     selectedTemplate?.html || ''
   )
-
-  useEffect(() => {
-    const filteredTemplates = templates.filter(
-      (template) => template.type === recipientType
-    )
-    setFilteredTemplates(filteredTemplates)
-    setSelectedTemplate(filteredTemplates[0])
-  }, [recipientType, templates])
 
   const [step, setStep] = useState<number>(0)
   const titles = [
