@@ -23,11 +23,14 @@ import {
 } from '@core/Constants'
 import {
   Course,
-  Group,
   responseCourseToCourse,
+  Group,
   responseGroupToGroup,
-  responseStudentToStudent,
   Student,
+  responseStudentToStudent,
+  EmailTemplate,
+  EmailTemplatesResponse,
+  responseEmailTemplateToEmailTemplate,
 } from '@core/Types'
 import { Home } from 'Home'
 import { AdminHome } from 'AdminHome'
@@ -41,8 +44,11 @@ import theme from '@core/Constants/Theme'
 import { User, onAuthStateChanged, reload } from 'firebase/auth'
 import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
-import axios from 'axios'
+import { templatesBucket } from '@fire/firebase'
+import { getDownloadURL, ref } from 'firebase/storage'
+import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
+import { TemplateProvider } from '@context/TemplateContext'
 import React from 'react'
 
 const App = () => {
@@ -118,6 +124,7 @@ const App = () => {
                 if (res.data.data.isAuthed) {
                   loadCourses()
                   loadStudents()
+                  loadTemplates()
                 }
               },
               (error) => setNetworkError(error.message)
@@ -476,6 +483,78 @@ const App = () => {
     )
   }
 
+  const [templates, setTemplates] = useState<EmailTemplate[]>([])
+  const [hasLoadedTemplates, setHasLoadedTemplates] = useState(false)
+
+  const loadTemplates = () => {
+    axios.get(`${API_ROOT}${EMAIL_PATH}/templates`).then(
+      async (res: AxiosResponse<EmailTemplatesResponse>) => {
+        const templates = await Promise.all(
+          res.data.data
+            .map(responseEmailTemplateToEmailTemplate)
+            .map(async (template) => {
+              // Download the HTML for the email body in Cloud Storage bucket
+              const url = await getDownloadURL(
+                ref(templatesBucket, template.body)
+              )
+              const html = (await axios.get(url)).data as string
+              return { ...template, html }
+            })
+        )
+        setTemplates(templates)
+        setHasLoadedTemplates(true)
+      },
+      (error) => {
+        console.log(error)
+        setNetworkError(error.message)
+      }
+    )
+  }
+
+  /** Save form fields to local template to keep when changing template */
+  const keepForm = (
+    selectedTemplateId: string,
+    templateName: string,
+    templateType: 'group' | 'student',
+    templateSubject: string,
+    templateHtml: string
+  ) =>
+    setTemplates(
+      templates.map((template) =>
+        template.id === selectedTemplateId
+          ? {
+              ...template,
+              name: templateName,
+              type: templateType,
+              subject: templateSubject,
+              modifyTime: new Date(),
+              html: templateHtml,
+            }
+          : template
+      )
+    )
+
+  /** Append form fields to local templates for local update on add new form */
+  const appendForm = (
+    id: string,
+    templateName: string,
+    templateType: 'group' | 'student',
+    templateSubject: string,
+    templateHtml: string
+  ) =>
+    setTemplates([
+      ...templates,
+      {
+        id,
+        name: templateName,
+        type: templateType,
+        subject: templateSubject,
+        modifyTime: new Date(),
+        body: `${id}.html`,
+        html: templateHtml,
+      },
+    ])
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -505,34 +584,51 @@ const App = () => {
                   addStudentEmailTimestamps,
                 }}
               >
-                <Snackbar
-                  open={needsRefresh}
-                  autoHideDuration={10000}
-                  onClose={handleClose}
+                <TemplateProvider
+                  value={{
+                    hasLoadedTemplates,
+                    templates,
+                    keepForm,
+                    appendForm,
+                  }}
                 >
-                  {ReloadMessage()}
-                </Snackbar>
-                <Switch>
-                  <PublicRoute exact path={HOME_PATH} component={Home} />
-                  <PublicRoute exact path={ADMIN_PATH} component={AdminHome} />
-                  <Route exact path={SURVEY_PATH} component={Survey} />
-                  <PrivateRoute
-                    exact
-                    path={DASHBOARD_PATH}
-                    component={Dashboard}
-                  />
-                  <PrivateRoute exact path={EMAIL_PATH} component={Emailing} />
-                  <PrivateRoute
-                    exact
-                    path={`${EDIT_ZING_PATH}/:courseId`}
-                    component={EditZing}
-                  />
-                  <PrivateRoute
-                    exact
-                    path={TEMPLATE_EDITOR_PATH}
-                    component={TemplateEditor}
-                  />
-                </Switch>
+                  <Snackbar
+                    open={needsRefresh}
+                    autoHideDuration={10000}
+                    onClose={handleClose}
+                  >
+                    {ReloadMessage()}
+                  </Snackbar>
+                  <Switch>
+                    <PublicRoute exact path={HOME_PATH} component={Home} />
+                    <PublicRoute
+                      exact
+                      path={ADMIN_PATH}
+                      component={AdminHome}
+                    />
+                    <Route exact path={SURVEY_PATH} component={Survey} />
+                    <PrivateRoute
+                      exact
+                      path={DASHBOARD_PATH}
+                      component={Dashboard}
+                    />
+                    <PrivateRoute
+                      exact
+                      path={EMAIL_PATH}
+                      component={Emailing}
+                    />
+                    <PrivateRoute
+                      exact
+                      path={`${EDIT_ZING_PATH}/:courseId`}
+                      component={EditZing}
+                    />
+                    <PrivateRoute
+                      exact
+                      path={TEMPLATE_EDITOR_PATH}
+                      component={TemplateEditor}
+                    />
+                  </Switch>
+                </TemplateProvider>
               </StudentProvider>
             </CourseProvider>
           </AuthProvider>

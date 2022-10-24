@@ -44,7 +44,7 @@ app.use('/email', [checkAuth, checkIsAuthorized], emailRouter)
 app.get('/getauth', checkAuth, (req, res) => {
   if (req.headers?.authorization?.startsWith('Bearer ')) {
     const idToken = req.headers.authorization.split('Bearer ')[1]
-    checkIsAuthorizedFromToken(idToken).then((isAuthed) => {
+    checkIsAuthorizedFromToken(req, idToken).then((isAuthed) => {
       res.status(200).send({
         success: true,
         data: { isAuthed: isAuthed },
