@@ -48,7 +48,7 @@ export function logReqBody(req: Request, res: Response, next: NextFunction) {
   logger.info({
     request_type: req.method,
     endpoint: req.originalUrl,
-    params: JSON.stringify(req.params),
+    params: req.params,
     body: req.body,
   })
   next()
