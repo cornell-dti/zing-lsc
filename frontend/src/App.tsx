@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   Alert,
+  Button,
   Snackbar,
   StyledEngineProvider,
   ThemeProvider,
@@ -40,7 +41,7 @@ import { Emailing } from 'Emailing'
 import { TemplateEditor } from 'TemplateEditor'
 import './App.css'
 import theme from '@core/Constants/Theme'
-import { User, onAuthStateChanged } from 'firebase/auth'
+import { User, onAuthStateChanged, reload } from 'firebase/auth'
 import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
 import { templatesBucket } from '@fire/firebase'
@@ -48,6 +49,7 @@ import { getDownloadURL, ref } from 'firebase/storage'
 import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
+import React from 'react'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -55,7 +57,45 @@ const App = () => {
   const axiosAuthInterceptor = useRef<number | null>(null)
   const [networkError, setNetworkError] = useState<string | null>(null)
 
+  const [needsRefresh, setNeedsRefresh] = useState(false)
+  const checkRefreshDuration = 10000 //600000 (10 min)
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setNeedsRefresh(false)
+  }
+
+  const ReloadMessage = () => (
+    <Alert
+      onClose={handleClose}
+      severity="info"
+      sx={{ width: '100%' }}
+      variant="filled"
+      action={
+        <Button
+          variant="contained"
+          size="small"
+          // onClick={document.location.reload()}
+        >
+          Reload
+        </Button>
+      }
+    >
+      You haven't reloaded in a while and there may be updated information
+    </Alert>
+  )
+
   useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('10 seconds have passed')
+      setNeedsRefresh(true)
+    }, checkRefreshDuration)
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
       // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
@@ -101,6 +141,7 @@ const App = () => {
         setAuthState('unauthenticated')
       }
     })
+    return () => clearInterval(interval)
   }, [])
 
   // Application-wide courses are only loaded when user is authorized
@@ -551,6 +592,13 @@ const App = () => {
                     appendForm,
                   }}
                 >
+                  <Snackbar
+                    open={needsRefresh}
+                    autoHideDuration={10000}
+                    onClose={handleClose}
+                  >
+                    {ReloadMessage()}
+                  </Snackbar>
                   <Switch>
                     <PublicRoute exact path={HOME_PATH} component={Home} />
                     <PublicRoute
