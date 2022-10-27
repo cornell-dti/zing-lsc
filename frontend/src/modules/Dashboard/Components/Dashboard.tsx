@@ -293,7 +293,10 @@ export const Dashboard = () => {
             horizontal: 'right',
           }}
         >
-          <CSVLink data={csvCourses} filename={`export-courses-${Date.now()}`}>
+          <CSVLink
+            data={csvCourses.filter((e) => e.semester === 'FA22')}
+            filename={`export-courses-${Date.now()}`}
+          >
             <MenuItem>Export CSV (Courses)</MenuItem>
           </CSVLink>
           <CSVLink
