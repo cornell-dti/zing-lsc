@@ -297,7 +297,7 @@ export const Dashboard = () => {
             <MenuItem>Export CSV (Courses)</MenuItem>
           </CSVLink>
           <CSVLink
-            data={csvStudents}
+            data={csvStudents.filter((e) => e.semester === 'FA22')}
             filename={`export-students-${Date.now()}`}
           >
             <MenuItem>Export CSV (Students)</MenuItem>
