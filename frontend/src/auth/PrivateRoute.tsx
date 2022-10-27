@@ -3,8 +3,6 @@ import { ADMIN_PATH, SURVEY_PATH } from '@core/Constants'
 import { useAuthValue } from './AuthContext'
 import { RouteProps } from '@core'
 import { RouteLoading } from './RouteLoading'
-import { Box, Button, Container, Typography } from '@mui/material'
-import { logOut } from '@fire'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 
