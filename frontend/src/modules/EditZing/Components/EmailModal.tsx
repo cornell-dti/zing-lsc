@@ -1,5 +1,5 @@
 // external imports
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useParams } from 'react-router-dom'
@@ -12,32 +12,36 @@ import { sendEmail } from 'Emailing/Components/Emailing'
 import { adminSignIn } from '@fire/firebase'
 
 // template editor
-import { templatesBucket } from '@fire/firebase'
-import { API_ROOT, EMAIL_PATH } from '@core/Constants'
-import {
-  EmailTemplate,
-  EmailTemplatesResponse,
-  responseEmailTemplateToEmailTemplate,
-} from '@core/Types'
-import axios, { AxiosResponse } from 'axios'
-import { getDownloadURL, ref } from 'firebase/storage'
+import { EmailTemplate } from '@core/Types'
+import { useStudentValue } from '@context/StudentContext'
+import { useCourseValue } from '@context/CourseContext'
+import { useTemplateValue } from '@context/TemplateContext'
 
 export const EmailModal = ({
-  selectedGroups,
-  selectedStudents,
+  selectedGroupNumbers,
+  selectedStudentEmails,
   isEmailing,
   setIsEmailing,
   courseNames,
   setEmailSent,
   setEmailSentError,
-  handleEmailTimestamp,
 }: EmailModalProps) => {
+  const { courseId } = useParams<{ courseId: string }>()
+  const { addGroupEmailTimestamps } = useCourseValue()
+  const { addStudentEmailTimestamps } = useStudentValue()
+  const { templates } = useTemplateValue()
+
   // check if emailing students or groups
-  const recipientType = selectedStudents.length > 0 ? 'student' : 'group'
+  const recipientType = selectedStudentEmails.length > 0 ? 'student' : 'group'
+
+  const filteredTemplates = templates.filter(
+    (template) => template.type === recipientType
+  )
 
   // template editor logic
-  const [templates, setTemplates] = useState<EmailTemplate[]>([])
-  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>()
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>(
+    filteredTemplates[0]
+  )
 
   // Special value substitution in template HTML
   const replaceMap = {
@@ -48,32 +52,6 @@ export const EmailModal = ({
     selectedTemplate?.html || ''
   )
 
-  useEffect(() => {
-    axios
-      .get(`${API_ROOT}${EMAIL_PATH}/templates`)
-      .then(async (res: AxiosResponse<EmailTemplatesResponse>) => {
-        const allTemplates = await Promise.all(
-          res.data.data
-            .map(responseEmailTemplateToEmailTemplate)
-            .map(async (template: EmailTemplate, i) => {
-              // Download the HTML for the email body in Cloud Storage bucket
-              const url = await getDownloadURL(
-                ref(templatesBucket, template.body)
-              )
-              const html = (await axios.get(url)).data as string
-              return { ...template, html }
-            })
-        )
-        const filteredTemplates = allTemplates.filter(
-          (template) => template.type === recipientType
-        )
-        setTemplates(filteredTemplates)
-        setSelectedTemplate(filteredTemplates[0])
-      })
-      .catch((error) => console.error(error))
-  }, [recipientType])
-
-  const { courseId } = useParams<{ courseId: string }>()
   const [step, setStep] = useState<number>(0)
   const titles = [
     'Select email template',
@@ -92,12 +70,11 @@ export const EmailModal = ({
    */
   const sendIndividualEmails = async () => {
     await Promise.all(
-      selectedStudents.map((student: string) => {
-        const indivEmail = student
+      selectedStudentEmails.map((studentEmail: string) => {
         const emailSubject = selectedTemplate?.subject
         const emailItems = {
           emailSubject,
-          indivEmail,
+          indivEmail: studentEmail,
           emailBody: replacedHtml,
           courseId,
           groupNum: undefined,
@@ -115,15 +92,14 @@ export const EmailModal = ({
    */
   const sendGroupEmails = async () => {
     await Promise.all(
-      selectedGroups.map((group) => {
+      selectedGroupNumbers.map((groupNumber) => {
         const emailSubject = selectedTemplate?.subject
-        const groupNum = group.groupNumber.toString()
         const emailItems = {
           emailSubject,
           indivEmail: undefined,
           emailBody: replacedHtml,
           courseId,
-          groupNum,
+          groupNum: groupNumber.toString(),
           selectedTemplate: selectedTemplate?.id,
         }
         return sendEmail(emailItems)
@@ -136,11 +112,25 @@ export const EmailModal = ({
    */
   const handleEmailSend = async () => {
     try {
-      await sendGroupEmails()
-      await sendIndividualEmails()
+      if (recipientType === 'student') {
+        await sendIndividualEmails()
+        addStudentEmailTimestamps(
+          selectedStudentEmails,
+          courseId,
+          selectedTemplate!.id,
+          new Date()
+        )
+      } else {
+        await sendGroupEmails()
+        addGroupEmailTimestamps(
+          selectedGroupNumbers,
+          courseId,
+          selectedTemplate!.id,
+          new Date()
+        )
+      }
       setEmailSent(true)
       setIsEmailing(false)
-      handleEmailTimestamp()
     } catch (e) {
       step === 2 ? setStep(3) : setStep(2)
       setEmailSentError(true)
@@ -152,7 +142,7 @@ export const EmailModal = ({
     return (
       <Box sx={{ marginTop: '0.25em', marginBottom: '0.5em' }}>
         <Typography variant="h5" component="h5">
-          Template:
+          Template:{' '}
           <Box component="span" sx={{ fontWeight: 800 }}>
             {selectedTemplate?.name}
           </Box>
@@ -165,7 +155,7 @@ export const EmailModal = ({
     return (
       <Box>
         <EmailTemplateButtons
-          templates={templates}
+          templates={filteredTemplates}
           selectedTemplate={selectedTemplate!}
           setSelectedTemplate={setSelectedTemplate}
         />
@@ -284,8 +274,11 @@ export const EmailModal = ({
           }}
           endIcon={<SendIcon />}
         >
-          Send {selectedGroups.length > 0 && selectedGroups.length}
-          {selectedStudents.length > 0 && selectedStudents.length} Emails
+          Send{' '}
+          {recipientType === 'group'
+            ? selectedGroupNumbers.length
+            : selectedStudentEmails.length}{' '}
+          Emails
         </Button>
       )
     } else return null
@@ -298,7 +291,8 @@ export const EmailModal = ({
           onClick={() => {
             setStep(0)
           }}
-          color="inherit"
+          color="secondary"
+          variant="outlined"
         >
           Back to templates
         </Button>
@@ -321,10 +315,10 @@ export const EmailModal = ({
             component="span"
             sx={{ fontWeight: 900, maxWidth: '90%', wordBreak: 'break-word' }}
           >
-            {selectedGroups
-              .map(({ groupNumber }) => `Group ${groupNumber}`)
+            {selectedGroupNumbers
+              .map((groupNumber) => `Group ${groupNumber}`)
               .join(', ')}
-            {selectedStudents.join(', ')}
+            {selectedStudentEmails.join(', ')}
           </Box>
         </Typography>
         {step === 0 && <Step0 />}

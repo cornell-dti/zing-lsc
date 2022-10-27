@@ -1,6 +1,5 @@
 import { GridSize } from '@mui/material'
-import { Student } from '@core/Types'
-import { Group } from './CourseInfo'
+import { Group, Student } from '@core/Types'
 import { TemplateName } from 'EditZing/utils/emailTemplates'
 import { EmailTemplate } from '@core/Types'
 
@@ -10,15 +9,20 @@ export interface UnmatchedGridProps {
   courseId: string
   unmatchedStudents: Student[]
   moveStudent: (
-    studentToMove: Student,
+    studentEmail: string,
+    courseId: string,
     fromGroupNumber: number,
     toGroupNumber: number
   ) => void
-  matchStudents: () => void
+  handleMatchStudents: () => void
   templateMap: IdMap
   selectedStudents: string[]
   handleAddStudent: (student: string, selected: boolean) => void
-  updateNotes: (student: string, notes: string) => void
+  updateNotes: (
+    studentEmail: string,
+    courseId: string,
+    notes: string
+  ) => Promise<void>
 }
 
 export interface GroupGridProps {
@@ -28,7 +32,8 @@ export interface GroupGridProps {
   templateMap: IdMap
   groupTimestamps: { [key: string]: Date }
   moveStudent: (
-    studentToMove: Student,
+    studentEmail: string,
+    courseId: string,
     fromGroupNumber: number,
     toGroupNumber: number
   ) => void
@@ -38,7 +43,11 @@ export interface GroupGridProps {
   selectedStudents: string[]
   handleChecked: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleAddStudent: (student: string, selected: boolean) => void
-  updateNotes: (student: string, notes: string) => void
+  updateNotes: (
+    studentEmail: string,
+    courseId: string,
+    notes: string
+  ) => Promise<void>
 }
 
 export interface StudentGridProps {
@@ -49,7 +58,11 @@ export interface StudentGridProps {
   templateMap: IdMap
   selected: boolean
   handleAddStudent: (student: string, selected: boolean) => void
-  updateNotes: (student: string, notes: string) => void
+  updateNotes: (
+    studentEmail: string,
+    courseId: string,
+    notes: string
+  ) => Promise<void>
 }
 
 export interface MatchLoadingProps {
@@ -61,14 +74,13 @@ export interface MatchLoadingProps {
 }
 
 export interface EmailModalProps {
-  selectedStudents: string[]
-  selectedGroups: Group[]
+  selectedStudentEmails: string[]
+  selectedGroupNumbers: number[]
   isEmailing: boolean
   setIsEmailing: (arg: boolean) => void
   courseNames: string[]
   setEmailSent: (arg: boolean) => void
   setEmailSentError: (arg: boolean) => void
-  handleEmailTimestamp: () => void
 }
 
 export interface NotesModalProps {
@@ -77,7 +89,7 @@ export interface NotesModalProps {
   name: string
   modalNotes: string
   setModalNotes: (arg: string) => void
-  saveModalNotes: () => void
+  saveModalNotes: () => Promise<void>
   handleClose: () => void
 }
 

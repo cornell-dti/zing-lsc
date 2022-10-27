@@ -1,9 +1,19 @@
-import { Box, CircularProgress, Fade } from '@mui/material'
+import { Box, CircularProgress, Fade, Typography } from '@mui/material'
 import React from 'react'
 
 // meant to show when the route is loading with the information it needs
 // 800 ms delay, as no special feedback (loading) is needed before then.
-export const RouteLoading = ({ isLoading }: { isLoading: boolean }) => {
+export const RouteLoading = ({
+  isLoading,
+  hasLoadedCourses,
+  hasLoadedStudents,
+  hasLoadedTemplates,
+}: {
+  isLoading: boolean
+  hasLoadedCourses?: boolean
+  hasLoadedStudents?: boolean
+  hasLoadedTemplates?: boolean
+}) => {
   return (
     <Fade
       in={isLoading}
@@ -12,8 +22,29 @@ export const RouteLoading = ({ isLoading }: { isLoading: boolean }) => {
       }}
       unmountOnExit
     >
-      <Box display="flex" justifyContent="center" padding={6}>
+      <Box
+        display="flex"
+        alignItems="center"
+        padding={6}
+        flexDirection="column"
+        gap={2}
+      >
         <CircularProgress size={50} />
+        {hasLoadedCourses !== undefined && hasLoadedCourses ? (
+          <Typography>Loaded courses ✅</Typography>
+        ) : (
+          <Typography>Loading courses ⏳</Typography>
+        )}
+        {hasLoadedStudents !== undefined && hasLoadedStudents ? (
+          <Typography>Loaded students ✅</Typography>
+        ) : (
+          <Typography>Loading students ⏳</Typography>
+        )}
+        {hasLoadedTemplates !== undefined && hasLoadedTemplates ? (
+          <Typography>Loaded templates ✅</Typography>
+        ) : (
+          <Typography>Loading templates ⏳</Typography>
+        )}
       </Box>
     </Fade>
   )
