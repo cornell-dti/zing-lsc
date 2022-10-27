@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -197,14 +197,13 @@ export const Dashboard = () => {
     console.log('search is:', event.target.value)
   }
 
-  const filteredCourses = sorted(
-    courses.filter((c) => c.roster === selectedRoster),
-    sortedOrder
-  ).filter((d) =>
-    d.names.find((e) => {
-      return e.includes(message.toUpperCase())
-    })
-  )
+  const filteredCourses = courses
+    .filter((c) => c.roster === selectedRoster)
+    .filter((d) =>
+      d.names.find((e) => {
+        return e.includes(message.toUpperCase())
+      })
+    )
 
   return (
     <StyledContainer>
