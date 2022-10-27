@@ -22,6 +22,10 @@ export interface StepProps {
   currentAnswer: string
 }
 
+export interface LoginCheckProps {
+  gotoNextStep: () => void
+}
+
 export interface StepBeginProps {
   setName: (arg: string) => void
   setEmail: (arg: string) => void

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { SURVEY_PATH } from '@core/Constants'
 
 import { ReactComponent as CornellSeal } from '@assets/img/CornellSealWhite.svg'
+import { signInWithGoogle } from '@fire/firebase'
 
 export const Home = () => {
   return (
@@ -62,14 +63,15 @@ export const Home = () => {
           Create groups.
         </Typography>
         <Button
-          variant="outlined"
-          component={Link}
-          to={SURVEY_PATH}
           color="secondary"
+          variant="outlined"
           sx={{
             width: '14em',
             fontSize: '22px',
             mb: '1.25em',
+          }}
+          onClick={() => {
+            signInWithGoogle().catch(() => {})
           }}
         >
           I'm a Cornell Student

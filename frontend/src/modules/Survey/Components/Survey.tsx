@@ -6,6 +6,7 @@ import { API_ROOT, STUDENT_API } from '@core/Constants'
 import {
   StyledContainer1 as SplashBackground,
   StyledContainer2 as QuestionBackground,
+  StyledContainer3 as LoginBackground,
 } from 'Survey/Styles/Survey.style'
 import { StepTemplate } from 'Survey/Components/StepTemplate'
 import { StepBegin } from 'Survey/Components/StepBegin'
@@ -14,9 +15,10 @@ import { StepRadio } from 'Survey/Components/StepRadio'
 import { StepFinal } from 'Survey/Components/StepFinal'
 import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
+import { LoginCheck } from './LoginCheck'
 
 export const Survey = () => {
-  const [currStep, setCurrStep] = useState(1)
+  const [currStep, setCurrStep] = useState(0)
 
   // Final step data
   const [surveySubmissionResponse, setSurveySubmissionResponse] = useState<
@@ -81,7 +83,13 @@ export const Survey = () => {
       ? courseList.length > 0 && courseList.every((c) => validCourseRe.test(c))
       : answers[multipleChoiceIndex] !== ''
 
-  return currStep === 1 ? ( // Form landing
+  return currStep === 0 ? (
+    <LoginBackground>
+      <LoginCheck
+        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
+      ></LoginCheck>
+    </LoginBackground>
+  ) : currStep === 1 ? ( // Form landing
     <SplashBackground>
       <StepBegin
         name={nameAnswer}
