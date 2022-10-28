@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   Alert,
@@ -47,7 +47,12 @@ import { auth } from '@fire'
 import { templatesBucket } from '@fire/firebase'
 import { getDownloadURL, ref } from 'firebase/storage'
 import axios, { AxiosResponse } from 'axios'
-import { CourseProvider, StudentProvider } from '@context'
+import {
+  CourseProvider,
+  StudentProvider,
+  useCourseValue,
+  useStudentValue,
+} from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
 import React from 'react'
 
@@ -90,12 +95,9 @@ const App = () => {
       You haven't reloaded in a while and there may be updated information
     </Alert>
   )
-
+  const [refetchedCourses, setRefetchedCourses] = useState<Course[]>([])
+  const [refetchedStudents, setRefetchedStudents] = useState<Student[]>([])
   useEffect(() => {
-    const interval = setInterval(() => {
-      console.log('10 seconds have passed')
-      setNeedsRefresh(true)
-    }, checkRefreshDuration)
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
       // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
@@ -141,7 +143,6 @@ const App = () => {
         setAuthState('unauthenticated')
       }
     })
-    return () => clearInterval(interval)
   }, [])
 
   // Application-wide courses are only loaded when user is authorized
@@ -177,6 +178,37 @@ const App = () => {
       }
     )
   }
+
+  useEffect(() => {
+    if (hasLoadedCourses && hasLoadedStudents) {
+      console.log('setting interval')
+      const interval = setInterval(async () => {
+        console.log(
+          `${
+            checkRefreshDuration / 1000
+          } seconds have passed — now checking if course/student data have changed.`
+        )
+
+        const newClasses = (
+          await axios.get(`${API_ROOT}${COURSE_API}`)
+        ).data.map(responseCourseToCourse)
+
+        const newStudents = (
+          await axios.get(`${API_ROOT}${STUDENT_API}`)
+        ).data.map(responseStudentToStudent)
+
+        console.log(
+          `Number of courses: ${newClasses.length}, Number of students: ${newStudents.length}`
+        )
+        if (
+          newClasses.length !== courses.length ||
+          newStudents.length !== students.length
+        )
+          setNeedsRefresh(true)
+      }, checkRefreshDuration)
+      return () => clearInterval(interval)
+    }
+  }, [hasLoadedCourses, hasLoadedStudents])
 
   /** Add an unmatched student to a group */
   const moveStudentFromUnmatched = (
