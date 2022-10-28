@@ -16,6 +16,7 @@ import { EmailTemplate } from '@core/Types'
 import { useStudentValue } from '@context/StudentContext'
 import { useCourseValue } from '@context/CourseContext'
 import { useTemplateValue } from '@context/TemplateContext'
+import { EmailEdit } from 'EditZing/Components/EmailEdit'
 
 export const EmailModal = ({
   selectedGroupNumbers,
@@ -151,6 +152,36 @@ export const EmailModal = ({
     )
   }
 
+  const EditButton = () => {
+    if (step === 1) {
+      return (
+        <Button
+          onClick={() => {
+            setStep(4)
+          }}
+          color="secondary"
+          variant="outlined"
+        >
+          Edit
+        </Button>
+      )
+    } else {
+      return null
+    }
+  }
+
+  const EditEmail = () => {
+    return (
+      <Box>
+        <TemplateSelectedComponent />
+        <EmailEdit
+          template={selectedTemplate!}
+          replacedHtml={replacedHtml}
+          setSelectedTemplate={setSelectedTemplate}
+        />
+      </Box>
+    )
+  }
   const Step0 = () => {
     return (
       <Box>
@@ -297,6 +328,18 @@ export const EmailModal = ({
           Back to templates
         </Button>
       )
+    } else if (step === 4) {
+      return (
+        <Button
+          onClick={() => {
+            setStep(1)
+          }}
+          color="secondary"
+          variant="outlined"
+        >
+          Back to preview
+        </Button>
+      )
     } else {
       return null
     }
@@ -352,6 +395,7 @@ export const EmailModal = ({
             {step <= 1 && <SelectTemplates />}
             {step === 2 && <StepFailure />}
             {step === 3 && <StepFinalFailure />}
+            {step === 4 && <EditEmail />}
           </Box>
         ) : (
           <Box
@@ -373,6 +417,7 @@ export const EmailModal = ({
           </Box>
         )}
       </ZingModal.Body>
+      <EditButton />
       <ZingModal.Controls>
         <BackButton />
         <ProceedButton />
