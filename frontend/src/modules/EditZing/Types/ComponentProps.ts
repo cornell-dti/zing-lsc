@@ -110,3 +110,8 @@ export interface EmailPreviewProps {
   template: EmailTemplate
   replacedHtml: string
 }
+export interface EmailEditProps {
+  template: EmailTemplate
+  replacedHtml: string
+  setSelectedTemplate: (value: EmailTemplate) => void
+}
