@@ -624,11 +624,7 @@ const App = () => {
                     appendForm,
                   }}
                 >
-                  <Snackbar
-                    open={needsRefresh}
-                    autoHideDuration={10000}
-                    onClose={handleClose}
-                  >
+                  <Snackbar open={needsRefresh} onClose={handleClose}>
                     {ReloadMessage()}
                   </Snackbar>
                   <Switch>
