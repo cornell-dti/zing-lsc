@@ -6,6 +6,7 @@ import {
   InputLabel,
   Typography,
   Link,
+  Avatar,
 } from '@mui/material'
 import { LoginCheckProps } from 'Survey/Types'
 import { useAuthValue } from '@auth'
@@ -59,10 +60,11 @@ export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
       >
         Confirm Login
       </Typography>
-      <img
+      <Avatar
         src={user?.photoURL ?? ''}
-        alt="Profile"
-        style={{ borderRadius: '50%', width: 188, marginBottom: '2rem' }}
+        alt="profile"
+        imgProps={{ referrerPolicy: 'no-referrer' }}
+        sx={{ marginBottom: '2rem', height: '10rem', width: '10rem' }}
       />
       <Typography
         sx={{
