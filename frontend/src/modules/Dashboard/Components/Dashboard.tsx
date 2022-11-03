@@ -294,13 +294,13 @@ export const Dashboard = () => {
           }}
         >
           <CSVLink
-            data={csvCourses.filter((e) => e.semester === 'FA22')}
+            data={csvCourses.filter((e) => e.semester === selectedRoster)}
             filename={`export-courses-${Date.now()}`}
           >
             <MenuItem>Export CSV (Courses)</MenuItem>
           </CSVLink>
           <CSVLink
-            data={csvStudents.filter((e) => e.semester === 'FA22')}
+            data={csvStudents.filter((e) => e.semester === selectedRoster)}
             filename={`export-students-${Date.now()}`}
           >
             <MenuItem>Export CSV (Students)</MenuItem>
