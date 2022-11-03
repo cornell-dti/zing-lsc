@@ -214,10 +214,6 @@ export const Dashboard = () => {
     })
   )
 
-  // const filteredCourses = filtered(
-  //   courses.filter((course) => course.roster === selectedRoster),
-  //   filteredOption
-
   return (
     <StyledContainer>
       <StyledHeaderMenu>
