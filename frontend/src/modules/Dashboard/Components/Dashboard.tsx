@@ -239,6 +239,7 @@ export const Dashboard = () => {
                   padding: 0,
                   margin: 0,
                   fontWeight: 'bold',
+                  maxWidth: '250px',
                 }}
               >
                 <MenuItem value="no-filter">None</MenuItem>
@@ -261,9 +262,10 @@ export const Dashboard = () => {
                 color: 'essentials.75',
                 padding: 1,
                 margin: 1,
+                maxWidth: '300px',
               }}
             >
-              Sort by:
+              Sort:
             </Box>
             <DropdownSelect
               value={sortedOrder}
@@ -272,6 +274,7 @@ export const Dashboard = () => {
                 padding: 0,
                 margin: 0,
                 fontWeight: 'bold',
+                maxWidth: '250px',
               }}
             >
               <MenuItem value="newest-requests-first">
@@ -281,26 +284,38 @@ export const Dashboard = () => {
               <MenuItem value="classes-z-a">Classes Z-A</MenuItem>
             </DropdownSelect>
           </Box>
-          <TextField
-            id="search-bar"
-            label="Search for a course"
-            variant="outlined"
-            sx={{
-              padding: 0,
-              margin: 0,
-              ml: 3,
-              width: 200,
-            }}
-            value={message}
-            onChange={handleSearch}
-            InputProps={{
-              endAdornment: message ? (
-                <IconButton size="small" onClick={() => setMessage('')}>
-                  <ClearIcon />
-                </IconButton>
-              ) : undefined,
-            }}
-          />
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box
+              sx={{
+                fontWeight: 'bold',
+                color: 'essentials.75',
+                padding: 1,
+                margin: 1,
+              }}
+            >
+              Search:
+            </Box>
+            <TextField
+              id="search-bar"
+              label="Search for a course"
+              variant="outlined"
+              sx={{
+                padding: 0,
+                margin: 0,
+                width: 200,
+                maxWidth: '250px',
+              }}
+              value={message}
+              onChange={handleSearch}
+              InputProps={{
+                endAdornment: message ? (
+                  <IconButton size="small" onClick={() => setMessage('')}>
+                    <ClearIcon />
+                  </IconButton>
+                ) : undefined,
+              }}
+            />
+          </Box>
         </Box>
         <Button
           id="logout-button"
