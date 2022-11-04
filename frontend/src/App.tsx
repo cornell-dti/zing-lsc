@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   Alert,
@@ -41,18 +41,13 @@ import { Emailing } from 'Emailing'
 import { TemplateEditor } from 'TemplateEditor'
 import './App.css'
 import theme from '@core/Constants/Theme'
-import { User, onAuthStateChanged, reload } from 'firebase/auth'
+import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
 import { templatesBucket } from '@fire/firebase'
 import { getDownloadURL, ref } from 'firebase/storage'
 import axios, { AxiosResponse } from 'axios'
-import {
-  CourseProvider,
-  StudentProvider,
-  useCourseValue,
-  useStudentValue,
-} from '@context'
+import { CourseProvider, StudentProvider } from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
 import React from 'react'
 
@@ -72,31 +67,18 @@ const App = () => {
     if (reason === 'clickaway') {
       return
     }
-
-    setNeedsRefresh(false)
   }
 
-  const ReloadMessage = () => (
-    <Alert
-      onClose={handleClose}
-      severity="info"
-      sx={{ width: '100%' }}
-      variant="filled"
-      action={
-        <Button
-          variant="contained"
-          size="small"
-          // onClick={document.location.reload()}
-        >
-          Reload
-        </Button>
-      }
-    >
-      You haven't reloaded in a while and there may be updated information
-    </Alert>
+  function refreshPage() {
+    window.location.reload()
+  }
+
+  const reloadButton = (
+    <Button variant="text" size="small" onClick={refreshPage} color="secondary">
+      Reload
+    </Button>
   )
-  const [refetchedCourses, setRefetchedCourses] = useState<Course[]>([])
-  const [refetchedStudents, setRefetchedStudents] = useState<Student[]>([])
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
@@ -208,7 +190,7 @@ const App = () => {
       }, checkRefreshDuration)
       return () => clearInterval(interval)
     }
-  }, [hasLoadedCourses, hasLoadedStudents])
+  }, [courses.length, hasLoadedCourses, hasLoadedStudents, students.length])
 
   /** Add an unmatched student to a group */
   const moveStudentFromUnmatched = (
@@ -624,9 +606,13 @@ const App = () => {
                     appendForm,
                   }}
                 >
-                  <Snackbar open={needsRefresh} onClose={handleClose}>
-                    {ReloadMessage()}
-                  </Snackbar>
+                  <Snackbar
+                    open={needsRefresh}
+                    onClose={handleClose}
+                    message="The information in your app is out of date. 
+                      Please reload to see the latest updates."
+                    action={reloadButton}
+                  />
                   <Switch>
                     <PublicRoute exact path={HOME_PATH} component={Home} />
                     <PublicRoute
