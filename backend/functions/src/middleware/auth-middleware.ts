@@ -1,7 +1,6 @@
 const { db } = require('../config')
 import * as admin from 'firebase-admin'
 import { Request, Response, NextFunction } from 'express'
-import { logger } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import QuerySnapshot = firestore.QuerySnapshot
 
@@ -44,26 +43,10 @@ export function checkAuth(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export function logReqBody(req: Request, res: Response, next: NextFunction) {
-  logger.info({
-    request_type: req.method,
-    endpoint: req.originalUrl,
-    params: req.params,
-    body: req.body,
-  })
-  next()
-}
-
-export async function checkIsAuthorizedFromToken(
-  req: Request,
-  idToken: string
-) {
+export async function checkIsAuthorizedFromToken(idToken: string) {
   const decodedToken = await admin.auth().verifyIdToken(idToken)
   const uid = decodedToken.uid
   const user = await admin.auth().getUser(uid)
-  logger.info(
-    `${req.method} request on endpoint ${req.originalUrl} called by user ${user.displayName} with uid ${user.uid}`
-  )
   return !!(user.email && allowedUsers.includes(user.email))
 }
 
@@ -74,7 +57,7 @@ export function checkIsAuthorized(
 ) {
   const idToken = req.headers?.authorization?.split('Bearer ')[1]
   if (idToken) {
-    checkIsAuthorizedFromToken(req, idToken)
+    checkIsAuthorizedFromToken(idToken)
       .then((isAuth) => {
         if (isAuth) next()
         else res.status(403).send('Unauthorized: not correct permissions')

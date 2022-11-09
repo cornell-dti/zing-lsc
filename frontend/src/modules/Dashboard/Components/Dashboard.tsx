@@ -90,7 +90,7 @@ export const Dashboard = () => {
                   : undefined,
               ...localeMap(group?.templateTimestamps),
               ...localeMap(membership.templateTimestamps),
-              notes: membership.notes.replace(/(\n)/gm, '  ').trim(),
+              notes: membership.notes,
             }
           })
         )
