@@ -1,8 +1,6 @@
 import { StyledBackground } from 'Home/Styles/Home.style'
 import { Box, Button, Typography } from '@mui/material'
 import matchimg from '@assets/img/matching.svg'
-import { Link } from 'react-router-dom'
-import { SURVEY_PATH } from '@core/Constants'
 
 import { ReactComponent as CornellSeal } from '@assets/img/CornellSealWhite.svg'
 import { signInWithGoogle } from '@fire/firebase'
