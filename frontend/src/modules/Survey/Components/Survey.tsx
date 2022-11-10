@@ -4,27 +4,28 @@ import axios from 'axios'
 import { Question } from '@core/Types'
 import { API_ROOT, STUDENT_API } from '@core/Constants'
 import {
-  StyledContainer1 as SplashBackground,
   StyledContainer2 as QuestionBackground,
   StyledContainer3 as LoginBackground,
 } from 'Survey/Styles/Survey.style'
 import { StepTemplate } from 'Survey/Components/StepTemplate'
-import { StepBegin } from 'Survey/Components/StepBegin'
 import { StepCourse } from 'Survey/Components/StepCourse'
 import { StepRadio } from 'Survey/Components/StepRadio'
 import { StepFinal } from 'Survey/Components/StepFinal'
 import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
 import { LoginCheck } from './LoginCheck'
+import { useAuthValue } from '@auth/AuthContext'
 
 export const Survey = () => {
-  const [currStep, setCurrStep] = useState(0)
+  const [currStep, setCurrStep] = useState(1)
 
   // Final step data
   const [surveySubmissionResponse, setSurveySubmissionResponse] = useState<
     SurveySubmissionResponse | undefined
   >()
   const [surveyError, setSurveyError] = useState<string | null>(null)
+
+  const { user } = useAuthValue()
 
   // For the progress spinner on the submission button
   const [isSubmittingSurvey, setIsSubmittingSurvey] = useState(false)
@@ -36,8 +37,6 @@ export const Survey = () => {
   const totalSteps = questions.length + numSpecialQuestions + 1
 
   // Form answer props
-  const [nameAnswer, setNameAnswer] = useState('')
-  const [emailAnswer, setEmailAnswer] = useState('')
   const [courseList, setCourseList] = useState<string[]>([])
   const [answers, setAnswers] = useState(
     Array<string>(questions.length).fill('')
@@ -55,8 +54,8 @@ export const Survey = () => {
     )
     const surveyData: SurveyData = {
       courseCatalogNames: courseList,
-      name: nameAnswer,
-      email: emailAnswer,
+      name: user!.displayName!,
+      email: user!.email!,
       ...mcData,
     }
     console.log('Finished survey', surveyData)
@@ -83,22 +82,12 @@ export const Survey = () => {
       ? courseList.length > 0 && courseList.every((c) => validCourseRe.test(c))
       : answers[multipleChoiceIndex] !== ''
 
-  return currStep === 0 ? (
+  return currStep === 1 ? (
     <LoginBackground>
       <LoginCheck
         gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
       ></LoginCheck>
     </LoginBackground>
-  ) : currStep === 1 ? ( // Form landing
-    <SplashBackground>
-      <StepBegin
-        name={nameAnswer}
-        email={emailAnswer}
-        setName={(arg: string) => setNameAnswer(arg)}
-        setEmail={(arg: string) => setEmailAnswer(arg)}
-        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
-      />
-    </SplashBackground>
   ) : currStep === totalSteps + 1 ? (
     // Form confirmation
     <QuestionBackground>

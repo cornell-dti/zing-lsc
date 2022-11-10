@@ -11,7 +11,6 @@ import {
 import { LoginCheckProps } from 'Survey/Types'
 import { useAuthValue } from '@auth'
 import { signInWithGoogle } from '@fire/firebase'
-import { logOut } from '@fire'
 
 export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
   const textInputStyle = {
@@ -24,6 +23,8 @@ export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
   }
 
   const { user } = useAuthValue()
+  const validEmail = /^\w+@cornell.edu$/
+  const isValidEmail = validEmail.test(user?.email ?? '')
 
   return (
     <Box
@@ -46,7 +47,7 @@ export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
         },
         margin: {
           xs: '0%',
-          lg: '25%',
+          lg: '28%',
         },
       }}
     >
@@ -55,7 +56,7 @@ export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
           color: '#3d2d49',
           fontSize: '2rem',
           fontWeight: '500',
-          mb: '2rem',
+          mb: '6%',
         }}
       >
         Confirm Login
@@ -64,14 +65,14 @@ export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
         src={user?.photoURL ?? ''}
         alt="profile"
         imgProps={{ referrerPolicy: 'no-referrer' }}
-        sx={{ marginBottom: '2rem', height: '10rem', width: '10rem' }}
+        sx={{ marginBottom: '1.2rem', height: '10rem', width: '10rem' }}
       />
       <Typography
         sx={{
           color: '#3d2d49',
           fontSize: '1.2rem',
           fontWeight: '500',
-          mb: '2rem',
+          mb: '6%',
         }}
       >
         Welcome, <b>{user?.displayName}</b>
@@ -79,13 +80,17 @@ export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
 
       <Box sx={{ textAlign: 'left', mb: '2rem' }}>
         <InputLabel>
-          <Typography fontWeight="430">You are signed in as</Typography>
+          <Typography fontWeight="400" color="black">
+            You are signed in as
+          </Typography>
         </InputLabel>
         <TextField
           sx={textInputStyle}
-          disabled={true}
           type="email"
-          placeholder={user?.email ?? 'No Email Provided'}
+          value={user?.email ?? 'No Email Provided'}
+          helperText={!isValidEmail && 'Error: Not a valid cornell.edu email'}
+          error={!isValidEmail}
+          disabled
         />
       </Box>
 
@@ -95,19 +100,23 @@ export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
         sx={{
           width: '8em',
           fontSize: '16px',
-          mb: '3%',
+          mb: '8%',
         }}
-        disabled={!user}
+        disabled={!isValidEmail || !user}
         onClick={gotoNextStep}
       >
         Continue
       </Button>
       <Link
         onClick={() => {
-          logOut()
           signInWithGoogle().catch(() => {})
         }}
-        sx={{ color: 'black', textDecoration: 'none', fontWeight: '500' }}
+        sx={{
+          color: 'black',
+          fontSize: '14px',
+          textDecoration: 'none',
+          fontWeight: '500',
+        }}
       >
         Not You?
       </Link>
