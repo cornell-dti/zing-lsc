@@ -58,7 +58,7 @@ const App = () => {
   const [networkError, setNetworkError] = useState<string | null>(null)
 
   const [needsRefresh, setNeedsRefresh] = useState(false)
-  const checkRefreshDuration = 10000 //600000 (10 min)
+  const checkRefreshDuration = 600000 // (10 min)
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -163,14 +163,7 @@ const App = () => {
 
   useEffect(() => {
     if (hasLoadedCourses && hasLoadedStudents) {
-      console.log('setting interval')
       const interval = setInterval(async () => {
-        console.log(
-          `${
-            checkRefreshDuration / 1000
-          } seconds have passed — now checking if course/student data have changed.`
-        )
-
         const newClasses = (
           await axios.get(`${API_ROOT}${COURSE_API}`)
         ).data.map(responseCourseToCourse)
@@ -179,9 +172,25 @@ const App = () => {
           await axios.get(`${API_ROOT}${STUDENT_API}`)
         ).data.map(responseStudentToStudent)
 
-        console.log(
-          `Number of courses: ${newClasses.length}, Number of students: ${newStudents.length}`
-        )
+        newClasses.forEach((course: Course, index: number) => {
+          let newGroups = course.groups
+          let oldGroups = courses[index].groups
+
+          let newMembers = newGroups.map((group) => group.members)
+          let oldMembers = oldGroups.map((group) => group.members)
+          if (newMembers.length === oldMembers.length) {
+            newMembers.forEach((group, index) => {
+              group.forEach((member, ind) => {
+                if (member !== oldMembers[index][ind]) {
+                  setNeedsRefresh(true)
+                }
+              })
+            })
+          } else {
+            setNeedsRefresh(true)
+          }
+        })
+
         if (
           newClasses.length !== courses.length ||
           newStudents.length !== students.length
@@ -190,7 +199,13 @@ const App = () => {
       }, checkRefreshDuration)
       return () => clearInterval(interval)
     }
-  }, [courses.length, hasLoadedCourses, hasLoadedStudents, students.length])
+  }, [
+    courses,
+    courses.length,
+    hasLoadedCourses,
+    hasLoadedStudents,
+    students.length,
+  ])
 
   /** Add an unmatched student to a group */
   const moveStudentFromUnmatched = (
