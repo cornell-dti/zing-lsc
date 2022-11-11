@@ -41,7 +41,7 @@ import { Emailing } from 'Emailing'
 import { TemplateEditor } from 'TemplateEditor'
 import './App.css'
 import theme from '@core/Constants/Theme'
-import { User, onAuthStateChanged, reload } from 'firebase/auth'
+import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
 import { templatesBucket } from '@fire/firebase'
@@ -58,7 +58,7 @@ const App = () => {
   const [networkError, setNetworkError] = useState<string | null>(null)
 
   const [needsRefresh, setNeedsRefresh] = useState(false)
-  const checkRefreshDuration = 10000 //600000 (10 min)
+  const checkRefreshDuration = 600000 // (10 min)
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -67,35 +67,19 @@ const App = () => {
     if (reason === 'clickaway') {
       return
     }
-
-    setNeedsRefresh(false)
   }
 
-  const ReloadMessage = () => (
-    <Alert
-      onClose={handleClose}
-      severity="info"
-      sx={{ width: '100%' }}
-      variant="filled"
-      action={
-        <Button
-          variant="contained"
-          size="small"
-          // onClick={document.location.reload()}
-        >
-          Reload
-        </Button>
-      }
-    >
-      You haven't reloaded in a while and there may be updated information
-    </Alert>
+  function refreshPage() {
+    window.location.reload()
+  }
+
+  const reloadButton = (
+    <Button variant="text" size="small" onClick={refreshPage} color="secondary">
+      Reload
+    </Button>
   )
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      console.log('10 seconds have passed')
-      setNeedsRefresh(true)
-    }, checkRefreshDuration)
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
       // need these to conditions to resolve isLoading at the correct time so data can be loaded properly
@@ -141,7 +125,6 @@ const App = () => {
         setAuthState('unauthenticated')
       }
     })
-    return () => clearInterval(interval)
   }, [])
 
   // Application-wide courses are only loaded when user is authorized
@@ -177,6 +160,52 @@ const App = () => {
       }
     )
   }
+
+  useEffect(() => {
+    if (hasLoadedCourses && hasLoadedStudents) {
+      const interval = setInterval(async () => {
+        const newClasses = (
+          await axios.get(`${API_ROOT}${COURSE_API}`)
+        ).data.map(responseCourseToCourse)
+
+        const newStudents = (
+          await axios.get(`${API_ROOT}${STUDENT_API}`)
+        ).data.map(responseStudentToStudent)
+
+        newClasses.forEach((course: Course, index: number) => {
+          let newGroups = course.groups
+          let oldGroups = courses[index].groups
+
+          let newMembers = newGroups.map((group) => group.members)
+          let oldMembers = oldGroups.map((group) => group.members)
+          if (newMembers.length === oldMembers.length) {
+            newMembers.forEach((group, index) => {
+              group.forEach((member, ind) => {
+                if (member !== oldMembers[index][ind]) {
+                  setNeedsRefresh(true)
+                }
+              })
+            })
+          } else {
+            setNeedsRefresh(true)
+          }
+        })
+
+        if (
+          newClasses.length !== courses.length ||
+          newStudents.length !== students.length
+        )
+          setNeedsRefresh(true)
+      }, checkRefreshDuration)
+      return () => clearInterval(interval)
+    }
+  }, [
+    courses,
+    courses.length,
+    hasLoadedCourses,
+    hasLoadedStudents,
+    students.length,
+  ])
 
   /** Add an unmatched student to a group */
   const moveStudentFromUnmatched = (
@@ -594,11 +623,11 @@ const App = () => {
                 >
                   <Snackbar
                     open={needsRefresh}
-                    autoHideDuration={10000}
                     onClose={handleClose}
-                  >
-                    {ReloadMessage()}
-                  </Snackbar>
+                    message="The information in your app is out of date. 
+                      Please reload to see the latest updates."
+                    action={reloadButton}
+                  />
                   <Switch>
                     <PublicRoute exact path={HOME_PATH} component={Home} />
                     <PublicRoute
