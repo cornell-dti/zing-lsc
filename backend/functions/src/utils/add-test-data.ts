@@ -49,13 +49,25 @@ const selectClasses = (numClasses = 3) => {
   return getRandomSample(classes, numClasses)
 }
 
+// function takes all the allowed users
 const addTestStudents = async () => {
-  const alphabet = Array.from('abcdefghijklmnopqrstuvwxyz')
+  const users = [
+    'mml267@cornell.edu',
+    'cl859@cornell.edu',
+    'bt283@cornell.edu',
+    'cww72@cornell.edu',
+    'jjw255@cornell.edu',
+    'pak226@cornell.edu',
+    'ml953@cornell.edu',
+    'jk2338@cornell.edu',
+    'rg779@cornell.edu',
+  ]
+
   await Promise.all(
-    alphabet.map((a) =>
+    users.map((email) =>
       addStudentSurveyResponse(
-        a,
-        `${a}@cornell.edu`,
+        email.substring(0, email.indexOf('@')),
+        email,
         selectCollege(),
         selectYear(),
         selectClasses()

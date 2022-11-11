@@ -106,7 +106,8 @@ export const Dashboard = () => {
                   ? `${course.names.join('/')}_${membership.groupNumber}`
                   : undefined,
               ...localeMap(group?.templateTimestamps),
-              notes: membership.notes,
+              ...localeMap(membership.templateTimestamps),
+              notes: membership.notes.replace(/(\n)/gm, '  ').trim(),
             }
           })
         )
@@ -312,11 +313,14 @@ export const Dashboard = () => {
             horizontal: 'right',
           }}
         >
-          <CSVLink data={csvCourses} filename={`export-courses-${Date.now()}`}>
+          <CSVLink
+            data={csvCourses.filter((e) => e.semester === selectedRoster)}
+            filename={`export-courses-${Date.now()}`}
+          >
             <MenuItem>Export CSV (Courses)</MenuItem>
           </CSVLink>
           <CSVLink
-            data={csvStudents}
+            data={csvStudents.filter((e) => e.semester === selectedRoster)}
             filename={`export-students-${Date.now()}`}
           >
             <MenuItem>Export CSV (Students)</MenuItem>

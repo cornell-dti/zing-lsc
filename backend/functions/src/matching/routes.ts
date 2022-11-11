@@ -11,25 +11,17 @@ import {
   unmatchStudent,
 } from './functions'
 
-// should return
-// {
-//     unmatched: unmatchedStudentData,
-//     groups: groupStudentData,
-//   }; ?
 router.post('/make', (req, res) => {
   const { courseId } = req.body
   makeMatches(courseId)
     .then((data) => {
       logger.info(`Made matched for course: ${courseId}`)
-      res.status(200).json({ success: true, data })
+      res.status(200).json(data)
     })
     .catch((err) => {
-      logger.error(
-        `Failed to make matches for course ${courseId}. Error: `,
-        err
-      )
-      console.log(err)
-      res.status(400).json({ success: false, err: err.message })
+      // Later add special checks for WHY the error happened like course doesn't exist -- that could be a HTTP 400
+      logger.error(`Unexpected error making matches: ${err.message}`)
+      res.status(500).json({ message: err.message })
     })
 })
 
