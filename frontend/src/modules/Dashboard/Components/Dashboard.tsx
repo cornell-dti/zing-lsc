@@ -28,6 +28,9 @@ type FilterOption =
   | 'matchable'
   | 'no-check-in-email'
   | 'no-no-match-email'
+export const defaultSortingOrder = 'newest-requests-first'
+export const defaultFilterOption = 'no-filter'
+
 const filterOptionDisplay = [
   ['no-filter', 'All Classes'],
   ['unmatchable', 'Unmatchable'],
@@ -52,10 +55,10 @@ export const Dashboard = () => {
     filterOption: FilterOption
   }
   const [sortedOrder, setSortedOrder] = useState<SortOrder>(() =>
-    state?.sortedOrder ? state.sortedOrder : 'newest-requests-first'
+    state?.sortedOrder ? state.sortedOrder : defaultSortingOrder
   )
   const [filteredOption, setFilteredOption] = useState<FilterOption>(() =>
-    state?.filterOption ? state.filterOption : 'no-filter'
+    state?.filterOption ? state.filterOption : defaultFilterOption
   )
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)

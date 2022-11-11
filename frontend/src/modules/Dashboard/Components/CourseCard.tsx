@@ -6,7 +6,7 @@ import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
 import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
 import { ReactComponent as WarningIcon } from '@assets/img/warning.svg'
 import { useHistory } from 'react-router'
-
+import { defaultSortingOrder, defaultFilterOption } from './Dashboard'
 export const CourseCard = ({
   id,
   name,
@@ -21,8 +21,10 @@ export const CourseCard = ({
       state: {
         sortedOrder: state?.sortedOrder
           ? state.sortedOrder
-          : 'newest-requests-first',
-        filterOption: state?.filterOption ? state.filterOption : 'no-filter',
+          : defaultSortingOrder,
+        filterOption: state?.filterOption
+          ? state.filterOption
+          : defaultFilterOption,
       },
     })
   }
