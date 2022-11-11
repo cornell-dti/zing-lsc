@@ -205,7 +205,7 @@ export const Dashboard = () => {
     history.replace({
       state: {
         sortedOrder: event.target.value as SortOrder,
-        filterOption: state.filterOption,
+        filterOption: state?.filterOption ? state.filterOption : 'no-filter',
       },
     })
   }
@@ -213,7 +213,9 @@ export const Dashboard = () => {
     setFilteredOption(event.target.value as FilterOption)
     history.replace({
       state: {
-        sortedOrder: state.sortedOrder,
+        sortedOrder: state?.sortedOrder
+          ? state.sortedOrder
+          : 'newest-requests-first',
         filterOption: event.target.value as FilterOption,
       },
     })

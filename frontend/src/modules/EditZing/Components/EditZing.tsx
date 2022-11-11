@@ -20,7 +20,6 @@ import {
 } from '@mui/material'
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
-import { useAuthValue } from '@auth/AuthContext'
 import { useHistory } from 'react-router-dom'
 import { DASHBOARD_PATH } from '@core/Constants'
 import { useCourseValue } from '@context/CourseContext'
@@ -34,10 +33,8 @@ const LscIcon = (props: SvgIconProps) => {
 
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
-  const [showError, setShowError] = useState(false)
   const history = useHistory()
   const state = history.location.state as any
-  const { displayNetworkError } = useAuthValue()
   const { courses, moveStudent, matchStudents } = useCourseValue()
   const { students, updateNotes } = useStudentValue()
   const { templates } = useTemplateValue()
@@ -194,8 +191,12 @@ export const EditZing = () => {
           to={{
             pathname: DASHBOARD_PATH,
             state: {
-              sortedOrder: state.sortedOrder,
-              filterOption: state.filterOption,
+              sortedOrder: state?.sortedOrder
+                ? state.sortedOrder
+                : 'newest-requests-first',
+              filterOption: state?.filterOption
+                ? state.filterOption
+                : 'no-filter',
             },
           }}
           sx={{
