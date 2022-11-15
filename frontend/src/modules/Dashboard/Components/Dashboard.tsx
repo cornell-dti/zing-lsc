@@ -207,11 +207,7 @@ export const Dashboard = () => {
       sortedOrder
     ),
     filteredOption
-  ).filter((d) =>
-    d.names.find((e) => {
-      return e.includes(query.toUpperCase())
-    })
-  )
+  ).filter((d) => d.names.some((e) => e.includes(query.toUpperCase())))
 
   return (
     <StyledContainer>
