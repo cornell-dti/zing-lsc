@@ -24,6 +24,7 @@ type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
 type FilterOption =
   | 'no-filter'
   | 'unmatchable'
+  | 'NEW GROUP: lone unmatched student'
   | 'newly-matchable'
   | 'matchable'
   | 'no-check-in-email'
@@ -136,9 +137,15 @@ export const Dashboard = () => {
       case 'no-filter':
         return courseInfo
       case 'unmatchable':
+        console.log('here')
         return [...courseInfo].filter(
           (course, _) =>
             course.lastGroupNumber === 0 && course.unmatched.length === 1
+        )
+      case 'NEW GROUP: lone unmatched student':
+        return [...courseInfo].filter(
+          (course, _) =>
+            course.lastGroupNumber > 0 && course.unmatched.length === 1
         )
       case 'newly-matchable':
         return [...courseInfo].filter(
@@ -148,7 +155,7 @@ export const Dashboard = () => {
       case 'matchable':
         return [...courseInfo].filter(
           (course, _) =>
-            (course.lastGroupNumber > 0 && course.unmatched.length > 0) ||
+            (course.lastGroupNumber > 0 && course.unmatched.length > 1) ||
             (course.lastGroupNumber === 0 && course.unmatched.length > 1)
         )
       case 'no-check-in-email':
