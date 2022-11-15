@@ -24,7 +24,6 @@ type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
 type FilterOption =
   | 'no-filter'
   | 'unmatchable'
-  | 'NEW GROUP: lone unmatched student'
   | 'newly-matchable'
   | 'matchable'
   | 'no-check-in-email'
@@ -110,6 +109,10 @@ export const Dashboard = () => {
   function hasUnsentCheckIns(c: Course) {
     return c.groups.some((group) => !group.templateTimestamps['check-in'])
   }
+  //Helper function to check if a given course has any unmatchable students
+  function hasNoUnmatchableStudents(c: Course) {
+    return !(c.lastGroupNumber === 0 && c.unmatched.length === 1)
+  }
 
   //Helper function that returns true if the student doesn't have a no match email
   function studentHasUnsentNoMatch(smail: string, courseId: string) {
@@ -137,15 +140,9 @@ export const Dashboard = () => {
       case 'no-filter':
         return courseInfo
       case 'unmatchable':
-        console.log('here')
         return [...courseInfo].filter(
           (course, _) =>
             course.lastGroupNumber === 0 && course.unmatched.length === 1
-        )
-      case 'NEW GROUP: lone unmatched student':
-        return [...courseInfo].filter(
-          (course, _) =>
-            course.lastGroupNumber > 0 && course.unmatched.length === 1
         )
       case 'newly-matchable':
         return [...courseInfo].filter(
@@ -159,9 +156,13 @@ export const Dashboard = () => {
             (course.lastGroupNumber === 0 && course.unmatched.length > 1)
         )
       case 'no-check-in-email':
-        return courseInfo.filter(hasUnsentCheckIns)
+        return courseInfo
+          .filter(hasUnsentCheckIns)
+          .filter(hasNoUnmatchableStudents)
       case 'no-no-match-email':
-        return courseInfo.filter(hasUnsentNoMatch)
+        return courseInfo
+          .filter(hasUnsentNoMatch)
+          .filter(hasNoUnmatchableStudents)
       default:
         return courseInfo
     }
