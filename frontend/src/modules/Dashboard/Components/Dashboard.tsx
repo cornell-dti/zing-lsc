@@ -156,9 +156,8 @@ export const Dashboard = () => {
             (course.lastGroupNumber === 0 && course.unmatched.length > 1)
         )
       case 'no-check-in-email':
-        return courseInfo
-          .filter(hasUnsentCheckIns)
-          .filter(hasNoUnmatchableStudents)
+        return courseInfo.filter(hasUnsentCheckIns)
+
       case 'no-no-match-email':
         return courseInfo
           .filter(hasUnsentNoMatch)
