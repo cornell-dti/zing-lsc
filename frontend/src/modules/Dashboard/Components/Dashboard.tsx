@@ -193,13 +193,12 @@ export const Dashboard = () => {
 
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
 
-  const [message, setMessage] = useState('')
+  const [query, setQuery] = useState('')
 
   const handleSearch = (event: {
     target: { value: React.SetStateAction<string> }
   }) => {
-    setMessage(event.target.value)
-    console.log('search is:', event.target.value)
+    setQuery(event.target.value)
   }
 
   const filteredCourses = filtered(
@@ -210,7 +209,7 @@ export const Dashboard = () => {
     filteredOption
   ).filter((d) =>
     d.names.find((e) => {
-      return e.includes(message.toUpperCase())
+      return e.includes(query.toUpperCase())
     })
   )
 
@@ -305,11 +304,11 @@ export const Dashboard = () => {
                 width: 200,
                 maxWidth: '250px',
               }}
-              value={message}
+              value={query}
               onChange={handleSearch}
               InputProps={{
-                endAdornment: message ? (
-                  <IconButton size="small" onClick={() => setMessage('')}>
+                endAdornment: query ? (
+                  <IconButton size="small" onClick={() => setQuery('')}>
                     <ClearIcon />
                   </IconButton>
                 ) : undefined,
