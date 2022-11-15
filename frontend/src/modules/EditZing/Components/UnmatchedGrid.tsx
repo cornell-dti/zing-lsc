@@ -44,15 +44,18 @@ export const UnmatchedGrid = ({
           <StyledUnmatchedText>
             Unmatched Students ({unmatchedStudents.length})
           </StyledUnmatchedText>
-          <MatchButton label="Match" onClick={handleMatchStudents} />
           <Button
             variant="contained"
             onClick={handleMatchStudents}
             disabled={unmatchedStudents.length < 2}
             sx={{
-              backgroundColor: disabled
-                ? colors.verylightblack
-                : colors.darkgreen,
+              backgroundColor: colors.darkgreen,
+              disabled: {
+                backgroundColor: colors.verylightblack,
+              },
+              '&:hover': {
+                backgroundColor: colors.darkgreen,
+              },
             }}
           >
             Match
