@@ -18,7 +18,7 @@ import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
 import { CSVLink } from 'react-csv'
-
+import { useHistory } from 'react-router-dom'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ClearIcon from '@mui/icons-material/Clear'
 
@@ -30,16 +30,33 @@ type FilterOption =
   | 'matchable'
   | 'no-check-in-email'
   | 'no-no-match-email'
+export const defaultSortingOrder = 'newest-requests-first'
+export const defaultFilterOption = 'no-filter'
+
+const filterOptionDisplay = [
+  ['no-filter', 'All Classes'],
+  ['unmatchable', 'Unmatchable'],
+  ['newly-matchable', 'Newly Matchable'],
+  ['matchable', 'Matchable'],
+  ['no-check-in-email', 'No Check In Email'],
+  ['no-no-match-email', 'No No Match Email'],
+]
+const sortOrderDisplay = [
+  ['newest-requests-first', 'Newest Requests First'],
+  ['classes-a-z', 'Classes A-Z'],
+  ['classes-z-a', 'Classes Z-A'],
+]
 
 export const Dashboard = () => {
+  const history = useHistory()
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
   const [filteredOption, setFilteredOption] = useState<FilterOption>(
     'no-filter'
   )
-  const [sortedOrder, setSortedOrder] = useState<SortOrder>(
-    'newest-requests-first'
+  const [filteredOption, setFilteredOption] = useState<FilterOption>(() =>
+    state?.filterOption ? state.filterOption : defaultFilterOption
   )
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -91,7 +108,7 @@ export const Dashboard = () => {
                   : undefined,
               ...localeMap(group?.templateTimestamps),
               ...localeMap(membership.templateTimestamps),
-              notes: membership.notes,
+              notes: membership.notes.replace(/(\n)/gm, '  ').trim(),
             }
           })
         )
@@ -186,9 +203,23 @@ export const Dashboard = () => {
 
   const handleSortedChange = (event: SelectChangeEvent) => {
     setSortedOrder(event.target.value as SortOrder)
+    history.replace({
+      state: {
+        sortedOrder: event.target.value as SortOrder,
+        filterOption: state?.filterOption ? state.filterOption : 'no-filter',
+      },
+    })
   }
   const handleFilterChange = (event: SelectChangeEvent) => {
     setFilteredOption(event.target.value as FilterOption)
+    history.replace({
+      state: {
+        sortedOrder: state?.sortedOrder
+          ? state.sortedOrder
+          : 'newest-requests-first',
+        filterOption: event.target.value as FilterOption,
+      },
+    })
   }
 
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
@@ -341,11 +372,14 @@ export const Dashboard = () => {
             horizontal: 'right',
           }}
         >
-          <CSVLink data={csvCourses} filename={`export-courses-${Date.now()}`}>
+          <CSVLink
+            data={csvCourses.filter((e) => e.semester === selectedRoster)}
+            filename={`export-courses-${Date.now()}`}
+          >
             <MenuItem>Export CSV (Courses)</MenuItem>
           </CSVLink>
           <CSVLink
-            data={csvStudents}
+            data={csvStudents.filter((e) => e.semester === selectedRoster)}
             filename={`export-students-${Date.now()}`}
           >
             <MenuItem>Export CSV (Students)</MenuItem>
