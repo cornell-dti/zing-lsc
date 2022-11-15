@@ -9,7 +9,6 @@ import {
 } from 'EditZing/Styles/StudentAndGroup.style'
 import { useDrop } from 'react-dnd'
 import { DnDStudentTransferType, STUDENT_TYPE } from 'EditZing/Types/Student'
-import { MatchButton } from './MatchButton'
 import { colors } from '@core/Constants'
 
 /** Where unmatched students live in the grid */
