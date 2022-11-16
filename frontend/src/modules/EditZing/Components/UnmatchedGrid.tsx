@@ -49,9 +49,6 @@ export const UnmatchedGrid = ({
             disabled={unmatchedStudents.length < 2}
             sx={{
               backgroundColor: colors.darkgreen,
-              disabled: {
-                backgroundColor: colors.verylightblack,
-              },
               '&:hover': {
                 backgroundColor: colors.darkgreen,
               },
