@@ -73,6 +73,7 @@ const GroupCard = ({
       courseId: courseId,
       groupNumber: groupNumber,
     })
+    window.location.reload() // this can be improved so page doesn't reload
   }
 
   return (
