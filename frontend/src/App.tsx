@@ -70,12 +70,13 @@ const App = () => {
     }
   }
 
-  function refreshPage() {
-    window.location.reload()
-  }
-
   const reloadButton = (
-    <Button variant="text" size="small" onClick={refreshPage} color="secondary">
+    <Button
+      variant="text"
+      size="small"
+      onClick={() => window.location.reload()}
+      color="secondary"
+    >
       Reload
     </Button>
   )
@@ -165,7 +166,6 @@ const App = () => {
   useEffect(() => {
     if (hasLoadedCourses && hasLoadedStudents) {
       const interval = setInterval(async () => {
-        console.log('check')
         const newClasses = (
           await axios.get(`${API_ROOT}${COURSE_API}`)
         ).data.map(responseCourseToCourse)
