@@ -30,22 +30,6 @@ type FilterOption =
   | 'matchable'
   | 'no-check-in-email'
   | 'no-no-match-email'
-export const defaultSortingOrder = 'newest-requests-first'
-export const defaultFilterOption = 'no-filter'
-
-const filterOptionDisplay = [
-  ['no-filter', 'All Classes'],
-  ['unmatchable', 'Unmatchable'],
-  ['newly-matchable', 'Newly Matchable'],
-  ['matchable', 'Matchable'],
-  ['no-check-in-email', 'No Check In Email'],
-  ['no-no-match-email', 'No No Match Email'],
-]
-const sortOrderDisplay = [
-  ['newest-requests-first', 'Newest Requests First'],
-  ['classes-a-z', 'Classes A-Z'],
-  ['classes-z-a', 'Classes Z-A'],
-]
 
 export const defaultSortingOrder = 'newest-requests-first'
 export const defaultFilterOption = 'no-filter'
@@ -128,7 +112,7 @@ export const Dashboard = () => {
                   : undefined,
               ...localeMap(group?.templateTimestamps),
               ...localeMap(membership.templateTimestamps),
-              notes: membership.notes.replace(/(\n)/gm, '  ').trim(),
+              notes: membership.notes,
             }
           })
         )
@@ -382,14 +366,11 @@ export const Dashboard = () => {
             horizontal: 'right',
           }}
         >
-          <CSVLink
-            data={csvCourses.filter((e) => e.semester === selectedRoster)}
-            filename={`export-courses-${Date.now()}`}
-          >
+          <CSVLink data={csvCourses} filename={`export-courses-${Date.now()}`}>
             <MenuItem>Export CSV (Courses)</MenuItem>
           </CSVLink>
           <CSVLink
-            data={csvStudents.filter((e) => e.semester === selectedRoster)}
+            data={csvStudents}
             filename={`export-students-${Date.now()}`}
           >
             <MenuItem>Export CSV (Students)</MenuItem>
