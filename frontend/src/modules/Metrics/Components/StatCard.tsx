@@ -17,7 +17,7 @@ export const StatCard = ({ number, title, subtitle }: StatCardProps) => {
         position: 'relative',
       }}
     >
-      <Typography variant="h4" fontWeight={600}>
+      <Typography variant="h3" fontWeight={600}>
         {number}
       </Typography>
       <Typography variant="h6" fontWeight={600}>

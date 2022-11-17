@@ -7,7 +7,8 @@ export const StatGrid = ({ stats }: StatGridProps) => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        padding: '2rem',
       }}
     >
       {stats.length === 0 ? (
@@ -23,7 +24,7 @@ export const StatGrid = ({ stats }: StatGridProps) => {
             display: 'grid',
             justifyContent: 'center',
             gap: 2,
-            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridTemplateColumns: 'repeat(5, 1fr)',
             px: 10,
             py: 4,
           }}

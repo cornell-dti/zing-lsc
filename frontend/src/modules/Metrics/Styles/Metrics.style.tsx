@@ -9,7 +9,6 @@ export const StyledContainer = styled.main`
   box-shadow: -10px -10px 150px rgba(0, 0, 0, 0.05),
     10px 10px 150px rgba(0, 0, 0, 0.05);
   border-radius: 30px;
-
   display: flex;
   flex-direction: column;
 `
@@ -21,16 +20,15 @@ export const StyledHeaderMenu = styled.div`
   padding-left: 10rem;
   padding-right: 10rem;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
 `
 
 export const StyledName = styled.div`
   ${h4};
   font-weight: 600;
-  color: ${colors.white};
-
+  color: ${colors.darkgray};
   display: flex;
+  margin-left: 2rem;
   align-items: center;
 `
 

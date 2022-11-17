@@ -29,35 +29,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }))
 
-function createData(
-  college: string,
-  students: number,
-  requests: number,
-  matches: number,
-  groups: number
-) {
-  return { college, students, requests, matches, groups }
-}
-
-const rows = [
-  createData('College of Arts and Sciences', 159, 6.0, 24, 4.0),
-  createData('College of Engineering', 237, 9.0, 37, 4.3),
-  createData('College of Human Ecology', 262, 16.0, 24, 6.0),
-  createData('College of Industrial and Labor Relations', 305, 3.7, 67, 4.3),
-]
-
-export const MetricsTable = () => {
+export const MetricsTable = ({ data }: MetricsTableProps) => {
   return (
     <Box
       sx={{
         m: 'auto',
+        padding: 1,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        width: 1,
       }}
     >
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="customized table">
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell>College </StyledTableCell>
@@ -68,10 +53,10 @@ export const MetricsTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow key={row.college}>
+            {data.map((row) => (
+              <StyledTableRow key={row.rowName}>
                 <StyledTableCell component="th" scope="row">
-                  {row.college}
+                  {row.rowName}
                 </StyledTableCell>
                 <StyledTableCell align="right">{row.students}</StyledTableCell>
                 <StyledTableCell align="right">{row.requests}</StyledTableCell>
@@ -84,4 +69,14 @@ export const MetricsTable = () => {
       </TableContainer>
     </Box>
   )
+}
+export interface RowData {
+  rowName: string
+  students: number
+  requests: number
+  matches: number
+  groups: number
+}
+interface MetricsTableProps {
+  data: RowData[]
 }
