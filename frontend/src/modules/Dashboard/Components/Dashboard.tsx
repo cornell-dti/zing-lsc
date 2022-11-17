@@ -236,7 +236,7 @@ export const Dashboard = () => {
     setQuery(event.target.value)
   }
 
-  const filteredCourses = filtered(
+  const filteredSortedCourses = filtered(
     sorted(
       courses.filter((c) => c.roster === selectedRoster),
       sortedOrder
@@ -421,7 +421,7 @@ export const Dashboard = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      <CourseGrid courses={filteredCourses} />
+      <CourseGrid courses={filteredSortedCourses} />
     </StyledContainer>
   )
 }
