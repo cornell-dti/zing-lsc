@@ -144,7 +144,7 @@ const GroupCard = ({
             onClick={() => {
               if (studentList.length === 0) {
                 removeGroup(courseId, groupNumber)
-              } else return // send an error message
+              }
             }}
           >
             <Delete sx={{ color: 'purple' }}></Delete>
