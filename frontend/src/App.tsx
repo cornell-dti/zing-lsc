@@ -58,7 +58,8 @@ const App = () => {
   const [networkError, setNetworkError] = useState<string | null>(null)
 
   const [needsRefresh, setNeedsRefresh] = useState(false)
-  const checkRefreshDuration = 600000 // (10 min)
+  const checkRefreshDuration = 1000
+  // 600000 // (10 min)
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -164,6 +165,7 @@ const App = () => {
   useEffect(() => {
     if (hasLoadedCourses && hasLoadedStudents) {
       const interval = setInterval(async () => {
+        console.log('check')
         const newClasses = (
           await axios.get(`${API_ROOT}${COURSE_API}`)
         ).data.map(responseCourseToCourse)
@@ -171,6 +173,14 @@ const App = () => {
         const newStudents = (
           await axios.get(`${API_ROOT}${STUDENT_API}`)
         ).data.map(responseStudentToStudent)
+
+        if (
+          newClasses.length !== courses.length ||
+          newStudents.length !== students.length
+        ) {
+          setNeedsRefresh(true)
+          return
+        }
 
         newClasses.forEach((course: Course, index: number) => {
           let newGroups = course.groups
@@ -190,12 +200,6 @@ const App = () => {
             setNeedsRefresh(true)
           }
         })
-
-        if (
-          newClasses.length !== courses.length ||
-          newStudents.length !== students.length
-        )
-          setNeedsRefresh(true)
       }, checkRefreshDuration)
       return () => clearInterval(interval)
     }
