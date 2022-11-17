@@ -73,7 +73,7 @@ const GroupCard = ({
       courseId: courseId,
       groupNumber: groupNumber,
     })
-    window.location.reload() // this can be improved so page doesn't reload
+    window.location.reload() // this can be improved so page doesn't reloadA
   }
 
   return (
@@ -137,10 +137,7 @@ const GroupCard = ({
           <IconButton
             color="secondary"
             sx={{
-              display:
-                selected || (studentList.length === 0 && isHovering)
-                  ? 'flex'
-                  : 'none',
+              display: studentList.length === 0 && isHovering ? 'flex' : 'none',
               backgroundColor: 'transparent',
               border: 'none',
             }}
