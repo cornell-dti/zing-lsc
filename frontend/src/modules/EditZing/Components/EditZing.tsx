@@ -264,31 +264,33 @@ export const EditZing = () => {
                 updateNotes={updateNotes}
               />
             </Box>
-            {copyStudentGroups.map((studentGroup) => (
-              <GroupCard
-                key={studentGroup.groupNumber}
-                courseId={courseId}
-                studentList={getStudentsFromEmails(studentGroup.members)}
-                groupNumber={studentGroup.groupNumber}
-                templateMap={templateNameMap}
-                groupTimestamps={studentGroup.templateTimestamps}
-                moveStudent={moveStudent}
-                createTime={studentGroup.createTime}
-                updateTime={studentGroup.updateTime}
-                selected={selectedGroupNumbers.includes(
-                  studentGroup.groupNumber
-                )}
-                selectedStudents={selectedStudentEmails}
-                handleChecked={(event) => {
-                  editSelectedGroupNumbers(
-                    studentGroup.groupNumber,
-                    event.target.checked
-                  )
-                }}
-                handleAddStudent={editSelectedStudentEmails}
-                updateNotes={updateNotes}
-              />
-            ))}
+            {copyStudentGroups
+              .filter((e) => !e.hidden)
+              .map((studentGroup) => (
+                <GroupCard
+                  key={studentGroup.groupNumber}
+                  courseId={courseId}
+                  studentList={getStudentsFromEmails(studentGroup.members)}
+                  groupNumber={studentGroup.groupNumber}
+                  templateMap={templateNameMap}
+                  groupTimestamps={studentGroup.templateTimestamps}
+                  moveStudent={moveStudent}
+                  createTime={studentGroup.createTime}
+                  updateTime={studentGroup.updateTime}
+                  selected={selectedGroupNumbers.includes(
+                    studentGroup.groupNumber
+                  )}
+                  selectedStudents={selectedStudentEmails}
+                  handleChecked={(event) => {
+                    editSelectedGroupNumbers(
+                      studentGroup.groupNumber,
+                      event.target.checked
+                    )
+                  }}
+                  handleAddStudent={editSelectedStudentEmails}
+                  updateNotes={updateNotes}
+                />
+              ))}
           </Box>
         </DndProvider>
       </Box>

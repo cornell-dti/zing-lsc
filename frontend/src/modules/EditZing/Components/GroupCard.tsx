@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import StudentCard from 'EditZing/Components/StudentCard'
 import { GroupGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrop } from 'react-dnd'
 import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
 import { StyledGroupText } from 'EditZing/Styles/StudentAndGroup.style'
-import { Box, Tooltip, Checkbox } from '@mui/material'
+import { Box, Tooltip, Checkbox, IconButton } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
+import { Delete, DeleteOutline } from '@mui/icons-material'
 
 /** the equivalent of Column */
 const GroupCard = ({
@@ -123,6 +124,17 @@ const GroupCard = ({
             )
           })}
           <Box flexGrow={2} />
+          <IconButton
+            color="secondary"
+            sx={{
+              display: selected || isHovering ? 'flex' : 'none',
+              backgroundColor: 'transparent',
+              border: 'none',
+            }}
+            onClick={() => false}
+          >
+            <Delete sx={{ color: 'purple' }}></Delete>
+          </IconButton>
           <Checkbox
             color="secondary"
             checked={selected}
@@ -132,6 +144,7 @@ const GroupCard = ({
             }}
           />
         </Box>
+
         <Box
           sx={{
             display: 'grid',

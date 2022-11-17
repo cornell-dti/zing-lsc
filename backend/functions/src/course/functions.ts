@@ -28,6 +28,7 @@ export const getAllCourses = async (): Promise<Course[]> => {
             createTime: groupData.createTime.toDate(),
             updateTime: groupData.updateTime.toDate(),
             templateTimestamps: mapDate(groupData.templateTimestamps),
+            hidden: groupData.hidden,
           })),
       }
     })

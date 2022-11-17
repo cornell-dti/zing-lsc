@@ -97,6 +97,7 @@ async function makeMatches(courseId: string) {
       createTime: nowDate,
       updateTime: nowDate,
       templateTimestamps: {},
+      hidden: false,
     })
   }
   for (let i = 0; i < groupDoubles.length; i += 2) {
@@ -108,6 +109,7 @@ async function makeMatches(courseId: string) {
       createTime: nowDate,
       updateTime: nowDate,
       templateTimestamps: {},
+      hidden: false,
     })
   }
 
@@ -117,6 +119,7 @@ async function makeMatches(courseId: string) {
     createTime: nowTimestamp,
     updateTime: nowTimestamp,
     templateTimestamps: {}, // Groups have this typed differently though it's just empty object
+    hidden: false,
   }))
 
   // lastly, update the collections to reflect this matching
@@ -302,6 +305,7 @@ async function createEmptyGroup(courseId: string) {
       createTime: admin.firestore.FieldValue.serverTimestamp(),
       updateTime: admin.firestore.FieldValue.serverTimestamp(),
       templateTimestamps: {},
+      hidden: false,
     })
     .catch((err) => {
       console.log(err)
