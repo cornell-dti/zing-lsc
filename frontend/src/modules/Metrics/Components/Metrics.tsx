@@ -10,43 +10,79 @@ import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { CSVLink } from 'react-csv'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import { StyledContainer, StyledHeaderMenu } from '../Styles/Metrics.style'
-import { Link } from '@mui/material'
+import {
+  StyledContainer,
+  StyledHeaderMenu,
+  StyledName,
+} from '../Styles/Metrics.style'
+import { Box, Link, SelectChangeEvent } from '@mui/material'
 import { StatGrid } from './StatGrid'
 import { MetricsTable } from './MetricsTable'
+import { DropdownSelect } from '@core/Components'
+
 export const Metrics = () => {
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  //calculate number of unique students who have made requests
   const num_students = {
     number: students.length,
     title: 'unique students',
     subtitle: 'made requests',
   }
+
+  //calculate number of unique courses that have received requests
   const num_courses = {
     number: courses.length,
     title: 'courses',
     subtitle: 'received requests',
   }
-  const initialValue = 0
+
+  //calculate total number of requests made by students
   const num_requests = {
     number: students.reduce(
       (total, student) => total + student.groups.length,
-      initialValue
+      0
     ),
     title: 'requests',
     subtitle: 'made in total',
   }
+
+  //calculate number of students matched into groups
   const num_matches = {
     number: courses.reduce(
-      (total, course) => total + course.groups.length,
-      initialValue
+      (courseTotal, course) =>
+        courseTotal +
+        course.groups.reduce(
+          (groupTotal, group) => groupTotal + group.members.length,
+          0
+        ),
+      0
     ),
     title: 'matches',
     subtitle: 'made in total',
   }
-  const stats = [num_students, num_courses, num_requests, num_matches]
+
+  //calculate number of students matched into groups
+  const num_groups = {
+    number: courses.reduce((total, course) => total + course.groups.length, 0),
+    title: 'groups',
+    subtitle: 'successfully made',
+  }
+  const stats = [
+    num_students,
+    num_courses,
+    num_requests,
+    num_matches,
+    num_groups,
+  ]
+
+  const csvCourses = courses.map((course) => ({
+    semester: course.roster,
+    course: course.names.join('/'),
+  }))
 
   const open = Boolean(anchorEl)
 
@@ -56,11 +92,6 @@ export const Metrics = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
-
-  const csvCourses = courses.map((course) => ({
-    semester: course.roster,
-    course: course.names.join('/'),
-  }))
 
   //this can be removed if there is a place to store an objectMap() function
   const localeMap = (obj: { [key: string]: Date } | undefined) => {
@@ -113,6 +144,44 @@ export const Metrics = () => {
   }
 
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
+  const chosenSemesterStudents = csvStudents.filter(
+    (e) => e.semester === selectedRoster
+  )
+  const collegeNames = chosenSemesterStudents
+    .map((s) => s.college)
+    .filter((value, index, self) => self.indexOf(value) === index)
+  const calculateStats = (college: string) => {
+    const specificCollegeStudents = chosenSemesterStudents.filter(
+      (s) => s.college === college
+    )
+    const uniqueStudents = specificCollegeStudents
+      .map((s) => s.name)
+      .filter((value, index, self) => self.indexOf(value) === index)
+    const matches = specificCollegeStudents.reduce(
+      (total, student) => (student?.groupNumber ? total + 1 : total),
+      0
+    )
+    const groups = specificCollegeStudents
+      .map((s) => s.groupNumber)
+      .filter((value, index, self) => self.indexOf(value) === index)
+    console.log({
+      rowName: college,
+      students: uniqueStudents.length,
+      requests: specificCollegeStudents.length,
+      matches: matches,
+      groups: groups.length,
+    })
+    return {
+      rowName: college,
+      students: uniqueStudents.length,
+      requests: specificCollegeStudents.length,
+      matches: matches,
+      groups: groups.length,
+    }
+  }
+  const handleSemesterChange = (event: SelectChangeEvent) => {
+    setSelectedRoster(event.target.value)
+  }
 
   return (
     <StyledContainer>
@@ -205,8 +274,48 @@ export const Metrics = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
+      <StyledName>Overall</StyledName>
       <StatGrid stats={stats} />
-      <MetricsTable />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          pl: '2rem',
+          pr: '2rem',
+        }}
+      >
+        <StyledName>By College</StyledName>
+        <DropdownSelect
+          size="small"
+          value={selectedRoster}
+          onChange={handleSemesterChange}
+          sx={{
+            fontWeight: 'bold',
+            alignSelf: 'flex-end',
+          }}
+        >
+          <MenuItem value="SU22">Summer 2022</MenuItem>
+          <MenuItem value="FA22">Fall 2022</MenuItem>
+          <MenuItem value="WI22">Winter 2022</MenuItem>
+          <MenuItem value="SP23">Spring 2023</MenuItem>
+        </DropdownSelect>
+      </Box>
+      <MetricsTable
+        data={collegeNames.map((college) => calculateStats(college))}
+      />
     </StyledContainer>
   )
+}
+
+interface csvStudentRow {
+  notes: string
+  semester: string
+  dateRequested: string
+  cornellEmail: string
+  name: string
+  college: string
+  year: string
+  course: string
+  groupNumber: string | undefined
 }
