@@ -136,7 +136,10 @@ const GroupCard = ({
           <IconButton
             color="secondary"
             sx={{
-              display: selected || isHovering ? 'flex' : 'none',
+              display:
+                selected || (studentList.length === 0 && isHovering)
+                  ? 'flex'
+                  : 'none',
               backgroundColor: 'transparent',
               border: 'none',
             }}
@@ -153,7 +156,10 @@ const GroupCard = ({
             checked={selected}
             onChange={handleChecked}
             sx={{
-              display: selected || isHovering ? 'flex' : 'none',
+              display:
+                selected || (studentList.length !== 0 && isHovering)
+                  ? 'flex'
+                  : 'none',
             }}
           />
         </Box>
