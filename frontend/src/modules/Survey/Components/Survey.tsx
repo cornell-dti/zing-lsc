@@ -55,7 +55,7 @@ export const Survey = () => {
     const surveyData: SurveyData = {
       courseCatalogNames: courseList,
       name: user!.displayName!,
-      email: user!.email!,
+      email: user!.providerData[0].email!,
       ...mcData,
     }
     console.log('Finished survey', surveyData)

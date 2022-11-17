@@ -110,7 +110,6 @@ export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
       </Button>
       <Link
         onClick={() => {
-          console.log(user)
           signInWithGoogle().catch(() => {})
         }}
         sx={{

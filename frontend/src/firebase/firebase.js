@@ -19,8 +19,7 @@ export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider()
   provider.addScope('email')
   provider.addScope('profile')
-  const result = await signInWithPopup(auth, provider)
-  console.log(result)
+  await signInWithPopup(auth, provider)
 }
 
 export async function signInWithMicrosoft() {
