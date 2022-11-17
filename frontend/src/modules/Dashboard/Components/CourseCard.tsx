@@ -15,7 +15,6 @@ export const CourseCard = ({
   groupsFormed,
 }: CourseCardProps) => {
   const history = useHistory()
-
   const handleClickView = () => {
     const state = history.location.state as any
     history.push({

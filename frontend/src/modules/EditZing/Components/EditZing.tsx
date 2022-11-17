@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import axios, { AxiosResponse } from 'axios'
+import React, { useState } from 'react'
 import GroupCard from 'EditZing/Components/GroupCard'
 import { UnmatchedGrid } from './UnmatchedGrid'
-import { EmailTemplatesResponse } from '@core/Types'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { API_ROOT, EMAIL_PATH } from '@core/Constants'
 import { Link, useParams } from 'react-router-dom'
 import { EmailModal } from 'EditZing/Components/EmailModal'
 import { MatchLoading } from './MatchLoading'
@@ -27,6 +24,8 @@ import { useHistory } from 'react-router-dom'
 import { DASHBOARD_PATH } from '@core/Constants'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
+import { useTemplateValue } from '@context/TemplateContext'
+import { Group } from '@core/index'
 
 const LscIcon = (props: SvgIconProps) => {
   return <SvgIcon inheritViewBox component={Lsc} {...props} />
@@ -38,6 +37,7 @@ export const EditZing = () => {
   const state = history.location.state as any
   const { courses, moveStudent, matchStudents } = useCourseValue()
   const { students, updateNotes } = useStudentValue()
+  const { templates } = useTemplateValue()
 
   const course = courses.find((course) => course.courseId === courseId)
 
@@ -47,6 +47,8 @@ export const EditZing = () => {
 
   const unmatchedStudents = getStudentsFromEmails(course?.unmatched ?? [])
   const studentGroups = course?.groups ?? []
+  const copyStudentGroups: Group[] = [...studentGroups]
+  copyStudentGroups.sort((a, b) => a.groupNumber - b.groupNumber)
 
   const [isEmailing, setIsEmailing] = useState<boolean>(false)
 
@@ -97,23 +99,9 @@ export const EditZing = () => {
   }
 
   //Map for getting the names of templates based on ID for rendering tooltips
-  const [templateNameMap, setTemplateNameMap] = useState<{
-    [key: string]: string
-  }>({})
-  useEffect(() => {
-    axios
-      .get(`${API_ROOT}${EMAIL_PATH}/templates`)
-      .then((res: AxiosResponse<EmailTemplatesResponse>) => {
-        setTemplateNameMap(
-          Object.fromEntries(
-            res.data.data.map((template) => [template.id, template.name])
-          )
-        )
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }, [courseId])
+  const templateNameMap = Object.fromEntries(
+    templates.map((template) => [template.id, template.name])
+  )
 
   const [showMatchLoading, setShowMatchLoading] = useState(false)
   const [isCurrentlyGrouping, setIsCurrentlyGrouping] = useState(false)
@@ -288,7 +276,7 @@ export const EditZing = () => {
                 updateNotes={updateNotes}
               />
             </Box>
-            {studentGroups.map((studentGroup) => (
+            {copyStudentGroups.map((studentGroup) => (
               <GroupCard
                 key={studentGroup.groupNumber}
                 courseId={courseId}

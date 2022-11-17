@@ -7,6 +7,7 @@ import { Box, Button, Container, Typography } from '@mui/material'
 import { logOut } from '@fire'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
+import { useTemplateValue } from '@context/TemplateContext'
 
 export const PrivateRoute = ({
   component: Component,
@@ -15,6 +16,7 @@ export const PrivateRoute = ({
   const { authState } = useAuthValue()
   const { hasLoadedCourses } = useCourseValue()
   const { hasLoadedStudents } = useStudentValue()
+  const { hasLoadedTemplates } = useTemplateValue()
 
   switch (authState) {
     case 'loading':
@@ -44,7 +46,7 @@ export const PrivateRoute = ({
       )
     // authorized, hooray, you can see the content!
     case 'authorized':
-      return hasLoadedCourses && hasLoadedStudents ? (
+      return hasLoadedCourses && hasLoadedStudents && hasLoadedTemplates ? (
         <Route
           {...routeProps}
           render={(props) => {
@@ -56,6 +58,7 @@ export const PrivateRoute = ({
           isLoading={true}
           hasLoadedCourses={hasLoadedCourses}
           hasLoadedStudents={hasLoadedStudents}
+          hasLoadedTemplates={hasLoadedTemplates}
         />
       )
   }
