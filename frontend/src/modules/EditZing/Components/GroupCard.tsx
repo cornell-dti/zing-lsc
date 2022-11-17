@@ -7,6 +7,8 @@ import { StyledGroupText } from 'EditZing/Styles/StudentAndGroup.style'
 import { Box, Tooltip, Checkbox, IconButton } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import { Delete, DeleteOutline } from '@mui/icons-material'
+import axios from 'axios'
+import { API_ROOT, MATCHING_API } from '@core'
 
 /** the equivalent of Column */
 const GroupCard = ({
@@ -64,6 +66,13 @@ const GroupCard = ({
 
   const handleMouseOut = () => {
     setIsHovering(false)
+  }
+
+  const removeGroup = (groupId: string, groupNumber: number) => {
+    axios.post(`${API_ROOT}${MATCHING_API}/hide-group`, {
+      courseId: courseId,
+      groupNumber: groupNumber,
+    })
   }
 
   return (
@@ -131,7 +140,11 @@ const GroupCard = ({
               backgroundColor: 'transparent',
               border: 'none',
             }}
-            onClick={() => false}
+            onClick={() => {
+              if (studentList.length === 0) {
+                removeGroup(courseId, groupNumber)
+              } else return // send an error message
+            }}
           >
             <Delete sx={{ color: 'purple' }}></Delete>
           </IconButton>
