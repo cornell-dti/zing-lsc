@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import TextField from '@mui/material/TextField'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import {
   StyledContainer,
@@ -12,33 +11,54 @@ import { CourseGrid } from 'Dashboard/Components/CourseGrid'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { logOut } from '@fire'
 import { useAuthValue } from '@auth'
-import { Box, IconButton, SelectChangeEvent } from '@mui/material'
+import { Box, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
 import { CSVLink } from 'react-csv'
-
+import { useHistory } from 'react-router-dom'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import ClearIcon from '@mui/icons-material/Clear'
 
-type SortOrder =
-  | 'newest-requests-first'
-  | 'unmatchable-first'
-  | 'newly-matchable-first'
-  | 'matchable-first'
-  | 'classes-a-z'
-  | 'classes-z-a'
+type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
+type FilterOption =
+  | 'no-filter'
+  | 'unmatchable'
+  | 'newly-matchable'
+  | 'matchable'
   | 'no-check-in-email'
   | 'no-no-match-email'
+export const defaultSortingOrder = 'newest-requests-first'
+export const defaultFilterOption = 'no-filter'
+
+const filterOptionDisplay = [
+  ['no-filter', 'All Classes'],
+  ['unmatchable', 'Unmatchable'],
+  ['newly-matchable', 'Newly Matchable'],
+  ['matchable', 'Matchable'],
+  ['no-check-in-email', 'No Check In Email'],
+  ['no-no-match-email', 'No No Match Email'],
+]
+const sortOrderDisplay = [
+  ['newest-requests-first', 'Newest Requests First'],
+  ['classes-a-z', 'Classes A-Z'],
+  ['classes-z-a', 'Classes Z-A'],
+]
 
 export const Dashboard = () => {
+  const history = useHistory()
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
-
-  const [sortedOrder, setSortedOrder] = useState<SortOrder>(
-    'newest-requests-first'
+  const state = history.location.state as {
+    sortedOrder: SortOrder
+    filterOption: FilterOption
+  }
+  const [sortedOrder, setSortedOrder] = useState<SortOrder>(() =>
+    state?.sortedOrder ? state.sortedOrder : defaultSortingOrder
+  )
+  const [filteredOption, setFilteredOption] = useState<FilterOption>(() =>
+    state?.filterOption ? state.filterOption : defaultFilterOption
   )
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -131,6 +151,35 @@ export const Dashboard = () => {
   }
 
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
+  function filtered(courseInfo: Course[], menuValue: FilterOption) {
+    switch (menuValue) {
+      case 'no-filter':
+        return courseInfo
+      case 'unmatchable':
+        return [...courseInfo].filter(
+          (course, _) =>
+            course.lastGroupNumber === 0 && course.unmatched.length === 1
+        )
+      case 'newly-matchable':
+        return [...courseInfo].filter(
+          (course, _) =>
+            course.lastGroupNumber === 0 && course.unmatched.length > 1
+        )
+      case 'matchable':
+        return [...courseInfo].filter(
+          (course, _) =>
+            (course.lastGroupNumber > 0 && course.unmatched.length > 0) ||
+            (course.lastGroupNumber === 0 && course.unmatched.length > 1)
+        )
+      case 'no-check-in-email':
+        return courseInfo.filter(hasUnsentCheckIns)
+      case 'no-no-match-email':
+        return courseInfo.filter(hasUnsentNoMatch)
+      default:
+        return courseInfo
+    }
+  }
+  // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
   function sorted(courseInfo: Course[], menuValue: SortOrder) {
     switch (menuValue) {
       case 'newest-requests-first':
@@ -138,30 +187,6 @@ export const Dashboard = () => {
           (a, b) =>
             b.latestSubmissionTime.valueOf() - a.latestSubmissionTime.valueOf()
         )
-      case 'unmatchable-first':
-        return [...courseInfo].sort((a, _) => {
-          //-1 if a unmatchable and b isn't
-          if (a.lastGroupNumber === 0 && a.unmatched.length === 1) {
-            return -1
-          } else return 1
-        })
-      case 'newly-matchable-first':
-        return [...courseInfo].sort((a, _) => {
-          //-1 if a newly matchable and b isn't
-          if (a.lastGroupNumber === 0 && a.unmatched.length > 1) {
-            return -1
-          } else return 1
-        })
-      case 'matchable-first':
-        return [...courseInfo].sort((a, _) => {
-          //-1 if a matchable and b isn't
-          if (
-            (a.lastGroupNumber > 0 && a.unmatched.length > 0) ||
-            (a.lastGroupNumber === 0 && a.unmatched.length > 1)
-          ) {
-            return -1
-          } else return 1
-        })
       case 'classes-a-z':
         return [...courseInfo].sort((a, b) => {
           return a.names[0].localeCompare(b.names[0], undefined, {
@@ -174,37 +199,39 @@ export const Dashboard = () => {
             numeric: true,
           })
         })
-      case 'no-check-in-email':
-        return courseInfo.filter(hasUnsentCheckIns)
-      case 'no-no-match-email':
-        return courseInfo.filter(hasUnsentNoMatch)
       default:
         return courseInfo
     }
   }
-
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleSortedChange = (event: SelectChangeEvent) => {
     setSortedOrder(event.target.value as SortOrder)
+    history.replace({
+      state: {
+        sortedOrder: event.target.value as SortOrder,
+        filterOption: state?.filterOption ? state.filterOption : 'no-filter',
+      },
+    })
+  }
+  const handleFilterChange = (event: SelectChangeEvent) => {
+    setFilteredOption(event.target.value as FilterOption)
+    history.replace({
+      state: {
+        sortedOrder: state?.sortedOrder
+          ? state.sortedOrder
+          : 'newest-requests-first',
+        filterOption: event.target.value as FilterOption,
+      },
+    })
   }
 
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
 
-  const [message, setMessage] = useState('')
-
-  const handleSearch = (event: {
-    target: { value: React.SetStateAction<string> }
-  }) => {
-    setMessage(event.target.value)
-    console.log('search is:', event.target.value)
-  }
-
-  const filteredCourses = sorted(
-    courses.filter((c) => c.roster === selectedRoster),
+  const sortedAndFilteredCourses = sorted(
+    filtered(
+      courses.filter((course) => course.roster === selectedRoster),
+      filteredOption
+    ),
     sortedOrder
-  ).filter((d) =>
-    d.names.find((e) => {
-      return e.includes(message.toUpperCase())
-    })
   )
 
   return (
@@ -213,64 +240,54 @@ export const Dashboard = () => {
         <LogoImg />
 
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Box
-              sx={{
-                fontWeight: 'bold',
-                color: 'essentials.75',
-                padding: 1,
-                margin: 1,
-              }}
-            >
-              Sort by:
-            </Box>
-            <DropdownSelect
-              value={sortedOrder}
-              onChange={handleChange}
-              sx={{
-                padding: 0,
-                margin: 0,
-                fontWeight: 'bold',
-              }}
-            >
-              <MenuItem value="newest-requests-first">
-                Newest requests first
-              </MenuItem>
-              <MenuItem value="unmatchable-first">Unmatchable first</MenuItem>
-              <MenuItem value="newly-matchable-first">
-                Newly matchable first
-              </MenuItem>
-              <MenuItem value="matchable-first">Matchable first</MenuItem>
-              <MenuItem value="classes-a-z">Classes A-Z</MenuItem>
-              <MenuItem value="classes-z-a">Classes Z-A</MenuItem>
-              <MenuItem value="no-check-in-email">
-                Unsent Check-in Emails
-              </MenuItem>
-              <MenuItem value="no-no-match-email">
-                Unsent No Match Emails
-              </MenuItem>
-            </DropdownSelect>
+          <Box
+            sx={{
+              fontWeight: 'bold',
+              color: 'essentials.75',
+              padding: 1,
+              margin: 1,
+            }}
+          >
+            Sort by:
           </Box>
-          <TextField
-            id="search-bar"
-            label="Search for a course"
-            variant="outlined"
+          <DropdownSelect
+            value={sortedOrder}
+            onChange={handleSortedChange}
             sx={{
               padding: 0,
               margin: 0,
-              ml: 3,
-              width: 200,
+              fontWeight: 'bold',
             }}
-            value={message}
-            onChange={handleSearch}
-            InputProps={{
-              endAdornment: message ? (
-                <IconButton size="small" onClick={() => setMessage('')}>
-                  <ClearIcon />
-                </IconButton>
-              ) : undefined,
+          >
+            {sortOrderDisplay.map(([object, name]) => (
+              <MenuItem value={object}> {name}</MenuItem>
+            ))}
+          </DropdownSelect>
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Box
+            sx={{
+              fontWeight: 'bold',
+              color: 'essentials.75',
+              padding: 1,
+              margin: 1,
             }}
-          />
+          >
+            Filter:
+          </Box>
+          <DropdownSelect
+            value={filteredOption}
+            onChange={handleFilterChange}
+            sx={{
+              padding: 0,
+              margin: 0,
+              fontWeight: 'bold',
+            }}
+          >
+            {filterOptionDisplay.map(([object, name]) => (
+              <MenuItem value={object}> {name}</MenuItem>
+            ))}
+          </DropdownSelect>
         </Box>
         <Button
           id="logout-button"
@@ -356,7 +373,7 @@ export const Dashboard = () => {
           </MenuItem>
         </Menu>
       </StyledHeaderMenu>
-      <CourseGrid courses={filteredCourses} />
+      <CourseGrid courses={sortedAndFilteredCourses} />
     </StyledContainer>
   )
 }
