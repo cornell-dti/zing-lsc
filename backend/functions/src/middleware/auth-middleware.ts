@@ -47,7 +47,8 @@ export async function checkIsAuthorizedFromToken(idToken: string) {
   const decodedToken = await admin.auth().verifyIdToken(idToken)
   const uid = decodedToken.uid
   const user = await admin.auth().getUser(uid)
-  return !!(user.email && allowedUsers.includes(user.email))
+  const email = user?.providerData[0].email
+  return !!(email && allowedUsers.includes(email))
 }
 
 export function checkIsAuthorized(

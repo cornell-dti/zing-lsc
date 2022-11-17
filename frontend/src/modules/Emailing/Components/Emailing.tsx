@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { getAuth } from 'firebase/auth'
+import { useAuthValue } from '@auth'
 // zing imports
 import { API_ROOT } from '@core'
 import {
@@ -22,9 +23,8 @@ export const Emailing = () => {
   const [sendError, setSendError] = useState(false)
 
   // 1. logged in user info
-  let auth = getAuth()
-  let user = auth.currentUser
-  let email = user?.email
+  const { user } = useAuthValue()
+  let email = user?.providerData[0].email
 
   /* TODO: ask @sean ? or future work
         
@@ -141,7 +141,8 @@ export const sendEmail = async (emailItems: any) => {
   // 1. logged in user info
   let auth = getAuth()
   let user = auth.currentUser
-  let email = user?.email
+  let email = user?.providerData[0].email
+
   // 2. obtaining auth token from local storage
   const msAuthToken = localStorage.getItem('authToken') || ' '
   const {
