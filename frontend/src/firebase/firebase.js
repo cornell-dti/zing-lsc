@@ -17,7 +17,10 @@ export const templatesBucket = getStorage(app, TEMPLATES_BUCKET)
 // function attempting to sign in with Google
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider()
-  await signInWithPopup(auth, provider)
+  provider.addScope('email')
+  provider.addScope('profile')
+  const result = await signInWithPopup(auth, provider)
+  console.log(result)
 }
 
 export async function signInWithMicrosoft() {

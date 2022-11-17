@@ -23,8 +23,9 @@ export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
   }
 
   const { user } = useAuthValue()
+  const userEmail = user?.providerData[0].email
   const validEmail = /^\w+@cornell.edu$/
-  const isValidEmail = validEmail.test(user?.email ?? '')
+  const isValidEmail = validEmail.test(userEmail ?? '')
 
   return (
     <Box
@@ -87,7 +88,7 @@ export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
         <TextField
           sx={textInputStyle}
           type="email"
-          value={user?.email ?? 'No Email Provided'}
+          value={userEmail ?? 'No Email Provided'}
           helperText={!isValidEmail && 'Error: Not a valid cornell.edu email'}
           error={!isValidEmail}
           disabled
@@ -109,6 +110,7 @@ export const LoginCheck = ({ gotoNextStep }: LoginCheckProps) => {
       </Button>
       <Link
         onClick={() => {
+          console.log(user)
           signInWithGoogle().catch(() => {})
         }}
         sx={{
