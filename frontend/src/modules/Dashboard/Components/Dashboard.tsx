@@ -112,7 +112,7 @@ export const Dashboard = () => {
                   : undefined,
               ...localeMap(group?.templateTimestamps),
               ...localeMap(membership.templateTimestamps),
-              notes: membership.notes,
+              notes: membership.notes.replace(/(\n)/gm, ' ').trim(),
             }
           })
         )
@@ -251,33 +251,6 @@ export const Dashboard = () => {
 
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-              <Box
-                sx={{
-                  fontWeight: 'bold',
-                  color: 'essentials.75',
-                  padding: 1,
-                  margin: 1,
-                }}
-              >
-                Filter:
-              </Box>
-              <DropdownSelect
-                value={filteredOption}
-                onChange={handleFilterChange}
-                sx={{
-                  padding: 0,
-                  margin: 0,
-                  fontWeight: 'bold',
-                  maxWidth: '250px',
-                }}
-              >
-                {filterOptionDisplay.map(([object, name]) => (
-                  <MenuItem value={object}> {name}</MenuItem>
-                ))}
-              </DropdownSelect>
-            </Box>
-
             <Box
               sx={{
                 fontWeight: 'bold',
@@ -300,6 +273,32 @@ export const Dashboard = () => {
               }}
             >
               {sortOrderDisplay.map(([object, name]) => (
+                <MenuItem value={object}> {name}</MenuItem>
+              ))}
+            </DropdownSelect>
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box
+              sx={{
+                fontWeight: 'bold',
+                color: 'essentials.75',
+                padding: 1,
+                margin: 1,
+              }}
+            >
+              Filter:
+            </Box>
+            <DropdownSelect
+              value={filteredOption}
+              onChange={handleFilterChange}
+              sx={{
+                padding: 0,
+                margin: 0,
+                fontWeight: 'bold',
+                maxWidth: '250px',
+              }}
+            >
+              {filterOptionDisplay.map(([object, name]) => (
                 <MenuItem value={object}> {name}</MenuItem>
               ))}
             </DropdownSelect>
@@ -366,11 +365,15 @@ export const Dashboard = () => {
             horizontal: 'right',
           }}
         >
-          <CSVLink data={csvCourses} filename={`export-courses-${Date.now()}`}>
+          <CSVLink
+            data={csvCourses.filter((e) => e.semester === selectedRoster)}
+            filename={`export-courses-${Date.now()}`}
+          >
+            {' '}
             <MenuItem>Export CSV (Courses)</MenuItem>
           </CSVLink>
           <CSVLink
-            data={csvStudents}
+            data={csvStudents.filter((e) => e.semester === selectedRoster)}
             filename={`export-students-${Date.now()}`}
           >
             <MenuItem>Export CSV (Students)</MenuItem>
