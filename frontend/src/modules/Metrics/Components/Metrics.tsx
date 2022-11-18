@@ -144,8 +144,18 @@ export const Metrics = () => {
   }
 
   return (
-    <Box>
-      <Box>
+    <Box sx={{ pl: '5rem', pr: '5rem' }}>
+      <Box
+        sx={{
+          height: 'fit-content',
+          padding: '2.5rem',
+          pl: '10rem',
+          pr: '10rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
         <LogoImg />
         <Link href="/dashboard" underline="none">
           Dashboard
@@ -155,7 +165,16 @@ export const Metrics = () => {
           setSelectedRoster={setSelectedRoster}
         ></AccountMenu>
       </Box>
-      <Box>Overall</Box>
+      <Box
+        sx={{
+          typography: 'h6',
+          fontWeight: 600,
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        Overall
+      </Box>
       <StatGrid stats={stats} />
       <Box
         sx={{
@@ -166,7 +185,16 @@ export const Metrics = () => {
           pr: '2rem',
         }}
       >
-        <Box>By College</Box>
+        <Box
+          sx={{
+            typography: 'h6',
+            fontWeight: 600,
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          By College
+        </Box>
         <DropdownSelect
           value={selectedRoster}
           onChange={handleSemesterChange}
