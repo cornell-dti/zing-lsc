@@ -6,7 +6,7 @@ import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
 import { StyledGroupText } from 'EditZing/Styles/StudentAndGroup.style'
 import { Box, Tooltip, Checkbox, IconButton } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
-import { Delete, DeleteOutline } from '@mui/icons-material'
+import { Delete } from '@mui/icons-material'
 import axios from 'axios'
 import { API_ROOT, MATCHING_API } from '@core'
 
