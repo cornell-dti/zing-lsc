@@ -6,14 +6,15 @@ import {
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
 import { CourseGrid } from 'Dashboard/Components/CourseGrid'
+import { useAuthValue } from '@auth'
 import { Box, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
+import { Link } from '@mui/material'
 import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
-
 type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
 type FilterOption =
   | 'no-filter'
@@ -41,6 +42,7 @@ const sortOrderDisplay = [
 
 export const Dashboard = () => {
   const history = useHistory()
+  const { user } = useAuthValue()
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
   const state = history.location.state as {
@@ -168,6 +170,9 @@ export const Dashboard = () => {
         <LogoImg />
 
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Link href="/metrics" underline="none">
+            Metrics
+          </Link>
           <Box
             sx={{
               fontWeight: 'bold',
