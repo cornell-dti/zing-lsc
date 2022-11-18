@@ -147,9 +147,10 @@ export const Metrics = () => {
   const chosenSemesterStudents = csvStudents.filter(
     (e) => e.semester === selectedRoster
   )
-  const collegeNames = chosenSemesterStudents
+  const collegeNames = csvStudents
     .map((s) => s.college)
     .filter((value, index, self) => self.indexOf(value) === index)
+
   const calculateStats = (college: string) => {
     const specificCollegeStudents = chosenSemesterStudents.filter(
       (s) => s.college === college
@@ -161,16 +162,15 @@ export const Metrics = () => {
       (total, student) => (student?.groupNumber ? total + 1 : total),
       0
     )
-    const groups = specificCollegeStudents
+    const createdGroups = specificCollegeStudents.filter((student) => {
+      return student.groupNumber !== undefined
+    })
+    console.log('created Groups')
+    console.log(createdGroups)
+    const groups = createdGroups
       .map((s) => s.groupNumber)
       .filter((value, index, self) => self.indexOf(value) === index)
-    console.log({
-      rowName: college,
-      students: uniqueStudents.length,
-      requests: specificCollegeStudents.length,
-      matches: matches,
-      groups: groups.length,
-    })
+    console.log(groups)
     return {
       rowName: college,
       students: uniqueStudents.length,
