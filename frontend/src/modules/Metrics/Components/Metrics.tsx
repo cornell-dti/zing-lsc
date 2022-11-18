@@ -63,6 +63,7 @@ export const Metrics = () => {
     title: 'groups',
     subtitle: 'successfully made',
   }
+
   const stats = [
     num_students,
     num_courses,
@@ -81,7 +82,7 @@ export const Metrics = () => {
     )
   }
 
-  const csvStudents =
+  const allStudents =
     courses.length && students.length // Just making sure this isn't calculated until the data is available
       ? students.flatMap((student) =>
           student.groups.map((membership) => {
@@ -94,7 +95,6 @@ export const Metrics = () => {
             )
             return {
               semester: course.roster,
-              dateRequested: membership.submissionTime.toLocaleString(),
               cornellEmail: student.email,
               name: student.name,
               college: student.college,
@@ -106,27 +106,28 @@ export const Metrics = () => {
                   : undefined,
               ...localeMap(group?.templateTimestamps),
               ...localeMap(membership.templateTimestamps),
-              notes: membership.notes.replace(/(\n)/gm, '  ').trim(),
             }
           })
         )
       : []
-
+  const getUniqueValues = (arr: any) =>
+    arr.filter(
+      (value: any, index: any, self: string | any[]) =>
+        self.indexOf(value) === index
+    )
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
-  const chosenSemesterStudents = csvStudents.filter(
+  const chosenSemesterStudents = allStudents.filter(
     (e) => e.semester === selectedRoster
   )
-  const collegeNames = csvStudents
-    .map((s) => s.college)
-    .filter((value, index, self) => self.indexOf(value) === index)
+  const collegeNames = getUniqueValues(allStudents.map((s) => s.college))
 
   const calculateStats = (college: string) => {
     const specificCollegeStudents = chosenSemesterStudents.filter(
       (s) => s.college === college
     )
-    const uniqueStudents = specificCollegeStudents
-      .map((s) => s.name)
-      .filter((value, index, self) => self.indexOf(value) === index)
+    const uniqueStudents = getUniqueValues(
+      specificCollegeStudents.map((s) => s.name)
+    )
     const matches = specificCollegeStudents.reduce(
       (total, student) => (student?.groupNumber ? total + 1 : total),
       0
@@ -134,9 +135,7 @@ export const Metrics = () => {
     const createdGroups = specificCollegeStudents.filter((student) => {
       return student.groupNumber !== undefined
     })
-    const groups = createdGroups
-      .map((s) => s.groupNumber)
-      .filter((value, index, self) => self.indexOf(value) === index)
+    const groups = getUniqueValues(createdGroups.map((s) => s.groupNumber))
     return {
       rowName: college,
       students: uniqueStudents.length,
@@ -174,7 +173,6 @@ export const Metrics = () => {
       >
         <StyledName>By College</StyledName>
         <DropdownSelect
-          size="small"
           value={selectedRoster}
           onChange={handleSemesterChange}
           sx={{
@@ -189,7 +187,7 @@ export const Metrics = () => {
         </DropdownSelect>
       </Box>
       <MetricsTable
-        data={collegeNames.map((college) => calculateStats(college))}
+        data={collegeNames.map((college: string) => calculateStats(college))}
       />
     </StyledContainer>
   )
