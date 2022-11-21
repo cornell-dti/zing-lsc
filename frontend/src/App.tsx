@@ -61,15 +61,6 @@ const App = () => {
   const checkRefreshDuration = 1000
   // 600000 // (10 min)
 
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return
-    }
-  }
-
   const reloadButton = (
     <Button
       variant="text"
@@ -166,23 +157,33 @@ const App = () => {
   useEffect(() => {
     if (hasLoadedCourses && hasLoadedStudents) {
       const interval = setInterval(async () => {
-        const newClasses = (
-          await axios.get(`${API_ROOT}${COURSE_API}`)
-        ).data.map(responseCourseToCourse)
+        let newCourses = []
+        let newStudents = []
+        try {
+          newCourses = (await axios.get(`${API_ROOT}${COURSE_API}`)).data.map(
+            responseCourseToCourse
+          )
+        } catch (e) {
+          setNetworkError('Error fetching courses')
+        }
 
-        const newStudents = (
-          await axios.get(`${API_ROOT}${STUDENT_API}`)
-        ).data.map(responseStudentToStudent)
+        try {
+          newStudents = (await axios.get(`${API_ROOT}${STUDENT_API}`)).data.map(
+            responseStudentToStudent
+          )
+        } catch (e) {
+          setNetworkError('Error fetching students')
+        }
 
         if (
-          newClasses.length !== courses.length ||
+          newCourses.length !== courses.length ||
           newStudents.length !== students.length
         ) {
           setNeedsRefresh(true)
           return
         }
 
-        newClasses.forEach((course: Course, index: number) => {
+        newCourses.forEach((course: Course, index: number) => {
           let newGroups = course.groups
           let oldGroups = courses[index].groups
 
@@ -200,6 +201,23 @@ const App = () => {
             setNeedsRefresh(true)
           }
         })
+
+        newStudents.forEach((student: Student, index: number) => {
+          let groupMembership = student.groups
+          console.log(groupMembership)
+          let oldGroupMembership = students[index].groups
+          if (groupMembership.length === oldGroupMembership.length) {
+            groupMembership.forEach((membership, ind) => {
+              if (
+                membership.groupNumber !== oldGroupMembership[ind].groupNumber
+              ) {
+                setNeedsRefresh(true)
+              }
+            })
+          } else {
+            setNeedsRefresh(true)
+          }
+        })
       }, checkRefreshDuration)
       return () => clearInterval(interval)
     }
@@ -208,6 +226,7 @@ const App = () => {
     courses.length,
     hasLoadedCourses,
     hasLoadedStudents,
+    students,
     students.length,
   ])
 
@@ -627,7 +646,6 @@ const App = () => {
                 >
                   <Snackbar
                     open={needsRefresh}
-                    onClose={handleClose}
                     message="The information in your app is out of date. 
                       Please reload to see the latest updates."
                     action={reloadButton}
