@@ -10,12 +10,15 @@ import { EmailTemplateButtons } from 'EditZing/Components/EmailTemplateButtons'
 import { EmailPreview } from 'EditZing/Components/EmailPreview'
 import { sendEmail } from 'Emailing/Components/Emailing'
 import { adminSignIn } from '@fire/firebase'
+import { Course, Group, responseCourseToCourse } from '@core/Types'
 
 // template editor
 import { EmailTemplate } from '@core/Types'
 import { useStudentValue } from '@context/StudentContext'
 import { useCourseValue } from '@context/CourseContext'
 import { useTemplateValue } from '@context/TemplateContext'
+import axios from 'axios'
+import { API_ROOT, COURSE_API } from '@core/Constants'
 
 export const EmailModal = ({
   selectedGroupNumbers,
@@ -47,10 +50,48 @@ export const EmailModal = ({
   const replaceMap = {
     '{{COURSE_NAME}}': courseNames.join('/'),
   }
+
   const replacedHtml = Object.entries(replaceMap).reduce(
     (prev, [key, value]) => prev.replaceAll(key, value),
     selectedTemplate?.html || ''
   )
+
+  /** Replaces {{NEW_STUDENT_NAME}} and {{OTHER_STUDENTS_NAMES}} with their proper values
+   * in the email template. {replacedHtml} is a general replacement common to all groups, so
+   * for this function, we must pass in the specific groupNumber and find the array of
+   * group members' names using that, since this information is not available from {EmailModalProps}
+   *
+   * @param groupNumber
+   */
+  const specificReplacedHtml = async (groupNumber: number) => {
+    const courses = (await axios.get(`${API_ROOT}${COURSE_API}`)).data.map(
+      responseCourseToCourse
+    )
+
+    courses.forEach((course: Course, index: number) => {
+      if (course.courseId === courseId) {
+        const groups = course.groups
+
+        groups.forEach((group: Group, num: number) => {
+          if (num === groupNumber) {
+            const groupSize = group.members.length
+            const newStudent = group.members[groupSize - 1]
+            const otherStudents = group.members.slice(0, groupSize - 2)
+
+            const replaceNamesMap = {
+              '{{NEW_STUDENT_NAME}}': newStudent,
+              '{{OTHER_STUDENTS_NAMES}}': otherStudents.join(', '),
+            }
+            return Object.entries(replaceNamesMap).reduce(
+              (prev, [key, value]) => prev.replaceAll(key, value),
+              replacedHtml
+            )
+          }
+        })
+      }
+    })
+    return replacedHtml
+  }
 
   const [step, setStep] = useState<number>(0)
   const titles = [
@@ -97,7 +138,7 @@ export const EmailModal = ({
         const emailItems = {
           emailSubject,
           indivEmail: undefined,
-          emailBody: replacedHtml,
+          emailBody: specificReplacedHtml(groupNumber),
           courseId,
           groupNum: groupNumber.toString(),
           selectedTemplate: selectedTemplate?.id,
