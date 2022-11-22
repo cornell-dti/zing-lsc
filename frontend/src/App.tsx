@@ -58,8 +58,7 @@ const App = () => {
   const [networkError, setNetworkError] = useState<string | null>(null)
 
   const [needsRefresh, setNeedsRefresh] = useState(false)
-  const checkRefreshDuration = 1000
-  // 600000 // (10 min)
+  const checkRefreshDuration = 600000 // (10 min)
 
   const reloadButton = (
     <Button
@@ -157,15 +156,7 @@ const App = () => {
   useEffect(() => {
     if (hasLoadedCourses && hasLoadedStudents) {
       const interval = setInterval(async () => {
-        let newCourses = []
         let newStudents = []
-        try {
-          newCourses = (await axios.get(`${API_ROOT}${COURSE_API}`)).data.map(
-            responseCourseToCourse
-          )
-        } catch (e) {
-          setNetworkError('Error fetching courses')
-        }
 
         try {
           newStudents = (await axios.get(`${API_ROOT}${STUDENT_API}`)).data.map(
@@ -175,36 +166,13 @@ const App = () => {
           setNetworkError('Error fetching students')
         }
 
-        if (
-          newCourses.length !== courses.length ||
-          newStudents.length !== students.length
-        ) {
+        if (newStudents.length !== students.length) {
           setNeedsRefresh(true)
           return
         }
 
-        newCourses.forEach((course: Course, index: number) => {
-          let newGroups = course.groups
-          let oldGroups = courses[index].groups
-
-          let newMembers = newGroups.map((group) => group.members)
-          let oldMembers = oldGroups.map((group) => group.members)
-          if (newMembers.length === oldMembers.length) {
-            newMembers.forEach((group, index) => {
-              group.forEach((member, ind) => {
-                if (member !== oldMembers[index][ind]) {
-                  setNeedsRefresh(true)
-                }
-              })
-            })
-          } else {
-            setNeedsRefresh(true)
-          }
-        })
-
         newStudents.forEach((student: Student, index: number) => {
           let groupMembership = student.groups
-          console.log(groupMembership)
           let oldGroupMembership = students[index].groups
           if (groupMembership.length === oldGroupMembership.length) {
             groupMembership.forEach((membership, ind) => {
