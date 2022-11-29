@@ -43,11 +43,11 @@ const templates: FirestoreEmailTemplate[] = [
     modifyTime,
   },
   {
-    id: 'introduce-student',
+    id: 'introduce-new-student',
     name: 'Introducing student to established group',
     type: 'group',
     subject: 'TEST Introducing a new student to your study group',
-    body: 'introduce-student.html',
+    body: 'introduce-new-student.html',
     modifyTime,
   },
 ]
