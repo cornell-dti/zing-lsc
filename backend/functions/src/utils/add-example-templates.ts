@@ -42,6 +42,14 @@ const templates: FirestoreEmailTemplate[] = [
     body: 'check-in.html',
     modifyTime,
   },
+  {
+    id: 'introduce-student',
+    name: 'Introducing student to established group',
+    type: 'group',
+    subject: 'TEST Introducing a new student to your study group',
+    body: 'introduce-student.html',
+    modifyTime,
+  },
 ]
 
 const templateRef = db.collection('email_templates')
