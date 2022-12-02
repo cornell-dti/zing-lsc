@@ -48,6 +48,7 @@ import { getDownloadURL, ref } from 'firebase/storage'
 import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
+import { Groups } from '@mui/icons-material'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -514,6 +515,25 @@ const App = () => {
       },
     ])
 
+  // update whats shown on the frontend
+  const removeGroups = (courseId: string, groupNumber: number) => {
+    setCourses(
+      courses.map((course) =>
+        course.courseId === courseId
+          ? {
+              ...course,
+              unmatched: [...course.unmatched],
+              groups: course.groups.map((group) =>
+                groupNumber === group.groupNumber
+                  ? { ...group, hidden: true }
+                  : group
+              ),
+            }
+          : course
+      )
+    )
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -533,6 +553,7 @@ const App = () => {
                 moveStudent,
                 matchStudents,
                 addGroupEmailTimestamps,
+                removeGroups,
               }}
             >
               <StudentProvider

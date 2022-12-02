@@ -17,6 +17,7 @@ interface CourseContextType {
     templateId: string,
     timestamp: Date
   ) => void
+  removeGroups: (courseId: string, groupNumber: number) => void
 }
 
 const CourseContext = React.createContext<CourseContextType>({
@@ -25,6 +26,7 @@ const CourseContext = React.createContext<CourseContextType>({
   moveStudent: () => {},
   matchStudents: async () => {},
   addGroupEmailTimestamps: () => {},
+  removeGroups: () => {},
 } as CourseContextType)
 
 export function CourseProvider({

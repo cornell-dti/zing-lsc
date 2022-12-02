@@ -35,7 +35,7 @@ export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
   const history = useHistory()
   const state = history.location.state as any
-  const { courses, moveStudent, matchStudents } = useCourseValue()
+  const { courses, moveStudent, matchStudents, removeGroups } = useCourseValue()
   const { students, updateNotes } = useStudentValue()
   const { templates } = useTemplateValue()
 
@@ -301,6 +301,7 @@ export const EditZing = () => {
                   }}
                   handleAddStudent={editSelectedStudentEmails}
                   updateNotes={updateNotes}
+                  removeGroups={removeGroups}
                 />
               ))}
           </Box>

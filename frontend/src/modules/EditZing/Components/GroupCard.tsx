@@ -24,6 +24,7 @@ const GroupCard = ({
   handleChecked,
   handleAddStudent,
   updateNotes,
+  removeGroups,
 }: GroupGridProps) => {
   /**
    * Helper to format the timestamp data in a way that is helpful for displaying in tooltips
@@ -68,12 +69,12 @@ const GroupCard = ({
     setIsHovering(false)
   }
 
-  const removeGroup = (groupId: string, groupNumber: number) => {
+  const removeGroup = (courseId: string, groupNumber: number) => {
     axios.post(`${API_ROOT}${MATCHING_API}/hide-group`, {
       courseId: courseId,
       groupNumber: groupNumber,
     })
-    window.location.reload() // this can be improved so page doesn't reloadA
+    removeGroups(courseId, groupNumber)
   }
 
   return (
