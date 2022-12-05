@@ -53,6 +53,7 @@ export const EditZing = () => {
   /*  Snackbars  */
   const [emailSent, setEmailSent] = useState<boolean>(false)
   const [emailSentError, setEmailSentError] = useState<boolean>(false)
+  const [emailSaved, setEmailSaved] = useState<boolean>(false)
   const emailSentAction = (
     <Button
       variant="text"
@@ -160,6 +161,7 @@ export const EditZing = () => {
           setIsEmailing={setIsEmailing}
           setEmailSent={setEmailSent}
           setEmailSentError={setEmailSentError}
+          setEmailSaved={setEmailSaved}
           courseNames={course.names}
         />
       )}
@@ -306,6 +308,15 @@ export const EditZing = () => {
       >
         <Alert variant="filled" severity="error">
           Emails Failed to send. Please relogin and try again.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={emailSaved}
+        autoHideDuration={6000}
+        onClose={() => setEmailSaved(false)}
+      >
+        <Alert variant="filled" severity="success">
+          Email Saved
         </Alert>
       </Snackbar>
     </Box>
