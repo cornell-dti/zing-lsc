@@ -76,12 +76,20 @@ export const EmailModal = ({
           if (num === groupNumber) {
             const groupSize = group.members.length
             const newStudent = group.members[groupSize - 1]
-            const otherStudents = group.members.slice(0, groupSize - 2)
+            const otherStudents = group.members.slice(0, groupSize - 1)
 
             const replaceNamesMap = {
               '{{NEW_STUDENT_NAME}}': newStudent,
               '{{OTHER_STUDENTS_NAMES}}': otherStudents.join(', '),
             }
+            console.log(`old students ${otherStudents}`)
+            console.log(
+              Object.entries(replaceNamesMap).reduce(
+                (prev, [key, value]) => prev.replaceAll(key, value),
+                replacedHtml
+              )
+            )
+
             return Object.entries(replaceNamesMap).reduce(
               (prev, [key, value]) => prev.replaceAll(key, value),
               replacedHtml
