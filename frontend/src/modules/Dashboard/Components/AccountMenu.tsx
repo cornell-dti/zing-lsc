@@ -10,10 +10,13 @@ import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { CSVLink } from 'react-csv'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import { Link } from 'react-router-dom'
 
 export const AccountMenu = ({
   selectedRoster,
   setSelectedRoster,
+  showMetricsLink,
+  showDashboardLink,
 }: AccountMenuProps) => {
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
@@ -131,6 +134,16 @@ export const AccountMenu = ({
           <ChevronLeftIcon sx={{ color: 'essentials.75', ml: -1 }} />
           Switch Semester
         </MenuItem>
+        {showMetricsLink && (
+          <MenuItem component={Link} to="/metrics">
+            Metrics
+          </MenuItem>
+        )}
+        {showDashboardLink && (
+          <MenuItem component={Link} to="/">
+            Dashboard
+          </MenuItem>
+        )}
         <MenuItem
           onClick={() => {
             handleClose()
@@ -174,4 +187,6 @@ export const AccountMenu = ({
 interface AccountMenuProps {
   selectedRoster: string
   setSelectedRoster: Dispatch<SetStateAction<string>>
+  showMetricsLink: boolean
+  showDashboardLink: boolean
 }

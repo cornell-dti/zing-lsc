@@ -29,7 +29,13 @@ export const StatGrid = ({ stats }: StatGridProps) => {
           }}
         >
           {stats.map((s) => (
-            <StatCard number={s.number} title={s.title} subtitle={s.subtitle} />
+            <StatCard
+              number={s.number}
+              title={s.title}
+              subtitle={s.subtitle}
+              thisWeek={s.thisWeek}
+              showAdded={s.showAdded}
+            />
           ))}
         </Box>
       )}
@@ -40,6 +46,8 @@ interface Stat {
   number: number
   title: string
   subtitle: string
+  thisWeek: number
+  showAdded: boolean
 }
 interface StatGridProps {
   stats: Stat[]

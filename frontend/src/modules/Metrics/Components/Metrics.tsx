@@ -4,37 +4,91 @@ import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
-import { Box, Link, SelectChangeEvent } from '@mui/material'
+import { Box, IconButton, SelectChangeEvent } from '@mui/material'
 import { StatGrid } from './StatGrid'
 import { MetricsTable } from './MetricsTable'
 import { DropdownSelect } from '@core/Components'
+import { DASHBOARD_PATH } from '@core/Constants'
+import { Link } from 'react-router-dom'
 
 export const Metrics = () => {
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
 
+  function isDateInThisWeek(date: Date) {
+    const todayObj = new Date()
+    const todayDate = todayObj.getDate()
+    const todayDay = todayObj.getDay()
+    // get first date of week
+    const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay))
+    // get last date of week
+    const lastDayOfWeek = new Date(firstDayOfWeek)
+    lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6)
+    // if date is equal or within the first and last dates of the week
+    return date >= firstDayOfWeek && date <= lastDayOfWeek
+  }
+
+  const collegeAbbreviations: { [key: string]: string } = {
+    CALS: 'College of Agriculture and Life Sciences',
+    AAP: 'College of Architecture, Art, and Planning',
+    'A&S': 'College of Arts and Sciences',
+    Engineering: 'College of Engineering',
+    HumEc: 'College of Human Ecology',
+    Dyson:
+      'Dyson School of Applied Economics and Management (SC Johnson College of Business)',
+    Nolan:
+      'Nolan School of Hotel Administration (SC Johnson College of Business)',
+    ILR: 'School of Industrial and Labor Relations',
+    SCE: 'School of Continuing Education & Summer Sessions',
+    'Grad School': 'Graduate/Professional School',
+  }
+  const num_students_in_week = students.map((student) =>
+    student.groups.filter((membership) =>
+      isDateInThisWeek(membership.submissionTime)
+    )
+  )
   //calculate number of unique students who have made requests
   const num_students = {
     number: students.length,
-    title: 'unique students',
+    title: 'UNIQUE STUDENTS',
     subtitle: 'made requests',
+    thisWeek: num_students_in_week.length,
+    showAdded: true,
   }
+  const courses_in_week: string[] = []
+  num_students_in_week.map((member) =>
+    member.map((memberships) => {
+      if (courses_in_week.indexOf(memberships.courseId) === -1) {
+        courses_in_week.push(memberships.courseId)
+      }
+    })
+  )
 
   //calculate number of unique courses that have received requests
   const num_courses = {
     number: courses.length,
-    title: 'courses',
+    title: 'UNIQUE COURSES',
     subtitle: 'received requests',
+    thisWeek: courses_in_week.length,
+    showAdded: true,
   }
-
   //calculate total number of requests made by students
   const num_requests = {
     number: students.reduce(
       (total, student) => total + student.groups.length,
       0
     ),
-    title: 'requests',
+    title: 'REQUESTS',
     subtitle: 'made in total',
+    thisWeek: students.reduce(
+      (total, student) =>
+        total +
+        student.groups.filter((membership) =>
+          isDateInThisWeek(membership.submissionTime)
+        ).length,
+      0
+    ),
+    showAdded: true,
   }
 
   //calculate number of students matched into groups
@@ -48,21 +102,25 @@ export const Metrics = () => {
         ),
       0
     ),
-    title: 'matches',
+    title: 'MATCHES',
     subtitle: 'made in total',
+    thisWeek: 0,
+    showAdded: false,
   }
 
   //calculate number of students matched into groups
   const num_groups = {
     number: courses.reduce((total, course) => total + course.groups.length, 0),
-    title: 'groups',
+    title: 'GROUPS',
     subtitle: 'successfully made',
+    thisWeek: 0,
+    showAdded: false,
   }
 
   const stats = [
     num_students,
-    num_courses,
     num_requests,
+    num_courses,
     num_matches,
     num_groups,
   ]
@@ -105,11 +163,12 @@ export const Metrics = () => {
           })
         )
       : []
-  const getUniqueValues = (arr: any) =>
-    arr.filter(
+  const getUniqueValues = (arr: any) => {
+    return arr.filter(
       (value: any, index: any, self: string | any[]) =>
         self.indexOf(value) === index
     )
+  }
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
   const chosenSemesterStudents = allStudents.filter(
     (e) => e.semester === selectedRoster
@@ -132,7 +191,7 @@ export const Metrics = () => {
     })
     const groups = getUniqueValues(createdGroups.map((s) => s.groupNumber))
     return {
-      rowName: college,
+      rowName: collegeAbbreviations[college],
       students: uniqueStudents.length,
       requests: specificCollegeStudents.length,
       matches: matches,
@@ -144,36 +203,53 @@ export const Metrics = () => {
   }
 
   return (
-    <Box sx={{ pl: '5rem', pr: '5rem' }}>
+    <Box
+      sx={{ pl: '5rem', pr: '5rem', display: 'flex', flexDirection: 'column' }}
+    >
       <Box
         sx={{
+          width: '100%',
           height: 'fit-content',
           padding: '2.5rem',
-          pl: '10rem',
-          pr: '10rem',
           display: 'flex',
+          flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
         }}
       >
-        <LogoImg />
-        <Link href="/dashboard" underline="none">
-          Dashboard
-        </Link>
+        <IconButton
+          color="secondary"
+          component={Link}
+          to={{
+            pathname: DASHBOARD_PATH,
+          }}
+          sx={{
+            border: 'none',
+            alignSelf: 'flex-start',
+          }}
+          disableRipple
+          disableFocusRipple
+        >
+          <LogoImg />
+        </IconButton>
+
         <AccountMenu
           selectedRoster={selectedRoster}
           setSelectedRoster={setSelectedRoster}
+          showMetricsLink={false}
+          showDashboardLink={true}
         ></AccountMenu>
       </Box>
       <Box
         sx={{
-          typography: 'h6',
+          typography: 'h5',
           fontWeight: 600,
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        Overall
+        Summary
       </Box>
       <StatGrid stats={stats} />
       <Box

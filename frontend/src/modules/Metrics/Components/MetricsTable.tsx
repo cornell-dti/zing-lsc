@@ -42,26 +42,34 @@ export const MetricsTable = ({ data }: MetricsTableProps) => {
       }}
     >
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <Table
+          sx={{
+            minWidth: 700,
+          }}
+          aria-label="customized table"
+        >
           <TableHead>
             <TableRow>
-              <StyledTableCell>College </StyledTableCell>
-              <StyledTableCell align="right">Students</StyledTableCell>
-              <StyledTableCell align="right">Requests</StyledTableCell>
-              <StyledTableCell align="right">Matches</StyledTableCell>
-              <StyledTableCell align="right">Groups</StyledTableCell>
+              <StyledTableCell sx={{ paddingLeft: '5%' }}>
+                College{' '}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {' '}
+                Student Requests
+              </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((row) => (
               <StyledTableRow key={row.rowName}>
-                <StyledTableCell component="th" scope="row">
+                <StyledTableCell
+                  sx={{ paddingLeft: '5%' }}
+                  component="th"
+                  scope="row"
+                >
                   {row.rowName}
                 </StyledTableCell>
-                <StyledTableCell align="right">{row.students}</StyledTableCell>
-                <StyledTableCell align="right">{row.requests}</StyledTableCell>
-                <StyledTableCell align="right">{row.matches}</StyledTableCell>
-                <StyledTableCell align="right">{row.groups}</StyledTableCell>
+                <StyledTableCell align="center">{row.requests}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>

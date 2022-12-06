@@ -1,6 +1,12 @@
 import { Box, Typography } from '@mui/material'
 
-export const StatCard = ({ number, title, subtitle }: StatCardProps) => {
+export const StatCard = ({
+  number,
+  title,
+  subtitle,
+  thisWeek,
+  showAdded,
+}: StatCardProps) => {
   return (
     <Box
       sx={{
@@ -17,15 +23,64 @@ export const StatCard = ({ number, title, subtitle }: StatCardProps) => {
         position: 'relative',
       }}
     >
-      <Typography variant="h3" fontWeight={600}>
+      {showAdded && (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'row',
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '2px 10px',
+              gap: '10px',
+
+              width: '53px',
+              height: '24px',
+
+              background: '#D0EAD6',
+              borderRadius: ' 8px',
+            }}
+          >
+            {' '}
+            <Typography variant="h6" color="#157E2C" fontWeight={600}>
+              + {thisWeek}
+            </Typography>
+          </Box>
+          <Typography
+            variant="subtitle1"
+            color="#898992"
+            fontWeight={600}
+            sx={{ marginLeft: '10px' }}
+          >
+            this week
+          </Typography>
+        </Box>
+      )}
+      <Typography variant="h2" fontWeight={600}>
         {number}
       </Typography>
-      <Typography variant="h6" fontWeight={600}>
-        {title}
-      </Typography>
-      <Typography variant="subtitle1" fontWeight={600} color="#898992">
-        {subtitle}
-      </Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 0,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography variant="subtitle1" fontWeight={600}>
+          {title}
+        </Typography>
+        <Typography variant="subtitle1" fontWeight={600} color="#898992">
+          {subtitle}
+        </Typography>
+      </Box>
     </Box>
   )
 }
@@ -33,4 +88,6 @@ interface StatCardProps {
   number: number
   title: string
   subtitle: string
+  thisWeek: number
+  showAdded: boolean
 }

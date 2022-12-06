@@ -12,7 +12,6 @@ import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
-import { Link } from '@mui/material'
 import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
@@ -170,9 +169,6 @@ export const Dashboard = () => {
         <LogoImg />
 
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <Link href="/metrics" underline="none">
-            Metrics
-          </Link>
           <Box
             sx={{
               fontWeight: 'bold',
@@ -225,6 +221,8 @@ export const Dashboard = () => {
         <AccountMenu
           selectedRoster={selectedRoster}
           setSelectedRoster={setSelectedRoster}
+          showMetricsLink={true}
+          showDashboardLink={false}
         ></AccountMenu>
       </StyledHeaderMenu>
       <CourseGrid courses={sortedAndFilteredCourses} />
