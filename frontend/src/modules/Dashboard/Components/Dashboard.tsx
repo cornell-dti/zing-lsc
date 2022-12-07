@@ -1,6 +1,4 @@
-import React, { useState } from 'react'
-import Button from '@mui/material/Button'
-import Menu from '@mui/material/Menu'
+import { useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
@@ -9,17 +7,13 @@ import {
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
 import { CourseGrid } from 'Dashboard/Components/CourseGrid'
-import { KeyboardArrowDown } from '@mui/icons-material'
-import { logOut } from '@fire'
-import { useAuthValue } from '@auth'
 import { Box, IconButton, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
-import { CSVLink } from 'react-csv'
 import { useHistory } from 'react-router-dom'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 import ClearIcon from '@mui/icons-material/Clear'
 
 type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
@@ -49,7 +43,6 @@ const sortOrderDisplay = [
 ]
 export const Dashboard = () => {
   const history = useHistory()
-  const { user } = useAuthValue()
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
   const state = history.location.state as {
@@ -62,71 +55,6 @@ export const Dashboard = () => {
   const [filteredOption, setFilteredOption] = useState<FilterOption>(() =>
     state?.filterOption ? state.filterOption : defaultFilterOption
   )
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
-  const csvCourses = courses.map((course) => ({
-    semester: course.roster,
-    course: course.names.join('/'),
-  }))
-
-  //this can be removed if there is a place to store an objectMap() function
-  const localeMap = (obj: { [key: string]: Date } | undefined) => {
-    if (!obj) {
-      return undefined
-    }
-    return Object.fromEntries(
-      Object.entries(obj).map(([k, v]) => [k, v.toLocaleString()])
-    )
-  }
-
-  const csvStudents =
-    courses.length && students.length // Just making sure this isn't calculated until the data is available
-      ? students.flatMap((student) =>
-          student.groups.map((membership) => {
-            const course = courses.find(
-              (c) => c.courseId === membership.courseId
-            )!
-            const group = course.groups.find(
-              // undefined if student is unmatched
-              (g) => g.groupNumber === membership.groupNumber
-            )
-            return {
-              semester: course.roster,
-              dateRequested: membership.submissionTime.toLocaleString(),
-              cornellEmail: student.email,
-              name: student.name,
-              college: student.college,
-              year: student.year,
-              course: course.names.join('/'),
-              groupNumber:
-                membership.groupNumber !== -1
-                  ? `${course.names.join('/')}_${membership.groupNumber}`
-                  : undefined,
-              ...localeMap(group?.templateTimestamps),
-              ...localeMap(membership.templateTimestamps),
-              notes: membership.notes.replace(/(\n)/gm, ' ').trim(),
-            }
-          })
-        )
-      : []
-
-  const [rostorAnchorEl, setRosterAnchorEl] = useState<null | HTMLElement>(null)
-  const openRoster = Boolean(rostorAnchorEl)
-  const handleRosterClick = (event: React.MouseEvent<HTMLElement>) => {
-    setRosterAnchorEl(event.currentTarget)
-  }
-  const handleRosterClose = () => {
-    setRosterAnchorEl(null)
-  }
-
   //Helper function to check if a given course has any groups without check-in emails
   function hasUnsentCheckIns(c: Course) {
     return c.groups.some((group) => !group.templateTimestamps['check-in'])
@@ -336,90 +264,10 @@ export const Dashboard = () => {
             />
           </Box>
         </Box>
-        <Button
-          id="logout-button"
-          aria-controls="logout-menu"
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-          endIcon={<KeyboardArrowDown />}
-          variant="text"
-          disableRipple
-        >
-          {user?.displayName}
-        </Button>
-        <Menu
-          id="logout-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'logout-button',
-          }}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          <CSVLink
-            data={csvCourses.filter((e) => e.semester === selectedRoster)}
-            filename={`export-courses-${Date.now()}`}
-          >
-            {' '}
-            <MenuItem>Export CSV (Courses)</MenuItem>
-          </CSVLink>
-          <CSVLink
-            data={csvStudents.filter((e) => e.semester === selectedRoster)}
-            filename={`export-students-${Date.now()}`}
-          >
-            <MenuItem>Export CSV (Students)</MenuItem>
-          </CSVLink>
-          <MenuItem onClick={handleRosterClick}>
-            <ChevronLeftIcon sx={{ color: 'essentials.75', ml: -1 }} />
-            Switch Semester
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              handleClose()
-              logOut()
-            }}
-          >
-            Log Out
-          </MenuItem>
-        </Menu>
-        <Menu
-          anchorEl={rostorAnchorEl}
-          open={openRoster}
-          onClick={handleRosterClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          sx={{
-            mt: -1.5,
-          }}
-        >
-          <MenuItem onClick={() => setSelectedRoster('SU22')}>
-            Summer 2022
-          </MenuItem>
-          <MenuItem onClick={() => setSelectedRoster('FA22')}>
-            Fall 2022
-          </MenuItem>
-          <MenuItem onClick={() => setSelectedRoster('WI22')}>
-            Winter 2022
-          </MenuItem>
-          <MenuItem onClick={() => setSelectedRoster('SP23')}>
-            Spring 2023
-          </MenuItem>
-        </Menu>
+        <AccountMenu
+          selectedRoster={selectedRoster}
+          setSelectedRoster={setSelectedRoster}
+        ></AccountMenu>
       </StyledHeaderMenu>
       <CourseGrid courses={filteredSortedCourses} />
     </StyledContainer>
