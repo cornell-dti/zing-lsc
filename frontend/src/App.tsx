@@ -14,6 +14,7 @@ import {
   SURVEY_PATH,
   EDIT_ZING_PATH,
   DASHBOARD_PATH,
+  METRICS_PATH,
   EMAIL_PATH,
   TEMPLATE_EDITOR_PATH,
   API_ROOT,
@@ -37,6 +38,7 @@ import { AdminHome } from 'AdminHome'
 import { Survey } from 'Survey'
 import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
+import { Metrics } from './modules/Metrics/Components/Metrics'
 import { Emailing } from 'Emailing'
 import { TemplateEditor } from 'TemplateEditor'
 import './App.css'
@@ -630,6 +632,11 @@ const App = () => {
                       exact
                       path={DASHBOARD_PATH}
                       component={Dashboard}
+                    />
+                    <PrivateRoute
+                      exact
+                      path={METRICS_PATH}
+                      component={Metrics}
                     />
                     <PrivateRoute
                       exact
