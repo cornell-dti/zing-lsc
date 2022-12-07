@@ -28,52 +28,39 @@ export const Metrics = () => {
     return date >= firstDayOfWeek && date <= lastDayOfWeek
   }
 
-  const collegeAbbreviations: { [key: string]: string } = {
-    CALS: 'College of Agriculture and Life Sciences',
-    AAP: 'College of Architecture, Art, and Planning',
-    'A&S': 'College of Arts and Sciences',
-    Engineering: 'College of Engineering',
-    HumEc: 'College of Human Ecology',
-    Dyson:
-      'Dyson School of Applied Economics and Management (SC Johnson College of Business)',
-    Nolan:
-      'Nolan School of Hotel Administration (SC Johnson College of Business)',
-    ILR: 'School of Industrial and Labor Relations',
-    SCE: 'School of Continuing Education & Summer Sessions',
-    'Grad School': 'Graduate/Professional School',
-  }
-  const num_students_in_week = students.map((student) =>
+  const collegeAbbreviations = require('@core/Questions/Questions.json')
+  const numStudentsInWeek = students.map((student) =>
     student.groups.filter((membership) =>
       isDateInThisWeek(membership.submissionTime)
     )
   )
   //calculate number of unique students who have made requests
-  const num_students = {
+  const numStudents = {
     number: students.length,
     title: 'UNIQUE STUDENTS',
     subtitle: 'made requests',
-    thisWeek: num_students_in_week.length,
+    thisWeek: numStudentsInWeek.length,
     showAdded: true,
   }
-  const courses_in_week: string[] = []
-  num_students_in_week.map((member) =>
-    member.map((memberships) => {
-      if (courses_in_week.indexOf(memberships.courseId) === -1) {
-        courses_in_week.push(memberships.courseId)
+  const coursesInWeek: string[] = []
+
+  numStudentsInWeek.forEach((member) => {
+    member.forEach((memberships) => {
+      if (coursesInWeek.indexOf(memberships.courseId) === -1) {
+        coursesInWeek.push(memberships.courseId)
       }
     })
-  )
-
+  })
   //calculate number of unique courses that have received requests
-  const num_courses = {
+  const numCourses = {
     number: courses.length,
     title: 'UNIQUE COURSES',
     subtitle: 'received requests',
-    thisWeek: courses_in_week.length,
+    thisWeek: coursesInWeek.length,
     showAdded: true,
   }
   //calculate total number of requests made by students
-  const num_requests = {
+  const numRequests = {
     number: students.reduce(
       (total, student) => total + student.groups.length,
       0
@@ -92,7 +79,7 @@ export const Metrics = () => {
   }
 
   //calculate number of students matched into groups
-  const num_matches = {
+  const numMatches = {
     number: courses.reduce(
       (courseTotal, course) =>
         courseTotal +
@@ -109,7 +96,7 @@ export const Metrics = () => {
   }
 
   //calculate number of students matched into groups
-  const num_groups = {
+  const numGroups = {
     number: courses.reduce((total, course) => total + course.groups.length, 0),
     title: 'GROUPS',
     subtitle: 'successfully made',
@@ -117,13 +104,7 @@ export const Metrics = () => {
     showAdded: false,
   }
 
-  const stats = [
-    num_students,
-    num_requests,
-    num_courses,
-    num_matches,
-    num_groups,
-  ]
+  const stats = [numStudents, numRequests, numCourses, numMatches, numGroups]
 
   //this can be removed if there is a place to store an objectMap() function
   const localeMap = (obj: { [key: string]: Date } | undefined) => {

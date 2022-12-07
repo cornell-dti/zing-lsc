@@ -39,10 +39,7 @@ export const StatCard = ({
               alignItems: 'center',
               padding: '2px 10px',
               gap: '10px',
-
-              width: '53px',
-              height: '24px',
-
+              objectFit: 'contain',
               background: '#D0EAD6',
               borderRadius: ' 8px',
             }}
