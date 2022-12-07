@@ -1,18 +1,20 @@
 import { useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
+import TextField from '@mui/material/TextField'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import {
   StyledContainer,
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
 import { CourseGrid } from 'Dashboard/Components/CourseGrid'
-import { Box, SelectChangeEvent } from '@mui/material'
+import { Box, IconButton, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
 import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
+import ClearIcon from '@mui/icons-material/Clear'
 
 type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
 type FilterOption =
@@ -22,6 +24,7 @@ type FilterOption =
   | 'matchable'
   | 'no-check-in-email'
   | 'no-no-match-email'
+
 export const defaultSortingOrder = 'newest-requests-first'
 export const defaultFilterOption = 'no-filter'
 
@@ -38,7 +41,6 @@ const sortOrderDisplay = [
   ['classes-a-z', 'Classes A-Z'],
   ['classes-z-a', 'Classes Z-A'],
 ]
-
 export const Dashboard = () => {
   const history = useHistory()
   const { courses } = useCourseValue()
@@ -77,7 +79,6 @@ export const Dashboard = () => {
       studentHasUnsentNoMatch(email, c.courseId)
     )
   }
-
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
   function filtered(courseInfo: Course[], menuValue: FilterOption) {
     switch (menuValue) {
@@ -131,6 +132,7 @@ export const Dashboard = () => {
         return courseInfo
     }
   }
+
   const handleSortedChange = (event: SelectChangeEvent) => {
     setSortedOrder(event.target.value as SortOrder)
     history.replace({
@@ -154,13 +156,21 @@ export const Dashboard = () => {
 
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
 
-  const sortedAndFilteredCourses = sorted(
-    filtered(
-      courses.filter((course) => course.roster === selectedRoster),
-      filteredOption
+  const [query, setQuery] = useState('')
+
+  const handleSearch = (event: {
+    target: { value: React.SetStateAction<string> }
+  }) => {
+    setQuery(event.target.value)
+  }
+
+  const filteredSortedCourses = filtered(
+    sorted(
+      courses.filter((c) => c.roster === selectedRoster),
+      sortedOrder
     ),
-    sortedOrder
-  )
+    filteredOption
+  ).filter((d) => d.names.some((e) => e.includes(query.toUpperCase())))
 
   return (
     <StyledContainer>
@@ -168,61 +178,98 @@ export const Dashboard = () => {
         <LogoImg />
 
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <Box
-            sx={{
-              fontWeight: 'bold',
-              color: 'essentials.75',
-              padding: 1,
-              margin: 1,
-            }}
-          >
-            Sort by:
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box
+              sx={{
+                fontWeight: 'bold',
+                color: 'essentials.75',
+                padding: 1,
+                margin: 1,
+                maxWidth: '300px',
+              }}
+            >
+              Sort:
+            </Box>
+            <DropdownSelect
+              value={sortedOrder}
+              onChange={handleSortedChange}
+              sx={{
+                padding: 0,
+                margin: 0,
+                fontWeight: 'bold',
+                maxWidth: '250px',
+              }}
+            >
+              {sortOrderDisplay.map(([object, name]) => (
+                <MenuItem value={object}> {name}</MenuItem>
+              ))}
+            </DropdownSelect>
           </Box>
-          <DropdownSelect
-            value={sortedOrder}
-            onChange={handleSortedChange}
-            sx={{
-              padding: 0,
-              margin: 0,
-              fontWeight: 'bold',
-            }}
-          >
-            {sortOrderDisplay.map(([object, name]) => (
-              <MenuItem value={object}> {name}</MenuItem>
-            ))}
-          </DropdownSelect>
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <Box
-            sx={{
-              fontWeight: 'bold',
-              color: 'essentials.75',
-              padding: 1,
-              margin: 1,
-            }}
-          >
-            Filter:
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box
+              sx={{
+                fontWeight: 'bold',
+                color: 'essentials.75',
+                padding: 1,
+                margin: 1,
+              }}
+            >
+              Filter:
+            </Box>
+            <DropdownSelect
+              value={filteredOption}
+              onChange={handleFilterChange}
+              sx={{
+                padding: 0,
+                margin: 0,
+                fontWeight: 'bold',
+                maxWidth: '250px',
+              }}
+            >
+              {filterOptionDisplay.map(([object, name]) => (
+                <MenuItem value={object}> {name}</MenuItem>
+              ))}
+            </DropdownSelect>
           </Box>
-          <DropdownSelect
-            value={filteredOption}
-            onChange={handleFilterChange}
-            sx={{
-              padding: 0,
-              margin: 0,
-              fontWeight: 'bold',
-            }}
-          >
-            {filterOptionDisplay.map(([object, name]) => (
-              <MenuItem value={object}> {name}</MenuItem>
-            ))}
-          </DropdownSelect>
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box
+              sx={{
+                fontWeight: 'bold',
+                color: 'essentials.75',
+                padding: 1,
+                margin: 1,
+              }}
+            >
+              Search:
+            </Box>
+            <TextField
+              id="search-bar"
+              label="Search for a course"
+              variant="outlined"
+              sx={{
+                padding: 0,
+                margin: 0,
+                width: 200,
+                maxWidth: '250px',
+              }}
+              value={query}
+              onChange={handleSearch}
+              InputProps={{
+                endAdornment: query ? (
+                  <IconButton size="small" onClick={() => setQuery('')}>
+                    <ClearIcon />
+                  </IconButton>
+                ) : undefined,
+              }}
+            />
+          </Box>
         </Box>
         <AccountMenu
           selectedRoster={selectedRoster}
           setSelectedRoster={setSelectedRoster}
         ></AccountMenu>
       </StyledHeaderMenu>
-      <CourseGrid courses={sortedAndFilteredCourses} />
+      <CourseGrid courses={filteredSortedCourses} />
     </StyledContainer>
   )
 }
