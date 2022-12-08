@@ -1,29 +1,29 @@
 import { useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
-import TextField from '@mui/material/TextField'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import {
   StyledContainer,
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
 import { CourseGrid } from 'Dashboard/Components/CourseGrid'
-import { Box, IconButton, SelectChangeEvent } from '@mui/material'
+import { useAuthValue } from '@auth'
+import { Box, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { Course } from '@core/Types'
+import { Link } from '@mui/material'
 import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
-import ClearIcon from '@mui/icons-material/Clear'
 type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
 type FilterOption =
   | 'no-filter'
   | 'unmatchable'
   | 'newly-matchable'
   | 'matchable'
+  | 'can-add-to-existing-group'
   | 'no-check-in-email'
   | 'no-no-match-email'
-
 export const defaultSortingOrder = 'newest-requests-first'
 export const defaultFilterOption = 'no-filter'
 
@@ -32,6 +32,7 @@ const filterOptionDisplay = [
   ['unmatchable', 'Unmatchable'],
   ['newly-matchable', 'Newly Matchable'],
   ['matchable', 'Matchable'],
+  ['can-add-to-existing-group', 'Can Add to Existing group'],
   ['no-check-in-email', 'No Check In Email'],
   ['no-no-match-email', 'No No Match Email'],
 ]
@@ -40,8 +41,10 @@ const sortOrderDisplay = [
   ['classes-a-z', 'Classes A-Z'],
   ['classes-z-a', 'Classes Z-A'],
 ]
+
 export const Dashboard = () => {
   const history = useHistory()
+  const { user } = useAuthValue()
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
   const state = history.location.state as {
@@ -78,6 +81,7 @@ export const Dashboard = () => {
       studentHasUnsentNoMatch(email, c.courseId)
     )
   }
+
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
   function filtered(courseInfo: Course[], menuValue: FilterOption) {
     switch (menuValue) {
@@ -98,6 +102,11 @@ export const Dashboard = () => {
           (course, _) =>
             (course.lastGroupNumber > 0 && course.unmatched.length > 0) ||
             (course.lastGroupNumber === 0 && course.unmatched.length > 1)
+        )
+      case 'can-add-to-existing-group':
+        return [...courseInfo].filter(
+          (course, _) =>
+            course.lastGroupNumber > 0 && course.unmatched.length === 1
         )
       case 'no-check-in-email':
         return courseInfo.filter(hasUnsentCheckIns)
@@ -131,7 +140,6 @@ export const Dashboard = () => {
         return courseInfo
     }
   }
-
   const handleSortedChange = (event: SelectChangeEvent) => {
     setSortedOrder(event.target.value as SortOrder)
     history.replace({
@@ -155,21 +163,13 @@ export const Dashboard = () => {
 
   const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
 
-  const [query, setQuery] = useState('')
-
-  const handleSearch = (event: {
-    target: { value: React.SetStateAction<string> }
-  }) => {
-    setQuery(event.target.value)
-  }
-
-  const filteredSortedCourses = filtered(
-    sorted(
-      courses.filter((c) => c.roster === selectedRoster),
-      sortedOrder
+  const sortedAndFilteredCourses = sorted(
+    filtered(
+      courses.filter((course) => course.roster === selectedRoster),
+      filteredOption
     ),
-    filteredOption
-  ).filter((d) => d.names.some((e) => e.includes(query.toUpperCase())))
+    sortedOrder
+  )
 
   return (
     <StyledContainer>
@@ -177,100 +177,66 @@ export const Dashboard = () => {
         <LogoImg />
 
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Box
-              sx={{
-                fontWeight: 'bold',
-                color: 'essentials.75',
-                padding: 1,
-                margin: 1,
-                maxWidth: '300px',
-              }}
-            >
-              Sort:
-            </Box>
-            <DropdownSelect
-              value={sortedOrder}
-              onChange={handleSortedChange}
-              sx={{
-                padding: 0,
-                margin: 0,
-                fontWeight: 'bold',
-                maxWidth: '250px',
-              }}
-            >
-              {sortOrderDisplay.map(([object, name]) => (
-                <MenuItem value={object}> {name}</MenuItem>
-              ))}
-            </DropdownSelect>
+          <Link href="/metrics" underline="none">
+            Metrics
+          </Link>
+          <Box
+            sx={{
+              fontWeight: 'bold',
+              color: 'essentials.75',
+              padding: 1,
+              margin: 1,
+            }}
+          >
+            Sort by:
           </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Box
-              sx={{
-                fontWeight: 'bold',
-                color: 'essentials.75',
-                padding: 1,
-                margin: 1,
-              }}
-            >
-              Filter:
-            </Box>
-            <DropdownSelect
-              value={filteredOption}
-              onChange={handleFilterChange}
-              sx={{
-                padding: 0,
-                margin: 0,
-                fontWeight: 'bold',
-                maxWidth: '250px',
-              }}
-            >
-              {filterOptionDisplay.map(([object, name]) => (
-                <MenuItem value={object}> {name}</MenuItem>
-              ))}
-            </DropdownSelect>
+          <DropdownSelect
+            value={sortedOrder}
+            onChange={handleSortedChange}
+            sx={{
+              padding: 0,
+              margin: 0,
+              fontWeight: 'bold',
+            }}
+          >
+            {sortOrderDisplay.map(([object, name]) => (
+              <MenuItem value={object}> {name}</MenuItem>
+            ))}
+          </DropdownSelect>
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Box
+            sx={{
+              fontWeight: 'bold',
+              color: 'essentials.75',
+              padding: 1,
+              margin: 1,
+            }}
+          >
+            Filter:
           </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Box
-              sx={{
-                fontWeight: 'bold',
-                color: 'essentials.75',
-                padding: 1,
-                margin: 1,
-              }}
-            >
-              Search:
-            </Box>
-            <TextField
-              id="search-bar"
-              label="Search for a course"
-              variant="outlined"
-              sx={{
-                padding: 0,
-                margin: 0,
-                width: 200,
-                maxWidth: '250px',
-              }}
-              value={query}
-              onChange={handleSearch}
-              InputProps={{
-                endAdornment: query ? (
-                  <IconButton size="small" onClick={() => setQuery('')}>
-                    <ClearIcon />
-                  </IconButton>
-                ) : undefined,
-              }}
-            />
-          </Box>
+          <DropdownSelect
+            value={filteredOption}
+            onChange={handleFilterChange}
+            sx={{
+              padding: 0,
+              margin: 0,
+              fontWeight: 'bold',
+            }}
+          >
+            {filterOptionDisplay.map(([object, name]) => (
+              <MenuItem value={object}> {name}</MenuItem>
+            ))}
+          </DropdownSelect>
         </Box>
         <AccountMenu
           selectedRoster={selectedRoster}
           setSelectedRoster={setSelectedRoster}
-          showMetricsLink={true}
+          showMetricsLink={false}
           showDashboardLink={false}
-        />
+        ></AccountMenu>
       </StyledHeaderMenu>
-      <CourseGrid courses={filteredSortedCourses} />
+      <CourseGrid courses={sortedAndFilteredCourses} />
     </StyledContainer>
   )
 }
