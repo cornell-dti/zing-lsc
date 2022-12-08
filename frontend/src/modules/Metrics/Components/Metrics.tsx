@@ -28,7 +28,9 @@ export const Metrics = () => {
     return date >= firstDayOfWeek && date <= lastDayOfWeek
   }
 
-  const collegeAbbreviations = require('@core/Questions/Questions.json')
+  const collegeAbbreviations = require('@core/Questions/Questions.json')[0][
+    'answers'
+  ]
   const numStudentsInWeek = students.map((student) =>
     student.groups.filter((membership) =>
       isDateInThisWeek(membership.submissionTime)
@@ -219,7 +221,7 @@ export const Metrics = () => {
           setSelectedRoster={setSelectedRoster}
           showMetricsLink={false}
           showDashboardLink={true}
-        ></AccountMenu>
+        />
       </Box>
       <Box
         sx={{

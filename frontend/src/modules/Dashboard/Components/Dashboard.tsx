@@ -7,7 +7,6 @@ import {
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
 import { CourseGrid } from 'Dashboard/Components/CourseGrid'
-import { useAuthValue } from '@auth'
 import { Box, IconButton, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
@@ -43,7 +42,6 @@ const sortOrderDisplay = [
 ]
 export const Dashboard = () => {
   const history = useHistory()
-  const { user } = useAuthValue()
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
   const state = history.location.state as {
@@ -270,7 +268,7 @@ export const Dashboard = () => {
           setSelectedRoster={setSelectedRoster}
           showMetricsLink={true}
           showDashboardLink={false}
-        ></AccountMenu>
+        />
       </StyledHeaderMenu>
       <CourseGrid courses={filteredSortedCourses} />
     </StyledContainer>
