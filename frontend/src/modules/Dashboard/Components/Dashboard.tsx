@@ -22,6 +22,7 @@ type FilterOption =
   | 'unmatchable'
   | 'newly-matchable'
   | 'matchable'
+  | 'can-add-to-existing-group'
   | 'no-check-in-email'
   | 'no-no-match-email'
 
@@ -33,6 +34,7 @@ const filterOptionDisplay = [
   ['unmatchable', 'Unmatchable'],
   ['newly-matchable', 'Newly Matchable'],
   ['matchable', 'Matchable'],
+  ['can-add-to-existing-group', 'Can Add to Existing group'],
   ['no-check-in-email', 'No Check In Email'],
   ['no-no-match-email', 'No No Match Email'],
 ]
@@ -99,6 +101,11 @@ export const Dashboard = () => {
           (course, _) =>
             (course.lastGroupNumber > 0 && course.unmatched.length > 0) ||
             (course.lastGroupNumber === 0 && course.unmatched.length > 1)
+        )
+      case 'can-add-to-existing-group':
+        return [...courseInfo].filter(
+          (course, _) =>
+            course.lastGroupNumber > 0 && course.unmatched.length === 1
         )
       case 'no-check-in-email':
         return courseInfo.filter(hasUnsentCheckIns)
