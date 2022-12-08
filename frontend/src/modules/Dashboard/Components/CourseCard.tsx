@@ -7,6 +7,7 @@ import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
 import { ReactComponent as WarningIcon } from '@assets/img/warning.svg'
 import { useHistory } from 'react-router'
 import { defaultSortingOrder, defaultFilterOption } from './Dashboard'
+
 export const CourseCard = ({
   id,
   name,
