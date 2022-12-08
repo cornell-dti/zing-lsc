@@ -28,8 +28,9 @@ export const StatGrid = ({ stats }: StatGridProps) => {
             py: 4,
           }}
         >
-          {stats.map((s) => (
+          {stats.map((s, index) => (
             <StatCard
+              key={index}
               number={s.number}
               title={s.title}
               subtitle={s.subtitle}
