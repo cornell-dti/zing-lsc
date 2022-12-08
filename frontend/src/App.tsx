@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   Alert,
+  Button,
   Snackbar,
   StyledEngineProvider,
   ThemeProvider,
@@ -13,6 +14,7 @@ import {
   SURVEY_PATH,
   EDIT_ZING_PATH,
   DASHBOARD_PATH,
+  METRICS_PATH,
   EMAIL_PATH,
   TEMPLATE_EDITOR_PATH,
   API_ROOT,
@@ -36,6 +38,7 @@ import { AdminHome } from 'AdminHome'
 import { Survey } from 'Survey'
 import { EditZing } from 'EditZing'
 import { Dashboard } from 'Dashboard'
+import { Metrics } from './modules/Metrics/Components/Metrics'
 import { Emailing } from 'Emailing'
 import { TemplateEditor } from 'TemplateEditor'
 import './App.css'
@@ -49,12 +52,27 @@ import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
 import { getToken } from 'firebase/app-check'
+import React from 'react'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [authState, setAuthState] = useState<AuthState>('loading')
   const axiosAuthInterceptor = useRef<number | null>(null)
   const [networkError, setNetworkError] = useState<string | null>(null)
+
+  const [needsRefresh, setNeedsRefresh] = useState(false)
+  const checkRefreshDuration = 600000 // (10 min)
+
+  const reloadButton = (
+    <Button
+      variant="text"
+      size="small"
+      onClick={() => window.location.reload()}
+      color="secondary"
+    >
+      Reload
+    </Button>
+  )
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -152,6 +170,51 @@ const App = () => {
       }
     )
   }
+
+  useEffect(() => {
+    if (hasLoadedCourses && hasLoadedStudents) {
+      const interval = setInterval(async () => {
+        let newStudents = []
+
+        try {
+          newStudents = (await axios.get(`${API_ROOT}${STUDENT_API}`)).data.map(
+            responseStudentToStudent
+          )
+        } catch (e) {
+          setNetworkError('Error fetching students')
+        }
+
+        if (newStudents.length !== students.length) {
+          setNeedsRefresh(true)
+          return
+        }
+
+        newStudents.forEach((student: Student, index: number) => {
+          let groupMembership = student.groups
+          let oldGroupMembership = students[index].groups
+          if (groupMembership.length === oldGroupMembership.length) {
+            groupMembership.forEach((membership, ind) => {
+              if (
+                membership.groupNumber !== oldGroupMembership[ind].groupNumber
+              ) {
+                setNeedsRefresh(true)
+              }
+            })
+          } else {
+            setNeedsRefresh(true)
+          }
+        })
+      }, checkRefreshDuration)
+      return () => clearInterval(interval)
+    }
+  }, [
+    courses,
+    courses.length,
+    hasLoadedCourses,
+    hasLoadedStudents,
+    students,
+    students.length,
+  ])
 
   /** Add an unmatched student to a group */
   const moveStudentFromUnmatched = (
@@ -567,6 +630,12 @@ const App = () => {
                     appendForm,
                   }}
                 >
+                  <Snackbar
+                    open={needsRefresh}
+                    message="The information in your app is out of date.
+                      Please reload to see the latest updates."
+                    action={reloadButton}
+                  />
                   <Switch>
                     <PublicRoute exact path={HOME_PATH} component={Home} />
                     <PublicRoute
@@ -579,6 +648,11 @@ const App = () => {
                       exact
                       path={DASHBOARD_PATH}
                       component={Dashboard}
+                    />
+                    <PrivateRoute
+                      exact
+                      path={METRICS_PATH}
+                      component={Metrics}
                     />
                     <PrivateRoute
                       exact

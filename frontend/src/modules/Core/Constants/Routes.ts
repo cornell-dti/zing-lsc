@@ -4,6 +4,7 @@ export const SURVEY_PATH = '/survey'
 export const CREATE_ZING_PATH = '/createzing'
 export const EDIT_ZING_PATH = '/edit'
 export const DASHBOARD_PATH = '/dashboard'
+export const METRICS_PATH = '/metrics'
 export const EMAIL_PATH = '/email'
 export const TEMPLATE_EDITOR_PATH = '/templates'
 
