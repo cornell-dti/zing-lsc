@@ -42,12 +42,18 @@ export const Metrics = () => {
       isDateInThisWeek(membership.submissionTime)
     )
   )
+  const uniqueStudentsInWeek = []
+  for (let i = 0; i < numStudentsInWeek.length; i++) {
+    if (numStudentsInWeek[i].length === students[i].groups.length) {
+      uniqueStudentsInWeek.push(students[i])
+    }
+  }
   //calculate number of unique students who have made requests
   const numStudents = {
     number: students.length,
     title: 'UNIQUE STUDENTS',
     subtitle: 'made requests',
-    thisWeek: numStudentsInWeek.length,
+    thisWeek: uniqueStudentsInWeek.length,
     showAdded: true,
   }
   const coursesInWeek: string[] = []
