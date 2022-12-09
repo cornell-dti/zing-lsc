@@ -16,6 +16,7 @@ import { Link } from '@mui/material'
 import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
+
 type FilterOption =
   | 'no-filter'
   | 'unmatchable'
