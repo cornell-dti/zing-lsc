@@ -16,6 +16,7 @@ import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 import ClearIcon from '@mui/icons-material/Clear'
 type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
+
 type FilterOption =
   | 'no-filter'
   | 'unmatchable'
