@@ -41,6 +41,7 @@ export interface GroupGridProps {
   updateTime: Date
   selected: boolean
   selectedStudents: string[]
+  removeGroups: (courseId: string, groupNumber: number) => void
   handleChecked: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleAddStudent: (student: string, selected: boolean) => void
   updateNotes: (
@@ -109,4 +110,9 @@ export interface EmailModalContentProps {
 export interface EmailPreviewProps {
   template: EmailTemplate
   replacedHtml: string
+}
+
+export interface DeleteGroupProps {
+  open: boolean
+  handleClose: () => void
 }
