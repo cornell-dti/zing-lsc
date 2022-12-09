@@ -25,6 +25,7 @@ const GroupCard = ({
   handleAddStudent,
   updateNotes,
   removeGroups,
+  undoRemove,
 }: GroupGridProps) => {
   /**
    * Helper to format the timestamp data in a way that is helpful for displaying in tooltips

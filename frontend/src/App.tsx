@@ -596,6 +596,24 @@ const App = () => {
     )
   }
 
+  const undoRemove = (courseId: string, groupNumber: number) => {
+    setCourses(
+      courses.map((course) =>
+        course.courseId === courseId
+          ? {
+              ...course,
+              unmatched: [...course.unmatched],
+              groups: course.groups.map((group) =>
+                groupNumber === group.groupNumber
+                  ? { ...group, hidden: false }
+                  : group
+              ),
+            }
+          : course
+      )
+    )
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -616,6 +634,7 @@ const App = () => {
                 matchStudents,
                 addGroupEmailTimestamps,
                 removeGroups,
+                undoRemove,
               }}
             >
               <StudentProvider
