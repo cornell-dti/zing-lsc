@@ -9,7 +9,7 @@ import React from 'react'
 
 export const AdminHome = () => {
   const [isLoading, setLoading] = React.useState(false)
-  function handleLoginClick() {
+  function handleSigninClick() {
     setLoading(true)
   }
   return (
@@ -68,16 +68,17 @@ export const AdminHome = () => {
         </Typography>
         <LoadingButton
           loading={isLoading}
-          color="secondary"
+          color={isLoading ? undefined : 'secondary'}
           variant="outlined"
           sx={{
+            backgroundColor: 'white',
             width: '14em',
             fontSize: '22px',
             mb: '1.25em',
           }}
           onClick={() => {
-            handleLoginClick()
-            adminSignIn().catch(() => {})
+            handleSigninClick()
+            // adminSignIn().catch(() => { })
           }}
         >
           LSC Admin Login
