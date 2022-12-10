@@ -1,11 +1,17 @@
 import { StyledBackground } from 'Home/Styles/Home.style'
 import { adminSignIn } from '@fire'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import matchimg from '@assets/img/matching.svg'
 
 import { ReactComponent as CornellSeal } from '@assets/img/CornellSealWhite.svg'
+import { LoadingButton } from '@mui/lab'
+import React from 'react'
 
 export const AdminHome = () => {
+  const [isLoading, setLoading] = React.useState(false)
+  function handleLoginClick() {
+    setLoading(true)
+  }
   return (
     <StyledBackground>
       <Box
@@ -60,7 +66,8 @@ export const AdminHome = () => {
           Connect students. <br />
           Create groups.
         </Typography>
-        <Button
+        <LoadingButton
+          loading={isLoading}
           color="secondary"
           variant="outlined"
           sx={{
@@ -69,11 +76,12 @@ export const AdminHome = () => {
             mb: '1.25em',
           }}
           onClick={() => {
+            handleLoginClick()
             adminSignIn().catch(() => {})
           }}
         >
           LSC Admin Login
-        </Button>
+        </LoadingButton>
       </Box>
       <Box
         sx={{
