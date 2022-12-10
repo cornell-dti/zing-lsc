@@ -78,7 +78,7 @@ export const AdminHome = () => {
           }}
           onClick={() => {
             handleSigninClick()
-            // adminSignIn().catch(() => { })
+            adminSignIn().catch(() => {})
           }}
         >
           LSC Admin Login
