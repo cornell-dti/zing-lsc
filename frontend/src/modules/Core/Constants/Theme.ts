@@ -294,6 +294,16 @@ theme = createTheme(theme, {
         },
       },
     },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: theme.palette.essentials.main,
+          color: 'white',
+          fontWeight: 600,
+          borderRadius: '10px',
+        },
+      },
+    },
   },
 })
 
