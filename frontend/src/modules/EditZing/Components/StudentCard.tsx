@@ -191,16 +191,6 @@ const StudentCard = ({
                     key={index}
                     title={`${timestamp.name + ': ' + month}/${day}`}
                     placement="bottom-start"
-                    componentsProps={{
-                      tooltip: {
-                        sx: {
-                          bgcolor: 'essentials.main',
-                          color: 'white',
-                          fontWeight: 600,
-                          borderRadius: '10px',
-                        },
-                      },
-                    }}
                   >
                     <CircleIcon sx={{ fontSize: 10 }} color="primary" />
                   </Tooltip>
