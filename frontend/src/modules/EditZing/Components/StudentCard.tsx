@@ -1,16 +1,16 @@
 import { useState } from 'react'
-import Paper from '@mui/material/Paper'
 import { STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrag } from 'react-dnd'
-import Tooltip from '@mui/material/Tooltip'
 import {
   Checkbox,
   Box,
+  Tooltip,
   Typography,
   Snackbar,
   IconButton,
   SvgIcon,
+  Paper,
 } from '@mui/material'
 import NotesModal from './NotesModal'
 import { ReactComponent as FilledEditIcon } from '@assets/img/FilledEditIcon.svg'
