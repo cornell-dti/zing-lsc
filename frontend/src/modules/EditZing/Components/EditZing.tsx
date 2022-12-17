@@ -20,6 +20,7 @@ import {
 } from '@mui/material'
 import { ReactComponent as Lsc } from '@assets/img/lscicon.svg'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import { useHistory } from 'react-router-dom'
 import { DASHBOARD_PATH } from '@core/Constants'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
@@ -32,8 +33,9 @@ const LscIcon = (props: SvgIconProps) => {
 
 export const EditZing = () => {
   const { courseId } = useParams<{ courseId: string }>()
-
-  const { courses, moveStudent, matchStudents } = useCourseValue()
+  const history = useHistory()
+  const state = history.location.state as any
+  const { courses, moveStudent, matchStudents, removeGroups } = useCourseValue()
   const { students, updateNotes } = useStudentValue()
   const { templates } = useTemplateValue()
 
@@ -188,7 +190,17 @@ export const EditZing = () => {
         <IconButton
           color="secondary"
           component={Link}
-          to={DASHBOARD_PATH}
+          to={{
+            pathname: DASHBOARD_PATH,
+            state: {
+              sortedOrder: state?.sortedOrder
+                ? state.sortedOrder
+                : 'newest-requests-first',
+              filterOption: state?.filterOption
+                ? state.filterOption
+                : 'no-filter',
+            },
+          }}
           sx={{
             border: 'none',
           }}
@@ -266,31 +278,34 @@ export const EditZing = () => {
                 updateNotes={updateNotes}
               />
             </Box>
-            {copyStudentGroups.map((studentGroup) => (
-              <GroupCard
-                key={studentGroup.groupNumber}
-                courseId={courseId}
-                studentList={getStudentsFromEmails(studentGroup.members)}
-                groupNumber={studentGroup.groupNumber}
-                templateMap={templateNameMap}
-                groupTimestamps={studentGroup.templateTimestamps}
-                moveStudent={moveStudent}
-                createTime={studentGroup.createTime}
-                updateTime={studentGroup.updateTime}
-                selected={selectedGroupNumbers.includes(
-                  studentGroup.groupNumber
-                )}
-                selectedStudents={selectedStudentEmails}
-                handleChecked={(event) => {
-                  editSelectedGroupNumbers(
-                    studentGroup.groupNumber,
-                    event.target.checked
-                  )
-                }}
-                handleAddStudent={editSelectedStudentEmails}
-                updateNotes={updateNotes}
-              />
-            ))}
+            {copyStudentGroups
+              .filter((e) => !e.hidden)
+              .map((studentGroup) => (
+                <GroupCard
+                  key={studentGroup.groupNumber}
+                  courseId={courseId}
+                  studentList={getStudentsFromEmails(studentGroup.members)}
+                  groupNumber={studentGroup.groupNumber}
+                  templateMap={templateNameMap}
+                  groupTimestamps={studentGroup.templateTimestamps}
+                  moveStudent={moveStudent}
+                  createTime={studentGroup.createTime}
+                  updateTime={studentGroup.updateTime}
+                  selected={selectedGroupNumbers.includes(
+                    studentGroup.groupNumber
+                  )}
+                  selectedStudents={selectedStudentEmails}
+                  handleChecked={(event) => {
+                    editSelectedGroupNumbers(
+                      studentGroup.groupNumber,
+                      event.target.checked
+                    )
+                  }}
+                  handleAddStudent={editSelectedStudentEmails}
+                  updateNotes={updateNotes}
+                  removeGroups={removeGroups}
+                />
+              ))}
           </Box>
         </DndProvider>
       </Box>

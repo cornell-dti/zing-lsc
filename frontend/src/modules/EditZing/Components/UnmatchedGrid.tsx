@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import StudentCard from 'EditZing/Components/StudentCard'
 import Grid, { GridSize } from '@mui/material/Grid'
 import { UnmatchedGridProps } from 'EditZing/Types/ComponentProps'
@@ -9,7 +9,7 @@ import {
 } from 'EditZing/Styles/StudentAndGroup.style'
 import { useDrop } from 'react-dnd'
 import { DnDStudentTransferType, STUDENT_TYPE } from 'EditZing/Types/Student'
-import { MatchButton } from './MatchButton'
+import { colors } from '@core/Constants'
 
 /** Where unmatched students live in the grid */
 export const UnmatchedGrid = ({
@@ -43,7 +43,19 @@ export const UnmatchedGrid = ({
           <StyledUnmatchedText>
             Unmatched Students ({unmatchedStudents.length})
           </StyledUnmatchedText>
-          <MatchButton label="Match" onClick={handleMatchStudents} />
+          <Button
+            variant="contained"
+            onClick={handleMatchStudents}
+            disabled={unmatchedStudents.length < 2}
+            sx={{
+              backgroundColor: colors.darkgreen,
+              '&:hover': {
+                backgroundColor: colors.darkgreen,
+              },
+            }}
+          >
+            Match
+          </Button>
         </StyledUnmatchedTextWrapper>
         <Box sx={{ display: 'flex', flexFlow: 'row wrap', gap: '8px' }}>
           {unmatchedStudents.map((student, index) => (
