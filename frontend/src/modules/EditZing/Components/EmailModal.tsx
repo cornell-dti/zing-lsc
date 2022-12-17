@@ -1,6 +1,6 @@
 // external imports
 import { useState } from 'react'
-import { Box, Button, Icon, IconButton, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useParams } from 'react-router-dom'
 // zing imports
