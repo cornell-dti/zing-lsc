@@ -43,11 +43,11 @@ export const Metrics = () => {
     )
   )
   const uniqueStudentsInWeek = []
-  for (let i = 0; i < numStudentsInWeek.length; i++) {
-    if (numStudentsInWeek[i].length === students[i].groups.length) {
+  numStudentsInWeek.forEach((student, i) => {
+    if (student.length === students[i].groups.length) {
       uniqueStudentsInWeek.push(students[i])
     }
-  }
+  })
   //calculate number of unique students who have made requests
   const numStudents = {
     number: students.length,
@@ -57,7 +57,6 @@ export const Metrics = () => {
     showAdded: true,
   }
   const coursesInWeek: string[] = []
-
   numStudentsInWeek.forEach((member) => {
     member.forEach((memberships) => {
       if (coursesInWeek.indexOf(memberships.courseId) === -1) {
@@ -65,6 +64,7 @@ export const Metrics = () => {
       }
     })
   })
+
   //calculate number of unique courses that have received requests
   const numCourses = {
     number: courses.length,
