@@ -10,6 +10,7 @@ import { MetricsTable } from './MetricsTable'
 import { DropdownSelect } from '@core/Components'
 import { DASHBOARD_PATH } from '@core/Constants'
 import { Link } from 'react-router-dom'
+import { GroupMembership } from '@core/index'
 
 export const Metrics = () => {
   const { courses } = useCourseValue()
@@ -34,92 +35,6 @@ export const Metrics = () => {
     return date >= firstDayOfWeek && date <= lastDayOfWeek
   }
 
-  const collegeAbbreviations = require('@core/Questions/Questions.json')[0][
-    'answers'
-  ]
-  const numStudentsInWeek = students.map((student) =>
-    student.groups.filter((membership) =>
-      isDateInThisWeek(membership.submissionTime)
-    )
-  )
-  const uniqueStudentsInWeek = []
-  numStudentsInWeek.forEach((student, i) => {
-    if (student.length === students[i].groups.length) {
-      uniqueStudentsInWeek.push(students[i])
-    }
-  })
-  //calculate number of unique students who have made requests
-  const numStudents = {
-    number: students.length,
-    title: 'UNIQUE STUDENTS',
-    subtitle: 'made requests',
-    thisWeek: uniqueStudentsInWeek.length,
-    showAdded: true,
-  }
-  const coursesInWeek: string[] = []
-  numStudentsInWeek.forEach((member) => {
-    member.forEach((memberships) => {
-      if (coursesInWeek.indexOf(memberships.courseId) === -1) {
-        coursesInWeek.push(memberships.courseId)
-      }
-    })
-  })
-
-  //calculate number of unique courses that have received requests
-  const numCourses = {
-    number: courses.length,
-    title: 'UNIQUE COURSES',
-    subtitle: 'received requests',
-    thisWeek: coursesInWeek.length,
-    showAdded: true,
-  }
-  //calculate total number of requests made by students
-  const numRequests = {
-    number: students.reduce(
-      (total, student) => total + student.groups.length,
-      0
-    ),
-    title: 'REQUESTS',
-    subtitle: 'made in total',
-    thisWeek: students.reduce(
-      (total, student) =>
-        total +
-        student.groups.filter((membership) =>
-          isDateInThisWeek(membership.submissionTime)
-        ).length,
-      0
-    ),
-    showAdded: true,
-  }
-
-  //calculate number of students matched into groups
-  const numMatches = {
-    number: courses.reduce(
-      (courseTotal, course) =>
-        courseTotal +
-        course.groups.reduce(
-          (groupTotal, group) => groupTotal + group.members.length,
-          0
-        ),
-      0
-    ),
-    title: 'MATCHES',
-    subtitle: 'made in total',
-    thisWeek: 0,
-    showAdded: false,
-  }
-
-  //calculate number of students matched into groups
-  const numGroups = {
-    number: courses.reduce((total, course) => total + course.groups.length, 0),
-    title: 'GROUPS',
-    subtitle: 'successfully made',
-    thisWeek: 0,
-    showAdded: false,
-  }
-
-  const stats = [numStudents, numRequests, numCourses, numMatches, numGroups]
-
   //this can be removed if there is a place to store an objectMap() function
   const localeMap = (obj: { [key: string]: Date } | undefined) => {
     if (!obj) {
@@ -130,6 +45,11 @@ export const Metrics = () => {
     )
   }
 
+  const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
+  const studentsInSemester = new Map<
+    string,
+    { semester: string; groups: GroupMembership[]; college: string }
+  >()
   const allStudents =
     courses.length && students.length // Just making sure this isn't calculated until the data is available
       ? students.flatMap((student) =>
@@ -141,6 +61,14 @@ export const Metrics = () => {
               // undefined if student is unmatched
               (g) => g.groupNumber === membership.groupNumber
             )
+            if (course.roster === selectedRoster) {
+              studentsInSemester.set(student.email, {
+                semester: course.roster,
+                groups: student.groups,
+                college: student.college,
+              })
+            }
+
             return {
               semester: course.roster,
               cornellEmail: student.email,
@@ -164,10 +92,117 @@ export const Metrics = () => {
         self.indexOf(value) === index
     )
   }
-  const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
   const chosenSemesterStudents = allStudents.filter(
     (e) => e.semester === selectedRoster
   )
+  const chosenSemesterCourses = courses.filter(
+    (e) => e.roster === selectedRoster
+  )
+  const collegeAbbreviations = require('@core/Questions/Questions.json')[0][
+    'answers'
+  ]
+  const numStudentsInWeek = new Map<
+    string,
+    { semester: string; groups: GroupMembership[]; college: string }
+  >()
+  let uniqueStudentsInWeek = 0
+  let numberOfRequests = 0
+  let numberOfRequestsInWeek = 0
+  const coursesInWeek: string[] = []
+
+  studentsInSemester.forEach((studentValues, student) =>
+    studentValues.groups.map((membership) => {
+      numberOfRequests += 1
+      if (
+        isDateInThisWeek(membership.submissionTime) &&
+        numStudentsInWeek.get(student) == null
+      ) {
+        numStudentsInWeek.set(student, {
+          semester: studentValues.semester,
+          groups: studentValues.groups.filter((group) =>
+            isDateInThisWeek(group.submissionTime)
+          ),
+          college: studentValues.college,
+        })
+      }
+      return (
+        isDateInThisWeek(membership.submissionTime) &&
+        numStudentsInWeek.get(student) == null
+      )
+    })
+  )
+  numStudentsInWeek.forEach((studentValues, student) => {
+    const originalGroups =
+      studentsInSemester.get(student) != null
+        ? studentsInSemester.get(student)?.groups.length
+        : 0
+    if (studentValues.groups.length === originalGroups) {
+      uniqueStudentsInWeek += 1
+    }
+    studentValues.groups.forEach((group) => {
+      if (coursesInWeek.indexOf(group.courseId) === -1) {
+        coursesInWeek.push(group.courseId)
+      }
+      numberOfRequestsInWeek += 1
+    })
+  })
+  //calculate number of unique students who have made requests
+  const numStudents = {
+    number: studentsInSemester.size,
+    title: 'UNIQUE STUDENTS',
+    subtitle: 'made requests',
+    thisWeek: uniqueStudentsInWeek,
+    showAdded: true,
+  }
+
+  //calculate number of unique courses that have received requests
+  const numCourses = {
+    number: chosenSemesterCourses.length,
+    title: 'UNIQUE COURSES',
+    subtitle: 'received requests',
+    thisWeek: coursesInWeek.length,
+    showAdded: true,
+  }
+  //calculate total number of requests made by students
+  const numRequests = {
+    number: numberOfRequests,
+    title: 'REQUESTS',
+    subtitle: 'made in total',
+    thisWeek: numberOfRequestsInWeek,
+    showAdded: true,
+  }
+
+  //calculate number of students matched into groups
+  const numMatches = {
+    number: chosenSemesterCourses.reduce(
+      (courseTotal, course) =>
+        courseTotal +
+        course.groups.reduce(
+          (groupTotal, group) => groupTotal + group.members.length,
+          0
+        ),
+      0
+    ),
+    title: 'MATCHES',
+    subtitle: 'made in total',
+    thisWeek: 0,
+    showAdded: false,
+  }
+
+  //calculate number of students matched into groups
+  const numGroups = {
+    number: chosenSemesterCourses.reduce(
+      (total, course) => total + course.groups.length,
+      0
+    ),
+    title: 'GROUPS',
+    subtitle: 'successfully made',
+    thisWeek: 0,
+    showAdded: false,
+  }
+
+  const stats = [numStudents, numRequests, numCourses, numMatches, numGroups]
+
   const collegeNames = getUniqueValues(allStudents.map((s) => s.college))
 
   const calculateStats = (college: string) => {
