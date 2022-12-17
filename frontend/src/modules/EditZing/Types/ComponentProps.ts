@@ -82,6 +82,7 @@ export interface EmailModalProps {
   courseNames: string[]
   setEmailSent: (arg: boolean) => void
   setEmailSentError: (arg: boolean) => void
+  setEmailSaved: (arg: boolean) => void
 }
 
 export interface NotesModalProps {
@@ -110,6 +111,12 @@ export interface EmailModalContentProps {
 export interface EmailPreviewProps {
   template: EmailTemplate
   replacedHtml: string
+}
+export interface EmailEditProps {
+  template: EmailTemplate
+  replacedHtml: string
+  setSelectedTemplate: (value: EmailTemplate) => void
+  setEmailSaved: (arg: boolean) => void
 }
 
 export interface DeleteGroupProps {
