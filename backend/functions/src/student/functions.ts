@@ -82,7 +82,7 @@ export const addStudentSurveyResponse = async (
   year: string,
   courseCatalogNames: string[]
 ) => {
-  const roster = 'FA22' // Fall 2022
+  const roster = 'WI22' // Winter 2022
 
   // 0. Check if email is valid cornell.edu email.
   const emailRegex = /^\w+@cornell.edu$/
