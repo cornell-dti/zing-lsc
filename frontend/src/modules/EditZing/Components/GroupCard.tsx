@@ -4,9 +4,9 @@ import { GroupGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrop } from 'react-dnd'
 import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
 import { StyledGroupText } from 'EditZing/Styles/StudentAndGroup.style'
-import { Box, Tooltip, Checkbox, IconButton } from '@mui/material'
+import { Box, Tooltip, Checkbox, IconButton, Button } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
-import { Delete } from '@mui/icons-material'
+import { Delete, Undo } from '@mui/icons-material'
 import axios from 'axios'
 import { API_ROOT, MATCHING_API } from '@core'
 
@@ -70,12 +70,26 @@ const GroupCard = ({
     setIsHovering(false)
   }
 
+  const [recentlyRemoved, setRecentlyRemoved] = useState(false)
   const removeGroup = (courseId: string, groupNumber: number) => {
+    setRecentlyRemoved(true)
+  }
+
+  const fullyRemoveGroup = (courseId: string, groupNumber: number) => {
     axios.post(`${API_ROOT}${MATCHING_API}/hide-group`, {
       courseId: courseId,
       groupNumber: groupNumber,
     })
     removeGroups(courseId, groupNumber)
+  }
+
+  const undoRemoveGroup = (courseId: string, groupNumber: number) => {
+    axios.post(`${API_ROOT}${MATCHING_API}/unhide-group`, {
+      courseId: courseId,
+      groupNumber: groupNumber,
+    })
+    undoRemove(courseId, groupNumber)
+    setRecentlyRemoved(false)
   }
 
   return (
@@ -139,18 +153,33 @@ const GroupCard = ({
           <IconButton
             color="secondary"
             sx={{
-              display: studentList.length === 0 && isHovering ? 'flex' : 'none',
+              display:
+                studentList.length === 0 && isHovering && !recentlyRemoved
+                  ? 'flex'
+                  : 'none',
               backgroundColor: 'transparent',
               border: 'none',
             }}
             onClick={() => {
-              if (studentList.length === 0) {
-                removeGroup(courseId, groupNumber)
-              }
+              removeGroup(courseId, groupNumber)
             }}
           >
             <Delete sx={{ color: 'purple' }}></Delete>
           </IconButton>
+          <IconButton
+            color="secondary"
+            sx={{
+              display: recentlyRemoved ? 'flex' : 'none',
+              backgroundColor: 'transparent',
+              border: 'none',
+            }}
+            onClick={() => {
+              undoRemoveGroup(courseId, groupNumber)
+            }}
+          >
+            <Undo sx={{ color: 'purple' }}></Undo>
+          </IconButton>
+
           <Checkbox
             color="secondary"
             checked={selected}
@@ -163,6 +192,7 @@ const GroupCard = ({
             }}
           />
         </Box>
+
         <Box
           sx={{
             display: 'grid',
@@ -183,6 +213,15 @@ const GroupCard = ({
             />
           ))}
         </Box>
+        <Button
+          onClick={() => fullyRemoveGroup(courseId, groupNumber)}
+          sx={{
+            display: recentlyRemoved ? 'fixed' : 'none',
+            top: '175px',
+          }}
+        >
+          Confirm Delete
+        </Button>
       </Box>
     </Box>
   )

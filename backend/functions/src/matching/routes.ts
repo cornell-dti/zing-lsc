@@ -10,6 +10,7 @@ import {
   createEmptyGroup,
   unmatchStudent,
   hideEmptyGroup,
+  unhideGroup,
 } from './functions'
 
 router.post('/make', (req, res) => {
@@ -99,6 +100,16 @@ router.post('/transfer/unmatch', (req, res) => {
 router.post('/hide-group', (req, res) => {
   const { courseId, groupNumber } = req.body
   hideEmptyGroup(courseId, groupNumber)
+    .then(() => res.status(200).json({ success: true }))
+    .catch((err) => {
+      console.log(err)
+      res.status(400).json({ success: false, err: err.message })
+    })
+})
+
+router.post('/unhide-group', (req, res) => {
+  const { courseId, groupNumber } = req.body
+  unhideGroup(courseId, groupNumber)
     .then(() => res.status(200).json({ success: true }))
     .catch((err) => {
       console.log(err)

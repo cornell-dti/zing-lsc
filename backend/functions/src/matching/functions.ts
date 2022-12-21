@@ -338,6 +338,20 @@ async function hideEmptyGroup(courseId: string, groupNumber: number) {
   await Promise.all([groupToHide])
 }
 
+async function unhideGroup(courseId: string, groupNumber: number) {
+  await assertIsExistingCourse(courseId)
+  const groupToHide = courseRef
+    .doc(courseId)
+    .collection('groups')
+    .doc(groupNumber.toString())
+    .update({ hidden: false })
+    .catch((err) => {
+      console.log(err)
+      throw new Error(`Cannot show group ${groupNumber}`)
+    })
+  await Promise.all([groupToHide])
+}
+
 export {
   makeMatches,
   getGroups,
@@ -346,4 +360,5 @@ export {
   createEmptyGroup,
   unmatchStudent,
   hideEmptyGroup,
+  unhideGroup,
 }
