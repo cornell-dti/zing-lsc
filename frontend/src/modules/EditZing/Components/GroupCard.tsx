@@ -4,8 +4,11 @@ import { GroupGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrop } from 'react-dnd'
 import { STUDENT_TYPE, DnDStudentTransferType } from 'EditZing/Types/Student'
 import { StyledGroupText } from 'EditZing/Styles/StudentAndGroup.style'
-import { Box, Tooltip, Checkbox } from '@mui/material'
+import { Box, Tooltip, Checkbox, IconButton } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
+import { Delete } from '@mui/icons-material'
+import axios from 'axios'
+import { API_ROOT, MATCHING_API } from '@core'
 
 /** the equivalent of Column */
 const GroupCard = ({
@@ -21,6 +24,7 @@ const GroupCard = ({
   handleChecked,
   handleAddStudent,
   updateNotes,
+  removeGroups,
 }: GroupGridProps) => {
   /**
    * Helper to format the timestamp data in a way that is helpful for displaying in tooltips
@@ -63,6 +67,14 @@ const GroupCard = ({
 
   const handleMouseOut = () => {
     setIsHovering(false)
+  }
+
+  const removeGroup = (courseId: string, groupNumber: number) => {
+    axios.post(`${API_ROOT}${MATCHING_API}/hide-group`, {
+      courseId: courseId,
+      groupNumber: groupNumber,
+    })
+    removeGroups(courseId, groupNumber)
   }
 
   return (
@@ -123,12 +135,30 @@ const GroupCard = ({
             )
           })}
           <Box flexGrow={2} />
+          <IconButton
+            color="secondary"
+            sx={{
+              display: studentList.length === 0 && isHovering ? 'flex' : 'none',
+              backgroundColor: 'transparent',
+              border: 'none',
+            }}
+            onClick={() => {
+              if (studentList.length === 0) {
+                removeGroup(courseId, groupNumber)
+              }
+            }}
+          >
+            <Delete sx={{ color: 'purple' }}></Delete>
+          </IconButton>
           <Checkbox
             color="secondary"
             checked={selected}
             onChange={handleChecked}
             sx={{
-              display: selected || isHovering ? 'flex' : 'none',
+              display:
+                selected || (studentList.length !== 0 && isHovering)
+                  ? 'flex'
+                  : 'none',
             }}
           />
         </Box>
