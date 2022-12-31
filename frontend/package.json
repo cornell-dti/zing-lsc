@@ -64,11 +64,15 @@
   "devDependencies": {
     "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.7",
+    "@vitejs/plugin-react": "^3.0.0",
     "customize-cra": "^1.0.0",
     "husky": "=4",
     "lint-staged": ">=10",
     "prettier": "2.2.1",
-    "react-app-rewired": "^2.1.8"
+    "react-app-rewired": "^2.1.8",
+    "vite": "^4.0.3",
+    "vite-plugin-svgr": "^2.4.0",
+    "vite-tsconfig-paths": "^4.0.3"
   },
   "husky": {
     "hooks": {
