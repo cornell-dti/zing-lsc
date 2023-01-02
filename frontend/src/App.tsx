@@ -96,6 +96,8 @@ const App = () => {
 
             axios.get(`${API_ROOT}/getauth`).then(
               (res) => {
+                console.log('hello')
+
                 setAuthState(
                   res.data.data.isAuthed ? 'authorized' : 'unauthorized'
                 )
@@ -641,38 +643,42 @@ const App = () => {
                     action={reloadButton}
                   />
                   <Switch>
-                    <PublicRoute exact path={HOME_PATH} component={Home} />
-                    <PublicRoute
-                      exact
-                      path={ADMIN_PATH}
-                      component={AdminHome}
-                    />
-                    <Route exact path={SURVEY_PATH} component={Survey} />
-                    <PrivateRoute
-                      exact
-                      path={DASHBOARD_PATH}
-                      component={Dashboard}
-                    />
-                    <PrivateRoute
-                      exact
-                      path={METRICS_PATH}
-                      component={Metrics}
-                    />
-                    <PrivateRoute
-                      exact
-                      path={EMAIL_PATH}
-                      component={Emailing}
-                    />
-                    <PrivateRoute
-                      exact
-                      path={`${EDIT_ZING_PATH}/:courseId`}
-                      component={EditZing}
-                    />
-                    <PrivateRoute
-                      exact
-                      path={TEMPLATE_EDITOR_PATH}
-                      component={TemplateEditor}
-                    />
+                    <Route exact path={HOME_PATH}>
+                      <Home />
+                    </Route>
+                    <Route exact path={ADMIN_PATH}>
+                      <PublicRoute>
+                        <AdminHome />
+                      </PublicRoute>
+                    </Route>
+                    <Route exact path={SURVEY_PATH}>
+                      <Survey />
+                    </Route>
+                    <Route exact path={DASHBOARD_PATH}>
+                      <PrivateRoute>
+                        <Dashboard />
+                      </PrivateRoute>
+                    </Route>
+                    <Route exact path={METRICS_PATH}>
+                      <PrivateRoute>
+                        <Metrics />
+                      </PrivateRoute>
+                    </Route>
+                    <Route exact path={EMAIL_PATH}>
+                      <PrivateRoute>
+                        <Emailing />
+                      </PrivateRoute>
+                    </Route>
+                    <Route exact path={`${EDIT_ZING_PATH}/:courseId`}>
+                      <PrivateRoute>
+                        <EditZing />
+                      </PrivateRoute>
+                    </Route>
+                    <Route exact path={TEMPLATE_EDITOR_PATH}>
+                      <PrivateRoute>
+                        <TemplateEditor />
+                      </PrivateRoute>
+                    </Route>
                   </Switch>
                 </TemplateProvider>
               </StudentProvider>

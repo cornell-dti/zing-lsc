@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router'
+import { Redirect } from 'react-router'
 import { ADMIN_PATH } from '@core/Constants'
 import { useAuthValue } from './AuthContext'
 import { RouteProps } from '@core'
@@ -9,28 +9,20 @@ import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { useTemplateValue } from '@context/TemplateContext'
 
-export const PrivateRoute = ({
-  component: Component,
-  ...routeProps
-}: RouteProps) => {
+export const PrivateRoute = ({ children }: RouteProps) => {
   const { authState } = useAuthValue()
   const { hasLoadedCourses } = useCourseValue()
   const { hasLoadedStudents } = useStudentValue()
   const { hasLoadedTemplates } = useTemplateValue()
+
+  console.log(authState)
 
   switch (authState) {
     case 'loading':
       return <RouteLoading isLoading={true} />
     // not logged in, redirect back to home page
     case 'unauthenticated':
-      return (
-        <Route
-          {...routeProps}
-          render={() => {
-            return <Redirect to={ADMIN_PATH} />
-          }}
-        />
-      )
+      return <Redirect to={ADMIN_PATH} />
     // unauthorized, so display message to user that you are unauthorized
     case 'unauthorized':
       return (
@@ -47,12 +39,7 @@ export const PrivateRoute = ({
     // authorized, hooray, you can see the content!
     case 'authorized':
       return hasLoadedCourses && hasLoadedStudents && hasLoadedTemplates ? (
-        <Route
-          {...routeProps}
-          render={(props) => {
-            return <Component {...props} />
-          }}
-        />
+        children
       ) : (
         <RouteLoading
           isLoading={true}

@@ -1,10 +1,6 @@
 import { SelectChangeEvent } from '@mui/material'
 import { SxProps, Theme } from '@mui/material/styles'
 import React, { ChangeEventHandler } from 'react'
-import {
-  RouteComponentProps,
-  RouteProps as DefaultRouteProps,
-} from 'react-router'
 
 // for the modal (dialog box)
 export interface ZingModalProps {
@@ -69,6 +65,6 @@ export interface ProgressBarProps {
   sx?: SxProps<Theme>
 }
 
-export interface RouteProps extends DefaultRouteProps {
-  component: React.ComponentType<RouteComponentProps>
+export interface RouteProps {
+  children: JSX.Element
 }
