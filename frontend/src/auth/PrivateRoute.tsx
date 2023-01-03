@@ -15,8 +15,6 @@ export const PrivateRoute = ({ children }: RouteProps) => {
   const { hasLoadedStudents } = useStudentValue()
   const { hasLoadedTemplates } = useTemplateValue()
 
-  console.log(authState)
-
   switch (authState) {
     case 'loading':
       return <RouteLoading isLoading={true} />
