@@ -96,8 +96,6 @@ const App = () => {
 
             axios.get(`${API_ROOT}/getauth`).then(
               (res) => {
-                console.log('hello')
-
                 setAuthState(
                   res.data.data.isAuthed ? 'authorized' : 'unauthorized'
                 )
@@ -646,39 +644,63 @@ const App = () => {
                     <Route exact path={HOME_PATH}>
                       <Home />
                     </Route>
-                    <Route exact path={ADMIN_PATH}>
-                      <PublicRoute>
-                        <AdminHome />
-                      </PublicRoute>
-                    </Route>
+                    <Route
+                      exact
+                      path={ADMIN_PATH}
+                      render={() => (
+                        <PublicRoute>
+                          <AdminHome />
+                        </PublicRoute>
+                      )}
+                    />
                     <Route exact path={SURVEY_PATH}>
                       <Survey />
                     </Route>
-                    <Route exact path={DASHBOARD_PATH}>
-                      <PrivateRoute>
-                        <Dashboard />
-                      </PrivateRoute>
-                    </Route>
-                    <Route exact path={METRICS_PATH}>
-                      <PrivateRoute>
-                        <Metrics />
-                      </PrivateRoute>
-                    </Route>
-                    <Route exact path={EMAIL_PATH}>
-                      <PrivateRoute>
-                        <Emailing />
-                      </PrivateRoute>
-                    </Route>
-                    <Route exact path={`${EDIT_ZING_PATH}/:courseId`}>
-                      <PrivateRoute>
-                        <EditZing />
-                      </PrivateRoute>
-                    </Route>
-                    <Route exact path={TEMPLATE_EDITOR_PATH}>
-                      <PrivateRoute>
-                        <TemplateEditor />
-                      </PrivateRoute>
-                    </Route>
+                    <Route
+                      exact
+                      path={DASHBOARD_PATH}
+                      render={() => (
+                        <PrivateRoute>
+                          <Dashboard />
+                        </PrivateRoute>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path={METRICS_PATH}
+                      render={() => (
+                        <PrivateRoute>
+                          <Metrics />
+                        </PrivateRoute>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path={EMAIL_PATH}
+                      render={() => (
+                        <PrivateRoute>
+                          <Emailing />
+                        </PrivateRoute>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path={`${EDIT_ZING_PATH}/:courseId`}
+                      render={() => (
+                        <PrivateRoute>
+                          <EditZing />
+                        </PrivateRoute>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path={TEMPLATE_EDITOR_PATH}
+                      render={() => (
+                        <PrivateRoute>
+                          <TemplateEditor />
+                        </PrivateRoute>
+                      )}
+                    />
                   </Switch>
                 </TemplateProvider>
               </StudentProvider>
