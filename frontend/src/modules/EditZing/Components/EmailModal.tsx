@@ -30,7 +30,7 @@ export const EmailModal = ({
   setEmailSentError,
 }: EmailModalProps) => {
   const { courseId } = useParams<{ courseId: string }>()
-  const { addGroupEmailTimestamps } = useCourseValue()
+  const { addGroupEmailTimestamps, courses } = useCourseValue()
   const { addStudentEmailTimestamps } = useStudentValue()
   const { templates } = useTemplateValue()
 
@@ -64,16 +64,14 @@ export const EmailModal = ({
    * @param groupNumber
    */
   const specificReplacedHtml = async (groupNumber: number) => {
-    const courses = (await axios.get(`${API_ROOT}${COURSE_API}`)).data.map(
-      responseCourseToCourse
-    )
-
+    console.log(`group number: ${groupNumber}`)
     courses.forEach((course: Course, index: number) => {
       if (course.courseId === courseId) {
         const groups = course.groups
 
         groups.forEach((group: Group, num: number) => {
-          if (num === groupNumber) {
+          console.log(`current group number: ${num}`)
+          if (num + 1 === groupNumber) {
             const groupSize = group.members.length
             const newStudent = group.members[groupSize - 1]
             const otherStudents = group.members.slice(0, groupSize - 1)
