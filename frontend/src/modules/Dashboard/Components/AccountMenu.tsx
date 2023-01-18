@@ -179,6 +179,9 @@ export const AccountMenu = ({
         <MenuItem onClick={() => setSelectedRoster('SP23')}>
           Spring 2023
         </MenuItem>
+        <MenuItem onClick={() => setSelectedRoster('SU23')}>
+          Summer 2023
+        </MenuItem>
       </Menu>
     </Box>
   )
