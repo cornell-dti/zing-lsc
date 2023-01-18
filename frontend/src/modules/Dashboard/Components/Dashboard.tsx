@@ -161,7 +161,7 @@ export const Dashboard = () => {
     })
   }
 
-  const [selectedRoster, setSelectedRoster] = useState<string>('WI23')
+  const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
 
   const [query, setQuery] = useState('')
 
