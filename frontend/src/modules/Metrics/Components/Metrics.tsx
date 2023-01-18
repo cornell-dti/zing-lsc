@@ -152,7 +152,7 @@ export const Metrics = () => {
         self.indexOf(value) === index
     )
   }
-  const [selectedRoster, setSelectedRoster] = useState<string>('WI23')
+  const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
   const chosenSemesterStudents = allStudents.filter(
     (e) => e.semester === selectedRoster
   )
