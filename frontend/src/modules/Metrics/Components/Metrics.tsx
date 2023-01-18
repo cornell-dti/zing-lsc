@@ -152,7 +152,7 @@ export const Metrics = () => {
         self.indexOf(value) === index
     )
   }
-  const [selectedRoster, setSelectedRoster] = useState<string>('WI23')
+  const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
   const chosenSemesterStudents = allStudents.filter(
     (e) => e.semester === selectedRoster
   )
@@ -266,6 +266,7 @@ export const Metrics = () => {
           <MenuItem value="FA22">Fall 2022</MenuItem>
           <MenuItem value="WI23">Winter 2023</MenuItem>
           <MenuItem value="SP23">Spring 2023</MenuItem>
+          <MenuItem value="SU23">Summer 2023</MenuItem>
         </DropdownSelect>
       </Box>
       <MetricsTable
