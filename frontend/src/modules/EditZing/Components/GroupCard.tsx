@@ -25,7 +25,6 @@ const GroupCard = ({
   handleAddStudent,
   updateNotes,
   removeGroups,
-  undoRemove,
 }: GroupGridProps) => {
   /**
    * Helper to format the timestamp data in a way that is helpful for displaying in tooltips
@@ -80,7 +79,7 @@ const GroupCard = ({
       courseId: courseId,
       groupNumber: groupNumber,
     })
-    removeGroups(courseId, groupNumber)
+    removeGroups(courseId, groupNumber, true)
   }
 
   const undoRemoveGroup = (courseId: string, groupNumber: number) => {
@@ -88,7 +87,7 @@ const GroupCard = ({
       courseId: courseId,
       groupNumber: groupNumber,
     })
-    undoRemove(courseId, groupNumber)
+    removeGroups(courseId, groupNumber, false)
     setRecentlyRemoved(false)
   }
 

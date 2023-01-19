@@ -41,8 +41,7 @@ export interface GroupGridProps {
   updateTime: Date
   selected: boolean
   selectedStudents: string[]
-  removeGroups: (courseId: string, groupNumber: number) => void
-  undoRemove: (courseId: string, groupNumber: number) => void
+  removeGroups: (courseId: string, groupNumber: number, toHide: boolean) => void
   handleChecked: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleAddStudent: (student: string, selected: boolean) => void
   updateNotes: (
