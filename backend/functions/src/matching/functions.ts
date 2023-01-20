@@ -97,6 +97,7 @@ async function makeMatches(courseId: string) {
       createTime: nowDate,
       updateTime: nowDate,
       templateTimestamps: {},
+      hidden: false,
     })
   }
   for (let i = 0; i < groupDoubles.length; i += 2) {
@@ -108,6 +109,7 @@ async function makeMatches(courseId: string) {
       createTime: nowDate,
       updateTime: nowDate,
       templateTimestamps: {},
+      hidden: false,
     })
   }
 
@@ -117,6 +119,7 @@ async function makeMatches(courseId: string) {
     createTime: nowTimestamp,
     updateTime: nowTimestamp,
     templateTimestamps: {}, // Groups have this typed differently though it's just empty object
+    hidden: false,
   }))
 
   // lastly, update the collections to reflect this matching
@@ -319,6 +322,22 @@ async function createEmptyGroup(courseId: string) {
   await Promise.all([groupCreationUpdate, groupNumberUpdate])
 }
 
+async function hideEmptyGroup(courseId: string, groupNumber: number) {
+  await assertIsExistingCourse(courseId)
+
+  const groupToHide = courseRef
+    .doc(courseId)
+    .collection('groups')
+    .doc(groupNumber.toString())
+    .update({ hidden: true })
+    .catch((err) => {
+      console.log(err)
+      throw new Error(`Error in removing group ${groupNumber}`)
+    })
+
+  await Promise.all([groupToHide])
+}
+
 export {
   makeMatches,
   getGroups,
@@ -326,4 +345,5 @@ export {
   transferStudentBetweenGroups,
   createEmptyGroup,
   unmatchStudent,
+  hideEmptyGroup,
 }

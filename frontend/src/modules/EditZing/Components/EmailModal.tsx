@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useParams } from 'react-router-dom'
+
 // zing imports
 import { ZingModal } from '@core/Components'
 import { EmailModalProps } from '../Types/ComponentProps'
@@ -10,15 +11,14 @@ import { EmailTemplateButtons } from 'EditZing/Components/EmailTemplateButtons'
 import { EmailPreview } from 'EditZing/Components/EmailPreview'
 import { sendEmail } from 'Emailing/Components/Emailing'
 import { adminSignIn } from '@fire/firebase'
-import { Course, Group, responseCourseToCourse } from '@core/Types'
+import EditIcon from '@mui/icons-material/Edit'
 
 // template editor
-import { EmailTemplate } from '@core/Types'
+import { Course, EmailTemplate, Group } from '@core/Types'
 import { useStudentValue } from '@context/StudentContext'
 import { useCourseValue } from '@context/CourseContext'
 import { useTemplateValue } from '@context/TemplateContext'
-import axios from 'axios'
-import { API_ROOT, COURSE_API } from '@core/Constants'
+import { EmailEdit } from './EmailEdit'
 
 export const EmailModal = ({
   selectedGroupNumbers,
@@ -27,6 +27,7 @@ export const EmailModal = ({
   setIsEmailing,
   courseNames,
   setEmailSent,
+  setEmailSaved,
   setEmailSentError,
 }: EmailModalProps) => {
   const { courseId } = useParams<{ courseId: string }>()
@@ -198,6 +199,39 @@ export const EmailModal = ({
     )
   }
 
+  const EditButton = () => {
+    if (step === 1) {
+      return (
+        <Button
+          onClick={() => {
+            setStep(4)
+          }}
+          color="primary"
+          variant="text"
+          sx={{ alignSelf: 'end' }}
+        >
+          <EditIcon style={{ marginRight: '5px' }} />
+          Edit Template
+        </Button>
+      )
+    } else {
+      return null
+    }
+  }
+
+  const EditEmail = () => {
+    return (
+      <Box>
+        <TemplateSelectedComponent />
+        <EmailEdit
+          template={selectedTemplate!}
+          replacedHtml={replacedHtml}
+          setSelectedTemplate={setSelectedTemplate}
+          setEmailSaved={setEmailSaved}
+        />
+      </Box>
+    )
+  }
   const Step0 = () => {
     return (
       <Box>
@@ -214,10 +248,17 @@ export const EmailModal = ({
     return (
       <Box>
         <TemplateSelectedComponent />
-        <EmailPreview
-          template={selectedTemplate!}
-          replacedHtml={replacedHtml}
-        />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+          }}
+        >
+          <EmailPreview
+            template={selectedTemplate!}
+            replacedHtml={replacedHtml}
+          />
+        </Box>
       </Box>
     )
   }
@@ -344,6 +385,18 @@ export const EmailModal = ({
           Back to templates
         </Button>
       )
+    } else if (step === 4) {
+      return (
+        <Button
+          onClick={() => {
+            setStep(1)
+          }}
+          color="secondary"
+          variant="outlined"
+        >
+          Back to preview
+        </Button>
+      )
     } else {
       return null
     }
@@ -352,22 +405,31 @@ export const EmailModal = ({
   const SelectTemplates = () => {
     return (
       <>
-        <Typography
-          variant="h5"
-          component="h5"
-          sx={{ display: 'flex', gap: 1 }}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
         >
-          <Box component="span">To:</Box>
-          <Box
-            component="span"
-            sx={{ fontWeight: 900, maxWidth: '90%', wordBreak: 'break-word' }}
+          <Typography
+            variant="h5"
+            component="h5"
+            sx={{ display: 'flex', gap: 1 }}
           >
-            {selectedGroupNumbers
-              .map((groupNumber) => `Group ${groupNumber}`)
-              .join(', ')}
-            {selectedStudentEmails.join(', ')}
-          </Box>
-        </Typography>
+            <Box component="span">To:</Box>
+            <Box
+              component="span"
+              sx={{ fontWeight: 900, maxWidth: '90%', wordBreak: 'break-word' }}
+            >
+              {selectedGroupNumbers
+                .map((groupNumber) => `Group ${groupNumber}`)
+                .join(', ')}
+              {selectedStudentEmails.join(', ')}
+            </Box>
+          </Typography>
+          {step === 1 && <EditButton />}
+        </Box>
         {step === 0 && <Step0 />}
         {step === 1 && <Step1 />}
       </>
@@ -399,6 +461,7 @@ export const EmailModal = ({
             {step <= 1 && <SelectTemplates />}
             {step === 2 && <StepFailure />}
             {step === 3 && <StepFinalFailure />}
+            {step === 4 && <EditEmail />}
           </Box>
         ) : (
           <Box
