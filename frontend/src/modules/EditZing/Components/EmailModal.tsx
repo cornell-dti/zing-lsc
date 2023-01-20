@@ -66,38 +66,34 @@ export const EmailModal = ({
    */
   const specificReplacedHtml = async (groupNumber: number) => {
     console.log(`group number: ${groupNumber}`)
-    courses.forEach((course: Course, index: number) => {
-      if (course.courseId === courseId) {
-        const groups = course.groups
+    const group = courses
+      .find((course: Course) => course.courseId === courseId)
+      ?.groups.find((group: Group) => group.groupNumber === groupNumber)
 
-        groups.forEach((group: Group, num: number) => {
-          console.log(`current group number: ${num}`)
-          if (num + 1 === groupNumber) {
-            const groupSize = group.members.length
-            const newStudent = group.members[groupSize - 1]
-            const otherStudents = group.members.slice(0, groupSize - 1)
+    if (!group) {
+      return replacedHtml
+    }
 
-            const replaceNamesMap = {
-              '{{NEW_STUDENT_NAME}}': newStudent,
-              '{{OTHER_STUDENTS_NAMES}}': otherStudents.join(', '),
-            }
-            console.log(`old students ${otherStudents}`)
-            console.log(
-              Object.entries(replaceNamesMap).reduce(
-                (prev, [key, value]) => prev.replaceAll(key, value),
-                replacedHtml
-              )
-            )
+    const groupSize = group.members.length
+    const newStudent = group.members[groupSize - 1]
+    const otherStudents = group.members.slice(0, groupSize - 1)
 
-            return Object.entries(replaceNamesMap).reduce(
-              (prev, [key, value]) => prev.replaceAll(key, value),
-              replacedHtml
-            )
-          }
-        })
-      }
-    })
-    return replacedHtml
+    const replaceNamesMap = {
+      '{{NEW_STUDENT_NAME}}': newStudent,
+      '{{OTHER_STUDENTS_NAMES}}': otherStudents.join(', '),
+    }
+    console.log(`old students ${otherStudents}`)
+    console.log(
+      Object.entries(replaceNamesMap).reduce(
+        (prev, [key, value]) => prev.replaceAll(key, value),
+        replacedHtml
+      )
+    )
+
+    return Object.entries(replaceNamesMap).reduce(
+      (prev, [key, value]) => prev.replaceAll(key, value),
+      replacedHtml
+    )
   }
 
   const [step, setStep] = useState<number>(0)

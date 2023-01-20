@@ -2,18 +2,18 @@
   "name": "check-in.html",
   "bucket": "zing-lsc-templates",
   "contentType": "text/html",
-  "metageneration": 2,
-  "generation": 1669937949462,
+  "metageneration": 1,
+  "generation": 1674179733939,
   "storageClass": "STANDARD",
   "contentDisposition": "inline",
   "cacheControl": "public, max-age=3600",
   "contentEncoding": "identity",
   "downloadTokens": [
-    "f0afc998-a136-4fff-ba9f-2c5447da719d"
+    "d6991434-94fc-421f-9ee6-5f8e0d2e8587"
   ],
-  "etag": "LDPo07GviDWK6qhTxAmDedxRdT4",
-  "timeCreated": "2022-12-01T23:39:09.462Z",
-  "updated": "2022-12-01T23:39:19.782Z",
+  "etag": "O7y3VBWoQeWMcpzme1ywfuEYTqU",
+  "timeCreated": "2023-01-20T01:55:33.938Z",
+  "updated": "2023-01-20T01:55:33.938Z",
   "size": 716,
   "md5Hash": "gdDZGCC4Ckz8nJ49S7Jw7w==",
   "crc32c": "1407986870"
