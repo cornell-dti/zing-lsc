@@ -17,7 +17,7 @@ interface CourseContextType {
     templateId: string,
     timestamp: Date
   ) => void
-  removeGroups: (courseId: string, groupNumber: number) => void
+  removeGroups: (courseId: string, groupNumber: number, toHide: boolean) => void
 }
 
 const CourseContext = React.createContext<CourseContextType>({
