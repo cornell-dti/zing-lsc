@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 import bg from '@assets/img/homebg.svg'
 import bg2 from '@assets/img/blobhomebg2.svg'
+import bg3 from '@assets/img/bloblogin.svg'
 
 /** Survey Landing page splash background image. Has the bob overlays. */
 export const StyledContainer1 = styled.main`
@@ -40,6 +41,21 @@ export const StyledContainer2 = styled.main`
   height: 100%;
   width: 100%;
   background-image: url(${bg2});
+  background-size: cover;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (min-width: 901px) {
+    overflow-y: hidden;
+  }
+`
+
+export const StyledContainer3 = styled.main`
+  height: 100%;
+  width: 100%;
+  background-image: url(${bg3});
   background-size: cover;
 
   display: flex;

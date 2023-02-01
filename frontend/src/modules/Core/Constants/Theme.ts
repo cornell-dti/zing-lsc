@@ -203,6 +203,10 @@ theme = createTheme(theme, {
             borderColor: theme.palette.common.white,
             backgroundColor: theme.palette.purple[120],
           },
+          '&.Mui-disabled': {
+            color: theme.palette.common.white,
+            backgroundColor: theme.palette.essentials[25],
+          },
         },
         outlinedSecondary: {
           borderColor: theme.palette.purple[100],

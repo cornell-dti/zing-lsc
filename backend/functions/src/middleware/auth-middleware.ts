@@ -64,7 +64,8 @@ export async function checkIsAuthorizedFromToken(
   logger.info(
     `${req.method} request on endpoint ${req.originalUrl} called by user ${user.displayName} with uid ${user.uid}`
   )
-  return !!(user.email && allowedUsers.includes(user.email))
+  const email = user?.providerData[0].email
+  return !!(email && allowedUsers.includes(email))
 }
 
 export function checkIsAuthorized(
