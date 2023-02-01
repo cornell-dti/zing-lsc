@@ -577,6 +577,25 @@ const App = () => {
       },
     ])
 
+  // update whats shown on the frontend
+  const removeGroups = (courseId: string, groupNumber: number) => {
+    setCourses(
+      courses.map((course) =>
+        course.courseId === courseId
+          ? {
+              ...course,
+              unmatched: [...course.unmatched],
+              groups: course.groups.map((group) =>
+                groupNumber === group.groupNumber
+                  ? { ...group, hidden: true }
+                  : group
+              ),
+            }
+          : course
+      )
+    )
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -596,6 +615,7 @@ const App = () => {
                 moveStudent,
                 matchStudents,
                 addGroupEmailTimestamps,
+                removeGroups,
               }}
             >
               <StudentProvider

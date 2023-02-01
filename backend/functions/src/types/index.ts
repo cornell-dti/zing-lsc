@@ -24,6 +24,7 @@ export type Group = {
   createTime: Date
   updateTime: Date
   templateTimestamps: { [key: string]: Date }
+  hidden: boolean
 }
 
 /** Student data. This is not exactly how it's stored in the database, since
@@ -104,4 +105,5 @@ export type FirestoreGroup = {
   createTime: Timestamp
   updateTime: Timestamp
   templateTimestamps: EmailTimestamps
+  hidden: boolean
 }

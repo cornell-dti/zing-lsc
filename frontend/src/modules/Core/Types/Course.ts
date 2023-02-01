@@ -17,6 +17,7 @@ export interface Group {
   createTime: Date
   updateTime: Date
   templateTimestamps: { [key: string]: Date }
+  hidden: boolean
 }
 
 export interface ResponseCourse {
@@ -36,6 +37,7 @@ export interface ResponseGroup {
   createTime: string
   updateTime: string
   templateTimestamps: { [key: string]: string }
+  hidden: boolean
 }
 
 export const responseGroupToGroup = (group: ResponseGroup): Group => ({
@@ -43,6 +45,7 @@ export const responseGroupToGroup = (group: ResponseGroup): Group => ({
   createTime: new Date(group.createTime),
   updateTime: new Date(group.updateTime),
   templateTimestamps: responseTimestampsToDate(group.templateTimestamps),
+  hidden: group.hidden,
 })
 
 export const responseCourseToCourse = (course: ResponseCourse): Course => ({
