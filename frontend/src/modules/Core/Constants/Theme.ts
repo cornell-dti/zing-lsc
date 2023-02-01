@@ -304,6 +304,25 @@ theme = createTheme(theme, {
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          transition: 'box-shadow 0.1s',
+        },
+        elevation1: {
+          boxShadow: '0px 2px 5px rgba(205, 156, 242, 0.2)',
+        },
+        elevation2: {
+          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.07)',
+        },
+        elevation3: {
+          boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.3)',
+        },
+        elevation4: {
+          boxShadow: '4px 4px 10px rgba(0, 0, 0, 0.3)',
+        },
+      },
+    },
   },
 })
 

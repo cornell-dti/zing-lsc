@@ -10,6 +10,11 @@ import { Delete } from '@mui/icons-material'
 import axios from 'axios'
 import { API_ROOT, MATCHING_API } from '@core'
 
+export interface ExtendedPaperProps {
+  exact?: boolean
+  to?: string
+}
+
 /** the equivalent of Column */
 const GroupCard = ({
   courseId,
@@ -82,21 +87,17 @@ const GroupCard = ({
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
       ref={drop}
+      elevation={isHovering && !selected ? 4 : 2}
       sx={{
         width: '380px',
         height: '350px',
         padding: '2rem',
         border: 0.5,
         borderColor: selected || isHovering ? 'purple.50' : 'purple.16',
-        boxShadow:
-          !selected && isHovering
-            ? '4px 4px 10px rgba(0, 0, 0, 0.3)'
-            : '0px 4px 10px rgba(0, 0, 0, 0.07)',
         borderRadius: '20px',
         margin: '0.25rem',
         backgroundColor: selected ? 'rgba(129, 94, 212, 0.15);' : 'white',
         opacity: isOver ? '0.6' : '1',
-        transition: 'box-shadow 0.1s',
       }}
     >
       <Box display="flex" alignItems="center" sx={{ mb: 2, height: '42px' }}>

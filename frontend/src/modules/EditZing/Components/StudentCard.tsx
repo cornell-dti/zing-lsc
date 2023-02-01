@@ -134,6 +134,7 @@ const StudentCard = ({
           onMouseOver={() => setIsHovering(true)}
           onMouseOut={() => setIsHovering(false)}
           style={{ opacity: opacity }}
+          elevation={isHovering && !selected ? 3 : 1}
           sx={{
             padding: '11px 12px',
             background: selected ? 'rgba(213, 204, 230, .85)' : '#FBF9FF',
@@ -141,13 +142,8 @@ const StudentCard = ({
             fontFamily: 'Montserrat',
             fontWeight: '700',
             fontSize: '14',
-            boxShadow:
-              isHovering && !selected
-                ? '4px 4px 8px rgba(0, 0, 0, 0.3)'
-                : '0px 2px 5px rgba(205, 156, 242, 0.2)',
             borderRadius: '10px',
             width: '100%',
-            transition: 'box-shadow 0.1s',
           }}
         >
           <Box
