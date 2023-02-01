@@ -10,11 +10,6 @@ import { Delete } from '@mui/icons-material'
 import axios from 'axios'
 import { API_ROOT, MATCHING_API } from '@core'
 
-export interface ExtendedPaperProps {
-  exact?: boolean
-  to?: string
-}
-
 /** the equivalent of Column */
 const GroupCard = ({
   courseId,
