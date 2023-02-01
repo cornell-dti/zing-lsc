@@ -64,7 +64,7 @@ export const EmailModal = ({
    *
    * @param groupNumber
    */
-  const specificReplacedHtml = async (groupNumber: number) => {
+  const specificReplacedHtml = (groupNumber: number) => {
     console.log(`group number: ${groupNumber}`)
     const group = courses
       .find((course: Course) => course.courseId === courseId)
@@ -240,8 +240,11 @@ export const EmailModal = ({
     )
   }
 
-  const Step1 = () => {
-    return (
+  const Step1 = ({ groupNumbers }: { groupNumbers: number[] }) => {
+    // Goes through all selected groups and generates individual templates.
+    // TODO (richardgu): Make specificReplacedHtml include reglar replacedHtml function
+    // for cases that aren't group-specific
+    const groupTemplates = groupNumbers.map((groupNum: number) => (
       <Box>
         <TemplateSelectedComponent />
         <Box
@@ -252,11 +255,13 @@ export const EmailModal = ({
         >
           <EmailPreview
             template={selectedTemplate!}
-            replacedHtml={replacedHtml}
+            replacedHtml={specificReplacedHtml(groupNum)}
           />
         </Box>
       </Box>
-    )
+    ))
+
+    return <div>{groupTemplates}</div>
   }
 
   /** Step 2
@@ -427,7 +432,7 @@ export const EmailModal = ({
           {step === 1 && <EditButton />}
         </Box>
         {step === 0 && <Step0 />}
-        {step === 1 && <Step1 />}
+        {step === 1 && <Step1 groupNumbers={selectedGroupNumbers} />}
       </>
     )
   }
