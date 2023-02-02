@@ -46,10 +46,13 @@ export const Metrics = () => {
   }
 
   const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
+
   const studentsInSemester = new Map<
     string,
     { semester: string; groups: GroupMembership[]; college: string }
   >()
+
+  //calculates details for all students
   const allStudents =
     courses.length && students.length // Just making sure this isn't calculated until the data is available
       ? students.flatMap((student) =>
@@ -86,6 +89,7 @@ export const Metrics = () => {
           })
         )
       : []
+
   const getUniqueValues = (arr: any) => {
     return arr.filter(
       (value: any, index: any, self: string | any[]) =>
@@ -102,51 +106,34 @@ export const Metrics = () => {
   const collegeAbbreviations = require('@core/Questions/Questions.json')[0][
     'answers'
   ]
-  const numStudentsInWeek = new Map<
-    string,
-    { semester: string; groups: GroupMembership[]; college: string }
-  >()
+  const numStudentsInWeek: string[] = []
   let uniqueStudentsInWeek = 0
   let numberOfRequests = 0
   let numberOfRequestsInWeek = 0
-  const coursesInWeek: string[] = []
+  const coursesInWeek = new Set<string>()
 
+  //calculate number of students in this week of the semester
   studentsInSemester.forEach((studentValues, student) =>
-    studentValues.groups.map((membership) => {
+    studentValues.groups.forEach((membership) => {
       numberOfRequests += 1
-      if (
-        isDateInThisWeek(membership.submissionTime) &&
-        numStudentsInWeek.get(student) == null
-      ) {
-        numStudentsInWeek.set(student, {
-          semester: studentValues.semester,
-          groups: studentValues.groups.filter((group) =>
-            isDateInThisWeek(group.submissionTime)
-          ),
-          college: studentValues.college,
-        })
+      //calculate statistics for requests made in this week
+      if (isDateInThisWeek(membership.submissionTime)) {
+        const originalGroups =
+          studentsInSemester.get(student) != null
+            ? studentsInSemester.get(student)?.groups.length
+            : 0
+        if (
+          studentValues.groups.length === originalGroups &&
+          !numStudentsInWeek.includes(student)
+        ) {
+          uniqueStudentsInWeek += 1
+        }
+        coursesInWeek.add(membership.courseId)
+        numberOfRequestsInWeek += 1
+        numStudentsInWeek.push(student)
       }
-      return (
-        isDateInThisWeek(membership.submissionTime) &&
-        numStudentsInWeek.get(student) == null
-      )
     })
   )
-  numStudentsInWeek.forEach((studentValues, student) => {
-    const originalGroups =
-      studentsInSemester.get(student) != null
-        ? studentsInSemester.get(student)?.groups.length
-        : 0
-    if (studentValues.groups.length === originalGroups) {
-      uniqueStudentsInWeek += 1
-    }
-    studentValues.groups.forEach((group) => {
-      if (coursesInWeek.indexOf(group.courseId) === -1) {
-        coursesInWeek.push(group.courseId)
-      }
-      numberOfRequestsInWeek += 1
-    })
-  })
   //calculate number of unique students who have made requests
   const numStudents = {
     number: studentsInSemester.size,
@@ -161,7 +148,7 @@ export const Metrics = () => {
     number: chosenSemesterCourses.length,
     title: 'UNIQUE COURSES',
     subtitle: 'received requests',
-    thisWeek: coursesInWeek.length,
+    thisWeek: coursesInWeek.size,
     showAdded: true,
   }
   //calculate total number of requests made by students
