@@ -47,6 +47,7 @@ export const Metrics = () => {
 
   const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
 
+  //group student's classes under the student
   const studentsInSemester = new Map<
     string,
     { semester: string; groups: GroupMembership[]; college: string }
@@ -71,7 +72,6 @@ export const Metrics = () => {
                 college: student.college,
               })
             }
-
             return {
               semester: course.roster,
               cornellEmail: student.email,
