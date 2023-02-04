@@ -216,13 +216,13 @@ export const EmailModal = ({
     }
   }
 
-  const EditEmail = () => {
+  const EditEmail = ({ groupNumber }: { groupNumber: number }) => {
     return (
       <Box>
         <TemplateSelectedComponent />
         <EmailEdit
           template={selectedTemplate!}
-          replacedHtml={replacedHtml}
+          replacedHtml={specificReplacedHtml(groupNumber)}
           setSelectedTemplate={setSelectedTemplate}
           setEmailSaved={setEmailSaved}
         />
@@ -556,7 +556,7 @@ export const EmailModal = ({
             {step <= 1 && <SelectTemplates />}
             {step === 2 && <StepFailure />}
             {step === 3 && <StepFinalFailure />}
-            {step === 4 && <EditEmail />}
+            {step === 4 && <EditEmail groupNumber={selectedTabIndex} />}
           </Box>
         ) : (
           <Box
