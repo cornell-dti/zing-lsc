@@ -97,6 +97,7 @@ export const EmailModal = ({
   }
 
   const [step, setStep] = useState<number>(0)
+  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
   const titles = [
     'Select email template',
     'Send emails',
@@ -240,26 +241,50 @@ export const EmailModal = ({
     )
   }
 
-  const Step1 = ({ groupNumbers }: { groupNumbers: number[] }) => {
+  const Step1 = ({
+    groupNumbers,
+    selectedTabIndex,
+  }: {
+    groupNumbers: number[]
+    selectedTabIndex: number
+  }) => {
     // Goes through all selected groups and generates individual templates.
     // TODO (richardgu): Make specificReplacedHtml include reglar replacedHtml function
     // for cases that aren't group-specific
-    const groupTemplates = groupNumbers.map((groupNum: number) => (
-      <Box>
-        <TemplateSelectedComponent />
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-          }}
-        >
-          <EmailPreview
-            template={selectedTemplate!}
-            replacedHtml={specificReplacedHtml(groupNum)}
-          />
+    const groupTemplates =
+      selectedTabIndex === 0 ? (
+        groupNumbers.map((groupNum: number) => (
+          <Box>
+            <TemplateSelectedComponent />
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+              }}
+            >
+              <EmailPreview
+                template={selectedTemplate!}
+                replacedHtml={specificReplacedHtml(groupNum)}
+              />
+            </Box>
+          </Box>
+        ))
+      ) : (
+        <Box>
+          <TemplateSelectedComponent />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+            }}
+          >
+            <EmailPreview
+              template={selectedTemplate!}
+              replacedHtml={specificReplacedHtml(selectedTabIndex)}
+            />
+          </Box>
         </Box>
-      </Box>
-    ))
+      )
 
     return <div>{groupTemplates}</div>
   }
@@ -403,6 +428,41 @@ export const EmailModal = ({
     }
   }
 
+  const GroupTabs = ({
+    groupNumbers,
+    selectedTabIndex,
+  }: {
+    groupNumbers: number[]
+    selectedTabIndex: number
+  }) => {
+    const selectedStyle = {}
+    const unselectedStyle = {
+      color: 'gray',
+    }
+
+    const tabs = groupNumbers.map((groupNum: number, index: number) => {
+      return (
+        <Button
+          sx={selectedTabIndex === index + 1 ? selectedStyle : unselectedStyle}
+          onClick={() => setSelectedTabIndex(index + 1)}
+        >
+          Group {index}
+        </Button>
+      )
+    })
+    return (
+      <div>
+        <Button
+          sx={selectedTabIndex === 0 ? selectedStyle : unselectedStyle}
+          onClick={() => setSelectedTabIndex(0)}
+        >
+          All groups
+        </Button>
+        {tabs}
+      </div>
+    )
+  }
+
   const SelectTemplates = () => {
     return (
       <>
@@ -432,7 +492,21 @@ export const EmailModal = ({
           {step === 1 && <EditButton />}
         </Box>
         {step === 0 && <Step0 />}
-        {step === 1 && <Step1 groupNumbers={selectedGroupNumbers} />}
+        {step === 1 &&
+          selectedTemplate.name ===
+            'Introducing student to established group' && (
+            <GroupTabs
+              groupNumbers={selectedGroupNumbers}
+              selectedTabIndex={selectedTabIndex}
+            />
+          )}
+
+        {step === 1 && (
+          <Step1
+            groupNumbers={selectedGroupNumbers}
+            selectedTabIndex={selectedTabIndex}
+          />
+        )}
       </>
     )
   }
