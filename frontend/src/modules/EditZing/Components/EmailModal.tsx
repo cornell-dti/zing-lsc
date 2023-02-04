@@ -255,13 +255,25 @@ export const EmailModal = ({
       selectedTabIndex === 0 ? (
         groupNumbers.map((groupNum: number) => (
           <Box>
-            <TemplateSelectedComponent />
             <Box
               sx={{
                 display: 'flex',
-                flexDirection: 'row',
+                flexDirection: 'column',
+                marginBottom: '1rem',
               }}
             >
+              <Box
+                component="div"
+                sx={{
+                  fontSize: 24,
+                  fontWeight: 900,
+                  maxWidth: '90%',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Group {groupNum}
+              </Box>
+
               <EmailPreview
                 template={selectedTemplate!}
                 replacedHtml={specificReplacedHtml(groupNum)}
@@ -271,7 +283,6 @@ export const EmailModal = ({
         ))
       ) : (
         <Box>
-          <TemplateSelectedComponent />
           <Box
             sx={{
               display: 'flex',
@@ -286,7 +297,12 @@ export const EmailModal = ({
         </Box>
       )
 
-    return <div>{groupTemplates}</div>
+    return (
+      <div>
+        <TemplateSelectedComponent />
+        {groupTemplates}
+      </div>
+    )
   }
 
   /** Step 2
@@ -435,9 +451,13 @@ export const EmailModal = ({
     groupNumbers: number[]
     selectedTabIndex: number
   }) => {
-    const selectedStyle = {}
+    const selectedStyle = {
+      marginRight: '1rem',
+    }
+
     const unselectedStyle = {
       color: 'gray',
+      marginRight: '1rem',
     }
 
     const tabs = groupNumbers.map((groupNum: number, index: number) => {
@@ -446,7 +466,7 @@ export const EmailModal = ({
           sx={selectedTabIndex === index + 1 ? selectedStyle : unselectedStyle}
           onClick={() => setSelectedTabIndex(index + 1)}
         >
-          Group {index}
+          Group {index + 1}
         </Button>
       )
     })
