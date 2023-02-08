@@ -17,7 +17,7 @@ export const getSemester = async (): Promise<String> => {
 }
 
 export const setSemester = async (sem: String) => {
-  return semesterRef.update({ semester: sem })
+  return semesterRef.set({ semester: sem })
 }
 
 /** Get all students in the student collection */
