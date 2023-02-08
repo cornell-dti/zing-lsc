@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-
 import axios from 'axios'
 import { Question } from '@core/Types'
 import { API_ROOT, STUDENT_API } from '@core/Constants'
@@ -14,6 +13,7 @@ import { StepRadio } from 'Survey/Components/StepRadio'
 import { StepFinal } from 'Survey/Components/StepFinal'
 import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
+import survey from '@core/Questions/Questions.json'
 
 export const Survey = () => {
   const [currStep, setCurrStep] = useState(1)
@@ -28,8 +28,18 @@ export const Survey = () => {
   const [isSubmittingSurvey, setIsSubmittingSurvey] = useState(false)
 
   // If there are custom questions the below will be a network call perhaps
-  const questions: Question[] = require('@core/Questions/Questions.json')
-  // import questions from '@core/Questions/Questions.json'
+  const questions: Question[] = survey.map((question) => {
+    var obj: { [key: string]: string } = {}
+    Object.entries(question.answers).forEach((answer) => {
+      obj[answer[0]] = answer[1]
+    })
+    return {
+      question: question.question,
+      questionId: question.questionId,
+      answers: obj,
+    }
+  })
+
   const numSpecialQuestions = 1 // Course list
   const totalSteps = questions.length + numSpecialQuestions + 1
 
