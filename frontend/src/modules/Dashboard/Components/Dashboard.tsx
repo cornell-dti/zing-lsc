@@ -128,6 +128,14 @@ export const Dashboard = () => {
           (a, b) =>
             b.latestSubmissionTime.valueOf() - a.latestSubmissionTime.valueOf()
         )
+      case 'oldest-requests-first':
+        return [...courseInfo]
+          .sort(
+            (a, b) =>
+              b.latestSubmissionTime.valueOf() -
+              a.latestSubmissionTime.valueOf()
+          )
+          .reverse()
       case 'classes-a-z':
         return [...courseInfo].sort((a, b) => {
           return a.names[0].localeCompare(b.names[0], undefined, {
