@@ -84,7 +84,8 @@ async function getRecipients(
   group?: string,
   indivEmail?: string
 ) {
-  let emailRcpts = ['lscstudypartners@cornell.edu']
+  // let emailRcpts = ['lscstudypartners@cornell.edu']
+  let emailRcpts = ['bt283@cornell.edu']
 
   if (group && indivEmail) {
     throw new Error('group and indivEmail cannot both be specified')
@@ -146,6 +147,7 @@ export const createEmailAsJson = (
       from: {
         emailAddress: {
           address: 'lscstudypartners@cornell.edu',
+          // address: 'IT-LSC-STUDYPARTNERS@cornell.edu',
         },
       },
     },
@@ -165,6 +167,51 @@ const isValidTemplate = async (templateId: string) => {
   return templateCollection.docs
     .map((templateDoc) => templateDoc.data() as FirestoreEmailTemplate)
     .find((template) => template.id === templateId)
+}
+
+/** Get Access Token acquires an access token for the Microsoft Graph API for
+ * the holding id, using a service principal.
+ */
+
+// https://login.microsoftonline.com/5d7e4366-1b9b-45cf-8e79-b14b27df46e1/adminconsent?
+// client_id=491e3596-f65a-4fa7-b4a4-aec5ce5ca6da
+// &state=12345
+// &redirect_uri=http://localhost/dashboard
+
+// curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'client_id=491e3596-f65a-4fa7-b4a4-aec5ce5ca6da&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default&client_secret=-DC8Q~0IAWd1oXrmMWsPIp~6ggx7ZiPImRr7KdcS&grant_type=client_credentials' 'https://login.microsoftonline.com/5d7e4366-1b9b-45cf-8e79-b14b27df46e1/oauth2/v2.0/token'
+
+const getAccessToken = async () => {
+  console.log('ENTERED GETACCESSTOKEN')
+  let clientId = '491e3596-f65a-4fa7-b4a4-aec5ce5ca6da'
+  // let scope = "https%3A%2F%2Fgraph.microsoft.com%2F.default";
+  let scope = 'mail.send.shared'
+  let clientSecret = '-DC8Q~0IAWd1oXrmMWsPIp~6ggx7ZiPImRr7KdcS'
+  let tokenEndpoint =
+    'https://login.microsoftonline.com/5d7e4366-1b9b-45cf-8e79-b14b27df46e1/oauth2/token'
+  try {
+    let response = await axios.post(
+      tokenEndpoint,
+      'grant_type=client_credentials&client_id=' +
+        clientId +
+        '&client_secret=' +
+        clientSecret +
+        '&scope=' +
+        scope,
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    )
+    console.log(
+      '\n\n\n\n\nPOTATO Access Token is ' +
+        response.data.access_token +
+        '\n\n\n\n\n'
+    )
+    return response.data.access_token
+  } catch (error) {
+    console.log('Error acquiring access token: ', error)
+  }
 }
 
 /** Send Mails takes the 
@@ -194,6 +241,10 @@ const sendMails = async (
   group?: string,
   indivEmail?: string
 ) => {
+  from = 'lscstudypartners@cornell.edu'
+  console.log('ENTERED SENDMAILS')
+  console.log('SENDMAILS AUTHTOKEN IS: ' + authToken)
+  console.log('SENDMAILS FROM IS: ' + from)
   const validTemplate = await isValidTemplate(template)
   if (!validTemplate) {
     throw new Error(`Template with id ${template} doesn't exist`)
@@ -211,8 +262,9 @@ const sendMails = async (
   }
 
   const response = await axios({
-    url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
-    // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
+    // url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
+    url: `${GRAPH_ENDPOINT}/v1.0/users/IT-LSC-STUDYPARTNERS@cornell.edu/sendMail`,
+    // url: `${GRAPH_ENDPOINT}/v1.0/users/5d7e4366-1b9b-45cf-8e79-b14b27df46e1/sendMail`,
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + authToken,
@@ -283,8 +335,16 @@ export const sendStudentEmails = async (
   group?: string,
   indivEmail?: string
 ) => {
+  console.log('ENTERED SENDSTUDENTEMAILS')
   const emailRcpts = await getRecipients(courseId, group, indivEmail)
   const message = createEmailAsJson(emailRcpts, subject, body)
+
+  try {
+    authToken = await getAccessToken()
+    console.log('ACCESS TOKEN IS: ', await authToken)
+  } catch (error) {
+    console.error(error)
+  }
 
   await sendMails(
     from,
