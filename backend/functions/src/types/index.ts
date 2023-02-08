@@ -5,6 +5,11 @@ type Timestamp = admin.firestore.Timestamp
 // For now this exists in the backend folder only
 // Future: become a cool monorepo and have shared types backend/frontend
 
+/** Semester */
+export type Semester = {
+  semester: string
+}
+
 /** Course */
 export type Course = {
   names: string[]
