@@ -6,19 +6,9 @@ import {
   MissingCourseError,
 } from '../course/get_course_id'
 import { mapDate } from '../course/functions'
-import { FirestoreStudent, Student, Semester } from '../types'
+import { FirestoreStudent, Student } from '../types'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
-const semesterRef = db.collection('semester').doc('semester')
-
-export const getSemester = async (): Promise<String> => {
-  const semData = (await semesterRef.get()).data() as Semester
-  return semData.semester
-}
-
-export const setSemester = async (sem: String) => {
-  return semesterRef.set({ semester: sem })
-}
 
 /** Get all students in the student collection */
 export const getAllStudents = async (): Promise<Student[]> => {

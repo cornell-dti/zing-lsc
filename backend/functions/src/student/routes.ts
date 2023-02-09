@@ -9,8 +9,6 @@ import {
   getAllStudents,
   removeStudent,
   updateStudentNotes,
-  getSemester,
-  setSemester,
 } from './functions'
 
 router.get('/', (_, res) => {
@@ -60,25 +58,6 @@ router.delete('/', checkAuth, (req, res) => {
   logger.info(`Student [${email}] deleted.`)
   removeStudent(email)
     .then((data) => res.status(200).send({ success: true, data }))
-    .catch((err) => {
-      console.log(err)
-      res.status(400).send({ success: false, err: err.message })
-    })
-})
-
-router.get('/semester', (_, res) => {
-  getSemester()
-    .then((data) => res.status(200).send(data))
-    .catch((err) => {
-      logger.error(`Unexpected error getting semester: ${err.message}`)
-      res.status(500).send({ message: err.message })
-    })
-})
-
-router.post('/semester', (req, res) => {
-  const { semester } = req.body
-  setSemester(semester)
-    .then(() => res.status(200).send({ success: true }))
     .catch((err) => {
       console.log(err)
       res.status(400).send({ success: false, err: err.message })

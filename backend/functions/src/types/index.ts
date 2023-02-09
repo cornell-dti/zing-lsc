@@ -7,7 +7,8 @@ type Timestamp = admin.firestore.Timestamp
 
 /** Semester */
 export type Semester = {
-  semester: string
+  currentSemester: string
+  allSemesters: string[]
 }
 
 /** Course */
