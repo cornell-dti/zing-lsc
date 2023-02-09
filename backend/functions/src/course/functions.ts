@@ -16,7 +16,7 @@ export const setCurrentSemester = async (sem: String) => {
 
 export const getAllSemesters = async () => {
   const semData = (await semesterRef.get()).data() as Semester
-  return semData.allSemesters
+  return [semData.currentSemester, ...semData.allSemesters]
 }
 
 async function getCourseInfo(courseId: string) {

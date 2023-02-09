@@ -65,7 +65,7 @@ router.get('/semester/all', (_, res) => {
   getAllSemesters()
     .then((data) => res.status(200).send(data))
     .catch((err) => {
-      logger.error(`Unexpected error getting semester: ${err.message}`)
+      logger.error(`Unexpected error getting all semesters: ${err.message}`)
       res.status(500).send({ message: err.message })
     })
 })
