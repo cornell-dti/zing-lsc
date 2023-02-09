@@ -31,7 +31,9 @@ export const Survey = () => {
   const questions: Question[] = survey.map((question) => {
     var obj: { [key: string]: string } = {}
     Object.entries(question.answers).forEach((answer) => {
-      obj[answer[0]] = answer[1]
+      if (answer[0] && answer[1]) {
+        obj[answer[0]] = answer[1]
+      }
     })
     return {
       question: question.question,
