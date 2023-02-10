@@ -10,7 +10,7 @@ import { MetricsTable } from './MetricsTable'
 import { DropdownSelect } from '@core/Components'
 import { DASHBOARD_PATH } from '@core/Constants'
 import { Link } from 'react-router-dom'
-
+import survey from '@core/Questions/Questions.json'
 export const Metrics = () => {
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
@@ -28,9 +28,7 @@ export const Metrics = () => {
     return date >= firstDayOfWeek && date <= lastDayOfWeek
   }
 
-  const collegeAbbreviations = require('@core/Questions/Questions.json')[0][
-    'answers'
-  ]
+  const collegeAbbreviations = new Map(Object.entries(survey[0]['answers']))
   const numStudentsInWeek = students.map((student) =>
     student.groups.filter((membership) =>
       isDateInThisWeek(membership.submissionTime)
@@ -174,7 +172,7 @@ export const Metrics = () => {
     })
     const groups = getUniqueValues(createdGroups.map((s) => s.groupNumber))
     return {
-      rowName: collegeAbbreviations[college],
+      rowName: collegeAbbreviations.get(college),
       students: uniqueStudents.length,
       requests: specificCollegeStudents.length,
       matches: matches,
