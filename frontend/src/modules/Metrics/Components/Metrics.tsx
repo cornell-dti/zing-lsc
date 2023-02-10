@@ -221,6 +221,7 @@ export const Metrics = () => {
           setSelectedRoster={setSelectedRoster}
           showMetricsLink={false}
           showDashboardLink={true}
+          showSettingsLink={true}
         />
       </Box>
       <Box

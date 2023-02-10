@@ -17,6 +17,7 @@ export const AccountMenu = ({
   setSelectedRoster,
   showMetricsLink,
   showDashboardLink,
+  showSettingsLink,
 }: AccountMenuProps) => {
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
@@ -86,7 +87,6 @@ export const AccountMenu = ({
   const handleRosterClose = () => {
     setRosterAnchorEl(null)
   }
-
   return (
     <Box>
       <Button
@@ -144,6 +144,11 @@ export const AccountMenu = ({
             Dashboard
           </MenuItem>
         )}
+        {showSettingsLink && (
+          <MenuItem component={Link} to="/dashboard/settings">
+            Settings
+          </MenuItem>
+        )}
         <MenuItem
           onClick={() => {
             handleClose()
@@ -192,4 +197,5 @@ interface AccountMenuProps {
   setSelectedRoster: Dispatch<SetStateAction<string>>
   showMetricsLink: boolean
   showDashboardLink: boolean
+  showSettingsLink: boolean
 }
