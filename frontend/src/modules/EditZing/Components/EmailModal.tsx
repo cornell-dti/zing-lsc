@@ -32,7 +32,7 @@ export const EmailModal = ({
 }: EmailModalProps) => {
   const { courseId } = useParams<{ courseId: string }>()
   const { addGroupEmailTimestamps, courses } = useCourseValue()
-  const { addStudentEmailTimestamps } = useStudentValue()
+  const { addStudentEmailTimestamps, students } = useStudentValue()
   const { templates } = useTemplateValue()
 
   // check if emailing students or groups
@@ -74,8 +74,14 @@ export const EmailModal = ({
     }
 
     const groupSize = group.members.length
-    const newStudent = group.members[groupSize - 1]
-    const otherStudents = group.members.slice(0, groupSize - 1)
+
+    const members = group.members.map(
+      (member) =>
+        students.find((student) => student.email === member)?.name || ''
+    )
+
+    let newStudent = members[groupSize - 1]
+    let otherStudents = members.slice(0, groupSize - 1)
 
     const replaceNamesMap = {
       '{{NEW_STUDENT_NAME}}': newStudent,
