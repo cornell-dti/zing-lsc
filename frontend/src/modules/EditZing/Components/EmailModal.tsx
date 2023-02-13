@@ -64,8 +64,7 @@ export const EmailModal = ({
    *
    * @param groupNumber
    */
-  const specificReplacedHtml = (groupNumber: number) => {
-    console.log(`group number: ${groupNumber}`)
+  const studentNamesHtml = (groupNumber: number) => {
     const group = courses
       .find((course: Course) => course.courseId === courseId)
       ?.groups.find((group: Group) => group.groupNumber === groupNumber)
@@ -82,13 +81,6 @@ export const EmailModal = ({
       '{{NEW_STUDENT_NAME}}': newStudent,
       '{{OTHER_STUDENTS_NAMES}}': otherStudents.join(', '),
     }
-    console.log(`old students ${otherStudents}`)
-    console.log(
-      Object.entries(replaceNamesMap).reduce(
-        (prev, [key, value]) => prev.replaceAll(key, value),
-        replacedHtml
-      )
-    )
 
     return Object.entries(replaceNamesMap).reduce(
       (prev, [key, value]) => prev.replaceAll(key, value),
@@ -142,7 +134,7 @@ export const EmailModal = ({
         const emailItems = {
           emailSubject,
           indivEmail: undefined,
-          emailBody: specificReplacedHtml(groupNumber),
+          emailBody: studentNamesHtml(groupNumber),
           courseId,
           groupNum: groupNumber.toString(),
           selectedTemplate: selectedTemplate?.id,
@@ -222,7 +214,7 @@ export const EmailModal = ({
         <TemplateSelectedComponent />
         <EmailEdit
           template={selectedTemplate!}
-          replacedHtml={specificReplacedHtml(groupNumber)}
+          replacedHtml={studentNamesHtml(groupNumber)}
           setSelectedTemplate={setSelectedTemplate}
           setEmailSaved={setEmailSaved}
         />
@@ -249,7 +241,7 @@ export const EmailModal = ({
     selectedTabIndex: number
   }) => {
     // Goes through all selected groups and generates individual templates.
-    // TODO (richardgu): Make specificReplacedHtml include reglar replacedHtml function
+    // TODO (richardgu): Make studentNamesHtml include regular replacedHtml function
     // for cases that aren't group-specific
     const groupTemplates =
       selectedTabIndex === 0 ? (
@@ -276,7 +268,7 @@ export const EmailModal = ({
 
               <EmailPreview
                 template={selectedTemplate!}
-                replacedHtml={specificReplacedHtml(groupNum)}
+                replacedHtml={studentNamesHtml(groupNum)}
               />
             </Box>
           </Box>
@@ -291,7 +283,7 @@ export const EmailModal = ({
           >
             <EmailPreview
               template={selectedTemplate!}
-              replacedHtml={specificReplacedHtml(selectedTabIndex)}
+              replacedHtml={studentNamesHtml(selectedTabIndex)}
             />
           </Box>
         </Box>
