@@ -98,7 +98,17 @@ router.post('/transfer/unmatch', (req, res) => {
 
 router.post('/hide-group', (req, res) => {
   const { courseId, groupNumber } = req.body
-  hideEmptyGroup(courseId, groupNumber)
+  hideEmptyGroup(courseId, groupNumber, true)
+    .then(() => res.status(200).json({ success: true }))
+    .catch((err) => {
+      console.log(err)
+      res.status(400).json({ success: false, err: err.message })
+    })
+})
+
+router.post('/unhide-group', (req, res) => {
+  const { courseId, groupNumber } = req.body
+  hideEmptyGroup(courseId, groupNumber, false)
     .then(() => res.status(200).json({ success: true }))
     .catch((err) => {
       console.log(err)

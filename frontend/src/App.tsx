@@ -517,7 +517,11 @@ const App = () => {
     ])
 
   // update whats shown on the frontend
-  const removeGroups = (courseId: string, groupNumber: number) => {
+  const removeGroups = (
+    courseId: string,
+    groupNumber: number,
+    toHide: boolean
+  ) => {
     setCourses(
       courses.map((course) =>
         course.courseId === courseId
@@ -526,7 +530,7 @@ const App = () => {
               unmatched: [...course.unmatched],
               groups: course.groups.map((group) =>
                 groupNumber === group.groupNumber
-                  ? { ...group, hidden: true }
+                  ? { ...group, hidden: toHide }
                   : group
               ),
             }
