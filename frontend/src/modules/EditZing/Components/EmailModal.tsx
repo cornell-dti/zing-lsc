@@ -512,7 +512,8 @@ export const EmailModal = ({
         {step === 0 && <Step0 />}
         {step === 1 &&
           selectedTemplate.name ===
-            'Introducing student to established group' && (
+            'Introducing student to established group' &&
+          selectedGroupNumbers.length > 1 && (
             <GroupTabs
               groupNumbers={selectedGroupNumbers}
               selectedTabIndex={selectedTabIndex}
