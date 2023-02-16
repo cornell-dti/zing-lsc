@@ -57,7 +57,7 @@ export interface GoToButtonProps extends Common {
 }
 
 export interface RadioButtonProps extends Common {
-  currentAnswer: string
+  currentAnswer: string | undefined
   onClick: (e: React.ChangeEvent<HTMLInputElement>) => void
   value: string
   label: string
