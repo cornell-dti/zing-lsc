@@ -10,6 +10,7 @@ import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 
 export const Settings = () => {
   const [currRoster, setCurrRoster] = useState<string>('SP23')
+  const semesters = ['SU22', 'FA22', 'WI23', 'SP23', 'SU23']
 
   const changeCurrRoster = (event: SelectChangeEvent) => {
     // function to only open the survey of the semester
@@ -71,11 +72,9 @@ export const Settings = () => {
             right: '1px',
           }}
         >
-          <MenuItem value="SU22">Summer 2022</MenuItem>
-          <MenuItem value="FA22">Fall 2022</MenuItem>
-          <MenuItem value="WI23">Winter 2023</MenuItem>
-          <MenuItem value="SP23">Spring 2023</MenuItem>
-          <MenuItem value="SU23">Summer 2023</MenuItem>
+          {semesters.map((sem) => (
+            <MenuItem value={sem}>{sem}</MenuItem>
+          ))}
         </DropdownSelect>
       </Box>
     </Box>

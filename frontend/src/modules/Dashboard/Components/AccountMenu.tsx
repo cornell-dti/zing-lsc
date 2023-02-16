@@ -87,6 +87,7 @@ export const AccountMenu = ({
   const handleRosterClose = () => {
     setRosterAnchorEl(null)
   }
+
   return (
     <Box>
       <Button
@@ -142,11 +143,6 @@ export const AccountMenu = ({
         {showDashboardLink && (
           <MenuItem component={Link} to="/">
             Dashboard
-          </MenuItem>
-        )}
-        {showSettingsLink && (
-          <MenuItem component={Link} to="/dashboard/settings">
-            Settings
           </MenuItem>
         )}
         <MenuItem
