@@ -34,7 +34,7 @@ export const EmailTemplateButtons = ({
         labels={templateNames}
         values={templateIds}
         onClick={handleChange}
-        currentAnswer={selectedTemplate ? selectedTemplate.id : undefined}
+        currentAnswer={selectedTemplate ? selectedTemplate.id : ''}
       />
     </Box>
   )
