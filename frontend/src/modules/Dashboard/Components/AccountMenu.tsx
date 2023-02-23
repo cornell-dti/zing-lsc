@@ -125,13 +125,13 @@ export const AccountMenu = ({
       >
         <CSVLink
           data={csvCourses.filter((e) => e.semester === selectedRoster)}
-          filename={`lsc-exported-courses-${year}-${month}-${date}.csv`}
+          filename={`export-courses-${Date.now()}.csv`}
         >
           <MenuItem>Export CSV (Courses)</MenuItem>
         </CSVLink>
         <CSVLink
           data={csvStudents.filter((e) => e.semester === selectedRoster)}
-          filename={`lsc-exported-courses-${year}-${month}-${date}.csv`}
+          filename={`export-students-${Date.now()}.csv`}
         >
           <MenuItem>Export CSV (Students)</MenuItem>
         </CSVLink>
