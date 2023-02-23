@@ -17,6 +17,7 @@ export const AccountMenu = ({
   setSelectedRoster,
   showMetricsLink,
   showDashboardLink,
+  showSettingsLink,
 }: AccountMenuProps) => {
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
@@ -192,4 +193,5 @@ interface AccountMenuProps {
   setSelectedRoster: Dispatch<SetStateAction<string>>
   showMetricsLink: boolean
   showDashboardLink: boolean
+  showSettingsLink: boolean
 }

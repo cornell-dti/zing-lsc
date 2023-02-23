@@ -21,6 +21,7 @@ import {
   COURSE_API,
   STUDENT_API,
   MATCHING_API,
+  SETTINGS_PATH,
 } from '@core/Constants'
 import {
   Course,
@@ -51,6 +52,7 @@ import { getDownloadURL, ref } from 'firebase/storage'
 import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
+import { Settings } from 'Settings'
 import React from 'react'
 
 const App = () => {
@@ -578,7 +580,11 @@ const App = () => {
     ])
 
   // update whats shown on the frontend
-  const removeGroups = (courseId: string, groupNumber: number) => {
+  const removeGroups = (
+    courseId: string,
+    groupNumber: number,
+    toHide: boolean
+  ) => {
     setCourses(
       courses.map((course) =>
         course.courseId === courseId
@@ -587,7 +593,7 @@ const App = () => {
               unmatched: [...course.unmatched],
               groups: course.groups.map((group) =>
                 groupNumber === group.groupNumber
-                  ? { ...group, hidden: true }
+                  ? { ...group, hidden: toHide }
                   : group
               ),
             }
@@ -672,6 +678,11 @@ const App = () => {
                       exact
                       path={TEMPLATE_EDITOR_PATH}
                       component={TemplateEditor}
+                    />
+                    <PrivateRoute
+                      exact
+                      path={SETTINGS_PATH}
+                      component={Settings}
                     />
                   </Switch>
                 </TemplateProvider>
