@@ -301,7 +301,7 @@ export const EmailModal = ({
           onClick={() => {
             setStep(1)
           }}
-          disabled={!selectedTemplate || selectedTemplate === undefined}
+          disabled={!selectedTemplate}
           sx={{ position: 'absolute', bottom: '24px', right: '24px' }}
         >
           Next
