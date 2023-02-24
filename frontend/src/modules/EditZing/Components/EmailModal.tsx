@@ -1,11 +1,17 @@
 // external imports
 import { useState } from 'react'
-import { Box, Button, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  MenuItem,
+  SelectChangeEvent,
+  Typography,
+} from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useParams } from 'react-router-dom'
 
 // zing imports
-import { ZingModal } from '@core/Components'
+import { DropdownSelect, ZingModal } from '@core/Components'
 import { EmailModalProps } from '../Types/ComponentProps'
 import { EmailTemplateButtons } from 'EditZing/Components/EmailTemplateButtons'
 import { EmailPreview } from 'EditZing/Components/EmailPreview'
@@ -442,6 +448,12 @@ export const EmailModal = ({
     }
   }
 
+  const [currGroup, setCurrGroup] = useState<string>('All groups')
+
+  const changeCurrGroup = (event: SelectChangeEvent) => {
+    setCurrGroup(event.target.value)
+  }
+
   const GroupTabs = ({
     groupNumbers,
     selectedTabIndex,
@@ -449,35 +461,31 @@ export const EmailModal = ({
     groupNumbers: number[]
     selectedTabIndex: number
   }) => {
-    const selectedStyle = {
-      marginRight: '1rem',
-    }
+    const allGroups = [0, ...groupNumbers]
 
-    const unselectedStyle = {
-      color: 'gray',
-      marginRight: '1rem',
-    }
-
-    const tabs = groupNumbers.map((groupNum: number, index: number) => {
-      return (
-        <Button
-          sx={selectedTabIndex === index + 1 ? selectedStyle : unselectedStyle}
-          onClick={() => setSelectedTabIndex(index + 1)}
-        >
-          Group {index + 1}
-        </Button>
-      )
-    })
     return (
-      <div>
-        <Button
-          sx={selectedTabIndex === 0 ? selectedStyle : unselectedStyle}
-          onClick={() => setSelectedTabIndex(0)}
-        >
-          All groups
-        </Button>
-        {tabs}
-      </div>
+      <DropdownSelect
+        value={currGroup}
+        onChange={changeCurrGroup}
+        sx={{
+          padding: 0,
+          margin: 0,
+          fontWeight: 'bold',
+          maxWidth: '250px',
+        }}
+      >
+        {allGroups.map((groupNum: number, index: number) =>
+          groupNum === 0 ? (
+            <MenuItem value={index} onClick={() => setSelectedTabIndex(index)}>
+              All Groups
+            </MenuItem>
+          ) : (
+            <MenuItem value={index} onClick={() => setSelectedTabIndex(index)}>
+              Group {index}
+            </MenuItem>
+          )
+        )}
+      </DropdownSelect>
     )
   }
 
