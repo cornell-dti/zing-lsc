@@ -10,27 +10,33 @@ import { MetricsTable } from './MetricsTable'
 import { DropdownSelect } from '@core/Components'
 import { DASHBOARD_PATH } from '@core/Constants'
 import { Link } from 'react-router-dom'
+import { GroupMembership } from '@core/index'
 
+import survey from '@core/Questions/Questions.json'
 export const Metrics = () => {
   const { courses } = useCourseValue()
   const { students } = useStudentValue()
 
-  function isDateInThisWeek(date: Date) {
+  //checks if date is within the week (beginning of the day Sunday to end of day Saturday)
+  const isDateInThisWeek = (date: Date) => {
     const todayObj = new Date()
     const todayDate = todayObj.getDate()
     const todayDay = todayObj.getDay()
+    //set the date to be Sunday midnight
+    todayObj.setDate(todayDate - todayDay)
+    todayObj.setHours(0, 0, 0, 0)
     // get first date of week
-    const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay))
+    const firstDayOfWeek = new Date(todayObj)
     // get last date of week
     const lastDayOfWeek = new Date(firstDayOfWeek)
+    //set the date to be Saturday 11:59:59 PM
     lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6)
+    lastDayOfWeek.setHours(23, 59, 999)
     // if date is equal or within the first and last dates of the week
     return date >= firstDayOfWeek && date <= lastDayOfWeek
   }
 
-  const collegeAbbreviations = require('@core/Questions/Questions.json')[0][
-    'answers'
-  ]
+  const collegeAbbreviations = new Map(Object.entries(survey[0]['answers']))
   const numStudentsInWeek = students.map((student) =>
     student.groups.filter((membership) =>
       isDateInThisWeek(membership.submissionTime)
@@ -118,6 +124,15 @@ export const Metrics = () => {
     )
   }
 
+  const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
+
+  //group student's classes under the student
+  const studentsInSemester = new Map<
+    string,
+    { semester: string; groups: GroupMembership[]; college: string }
+  >()
+
+  //calculates details for all students
   const allStudents =
     courses.length && students.length // Just making sure this isn't calculated until the data is available
       ? students.flatMap((student) =>
@@ -129,6 +144,13 @@ export const Metrics = () => {
               // undefined if student is unmatched
               (g) => g.groupNumber === membership.groupNumber
             )
+            if (course.roster === selectedRoster) {
+              studentsInSemester.set(student.email, {
+                semester: course.roster,
+                groups: student.groups,
+                college: student.college,
+              })
+            }
             return {
               semester: course.roster,
               cornellEmail: student.email,
@@ -146,16 +168,21 @@ export const Metrics = () => {
           })
         )
       : []
+
   const getUniqueValues = (arr: any) => {
     return arr.filter(
       (value: any, index: any, self: string | any[]) =>
         self.indexOf(value) === index
     )
   }
-  const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
+
   const chosenSemesterStudents = allStudents.filter(
     (e) => e.semester === selectedRoster
   )
+  const chosenSemesterCourses = courses.filter(
+    (e) => e.roster === selectedRoster
+  )
+
   const collegeNames = getUniqueValues(allStudents.map((s) => s.college))
 
   const calculateStats = (college: string) => {
@@ -174,7 +201,7 @@ export const Metrics = () => {
     })
     const groups = getUniqueValues(createdGroups.map((s) => s.groupNumber))
     return {
-      rowName: collegeAbbreviations[college],
+      rowName: collegeAbbreviations.get(college),
       students: uniqueStudents.length,
       requests: specificCollegeStudents.length,
       matches: matches,
@@ -221,6 +248,7 @@ export const Metrics = () => {
           setSelectedRoster={setSelectedRoster}
           showMetricsLink={false}
           showDashboardLink={true}
+          showSettingsLink={true}
         />
       </Box>
       <Box

@@ -17,6 +17,7 @@ export const AccountMenu = ({
   setSelectedRoster,
   showMetricsLink,
   showDashboardLink,
+  showSettingsLink,
 }: AccountMenuProps) => {
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
@@ -87,6 +88,11 @@ export const AccountMenu = ({
     setRosterAnchorEl(null)
   }
 
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = today.getMonth() + 1
+  const date = today.getDate()
+
   return (
     <Box>
       <Button
@@ -120,13 +126,13 @@ export const AccountMenu = ({
       >
         <CSVLink
           data={csvCourses.filter((e) => e.semester === selectedRoster)}
-          filename={`export-courses-${Date.now()}`}
+          filename={`lsc-exported-courses-${year}-${month}-${date}.csv`}
         >
           <MenuItem>Export CSV (Courses)</MenuItem>
         </CSVLink>
         <CSVLink
           data={csvStudents.filter((e) => e.semester === selectedRoster)}
-          filename={`export-students-${Date.now()}`}
+          filename={`lsc-exported-students-${year}-${month}-${date}.csv`}
         >
           <MenuItem>Export CSV (Students)</MenuItem>
         </CSVLink>
@@ -192,4 +198,5 @@ interface AccountMenuProps {
   setSelectedRoster: Dispatch<SetStateAction<string>>
   showMetricsLink: boolean
   showDashboardLink: boolean
+  showSettingsLink: boolean
 }

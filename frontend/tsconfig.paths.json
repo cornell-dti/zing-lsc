@@ -32,7 +32,9 @@
       "Emailing": ["src/modules/Emailing/"],
       "Emailing/*": ["src/modules/Emailing/*"],
       "TemplateEditor": ["src/modules/TemplateEditor/"],
-      "TemplateEditor/*": ["src/modules/TemplateEditor/*"]
+      "TemplateEditor/*": ["src/modules/TemplateEditor/*"],
+      "Settings": ["src/modules/Settings"],
+      "Settings/*": ["src/modules/Settings/*"]
     }
   }
 }
