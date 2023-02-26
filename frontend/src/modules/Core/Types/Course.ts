@@ -12,6 +12,7 @@ export interface Course {
 }
 
 export interface Group {
+  groupId: number
   groupNumber: number
   members: string[]
   createTime: Date
@@ -32,6 +33,7 @@ export interface ResponseCourse {
 }
 
 export interface ResponseGroup {
+  groupId: number
   groupNumber: number
   members: string[]
   createTime: string

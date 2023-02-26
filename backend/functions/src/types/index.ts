@@ -19,6 +19,7 @@ export type Course = {
 
 /** Group of students in a class */
 export type Group = {
+  groupId: number
   groupNumber: number
   members: string[]
   createTime: Date
@@ -100,6 +101,7 @@ export type FirestoreEmailTemplate = {
 
 /** How group data is stored in the database */
 export type FirestoreGroup = {
+  groupId: number
   groupNumber: number
   members: string[]
   createTime: Timestamp

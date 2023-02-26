@@ -26,6 +26,7 @@ export interface UnmatchedGridProps {
 }
 
 export interface GroupGridProps {
+  groupId: number
   courseId: string
   studentList: Student[]
   groupNumber: number
