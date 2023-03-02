@@ -2,20 +2,6 @@
 
 ## Contributors
 
-### Spring 2023 
-- **Mikayla Lin** - Product Manager
-- **Prachi Kelkar** - Associate Product Manager 
-- **Miranda Luo** - Co-Technical Product Manager
-- **Will Zhang** - Co-Technical Product Manager
-- **Clara Lee** - Designer
-- **Jenny Zhang** - Designer
-- **Benjamin Tang** - Developer
-- **Colin Wu** - Developer
-- **Jessica Wang** - Developer
-- **Justin Kong** - Developer
-- **Richard Gu** - Developer
-- **Changyuan Lin** - Advisor
-
 ### Fall 2022 
 - **Mikayla Lin** - Product Manager
 - **Changyuan Lin** - Co-Technical Product Manager

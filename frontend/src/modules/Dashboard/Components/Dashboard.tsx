@@ -276,7 +276,6 @@ export const Dashboard = () => {
           setSelectedRoster={setSelectedRoster}
           showMetricsLink={true}
           showDashboardLink={false}
-          showSettingsLink={true}
         />
       </StyledHeaderMenu>
       <CourseGrid courses={filteredSortedCourses} />
