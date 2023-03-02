@@ -322,14 +322,18 @@ async function createEmptyGroup(courseId: string) {
   await Promise.all([groupCreationUpdate, groupNumberUpdate])
 }
 
-async function hideEmptyGroup(courseId: string, groupNumber: number) {
+async function hideEmptyGroup(
+  courseId: string,
+  groupNumber: number,
+  toHide: boolean
+) {
   await assertIsExistingCourse(courseId)
 
   const groupToHide = courseRef
     .doc(courseId)
     .collection('groups')
     .doc(groupNumber.toString())
-    .update({ hidden: true })
+    .update({ hidden: toHide })
     .catch((err) => {
       console.log(err)
       throw new Error(`Error in removing group ${groupNumber}`)

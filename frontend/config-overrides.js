@@ -19,5 +19,6 @@ module.exports = override(
     ['Dashboard']: path.resolve(__dirname, './src/modules/Dashboard'),
     ['Emailing']: path.resolve(__dirname, './src/modules/Emailing'),
     ['TemplateEditor']: path.resolve(__dirname, './src/modules/TemplateEditor'),
+    ['Settings']: path.resolve(__dirname, './src/modules/Settings'),
   })
 )
