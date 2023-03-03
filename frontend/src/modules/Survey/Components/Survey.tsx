@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { Question } from '@core/Types'
-import { API_ROOT, STUDENT_API } from '@core/Constants'
+import { API_ROOT, STUDENT_API, COURSE_API } from '@core/Constants'
 import {
   StyledContainer1 as SplashBackground,
   StyledContainer2 as QuestionBackground,
@@ -14,9 +14,11 @@ import { StepFinal } from 'Survey/Components/StepFinal'
 import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
 import survey from '@core/Questions/Questions.json'
+import { Box } from '@mui/material'
 
 export const Survey = () => {
   const [currStep, setCurrStep] = useState(1)
+  const currSurveyState = false
 
   // Final step data
   const [surveySubmissionResponse, setSurveySubmissionResponse] = useState<
@@ -93,7 +95,7 @@ export const Survey = () => {
       ? courseList.length > 0 && courseList.every((c) => validCourseRe.test(c))
       : answers[multipleChoiceIndex] !== ''
 
-  return currStep === 1 ? ( // Form landing
+  return currStep === 1 && currSurveyState ? ( // Form landing
     <SplashBackground>
       <StepBegin
         name={nameAnswer}
@@ -112,7 +114,7 @@ export const Survey = () => {
         errorMsg={surveyError != null ? surveyError : ''}
       />
     </QuestionBackground>
-  ) : (
+  ) : !currSurveyState ? (
     <QuestionBackground>
       <StepTemplate
         isStepValid={isStepValid}
@@ -121,7 +123,7 @@ export const Survey = () => {
         totalSteps={totalSteps}
         gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
         gotoNextStep={
-          currStep === totalSteps
+          currStep === totalSteps && currSurveyState
             ? finalNext
             : () => setCurrStep((currStep) => currStep + 1)
         }
@@ -143,5 +145,7 @@ export const Survey = () => {
         )}
       </StepTemplate>
     </QuestionBackground>
+  ) : (
+    <Box>Survey is closed </Box>
   )
 }
