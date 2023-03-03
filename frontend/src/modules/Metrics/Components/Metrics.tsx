@@ -46,7 +46,7 @@ export const Metrics = () => {
     )
   }
 
-  const [selectedRoster, setSelectedRoster] = useState<string>('FA22')
+  const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
   const studentsInSemester = new Map<
     string,
     { semester: string; groups: GroupMembership[]; college: string }
