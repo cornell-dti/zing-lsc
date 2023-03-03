@@ -6,7 +6,9 @@ export const EmailEdit = ({
   template,
   replacedHtml,
   setSelectedTemplate,
+  setGroupTemplate,
   setEmailSaved,
+  groupNumber,
 }: EmailEditProps) => {
   const TitleSx: SxProps = {
     color: 'essentials.6',
@@ -30,7 +32,9 @@ export const EmailEdit = ({
   const copyEmailTemplate = () => {
     let copied = Object.assign({}, template)
     copied.html = replacedHtml
-    setSelectedTemplate(copied)
+    groupNumber
+      ? setGroupTemplate(copied, groupNumber)
+      : setSelectedTemplate(copied)
   }
 
   const handleClick = () => {

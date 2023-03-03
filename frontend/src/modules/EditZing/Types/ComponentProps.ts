@@ -116,7 +116,9 @@ export interface EmailEditProps {
   template: EmailTemplate
   replacedHtml: string
   setSelectedTemplate: (value: EmailTemplate) => void
+  setGroupTemplate: (value: EmailTemplate, groupNumber: number) => void
   setEmailSaved: (arg: boolean) => void
+  groupNumber?: number
 }
 
 export interface DeleteGroupProps {

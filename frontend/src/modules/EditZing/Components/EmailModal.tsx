@@ -105,6 +105,15 @@ export const EmailModal = ({
     template: studentNamesHtml(groupNumber),
   }))
 
+  // replaces a particular group's template
+  const setGroupTemplate = (copy: EmailTemplate, groupNumber: number) => {
+    allGroupTemplates[
+      allGroupTemplates.findIndex(
+        (groupTemplate) => groupTemplate.groupNumber === groupNumber
+      )
+    ] = { groupNumber, template: copy.html }
+  }
+
   const [step, setStep] = useState<number>(0)
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
   const titles = [
@@ -251,7 +260,9 @@ export const EmailModal = ({
             )?.template || ''
           }
           setSelectedTemplate={setSelectedTemplate}
+          setGroupTemplate={setGroupTemplate}
           setEmailSaved={setEmailSaved}
+          groupNumber={groupNumber}
         />
       </Box>
     ) : (
@@ -261,6 +272,7 @@ export const EmailModal = ({
           template={selectedTemplate!}
           replacedHtml={studentNamesHtml(groupNumber)}
           setSelectedTemplate={setSelectedTemplate}
+          setGroupTemplate={setGroupTemplate}
           setEmailSaved={setEmailSaved}
         />
       </Box>
