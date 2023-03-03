@@ -100,6 +100,11 @@ export const EmailModal = ({
     )
   }
 
+  const allGroupTemplates = selectedGroupNumbers.map((groupNumber) => ({
+    groupNumber,
+    template: studentNamesHtml(groupNumber),
+  }))
+
   const [step, setStep] = useState<number>(0)
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
   const titles = [
@@ -141,18 +146,31 @@ export const EmailModal = ({
    */
   const sendGroupEmails = async () => {
     await Promise.all(
-      selectedGroupNumbers.map((groupNumber) => {
-        const emailSubject = selectedTemplate?.subject
-        const emailItems = {
-          emailSubject,
-          indivEmail: undefined,
-          emailBody: studentNamesHtml(groupNumber),
-          courseId,
-          groupNum: groupNumber.toString(),
-          selectedTemplate: selectedTemplate?.id,
-        }
-        return sendEmail(emailItems)
-      })
+      selectedTemplate.name === 'Introducing student to established group'
+        ? allGroupTemplates.map(({ groupNumber, template }) => {
+            const emailSubject = selectedTemplate?.subject
+            const emailItems = {
+              emailSubject,
+              indivEmail: undefined,
+              emailBody: template,
+              courseId,
+              groupNum: groupNumber.toString(),
+              selectedTemplate: selectedTemplate?.id,
+            }
+            return sendEmail(emailItems)
+          })
+        : selectedGroupNumbers.map((groupNumber) => {
+            const emailSubject = selectedTemplate?.subject
+            const emailItems = {
+              emailSubject,
+              indivEmail: undefined,
+              emailBody: studentNamesHtml(groupNumber),
+              courseId,
+              groupNum: groupNumber.toString(),
+              selectedTemplate: selectedTemplate?.id,
+            }
+            return sendEmail(emailItems)
+          })
     )
   }
 
@@ -221,7 +239,22 @@ export const EmailModal = ({
   }
 
   const EditEmail = ({ groupNumber }: { groupNumber: number }) => {
-    return (
+    return selectedTemplate.name ===
+      'Introducing student to established group' ? (
+      <Box>
+        <TemplateSelectedComponent />
+        <EmailEdit
+          template={selectedTemplate!}
+          replacedHtml={
+            allGroupTemplates.find(
+              (groupTemplate) => groupTemplate.groupNumber === groupNumber
+            )?.template || ''
+          }
+          setSelectedTemplate={setSelectedTemplate}
+          setEmailSaved={setEmailSaved}
+        />
+      </Box>
+    ) : (
       <Box>
         <TemplateSelectedComponent />
         <EmailEdit
@@ -257,7 +290,7 @@ export const EmailModal = ({
     // for cases that aren't group-specific
     const groupTemplates =
       selectedTabIndex === 0 ? (
-        groupNumbers.map((groupNum: number) => (
+        allGroupTemplates.map(({ groupNumber, template }) => (
           <Box>
             <Box
               sx={{
@@ -275,12 +308,12 @@ export const EmailModal = ({
                   whiteSpace: 'nowrap',
                 }}
               >
-                Group {groupNum}
+                Group {groupNumber}
               </Box>
 
               <EmailPreview
                 template={selectedTemplate!}
-                replacedHtml={studentNamesHtml(groupNum)}
+                replacedHtml={template}
               />
             </Box>
           </Box>
