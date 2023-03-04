@@ -26,6 +26,14 @@ export const Settings = () => {
     setSurveyState(!surveyState)
   }
 
+  function getCurrSurveyState() {
+    axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
+      setSurveyState(req.data)
+      console.log(req.data)
+    })
+  }
+  getCurrSurveyState()
+
   return (
     <Box
       sx={{ pl: '5rem', pr: '5rem', display: 'flex', flexDirection: 'column' }}
