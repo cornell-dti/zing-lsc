@@ -14,11 +14,18 @@ import { StepFinal } from 'Survey/Components/StepFinal'
 import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
 import survey from '@core/Questions/Questions.json'
-import { Box } from '@mui/material'
 
 export const Survey = () => {
   const [currStep, setCurrStep] = useState(1)
-  const currSurveyState = false
+  const [currSurveyState, setCurrSurveyState] = useState<boolean>(true)
+
+  function getCurrSurveyState() {
+    axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
+      setCurrSurveyState(req.data)
+      console.log(req.data)
+    })
+  }
+  getCurrSurveyState()
 
   // Final step data
   const [surveySubmissionResponse, setSurveySubmissionResponse] = useState<
@@ -146,6 +153,7 @@ export const Survey = () => {
       </StepTemplate>
     </QuestionBackground>
   ) : (
-    <Box>Survey is closed </Box>
+    // page for a closed survey
+    <></>
   )
 }
