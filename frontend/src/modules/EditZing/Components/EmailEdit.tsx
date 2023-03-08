@@ -6,7 +6,7 @@ export const EmailEdit = ({
   template,
   replacedHtml,
   setSelectedTemplate,
-  setGroupTemplate,
+  setSingleGroupTemplate,
   setEmailSaved,
   groupNumber,
 }: EmailEditProps) => {
@@ -33,7 +33,7 @@ export const EmailEdit = ({
     let copied = Object.assign({}, template)
     copied.html = replacedHtml
     groupNumber
-      ? setGroupTemplate(copied, groupNumber)
+      ? setSingleGroupTemplate(copied, groupNumber)
       : setSelectedTemplate(copied)
   }
 

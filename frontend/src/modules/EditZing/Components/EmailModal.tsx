@@ -100,19 +100,31 @@ export const EmailModal = ({
     )
   }
 
-  const allGroupTemplates = selectedGroupNumbers.map((groupNumber) => ({
-    groupNumber,
-    template: studentNamesHtml(groupNumber),
-  }))
-
-  // replaces a particular group's template
-  const setGroupTemplate = (copy: EmailTemplate, groupNumber: number) => {
-    allGroupTemplates[
-      allGroupTemplates.findIndex(
-        (groupTemplate) => groupTemplate.groupNumber === groupNumber
-      )
-    ] = { groupNumber, template: copy.html }
+  interface GroupTemplate {
+    groupNumber: number
+    template: EmailTemplate
   }
+
+  // state containing initial custom email templates for each group
+  const [allGroupTemplates, setAllGroupTemplates] = useState<GroupTemplate[]>(
+    selectedGroupNumbers.map((groupNumber) => ({
+      groupNumber,
+      template: {
+        ...selectedTemplate,
+        body: studentNamesHtml(groupNumber),
+        html: studentNamesHtml(groupNumber),
+      },
+    }))
+  )
+
+  const setSingleGroupTemplate = (copied: EmailTemplate, groupNumber: number) =>
+    setAllGroupTemplates(
+      allGroupTemplates.map((groupTemplate) =>
+        groupTemplate.groupNumber === groupNumber
+          ? { groupNumber, template: copied }
+          : groupTemplate
+      )
+    )
 
   const [step, setStep] = useState<number>(0)
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
@@ -253,14 +265,14 @@ export const EmailModal = ({
       <Box>
         <TemplateSelectedComponent />
         <EmailEdit
-          template={selectedTemplate!}
-          replacedHtml={
+          template={
             allGroupTemplates.find(
               (groupTemplate) => groupTemplate.groupNumber === groupNumber
-            )?.template || ''
+            )?.template!
           }
+          replacedHtml={studentNamesHtml(groupNumber)}
           setSelectedTemplate={setSelectedTemplate}
-          setGroupTemplate={setGroupTemplate}
+          setSingleGroupTemplate={setSingleGroupTemplate}
           setEmailSaved={setEmailSaved}
           groupNumber={groupNumber}
         />
@@ -272,7 +284,7 @@ export const EmailModal = ({
           template={selectedTemplate!}
           replacedHtml={studentNamesHtml(groupNumber)}
           setSelectedTemplate={setSelectedTemplate}
-          setGroupTemplate={setGroupTemplate}
+          setSingleGroupTemplate={setSingleGroupTemplate}
           setEmailSaved={setEmailSaved}
         />
       </Box>
@@ -325,7 +337,7 @@ export const EmailModal = ({
 
               <EmailPreview
                 template={selectedTemplate!}
-                replacedHtml={template}
+                replacedHtml={template.html}
               />
             </Box>
           </Box>
