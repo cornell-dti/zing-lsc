@@ -57,18 +57,40 @@ async function removeStudentFromCourse(
   courseId: string,
   groupNumber: any
 ) {
+  //remove unmatched student
+  if (groupNumber === -1) {
+    const ref = courseRef.doc(courseId)
+
+    return ref
+      .update({
+        unmatched: admin.firestore.FieldValue.arrayRemove(email),
+      })
+      .catch((err) => {
+        console.log(err)
+        throw new Error(`error in removing ${email} from unmatched.`)
+      })
+  }
+
+  //remove matched student
   const ref = courseRef
     .doc(courseId)
     .collection('groups')
     .doc(groupNumber.toString())
+
   const data: any = (await ref.get()).data()
   if (data.members.length === 1 && data.members.includes(email)) {
     //second condition is a sanity check
     return ref.delete() // Fix this if we ever use this function, I don't think they want groups to ever be deleted fully
   } else {
-    return ref.update({
-      members: admin.firestore.FieldValue.arrayRemove(email),
-    })
+    return ref
+      .update({
+        members: admin.firestore.FieldValue.arrayRemove(email),
+        updateTime: admin.firestore.FieldValue.serverTimestamp(),
+      })
+      .catch((err) => {
+        console.log(err)
+        throw new Error(`error in removing ${email} from group ${groupNumber}.`)
+      })
   }
 }
 
@@ -168,6 +190,7 @@ export const addStudentSurveyResponse = async (
     notesModifyTime: surveyTimestamp, // Can't use serverTimestamp in arrays...
     submissionTime: surveyTimestamp,
     templateTimestamps: {},
+    archived: false,
   }))
 
   // First, update the [student] collection to include the data for the new student
@@ -303,4 +326,48 @@ export const updateStudentNotes = async (
   logger.info(
     `Updated notes for [${courseId}] in student [${email}] to [${notes}]`
   )
+}
+
+async function archiveStudentInStudent(email: any, courseId: string) {
+  const studentDocRef = studentRef.doc(email)
+  const studentDoc = await studentDocRef.get()
+  if (!studentDoc.exists) {
+    throw new Error(`Student document for ${email} does not exist`)
+  }
+  const studentData = studentDoc.data() as FirestoreStudent
+  const groups = studentData.groups
+  const groupMembership = groups.find((group) => group.courseId === courseId)
+  if (!groupMembership) {
+    throw new Error(`Student ${email} does not have membership in ${courseId}`)
+  }
+
+  groupMembership.archived = true
+  await studentDocRef.update({ groups })
+  logger.info(`Archived [${courseId}] in student [${email}]]`)
+  return groupMembership.groupNumber
+}
+
+// //Returns the group number of the student with email [email] in course [courseID]
+// async function getStudentGroup(
+//   email: any,
+//   courseId: string,
+// ) {
+//   const studentDocRef = studentRef.doc(email)
+//   const studentDoc = await studentDocRef.get()
+//   if (!studentDoc.exists) {
+//     throw new Error(`Student document for ${email} does not exist`)
+//   }
+//   const studentData = studentDoc.data() as FirestoreStudent
+//   const groups = studentData.groups
+//   const groupMembership = groups.find((group) => group.courseId === courseId)
+//   if (!groupMembership) {
+//     throw new Error(`Student ${email} does not have membership in ${courseId}`)
+//   }
+
+//   return groupMembership.groupNumber
+// }
+
+export async function archiveStudent(email: any, courseId: string) {
+  const groupNum = await archiveStudentInStudent(email, courseId)
+  await removeStudentFromCourse(email, courseId, groupNum)
 }

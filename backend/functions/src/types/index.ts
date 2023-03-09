@@ -45,6 +45,7 @@ export type GroupMembership = {
   notesModifyTime: Date
   submissionTime: Date
   templateTimestamps: { [key: string]: Date }
+  archived: boolean
 }
 
 /** Information about an email template */
@@ -86,6 +87,7 @@ export type FirestoreGroupMembership = {
   notesModifyTime: Timestamp
   submissionTime: Timestamp
   templateTimestamps: EmailTimestamps
+  archived: boolean
 }
 
 /** How email template data is stored in the database */
