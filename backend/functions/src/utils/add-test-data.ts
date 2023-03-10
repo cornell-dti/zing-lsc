@@ -70,7 +70,8 @@ const addTestStudents = async () => {
         email,
         selectCollege(),
         selectYear(),
-        selectClasses()
+        selectClasses(),
+        true
       )
         .then(() => {
           console.log('added successfully!')

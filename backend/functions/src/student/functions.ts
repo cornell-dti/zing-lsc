@@ -80,9 +80,14 @@ export const addStudentSurveyResponse = async (
   email: string,
   college: string,
   year: string,
-  courseCatalogNames: string[]
+  courseCatalogNames: string[],
+  surveySubmittable: boolean
 ) => {
   const roster = 'SP23' // Spring 2023
+
+  if (!surveySubmittable) {
+    throw new Error('Survey is Closed')
+  }
 
   // 0. Check if email is valid cornell.edu email.
   const emailRegex = /^\w+@cornell.edu$/
