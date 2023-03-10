@@ -76,7 +76,7 @@ export const Survey = () => {
       courseCatalogNames: courseList,
       name: nameAnswer,
       email: emailAnswer,
-      surveySubmittable: boolean,
+      surveySubmittable: currSurveyState,
       ...mcData,
     }
     console.log('Finished survey', surveyData)
