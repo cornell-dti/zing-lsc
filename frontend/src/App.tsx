@@ -20,6 +20,7 @@ import {
   COURSE_API,
   STUDENT_API,
   MATCHING_API,
+  SETTINGS_PATH,
 } from '@core/Constants'
 import {
   Course,
@@ -50,6 +51,8 @@ import { getDownloadURL, ref } from 'firebase/storage'
 import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
+import { Settings } from 'Settings'
+import React from 'react'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -609,6 +612,11 @@ const App = () => {
                       exact
                       path={TEMPLATE_EDITOR_PATH}
                       component={TemplateEditor}
+                    />
+                    <PrivateRoute
+                      exact
+                      path={SETTINGS_PATH}
+                      component={Settings}
                     />
                   </Switch>
                 </TemplateProvider>

@@ -49,9 +49,9 @@ export const EmailModal = ({
   )
 
   // template editor logic
-  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>(
-    filteredTemplates[0]
-  )
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    EmailTemplate | undefined
+  >(undefined)
 
   // Special value substitution in template HTML
   const replaceMap = {
@@ -615,7 +615,7 @@ export const EmailModal = ({
         </Box>
       </ZingModal.Title>
       <ZingModal.Body>
-        {selectedTemplate ? (
+        {filteredTemplates.length !== 0 ? (
           <Box sx={{ padding: '1rem 3.5rem 0 3.5rem' }}>
             {step <= 1 && <SelectTemplates />}
             {step === 2 && <StepFailure />}
