@@ -21,24 +21,28 @@ router.get('/', (_, res) => {
 })
 
 router.post('/survey', (req, res) => {
-  const { name, email, college, year, courseCatalogNames } = req.body
+  const { name, email, college, year, courseCatalogNames, surveySubmittable } =
+    req.body
   const userAgent = req.get('user-agent')
   logger.info(
     `Student [${name}] submitted survey using ${email} on agent ${userAgent}`
   )
-
-  addStudentSurveyResponse(name, email, college, year, courseCatalogNames)
-    .then((data) => res.status(200).json({ success: true, data }))
-    .catch((err) => {
-      logger.error(
-        `ERROR in Student [${name}] submitted survey using ${email} on agent ${userAgent}`,
-        err.message
-      )
-      if (err.name === 'processing_err') {
-        return res.status(500).send({ success: false, message: err.message })
-      }
-      return res.status(400).send({ success: false, message: err.message })
-    })
+  if (surveySubmittable) {
+    addStudentSurveyResponse(name, email, college, year, courseCatalogNames)
+      .then((data) => res.status(200).json({ success: true, data }))
+      .catch((err) => {
+        logger.error(
+          `ERROR in Student [${name}] submitted survey using ${email} on agent ${userAgent}`,
+          err.message
+        )
+        if (err.name === 'processing_err') {
+          return res.status(500).send({ success: false, message: err.message })
+        }
+        return res.status(400).send({ success: false, message: err.message })
+      })
+  } else {
+    return res.status(400).send({ success: false, message: 'Survey is closed' })
+  }
 })
 
 router.post('/notes', (req, res) => {
