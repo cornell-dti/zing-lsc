@@ -642,8 +642,7 @@ const App = () => {
                 >
                   <Snackbar
                     open={needsRefresh}
-                    message="The information in your app is out of date. 
-                       Please reload to see the latest updates."
+                    message="The information in your app is out of date. Please reload to see the latest updates."
                     action={reloadButton}
                   />
                   <Switch>
