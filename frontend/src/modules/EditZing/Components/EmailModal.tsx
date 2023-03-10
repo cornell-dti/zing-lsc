@@ -49,9 +49,9 @@ export const EmailModal = ({
   )
 
   // template editor logic
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    EmailTemplate | undefined
-  >(undefined)
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>(
+    filteredTemplates[0]
+  )
 
   // Special value substitution in template HTML
   const replaceMap = {
@@ -105,6 +105,9 @@ export const EmailModal = ({
     template: EmailTemplate
   }
 
+  const [step, setStep] = useState<number>(0)
+  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
+
   // state containing initial custom email templates for each group
   const [allGroupTemplates, setAllGroupTemplates] = useState<GroupTemplate[]>(
     selectedGroupNumbers.map((groupNumber) => ({
@@ -126,8 +129,6 @@ export const EmailModal = ({
       )
     )
 
-  const [step, setStep] = useState<number>(0)
-  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
   const titles = [
     'Select email template',
     'Send emails',
@@ -615,7 +616,7 @@ export const EmailModal = ({
         </Box>
       </ZingModal.Title>
       <ZingModal.Body>
-        {filteredTemplates.length !== 0 ? (
+        {selectedTemplate ? (
           <Box sx={{ padding: '1rem 3.5rem 0 3.5rem' }}>
             {step <= 1 && <SelectTemplates />}
             {step === 2 && <StepFailure />}
