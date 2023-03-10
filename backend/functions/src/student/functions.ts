@@ -169,7 +169,11 @@ export const addStudentSurveyResponse = async (
   // Find the existing courses this student is already in by checking group membership
   const existingData = (await studentRef.doc(email).get()).data() //gets all the existing data
   //studentCrses becomes courseIds of existingData.groups if available, otherwise []
-  const existingCourses = existingData ? existingData.groups : [] //gets the existing courses
+  const existingCourses = existingData
+    ? existingData.groups.filter(
+        (course: { archived: string }) => !course.archived
+      )
+    : [] //gets the existing courses
   const existingCourseIds: string[] = existingCourses.map(
     (course: { courseId: string }) => course.courseId
   )
@@ -328,7 +332,7 @@ export const updateStudentNotes = async (
   )
 }
 
-async function archiveStudentInStudent(email: any, courseId: string) {
+async function archiveStudentInStudent(email: string, courseId: string) {
   const studentDocRef = studentRef.doc(email)
   const studentDoc = await studentDocRef.get()
   if (!studentDoc.exists) {
@@ -347,27 +351,7 @@ async function archiveStudentInStudent(email: any, courseId: string) {
   return groupMembership.groupNumber
 }
 
-// //Returns the group number of the student with email [email] in course [courseID]
-// async function getStudentGroup(
-//   email: any,
-//   courseId: string,
-// ) {
-//   const studentDocRef = studentRef.doc(email)
-//   const studentDoc = await studentDocRef.get()
-//   if (!studentDoc.exists) {
-//     throw new Error(`Student document for ${email} does not exist`)
-//   }
-//   const studentData = studentDoc.data() as FirestoreStudent
-//   const groups = studentData.groups
-//   const groupMembership = groups.find((group) => group.courseId === courseId)
-//   if (!groupMembership) {
-//     throw new Error(`Student ${email} does not have membership in ${courseId}`)
-//   }
-
-//   return groupMembership.groupNumber
-// }
-
-export async function archiveStudent(email: any, courseId: string) {
+export async function archiveStudent(email: string, courseId: string) {
   const groupNum = await archiveStudentInStudent(email, courseId)
   await removeStudentFromCourse(email, courseId, groupNum)
 }
