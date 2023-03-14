@@ -3,12 +3,6 @@ import admin from 'firebase-admin'
 import { FirestoreGroup, Group } from '../types'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
-//initialize counter
-const docRef = db.doc('counters/group_count')
-let base_id = 123456
-docRef.set({
-  count: 0,
-})
 // =====================  HELPER FUNCTIONS ======================
 /** Avoid using this assertion check, it's usually not necessary.
  *  Just get the course doc and throw an error if the data is undefined. */
@@ -56,21 +50,6 @@ async function updateStudentGroup(
     .catch((err) => console.log(err))
 }
 
-async function incrementCounter() {
-  const docRef = db.collection('counters').doc('group_count')
-  try {
-    const res = await db.runTransaction(async (t) => {
-      const doc = await t.get(docRef)
-      const newCount = doc.data()?.count + 1
-      await t.update(docRef, { count: newCount })
-      return newCount
-    })
-    console.log('success', res)
-  } catch (e) {
-    console.log('failure:', e)
-  }
-  return 0
-}
 // =============================== EXPORTS ==================================
 async function makeMatches(courseId: string) {
   await assertIsExistingCourse(courseId)
@@ -111,8 +90,9 @@ async function makeMatches(courseId: string) {
   for (let i = 0; i < groupTriples.length; i += 3) {
     groupCounter += 1
     const newGroup = groupTriples.slice(i, i + 3)
+
     newGroups.push({
-      groupId: base_id,
+      groupId: courseId + groupCounter + lastGroupNumber,
       groupNumber: groupCounter + lastGroupNumber,
       members: newGroup,
       createTime: nowDate,
@@ -125,7 +105,7 @@ async function makeMatches(courseId: string) {
     groupCounter += 1
     const newGroup = groupDoubles.slice(i, i + 2)
     newGroups.push({
-      groupId: base_id,
+      groupId: courseId + groupCounter + lastGroupNumber,
       groupNumber: groupCounter + lastGroupNumber,
       members: newGroup,
       createTime: nowDate,
@@ -153,31 +133,14 @@ async function makeMatches(courseId: string) {
           lastGroupNumber: lastGroupNumber + groupCounter,
         })
         .catch((err) => console.log(err)),
-      newGroupsFirestore.map(async (group) => {
-        try {
-          await db.runTransaction(async (t) => {
-            incrementCounter().then((value) => {
-              courseRef
-                .doc(courseId)
-                .collection('groups')
-                .doc(group.groupNumber.toString())
-                .set({
-                  groupId: base_id + value,
-                  groupNumber: group.groupNumber,
-                  members: group.members,
-                  createTime: group.createTime,
-                  updateTime: group.updateTime,
-                  templateTimestamps: group.templateTimestamps,
-                  hidden: group.hidden,
-                })
-                .catch((err) => console.log(err))
-            })
-            console.log('Match success')
-          })
-        } catch (e) {
-          console.log('Match failure:', e)
-        }
-      }),
+      newGroupsFirestore.map((group) =>
+        courseRef
+          .doc(courseId)
+          .collection('groups')
+          .doc(group.groupNumber.toString())
+          .set(group)
+          .catch((err) => console.log(err))
+      ),
       newGroups.map((group) =>
         updateStudentReferencesForGroup(group, courseId)
       ),
