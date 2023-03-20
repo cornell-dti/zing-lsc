@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'
+import { Box, Button, Checkbox } from '@mui/material'
 import StudentCard from 'EditZing/Components/StudentCard'
 import Grid, { GridSize } from '@mui/material/Grid'
 import { UnmatchedGridProps } from 'EditZing/Types/ComponentProps'
@@ -43,6 +43,15 @@ export const UnmatchedGrid = ({
           <StyledUnmatchedText>
             Unmatched Students ({unmatchedStudents.length})
           </StyledUnmatchedText>
+          <Checkbox
+            defaultChecked
+            sx={{
+              color: colors.darkgreen,
+              '&.Mui-checked': {
+                color: colors.darkgreen,
+              },
+            }}
+          />
           <Button
             variant="contained"
             onClick={handleMatchStudents}

@@ -1,12 +1,14 @@
 import React from 'react'
 import { colors, EDIT_ZING_PATH } from '@core'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Checkbox, Typography } from '@mui/material'
 import { ReactComponent as NewlyMatchableIcon } from '@assets/img/newlymatchable.svg'
 import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
 import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
 import { ReactComponent as WarningIcon } from '@assets/img/warning.svg'
 import { useHistory } from 'react-router'
 import { defaultSortingOrder, defaultFilterOption } from './Dashboard'
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
+import BookmarkIcon from '@mui/icons-material/Bookmark'
 
 export const CourseCard = ({
   id,
@@ -107,6 +109,10 @@ export const CourseCard = ({
           View
         </Button>
         {/* {newStudents > 1 && <Button>Match</Button>} hidden for summer launch */}
+        <Checkbox
+          icon={<BookmarkBorderIcon />}
+          checkedIcon={<BookmarkIcon />}
+        />
       </Box>
     </Box>
   )
