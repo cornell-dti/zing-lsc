@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { colors, EDIT_ZING_PATH } from '@core'
 import { Box, Button, Checkbox, Typography } from '@mui/material'
 import { ReactComponent as NewlyMatchableIcon } from '@assets/img/newlymatchable.svg'
@@ -50,6 +50,7 @@ export const CourseCard = ({
     else return { color: colors.yellow, new_match: 'no' }
   }
   const styleMap = getColor(newStudents, groupsFormed)
+  const [flaggedCourses, setFlaggedCourses] = useState({})
 
   return (
     <Box

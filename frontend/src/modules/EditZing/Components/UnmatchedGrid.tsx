@@ -43,15 +43,6 @@ export const UnmatchedGrid = ({
           <StyledUnmatchedText>
             Unmatched Students ({unmatchedStudents.length})
           </StyledUnmatchedText>
-          <Checkbox
-            defaultChecked
-            sx={{
-              color: colors.darkgreen,
-              '&.Mui-checked': {
-                color: colors.darkgreen,
-              },
-            }}
-          />
           <Button
             variant="contained"
             onClick={handleMatchStudents}
