@@ -32,6 +32,22 @@ export const CourseCard = ({
       },
     })
   }
+  const state = history.location.state as {
+    flaggedCourses: Set<String>
+  }
+  const [flaggedCourses, setFlaggedCourses] = useState<Set<String>>(
+    state?.flaggedCourses ? state.flaggedCourses : new Set()
+  )
+
+  const updateFlaggedCourses = (e: string) => {
+    const newFlaggedCourses = new Set(flaggedCourses)
+    if (newFlaggedCourses.has(e)) {
+      newFlaggedCourses.delete(e)
+    } else {
+      newFlaggedCourses.add(e)
+    }
+    setFlaggedCourses(newFlaggedCourses)
+  }
 
   // returns color of background, button, and if newly matchable
   function getColor(students: number, groups: number) {
@@ -51,7 +67,6 @@ export const CourseCard = ({
     else return { color: colors.yellow, new_match: 'no' }
   }
   const styleMap = getColor(newStudents, groupsFormed)
-  const [flaggedCourses, setFlaggedCourses] = useState({})
 
   return (
     <Box
@@ -114,7 +129,7 @@ export const CourseCard = ({
         <Checkbox
           icon={<BookmarkBorderIcon />}
           checkedIcon={<BookmarkIcon />}
-          onClick={handleFlagChange}
+          onClick={(e) => updateFlaggedCourses(e.currentTarget.id)}
         />
       </Box>
     </Box>
