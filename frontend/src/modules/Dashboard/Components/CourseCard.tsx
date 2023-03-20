@@ -28,12 +28,16 @@ export const CourseCard = ({
         filterOption: state?.filterOption
           ? state.filterOption
           : defaultFilterOption,
-        flaggedCourses: state?.flaggedCourses ? state.flaggedCourses : {},
+        flaggedCourses: state?.flaggedCourses
+          ? state.flaggedCourses
+          : new Set(),
       },
     })
   }
   const state = history.location.state as {
     flaggedCourses: Set<String>
+    sortedOrder: any
+    filterOption: any
   }
   const [flaggedCourses, setFlaggedCourses] = useState<Set<String>>(
     state?.flaggedCourses ? state.flaggedCourses : new Set()
@@ -47,6 +51,7 @@ export const CourseCard = ({
       newFlaggedCourses.add(e)
     }
     setFlaggedCourses(newFlaggedCourses)
+    console.log(flaggedCourses)
   }
 
   // returns color of background, button, and if newly matchable
@@ -127,9 +132,10 @@ export const CourseCard = ({
         </Button>
         {/* {newStudents > 1 && <Button>Match</Button>} hidden for summer launch */}
         <Checkbox
+          // checked={flaggedCourses.has()}
           icon={<BookmarkBorderIcon />}
           checkedIcon={<BookmarkIcon />}
-          onClick={(e) => updateFlaggedCourses(e.currentTarget.id)}
+          onClick={() => updateFlaggedCourses(id)}
         />
       </Box>
     </Box>
