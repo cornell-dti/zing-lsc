@@ -28,6 +28,7 @@ export const CourseCard = ({
         filterOption: state?.filterOption
           ? state.filterOption
           : defaultFilterOption,
+        flaggedCourses: state?.flaggedCourses ? state.flaggedCourses : {},
       },
     })
   }
@@ -113,6 +114,7 @@ export const CourseCard = ({
         <Checkbox
           icon={<BookmarkBorderIcon />}
           checkedIcon={<BookmarkIcon />}
+          onClick={handleFlagChange}
         />
       </Box>
     </Box>
