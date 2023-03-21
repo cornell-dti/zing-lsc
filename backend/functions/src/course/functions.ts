@@ -30,7 +30,6 @@ export const getAllCourses = async (): Promise<Course[]> => {
             templateTimestamps: mapDate(groupData.templateTimestamps),
             hidden: groupData.hidden,
           })),
-        // flagged: courseData.flagged,
       }
     })
   )
@@ -76,6 +75,11 @@ async function getStudentsForCourse(courseId: string) {
     unmatched: unmatchedStudentData,
     groups: groupStudentData,
   }
+}
+
+export const setFlagged = async (courseId: string, status: boolean) => {
+  const courseDocRef = courseRef.doc(courseId)
+  return courseDocRef.update({ flagged: status })
 }
 
 export { getCourseInfo, getStudentsForCourse }
