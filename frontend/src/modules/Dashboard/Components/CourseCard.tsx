@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { colors, EDIT_ZING_PATH } from '@core'
+import { API_ROOT, colors, COURSE_API, EDIT_ZING_PATH } from '@core'
 import { Box, Button, Checkbox, Typography } from '@mui/material'
 import { ReactComponent as NewlyMatchableIcon } from '@assets/img/newlymatchable.svg'
 import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
@@ -9,6 +9,7 @@ import { useHistory } from 'react-router'
 import { defaultSortingOrder, defaultFilterOption } from './Dashboard'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import BookmarkIcon from '@mui/icons-material/Bookmark'
+import axios from 'axios'
 
 export const CourseCard = ({
   id,
@@ -40,6 +41,10 @@ export const CourseCard = ({
   }, [flag])
 
   const handleSetFlag = () => {
+    axios.post(`${API_ROOT}${COURSE_API}/flagged`, {
+      flagged: !flagged,
+      courseId: id,
+    })
     setFlag(!flag)
   }
 
