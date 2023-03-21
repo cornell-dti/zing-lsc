@@ -12,6 +12,9 @@ import { Box } from '@mui/material'
 import { Course } from '@core/Types'
 
 export const CourseGrid = ({ courses }: CourseGridProps) => {
+  {
+    courses.map((c) => console.log(c))
+  }
   return (
     <Box
       sx={{
@@ -55,6 +58,7 @@ export const CourseGrid = ({ courses }: CourseGridProps) => {
               name={c.names[0]}
               newStudents={c.unmatched.length}
               groupsFormed={c.lastGroupNumber}
+              flagged={c.flagged}
             />
           ))}
         </Box>

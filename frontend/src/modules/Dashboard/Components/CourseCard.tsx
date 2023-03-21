@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { colors, EDIT_ZING_PATH } from '@core'
 import { Box, Button, Checkbox, Typography } from '@mui/material'
 import { ReactComponent as NewlyMatchableIcon } from '@assets/img/newlymatchable.svg'
@@ -15,6 +15,7 @@ export const CourseCard = ({
   name,
   newStudents,
   groupsFormed,
+  flagged,
 }: CourseCardProps) => {
   const history = useHistory()
   const handleClickView = () => {
@@ -28,30 +29,18 @@ export const CourseCard = ({
         filterOption: state?.filterOption
           ? state.filterOption
           : defaultFilterOption,
-        flaggedCourses: state?.flaggedCourses
-          ? state.flaggedCourses
-          : new Set(),
       },
     })
   }
-  const state = history.location.state as {
-    flaggedCourses: Set<String>
-    sortedOrder: any
-    filterOption: any
-  }
-  const [flaggedCourses, setFlaggedCourses] = useState<Set<String>>(
-    state?.flaggedCourses ? state.flaggedCourses : new Set()
-  )
 
-  const updateFlaggedCourses = (e: string) => {
-    const newFlaggedCourses = new Set(flaggedCourses)
-    if (newFlaggedCourses.has(e)) {
-      newFlaggedCourses.delete(e)
-    } else {
-      newFlaggedCourses.add(e)
-    }
-    setFlaggedCourses(newFlaggedCourses)
-    console.log(flaggedCourses)
+  const [flag, setFlag] = useState(flagged)
+
+  useEffect(() => {
+    console.log(flag)
+  }, [flag])
+
+  const handleSetFlag = () => {
+    setFlag(!flag)
   }
 
   // returns color of background, button, and if newly matchable
@@ -132,10 +121,11 @@ export const CourseCard = ({
         </Button>
         {/* {newStudents > 1 && <Button>Match</Button>} hidden for summer launch */}
         <Checkbox
-          // checked={flaggedCourses.has()}
+          checked={flag}
           icon={<BookmarkBorderIcon />}
           checkedIcon={<BookmarkIcon />}
-          onClick={() => updateFlaggedCourses(id)}
+          // onClick={() => updateFlaggedCourses(id)}
+          onClick={() => handleSetFlag()}
         />
       </Box>
     </Box>
@@ -147,4 +137,5 @@ interface CourseCardProps {
   name: string
   newStudents: number
   groupsFormed: number
+  flagged: boolean
 }

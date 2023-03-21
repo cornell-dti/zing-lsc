@@ -30,6 +30,7 @@ export const getAllCourses = async (): Promise<Course[]> => {
             templateTimestamps: mapDate(groupData.templateTimestamps),
             hidden: groupData.hidden,
           })),
+        // flagged: courseData.flagged,
       }
     })
   )
