@@ -129,7 +129,6 @@ export const CourseCard = ({
           checked={flag}
           icon={<BookmarkBorderIcon />}
           checkedIcon={<BookmarkIcon />}
-          // onClick={() => updateFlaggedCourses(id)}
           onClick={() => handleSetFlag()}
         />
       </Box>
