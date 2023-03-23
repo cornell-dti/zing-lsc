@@ -306,11 +306,11 @@ export const updateStudentNotes = async (
   )
 }
 
-/** Add new user to the allowed users list */
-export const addAllowedUser = async (email: string) => {
+/** Add new user to the allowed users*/
+export const addAllowedUser = async (name: string, email: string) => {
   await adminRef
     .doc(email)
-    .set({ email })
+    .set({ email, name })
     .catch((err) => {
       console.log(err)
       const e = new Error(`Error in setting ${email} as administrative user`)
@@ -319,7 +319,7 @@ export const addAllowedUser = async (email: string) => {
     })
 }
 
-/** Remove user from allowed users list */
+/** Remove user from allowed users */
 export const removeAllowedUser = async (email: string) => {
   await adminRef
     .doc(email)
@@ -333,4 +333,12 @@ export const removeAllowedUser = async (email: string) => {
       e.name = 'processing_err'
       throw e
     })
+}
+
+/** Get all administrative users */
+export const getAllAdmins = async () => {
+  const adminCollection = await adminRef.get()
+  return adminCollection.docs.map((adminDoc) => {
+    return adminDoc.data()
+  })
 }

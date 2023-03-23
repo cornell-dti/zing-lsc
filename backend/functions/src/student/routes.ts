@@ -11,6 +11,7 @@ import {
   updateStudentNotes,
   addAllowedUser,
   removeAllowedUser,
+  getAllAdmins,
 } from './functions'
 
 router.get('/', (_, res) => {
@@ -67,8 +68,8 @@ router.delete('/', checkAuth, (req, res) => {
 })
 
 router.post('/admin', (req, res) => {
-  const { email } = req.body
-  addAllowedUser(email)
+  const { name, email } = req.body
+  addAllowedUser(name, email)
     .then((data) => res.status(200).send({ success: true, data }))
     .catch((err) => {
       console.log(err)
@@ -83,6 +84,17 @@ router.delete('/admin', (req, res) => {
     .catch((err) => {
       console.log(err)
       res.status(400).send({ success: false, err: err.message })
+    })
+})
+
+router.get('/admin', (_, res) => {
+  getAllAdmins()
+    .then((data) => res.status(200).send(data))
+    .catch((err) => {
+      logger.error(
+        `Unexpected error getting all administrators: ${err.message}`
+      )
+      res.status(500).send({ message: err.message })
     })
 })
 
