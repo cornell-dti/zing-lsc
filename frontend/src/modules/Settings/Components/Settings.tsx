@@ -29,7 +29,6 @@ export const Settings = () => {
   function getCurrSurveyState() {
     axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
       setSurveyState(req.data)
-      console.log(req.data)
     })
   }
   getCurrSurveyState()
