@@ -11,7 +11,7 @@ import {
   updateStudentNotes,
   addAllowedUser,
   removeAllowedUser,
-  getAllAdmins,
+  getAllAllowedUsers,
 } from './functions'
 
 router.get('/', (_, res) => {
@@ -88,7 +88,7 @@ router.delete('/admin', (req, res) => {
 })
 
 router.get('/admin', (_, res) => {
-  getAllAdmins()
+  getAllAllowedUsers()
     .then((data) => res.status(200).send(data))
     .catch((err) => {
       logger.error(

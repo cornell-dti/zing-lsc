@@ -336,7 +336,7 @@ export const removeAllowedUser = async (email: string) => {
 }
 
 /** Get all administrative users */
-export const getAllAdmins = async () => {
+export const getAllAllowedUsers = async () => {
   const adminCollection = await adminRef.get()
   return adminCollection.docs.map((adminDoc) => {
     return adminDoc.data()
