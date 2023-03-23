@@ -11,6 +11,7 @@ import { StepBegin } from 'Survey/Components/StepBegin'
 import { StepCourse } from 'Survey/Components/StepCourse'
 import { StepRadio } from 'Survey/Components/StepRadio'
 import { StepFinal } from 'Survey/Components/StepFinal'
+import { StepFail } from 'Survey/Components/StepFail'
 import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
 import survey from '@core/Questions/Questions.json'
@@ -103,58 +104,61 @@ export const Survey = () => {
       ? courseList.length > 0 && courseList.every((c) => validCourseRe.test(c))
       : answers[multipleChoiceIndex] !== ''
 
-  return currStep === 1 && currSurveyState ? ( // Form landing
-    <SplashBackground>
-      <StepBegin
-        name={nameAnswer}
-        email={emailAnswer}
-        setName={(arg: string) => setNameAnswer(arg)}
-        setEmail={(arg: string) => setEmailAnswer(arg)}
-        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
-      />
-    </SplashBackground>
-  ) : currStep === totalSteps + 1 ? (
-    // Form confirmation
-    <QuestionBackground>
-      <StepFinal
-        success={surveyError === null}
-        submissionResponse={surveySubmissionResponse!}
-        errorMsg={surveyError != null ? surveyError : ''}
-      />
-    </QuestionBackground>
-  ) : !currSurveyState ? (
-    <QuestionBackground>
-      <StepTemplate
-        isStepValid={isStepValid}
-        isSubmittingSurvey={isSubmittingSurvey}
-        stepNumber={currStep}
-        totalSteps={totalSteps}
-        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={
-          currStep === totalSteps && currSurveyState
-            ? finalNext
-            : () => setCurrStep((currStep) => currStep + 1)
-        }
-      >
-        {currStep === 2 ? ( // Course selection
-          <StepCourse
-            validCourseRe={validCourseRe}
-            courses={courseList}
-            setCourses={setCourseList}
-          />
-        ) : (
-          // General multiple-choice
-          <StepRadio
-            currentAnswer={answers[multipleChoiceIndex]}
-            question={questions[multipleChoiceIndex]}
-            setAnswer={(arg) => changeAnswer(multipleChoiceIndex, arg)}
-            key={String(currStep)}
-          />
-        )}
-      </StepTemplate>
-    </QuestionBackground>
+  return currSurveyState ? (
+    currStep === 1 ? ( // Form landing
+      <SplashBackground>
+        <StepBegin
+          name={nameAnswer}
+          email={emailAnswer}
+          setName={(arg: string) => setNameAnswer(arg)}
+          setEmail={(arg: string) => setEmailAnswer(arg)}
+          gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
+        />
+      </SplashBackground>
+    ) : currStep === totalSteps + 1 ? (
+      // Form confirmation
+      <QuestionBackground>
+        <StepFinal
+          success={surveyError === null}
+          submissionResponse={surveySubmissionResponse!}
+          errorMsg={surveyError != null ? surveyError : ''}
+        />
+      </QuestionBackground>
+    ) : (
+      <QuestionBackground>
+        <StepTemplate
+          isStepValid={isStepValid}
+          isSubmittingSurvey={isSubmittingSurvey}
+          stepNumber={currStep}
+          totalSteps={totalSteps}
+          gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
+          gotoNextStep={
+            currStep === totalSteps && currSurveyState
+              ? finalNext
+              : () => setCurrStep((currStep) => currStep + 1)
+          }
+        >
+          {currStep === 2 ? ( // Course selection
+            <StepCourse
+              validCourseRe={validCourseRe}
+              courses={courseList}
+              setCourses={setCourseList}
+            />
+          ) : (
+            // General multiple-choice
+            <StepRadio
+              currentAnswer={answers[multipleChoiceIndex]}
+              question={questions[multipleChoiceIndex]}
+              setAnswer={(arg) => changeAnswer(multipleChoiceIndex, arg)}
+              key={String(currStep)}
+            />
+          )}
+        </StepTemplate>
+      </QuestionBackground>
+    )
   ) : (
-    // page for a closed survey
-    <></>
+    <QuestionBackground>
+      <StepFail></StepFail>
+    </QuestionBackground>
   )
 }
