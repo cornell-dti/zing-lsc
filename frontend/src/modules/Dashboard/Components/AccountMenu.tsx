@@ -71,6 +71,7 @@ export const AccountMenu = ({
                 membership.groupNumber !== -1
                   ? `${course.names.join('/')}_${membership.groupNumber}`
                   : undefined,
+              groupId: group?.groupId,
               ...localeMap(group?.templateTimestamps),
               ...localeMap(membership.templateTimestamps),
               notes: membership.notes.replace(/(\n)/gm, '  ').trim(),

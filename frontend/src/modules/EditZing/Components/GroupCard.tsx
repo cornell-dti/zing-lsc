@@ -204,7 +204,7 @@ const GroupCard = ({
         <Typography
           variant="subtitle1"
           mb={1}
-        >{`Group Id ${groupId}`}</Typography>
+        >{`Group Id: ${groupId}`}</Typography>
         <Box
           sx={{
             display: 'grid',
