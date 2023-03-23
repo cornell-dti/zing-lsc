@@ -7,7 +7,7 @@ import {
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
 import { CourseGrid } from 'Dashboard/Components/CourseGrid'
-import { Box, IconButton, SelectChangeEvent } from '@mui/material'
+import { Box, Button, IconButton, SelectChangeEvent } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
@@ -15,6 +15,7 @@ import { Course } from '@core/Types'
 import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 import ClearIcon from '@mui/icons-material/Clear'
+import { CourseTable } from './CourseTable'
 type SortOrder =
   | 'newest-requests-first'
   | 'oldest-requests-first'
@@ -62,6 +63,12 @@ export const Dashboard = () => {
   const [filteredOption, setFilteredOption] = useState<FilterOption>(() =>
     state?.filterOption ? state.filterOption : defaultFilterOption
   )
+  const [tableView, setTableView] = useState(false)
+  //helper function to change view
+  const handleClickTable = () => {
+    setTableView((current) => !current)
+  }
+
   //Helper function to check if a given course has any groups without check-in emails
   function hasUnsentCheckIns(c: Course) {
     return c.groups.some((group) => !group.templateTimestamps['check-in'])
@@ -129,12 +136,10 @@ export const Dashboard = () => {
             b.latestSubmissionTime.valueOf() - a.latestSubmissionTime.valueOf()
         )
       case 'oldest-requests-first':
-        return [...courseInfo]
-          .sort(
-            (a, b) =>
-              a.latestSubmissionTime.valueOf() -
-              b.latestSubmissionTime.valueOf()
-          )
+        return [...courseInfo].sort(
+          (a, b) =>
+            a.latestSubmissionTime.valueOf() - b.latestSubmissionTime.valueOf()
+        )
       case 'classes-a-z':
         return [...courseInfo].sort((a, b) => {
           return a.names[0].localeCompare(b.names[0], undefined, {
@@ -283,6 +288,23 @@ export const Dashboard = () => {
             />
           </Box>
         </Box>
+        <Box
+          sx={{
+            fontWeight: 'bold',
+            color: 'essentials.75',
+            padding: 1,
+            margin: 1,
+          }}
+        >
+          <Button
+            onClick={handleClickTable}
+            sx={{ boxShadow: 2 }}
+            color="secondary"
+            variant="outlined"
+          >
+            View
+          </Button>
+        </Box>
         <AccountMenu
           selectedRoster={selectedRoster}
           setSelectedRoster={setSelectedRoster}
@@ -291,7 +313,11 @@ export const Dashboard = () => {
           showSettingsLink={true}
         />
       </StyledHeaderMenu>
-      <CourseGrid courses={filteredSortedCourses} />
+      {tableView ? (
+        <CourseGrid courses={filteredSortedCourses} />
+      ) : (
+        <CourseTable courses={filteredSortedCourses}></CourseTable>
+      )}
     </StyledContainer>
   )
 }
