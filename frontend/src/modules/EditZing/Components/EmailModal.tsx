@@ -94,9 +94,13 @@ export const EmailModal = ({
       '{{OTHER_STUDENTS_NAMES}}': otherStudents.join(', '),
     }
 
+    const groupTemplate =
+      allGroupTemplates.find((template) => template.groupNumber === groupNumber)
+        ?.template.html || replacedHtml
+
     return Object.entries(replaceNamesMap).reduce(
       (prev, [key, value]) => prev.replaceAll(key, value),
-      replacedHtml
+      groupTemplate
     )
   }
 
@@ -106,21 +110,20 @@ export const EmailModal = ({
   }
 
   const [step, setStep] = useState<number>(0)
-  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0)
 
   // state containing initial custom email templates for each group
   const [allGroupTemplates, setAllGroupTemplates] = useState<GroupTemplate[]>(
     selectedGroupNumbers.map((groupNumber) => ({
       groupNumber,
-      template: {
-        ...selectedTemplate,
-        body: studentNamesHtml(groupNumber),
-        html: studentNamesHtml(groupNumber),
-      },
+      template: selectedTemplate,
     }))
   )
 
-  const setSingleGroupTemplate = (copied: EmailTemplate, groupNumber: number) =>
+  const setSingleGroupTemplate = (
+    copied: EmailTemplate,
+    groupNumber: number
+  ) => {
+    console.log(copied.html)
     setAllGroupTemplates(
       allGroupTemplates.map((groupTemplate) =>
         groupTemplate.groupNumber === groupNumber
@@ -128,6 +131,7 @@ export const EmailModal = ({
           : groupTemplate
       )
     )
+  }
 
   const titles = [
     'Select email template',
@@ -261,15 +265,17 @@ export const EmailModal = ({
   }
 
   const EditEmail = ({ groupNumber }: { groupNumber: number }) => {
+    let selectedSingleTemplate = allGroupTemplates.find(
+      (groupTemplate) => groupTemplate.groupNumber === groupNumber
+    )?.template
+
     return selectedTemplate.name ===
       'Introducing student to established group' ? (
       <Box>
         <TemplateSelectedComponent />
         <EmailEdit
           template={
-            allGroupTemplates.find(
-              (groupTemplate) => groupTemplate.groupNumber === groupNumber
-            )?.template!
+            selectedSingleTemplate ? selectedSingleTemplate : selectedTemplate
           }
           replacedHtml={studentNamesHtml(groupNumber)}
           setSelectedTemplate={setSelectedTemplate}
@@ -298,6 +304,8 @@ export const EmailModal = ({
           templates={filteredTemplates}
           selectedTemplate={selectedTemplate!}
           setSelectedTemplate={setSelectedTemplate}
+          setGroupTemplates={setAllGroupTemplates}
+          selectedGroupNumbers={selectedGroupNumbers}
         />
       </Box>
     )
@@ -314,7 +322,7 @@ export const EmailModal = ({
     // TODO (richardgu): Make studentNamesHtml include regular replacedHtml function
     // for cases that aren't group-specific
     const groupTemplates =
-      selectedTabIndex === 0 ? (
+      selectedTabIndex === 0 && selectedGroupNumbers.length > 0 ? (
         allGroupTemplates.map(({ groupNumber, template }) => (
           <Box>
             <Box
@@ -506,10 +514,10 @@ export const EmailModal = ({
     }
   }
 
-  const [currGroup, setCurrGroup] = useState<string>('All groups')
+  const [currGroup, setCurrGroup] = useState<number>(0)
 
   const changeCurrGroup = (event: SelectChangeEvent) => {
-    setCurrGroup(event.target.value)
+    setCurrGroup(Number(event.target.value))
   }
 
   const GroupTabs = ({
@@ -534,13 +542,9 @@ export const EmailModal = ({
       >
         {allGroups.map((groupNum: number, index: number) =>
           groupNum === 0 ? (
-            <MenuItem value={index} onClick={() => setSelectedTabIndex(index)}>
-              All Groups
-            </MenuItem>
+            <MenuItem value={index}>All Groups</MenuItem>
           ) : (
-            <MenuItem value={index} onClick={() => setSelectedTabIndex(index)}>
-              Group {index}
-            </MenuItem>
+            <MenuItem value={index}>Group {index}</MenuItem>
           )
         )}
       </DropdownSelect>
@@ -582,14 +586,14 @@ export const EmailModal = ({
           selectedGroupNumbers.length > 1 && (
             <GroupTabs
               groupNumbers={selectedGroupNumbers}
-              selectedTabIndex={selectedTabIndex}
+              selectedTabIndex={currGroup}
             />
           )}
 
         {step === 1 && (
           <Step1
             groupNumbers={selectedGroupNumbers}
-            selectedTabIndex={selectedTabIndex}
+            selectedTabIndex={currGroup}
           />
         )}
       </>
@@ -621,7 +625,7 @@ export const EmailModal = ({
             {step <= 1 && <SelectTemplates />}
             {step === 2 && <StepFailure />}
             {step === 3 && <StepFinalFailure />}
-            {step === 4 && <EditEmail groupNumber={selectedTabIndex} />}
+            {step === 4 && <EditEmail groupNumber={currGroup} />}
           </Box>
         ) : (
           <Box
