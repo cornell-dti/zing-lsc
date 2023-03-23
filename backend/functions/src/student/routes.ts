@@ -9,6 +9,8 @@ import {
   getAllStudents,
   removeStudent,
   updateStudentNotes,
+  addAllowedUser,
+  removeAllowedUser,
 } from './functions'
 
 router.get('/', (_, res) => {
@@ -57,6 +59,26 @@ router.delete('/', checkAuth, (req, res) => {
   const email = req.body.studentEmail
   logger.info(`Student [${email}] deleted.`)
   removeStudent(email)
+    .then((data) => res.status(200).send({ success: true, data }))
+    .catch((err) => {
+      console.log(err)
+      res.status(400).send({ success: false, err: err.message })
+    })
+})
+
+router.post('/admin', (req, res) => {
+  const { email } = req.body
+  addAllowedUser(email)
+    .then((data) => res.status(200).send({ success: true, data }))
+    .catch((err) => {
+      console.log(err)
+      res.status(400).send({ success: false, err: err.message })
+    })
+})
+
+router.delete('/admin', (req, res) => {
+  const { email } = req.body
+  removeAllowedUser(email)
     .then((data) => res.status(200).send({ success: true, data }))
     .catch((err) => {
       console.log(err)
