@@ -36,10 +36,6 @@ export const CourseCard = ({
 
   const [flag, setFlag] = useState(flagged)
 
-  useEffect(() => {
-    console.log(flag)
-  }, [flag])
-
   const handleSetFlag = () => {
     axios.post(`${API_ROOT}${COURSE_API}/flagged`, {
       flagged: !flagged,
@@ -124,7 +120,6 @@ export const CourseCard = ({
         >
           View
         </Button>
-        {/* {newStudents > 1 && <Button>Match</Button>} hidden for summer launch */}
         <Checkbox
           checked={flag}
           icon={<BookmarkBorderIcon />}
