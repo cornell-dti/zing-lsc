@@ -10,13 +10,27 @@ import { API_ROOT, COURSE_API } from '@core/Constants'
 import axios from 'axios'
 
 export const Settings = () => {
+  // grabs the state of the backend once when you refresh code
+  const [start, setStart] = useState<boolean>(true)
+  if (start) {
+    setStart(false)
+    getCurrSurveyState()
+  }
+
   const [currRoster, setCurrRoster] = useState<string>('SP23')
   const changeCurrRoster = (event: SelectChangeEvent) => {
     // function to only open the survey of the semester
     setCurrRoster(event.target.value)
   }
 
-  const semesters = ['SU22', 'FA22', 'WI23', 'SP23', 'SU23']
+  const [semesters, setSemesters] = useState<string[]>([])
+  function getAllSemesters() {
+    axios
+      .get(`${API_ROOT}${COURSE_API}/semester/all`)
+      .then((res) => setSemesters(res.data))
+  }
+  getAllSemesters()
+
   const [surveyState, setSurveyState] = useState<boolean>()
 
   const changeSurveyAvailability = () => {
@@ -31,7 +45,6 @@ export const Settings = () => {
       setSurveyState(req.data)
     })
   }
-  getCurrSurveyState()
 
   return (
     <Box
@@ -79,47 +92,56 @@ export const Settings = () => {
           alignItems: 'center',
         }}
       >
-        <Box sx={{ typography: 'h5' }}>Change Semester</Box>
+        <Box sx={{ display: 'flex' }}>
+          <Box sx={{ width: '70%', display: 'grid' }}>
+            <Box sx={{ typography: 'h4', fontWeight: 'bold' }}>Semester</Box>
+            <Box sx={{ typography: 'h5' }}>Current Semester:</Box>
 
-        <DropdownSelect
-          value={currRoster}
-          onChange={changeCurrRoster}
-          sx={{
-            alignContent: 'right',
-            right: '1px',
-          }}
-        >
-          {semesters.map((sem) => (
-            <MenuItem value={sem}>{sem}</MenuItem>
-          ))}
-        </DropdownSelect>
-      </Box>
-      <Box
-        sx={{
-          width: '100%',
-          height: 'fit-content',
-          padding: '2.5rem',
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Box
-          sx={{
-            pl: '2.5rem',
-            pr: '2.5rem',
-            display: 'grid',
-            alignItems: 'center',
-          }}
-        >
-          <Box sx={{ typography: 'h5', pr: '2rem' }}>Open Survey</Box>
+            <DropdownSelect
+              value={currRoster}
+              onChange={changeCurrRoster}
+              sx={{
+                alignContent: 'right',
+                right: '1px',
+              }}
+            >
+              {semesters.map((sem) => (
+                <MenuItem value={sem}>{sem}</MenuItem>
+              ))}
+            </DropdownSelect>
+          </Box>
+
+          <Box
+            sx={{
+              height: 'fit-content',
+              padding: '2.5rem',
+              display: 'grid',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Box
+              sx={{
+                pl: '2.5rem',
+                pr: '2.5rem',
+                display: 'grid',
+                alignItems: 'center',
+              }}
+            >
+              <Box sx={{ typography: 'h5', pr: '2rem' }}>Open Survey</Box>
+            </Box>
+            <Switch
+              checked={surveyState}
+              onChange={changeSurveyAvailability}
+              sx={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                size: 'lg',
+                top: '1.9rem',
+              }}
+            ></Switch>
+          </Box>
         </Box>
-        <Switch
-          sx={{ right: '2rem' }}
-          checked={surveyState}
-          onChange={changeSurveyAvailability}
-        ></Switch>
       </Box>
     </Box>
   )
