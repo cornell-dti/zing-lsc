@@ -9,7 +9,6 @@ import { mapDate } from '../course/functions'
 import { FirestoreStudent, Student } from '../types'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
-const adminRef = db.collection('allowed_users')
 
 /** Get all students in the student collection */
 export const getAllStudents = async (): Promise<Student[]> => {
@@ -304,41 +303,4 @@ export const updateStudentNotes = async (
   logger.info(
     `Updated notes for [${courseId}] in student [${email}] to [${notes}]`
   )
-}
-
-/** Add new user to the allowed users*/
-export const addAllowedUser = async (name: string, email: string) => {
-  await adminRef
-    .doc(email)
-    .set({ email, name })
-    .catch((err) => {
-      console.log(err)
-      const e = new Error(`Error in setting ${email} as administrative user`)
-      e.name = 'processing_err'
-      throw e
-    })
-}
-
-/** Remove user from allowed users */
-export const removeAllowedUser = async (email: string) => {
-  await adminRef
-    .doc(email)
-    .delete()
-    .then(() => {
-      console.log(`Administrator ${email} successfully deleted!`)
-    })
-    .catch((err) => {
-      console.log(err)
-      const e = new Error(`Error in removing administrative user ${email} `)
-      e.name = 'processing_err'
-      throw e
-    })
-}
-
-/** Get all administrative users */
-export const getAllAllowedUsers = async () => {
-  const adminCollection = await adminRef.get()
-  return adminCollection.docs.map((adminDoc) => {
-    return adminDoc.data()
-  })
 }
