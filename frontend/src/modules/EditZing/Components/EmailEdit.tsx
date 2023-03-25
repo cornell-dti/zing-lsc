@@ -1,11 +1,13 @@
 import { EmailEditProps } from 'EditZing/Types/ComponentProps'
 import { Button, Box, TextField } from '@mui/material'
 import { SxProps } from '@mui/material'
+import { EmailTemplate } from '@core/index'
 
 export const EmailEdit = ({
   template,
   replacedHtml,
   setSelectedTemplate,
+  replaceSelectedTemplate,
   setSingleGroupTemplate,
   setEmailSaved,
   groupNumber,
@@ -29,12 +31,17 @@ export const EmailEdit = ({
     padding: '16px',
   }
 
+  const changeBaseTemplates = (copied: EmailTemplate) => {
+    setSelectedTemplate(copied)
+    replaceSelectedTemplate(copied)
+  }
+
   const copyEmailTemplate = () => {
     let copied = Object.assign({}, template)
     copied.html = replacedHtml
     groupNumber
       ? setSingleGroupTemplate(copied, groupNumber)
-      : setSelectedTemplate(copied)
+      : changeBaseTemplates(copied)
   }
 
   const handleClick = () => {

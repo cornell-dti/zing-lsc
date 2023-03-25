@@ -123,6 +123,7 @@ export interface EmailEditProps {
   template: EmailTemplate
   replacedHtml: string
   setSelectedTemplate: (value: EmailTemplate) => void
+  replaceSelectedTemplate: (value: EmailTemplate) => void
   setSingleGroupTemplate: any // temporary
   setEmailSaved: (arg: boolean) => void
   groupNumber?: number
