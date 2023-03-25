@@ -31,17 +31,15 @@ export const EmailEdit = ({
     padding: '16px',
   }
 
-  const changeBaseTemplates = (copied: EmailTemplate) => {
-    setSelectedTemplate(copied)
-    replaceSelectedTemplate(copied)
-  }
-
   const copyEmailTemplate = () => {
     let copied = Object.assign({}, template)
     copied.html = replacedHtml
-    groupNumber
-      ? setSingleGroupTemplate(copied, groupNumber)
-      : changeBaseTemplates(copied)
+    if (groupNumber) {
+      setSingleGroupTemplate(copied, groupNumber)
+    } else {
+      setSelectedTemplate(copied)
+      replaceSelectedTemplate(copied)
+    }
   }
 
   const handleClick = () => {
