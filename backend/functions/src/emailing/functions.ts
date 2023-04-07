@@ -254,8 +254,6 @@ const sendMails = async (
     .api('/me/sendMail')
     .post({ data: JSON.stringify(message) })
 
-  console.log(response)
-
   if (response.status === 202) {
     if (group && parseInt(group) > 0) {
       await updateGroupTimestamp(courseId, group, template)
