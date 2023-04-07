@@ -235,6 +235,7 @@ const sendMails = async (
     throw new Error('Both group and individual email are specified')
   }
 
+  // there's no need for this client to be created over and over again everytime a call is made. but idk where to put it so it's globally accessible.
   const credential = new ClientSecretCredential(
     process.env.MS_GRAPH_API_TENANT_ID as string,
     process.env.MS_GRAPH_API_CLIENT_ID as string,
@@ -254,17 +255,6 @@ const sendMails = async (
     .post({ data: JSON.stringify(message) })
 
   console.log(response)
-
-  // const response = await axios({
-  //   url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
-  //   // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
-  //   method: 'POST',
-  //   headers: {
-  //     Authorization: 'Bearer ' + authToken,
-  //     'Content-Type': 'application/json',
-  //   },
-  //   data: JSON.stringify(message),
-  // })
 
   if (response.status === 202) {
     if (group && parseInt(group) > 0) {
