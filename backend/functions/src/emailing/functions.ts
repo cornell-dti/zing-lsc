@@ -9,10 +9,17 @@ import {
   FirestoreEmailTemplate,
   FirestoreStudent,
 } from '../types'
+import { Client } from '@microsoft/microsoft-graph-client'
+import { TokenCredentialAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials'
+import { ClientSecretCredential } from '@azure/identity'
+import { config } from 'dotenv'
+import 'isomorphic-fetch'
 
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
 const templateRef = db.collection('email_templates')
+
+config()
 
 // ==== Timestamp helper functions
 
@@ -107,8 +114,8 @@ async function getRecipients(
   return emailRcpts
 }
 
-/* Add Recipients parses frontend data and adds to 
-    the 'toRecipients' key-value pair of 
+/* Add Recipients parses frontend data and adds to
+    the 'toRecipients' key-value pair of
     the email request body sent to the MS Graph API */
 function addRecipients(messageBody: any, rcpts = []) {
   const cloned = Object.assign({}, messageBody)
@@ -118,7 +125,7 @@ function addRecipients(messageBody: any, rcpts = []) {
   return cloned
 }
 
-/* Create Recipients parses the rcpts (string list of student emails) 
+/* Create Recipients parses the rcpts (string list of student emails)
     sent from the frontend. Called in addRecipients. */
 function createRecipients(rcpts: string[]) {
   return rcpts.map((rcpt) => ({ emailAddress: { address: rcpt } }))
@@ -167,23 +174,41 @@ const isValidTemplate = async (templateId: string) => {
     .find((template) => template.id === templateId)
 }
 
-/** Send Mails takes the 
+const getAuthToken = async () => {
+  const credential = new ClientSecretCredential(
+    process.env.MS_GRAPH_API_TENANT_ID as string,
+    process.env.MS_GRAPH_API_CLIENT_ID as string,
+    process.env.MS_GRAPH_API_CLIENT_SECRET_VALUE as string
+  )
+  const authProvider = new TokenCredentialAuthenticationProvider(credential, {
+    scopes: ['user.read', 'mail.send'],
+  })
+
+  const client = Client.initWithMiddleware({
+    debugLogging: true,
+    authProvider,
+  })
+}
+
+getAuthToken()
+
+/** Send Mails takes the
     @param from: sender (admin's email)
     @param message: graph api request body data
-    @param authToken: string that must match the [from] email and 
+    @param authToken: string that must match the [from] email and
       logged in user
-    @param courseId: roster and 6-digit course id 
+    @param courseId: roster and 6-digit course id
     @param template: string of template ID
     @param group: group number that email is being sent to (if the email is being sent to a group)
     @param indivEmail: email of the individual recipient (if the email is being sent to an individual)
-    
-    Sends a POST request to the GRAPH API and updates the database with the timestamp of when the email was sent. 
-    
-    @returns: 
-      202 (:number) if successfully sent. 
-      Other if email failed to send. 
-        - Bad AUTH or else. Frontend will then parse this response 
-        and render "Try Again" button or equivalent => User logs in and calls function again. 
+
+    Sends a POST request to the GRAPH API and updates the database with the timestamp of when the email was sent.
+
+    @returns:
+      202 (:number) if successfully sent.
+      Other if email failed to send.
+        - Bad AUTH or else. Frontend will then parse this response
+        and render "Try Again" button or equivalent => User logs in and calls function again.
        */
 const sendMails = async (
   from: string,
@@ -210,16 +235,36 @@ const sendMails = async (
     throw new Error('Both group and individual email are specified')
   }
 
-  const response = await axios({
-    url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
-    // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
-    method: 'POST',
-    headers: {
-      Authorization: 'Bearer ' + authToken,
-      'Content-Type': 'application/json',
-    },
-    data: JSON.stringify(message),
+  const credential = new ClientSecretCredential(
+    process.env.MS_GRAPH_API_TENANT_ID as string,
+    process.env.MS_GRAPH_API_CLIENT_ID as string,
+    process.env.MS_GRAPH_API_CLIENT_SECRET_VALUE as string
+  )
+  const authProvider = new TokenCredentialAuthenticationProvider(credential, {
+    scopes: ['user.read', 'mail.send'],
   })
+
+  const client = Client.initWithMiddleware({
+    debugLogging: true,
+    authProvider,
+  })
+
+  const response = await client
+    .api('/me/sendMail')
+    .post({ data: JSON.stringify(message) })
+
+  console.log(response)
+
+  // const response = await axios({
+  //   url: `${GRAPH_ENDPOINT}/v1.0/users/${from}/sendMail`,
+  //   // url: 'https://graph.microsoft.com/v1.0/users/wz282@cornell.edu/sendMail',
+  //   method: 'POST',
+  //   headers: {
+  //     Authorization: 'Bearer ' + authToken,
+  //     'Content-Type': 'application/json',
+  //   },
+  //   data: JSON.stringify(message),
+  // })
 
   if (response.status === 202) {
     if (group && parseInt(group) > 0) {
@@ -256,22 +301,22 @@ const sendMails = async (
 /**
  * Send Student Emails takes
  * @param from sender (admin's email)
- * @param authToken string that must match the [from] email and 
+ * @param authToken string that must match the [from] email and
       logged in user
  * @param subject is the subject line. Usually "Study Partners!"
  * @param body is the HTML body of the email
- * @param courseId roster and 6-digit course id 
+ * @param courseId roster and 6-digit course id
  * @param template string of template ID
  * @param group group number that email is being sent to (if the email is being sent to a group)
  * @param indivEmail  email of the individual recipient (if the email is being sent to an individual)
- * 
- * Sends a POST request to the GRAPH API and updates the database with the timestamp of when the email was sent. 
- * 
+ *
+ * Sends a POST request to the GRAPH API and updates the database with the timestamp of when the email was sent.
+ *
  * @returns
- * 202 (:number) if successfully sent. 
-      Other if email failed to send. 
-        - Bad AUTH or else. Frontend will then parse this response 
-        and render "Try Again" button or equivalent => User logs in and calls function again. 
+ * 202 (:number) if successfully sent.
+      Other if email failed to send.
+        - Bad AUTH or else. Frontend will then parse this response
+        and render "Try Again" button or equivalent => User logs in and calls function again.
  */
 export const sendStudentEmails = async (
   from: string,
