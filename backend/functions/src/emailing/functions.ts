@@ -235,7 +235,8 @@ const sendMails = async (
     throw new Error('Both group and individual email are specified')
   }
 
-  // there's no need for this client to be created over and over again everytime a call is made. but idk where to put it so it's globally accessible.
+  // there's no need for this client to be created over and over again everytime a call is made.
+  // but idk where to put it so it's globally accessible.
   const credential = new ClientSecretCredential(
     process.env.MS_GRAPH_API_TENANT_ID as string,
     process.env.MS_GRAPH_API_CLIENT_ID as string,
