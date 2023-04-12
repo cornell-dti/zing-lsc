@@ -49,6 +49,23 @@ export const Settings = () => {
     })
   }
 
+  const removeAdmin = (admin: Admin) => {
+    axios
+      .delete(`${API_ROOT}/admin`, { data: admin })
+      .then(() => {
+        administrators.forEach((email, index) => {
+          if ((email.email = admin.email)) {
+            administrators.splice(index, 1)
+            getAdministrators()
+          }
+        })
+      })
+      .catch((err) => console.log(err))
+  }
+
+  // TODO: allow to edit admin information
+  const editAdmin = () => {}
+
   // grabs the state of the backend once when you refresh code
   const [start, setStart] = useState<boolean>(true)
   if (start) {
@@ -179,7 +196,11 @@ export const Settings = () => {
         >
           Administrators
         </Box>
-        <AdministratorsTable data={administrators}></AdministratorsTable>
+        <AdministratorsTable
+          data={administrators}
+          removeAdmin={removeAdmin}
+          editAdmin={editAdmin}
+        ></AdministratorsTable>
       </Box>
     </Box>
   )

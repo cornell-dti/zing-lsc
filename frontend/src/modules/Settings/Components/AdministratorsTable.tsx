@@ -34,23 +34,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }))
 
-export const AdministratorsTable = ({ data }: AllowedUsers) => {
-  const removeAdmin = (admin: Admin) => {
-    axios
-      .delete(`${API_ROOT}/admin`, { data: admin })
-      .then(() => {
-        data.forEach((email, index) => {
-          if ((email.email = admin.email)) {
-            data.splice(index, 1)
-          }
-        })
-      })
-      .catch((err) => console.log(err))
-  }
-
-  // TODO: allow to edit admin information
-  const editAdmin = () => {}
-
+export const AdministratorsTable = ({
+  data,
+  removeAdmin,
+  editAdmin,
+}: AllowedUsers) => {
   return (
     <Box
       sx={{
