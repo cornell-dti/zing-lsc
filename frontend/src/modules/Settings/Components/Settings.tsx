@@ -47,7 +47,6 @@ export const Settings = () => {
     await axios.get(`${API_ROOT}/admin`).then((req) => {
       setAdministrators(req.data)
     })
-    console.log(administrators)
   }
 
   // grabs the state of the backend once when you refresh code

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -47,6 +48,7 @@ export const AdministratorsTable = ({ data }: AllowedUsers) => {
       .catch((err) => console.log(err))
   }
 
+  // TODO: allow to edit admin information
   const editAdmin = () => {}
 
   return (
