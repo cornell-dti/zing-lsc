@@ -7,6 +7,7 @@ import { DASHBOARD_PATH } from '@core/index'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 import { API_ROOT, COURSE_API } from '@core/Constants'
+import { Administrators } from './AdministratorsTable'
 import axios from 'axios'
 
 export const Settings = () => {
@@ -48,7 +49,12 @@ export const Settings = () => {
 
   return (
     <Box
-      sx={{ pl: '5rem', pr: '5rem', display: 'flex', flexDirection: 'column' }}
+      sx={{
+        pl: '5rem',
+        pr: '5rem',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
     >
       <Box
         sx={{
@@ -96,7 +102,6 @@ export const Settings = () => {
           <Box sx={{ width: '70%', display: 'grid' }}>
             <Box sx={{ typography: 'h4', fontWeight: 'bold' }}>Semester</Box>
             <Box sx={{ typography: 'h5' }}>Current Semester:</Box>
-
             <DropdownSelect
               value={currRoster}
               onChange={changeCurrRoster}
@@ -110,7 +115,6 @@ export const Settings = () => {
               ))}
             </DropdownSelect>
           </Box>
-
           <Box
             sx={{
               height: 'fit-content',
@@ -138,10 +142,36 @@ export const Settings = () => {
                 marginRight: 'auto',
                 size: 'lg',
                 top: '1.9rem',
+                scale: '1.8',
               }}
             ></Switch>
           </Box>
         </Box>
+      </Box>
+      <Box
+        sx={{
+          width: '100%',
+          height: 'fit-content',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: '1rem',
+          pl: '5rem',
+        }}
+      >
+        <Box
+          sx={{
+            typography: 'h4',
+            fontWeight: 'bold',
+            left: '90rem',
+            pt: '3rem',
+          }}
+        >
+          Administrators
+        </Box>
+        {
+          //administrators code goes here
+        }
       </Box>
     </Box>
   )
