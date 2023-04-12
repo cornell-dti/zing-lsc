@@ -7,17 +7,11 @@ import { DASHBOARD_PATH } from '@core/index'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 import { API_ROOT, COURSE_API } from '@core/Constants'
-import { Administrators } from './AdministratorsTable'
+import { AdministratorsTable } from './AdministratorsTable'
+import { Admin } from './types'
 import axios from 'axios'
 
 export const Settings = () => {
-  // grabs the state of the backend once when you refresh code
-  const [start, setStart] = useState<boolean>(true)
-  if (start) {
-    setStart(false)
-    getCurrSurveyState()
-  }
-
   const [currRoster, setCurrRoster] = useState<string>('SP23')
   const changeCurrRoster = (event: SelectChangeEvent) => {
     // function to only open the survey of the semester
@@ -41,10 +35,27 @@ export const Settings = () => {
     setSurveyState(!surveyState)
   }
 
-  function getCurrSurveyState() {
-    axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
+  const getCurrSurveyState = async () => {
+    await axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
       setSurveyState(req.data)
     })
+  }
+
+  const [administrators, setAdministrators] = useState<Admin[]>([])
+
+  const getAdministrators = async () => {
+    await axios.get(`${API_ROOT}/admin`).then((req) => {
+      setAdministrators(req.data)
+    })
+    console.log(administrators)
+  }
+
+  // grabs the state of the backend once when you refresh code
+  const [start, setStart] = useState<boolean>(true)
+  if (start) {
+    setStart(false)
+    getCurrSurveyState()
+    getAdministrators()
   }
 
   return (
@@ -169,9 +180,7 @@ export const Settings = () => {
         >
           Administrators
         </Box>
-        {
-          //administrators code goes here
-        }
+        <AdministratorsTable data={administrators}></AdministratorsTable>
       </Box>
     </Box>
   )
