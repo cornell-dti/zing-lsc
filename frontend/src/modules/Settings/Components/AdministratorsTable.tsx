@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, MouseEvent } from 'react'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -43,7 +43,7 @@ export const AdministratorsTable = ({
   const [isDeletingRow, setIsDeletingRow] = useState<Admin>()
 
   const confirmDelete = async (row: Admin) => {
-    if (isDeleting) {
+    if (isDeleting && row === isDeletingRow) {
       removeAdmin(row)
       setIsDeleting(false)
     } else {
