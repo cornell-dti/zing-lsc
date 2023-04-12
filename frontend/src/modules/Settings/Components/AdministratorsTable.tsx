@@ -39,6 +39,19 @@ export const AdministratorsTable = ({
   removeAdmin,
   editAdmin,
 }: AllowedUsers) => {
+  const [isDeleting, setIsDeleting] = useState<boolean>(false)
+  const [isDeletingRow, setIsDeletingRow] = useState<Admin>()
+
+  const confirmDelete = async (row: Admin) => {
+    if (isDeleting) {
+      removeAdmin(row)
+      setIsDeleting(false)
+    } else {
+      setIsDeleting(true)
+      setIsDeletingRow(row)
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -80,9 +93,11 @@ export const AdministratorsTable = ({
                   }}
                 >
                   <DeleteOutline
-                    color="action"
+                    color={
+                      isDeleting && row === isDeletingRow ? 'warning' : 'action'
+                    }
                     onClick={() => {
-                      removeAdmin(row)
+                      confirmDelete(row)
                     }}
                     sx={{
                       '&:hover': { scale: '1.2', cursor: 'pointer' },
