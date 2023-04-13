@@ -55,14 +55,6 @@ export const CourseGrid = ({ courses }: CourseGridProps) => {
         >
           {courses.map((c) => {
             const [flag, setFlag] = useState(c.flagged)
-            // const handleSetFlag = (id: string, flagged: boolean) => {
-            //   axios.post(`${API_ROOT}${COURSE_API}/flagged`, {
-            //     flagged: !flag,
-            //     courseId: id,
-            //   })
-            //   setFlag(!flag)
-            //   updateFlagged(id, !flag)
-            // };
             const handleSetFlag = (id: string, flagged: boolean) => {
               axios
                 .post(`${API_ROOT}${COURSE_API}/flagged`, {
@@ -73,7 +65,6 @@ export const CourseGrid = ({ courses }: CourseGridProps) => {
                   updateFlagged(id, !flag)
                   setFlag(!flag)
                 })
-                .catch((error) => {})
             }
             return (
               <CourseCard
