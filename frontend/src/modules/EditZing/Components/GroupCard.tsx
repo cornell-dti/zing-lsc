@@ -107,7 +107,7 @@ const GroupCard = ({
       ref={drop}
       sx={{
         width: '380px',
-        height: '350px',
+        height: '370px',
         padding: '2rem',
         border: 0.5,
         borderColor: selected || isHovering ? 'purple.50' : 'purple.16',
@@ -118,7 +118,7 @@ const GroupCard = ({
       }}
       elevation={isHovering && !selected ? 4 : 2}
     >
-      <Box display="flex" alignItems="center" sx={{ mb: 2, height: '42px' }}>
+      <Box display="flex" alignItems="center" sx={{ height: '42px' }}>
         <Tooltip
           title={
             'Created on ' +
@@ -129,6 +129,7 @@ const GroupCard = ({
         >
           <StyledGroupText>{`Group ${groupNumber}`}</StyledGroupText>
         </Tooltip>
+
         {tooltipTimestamps.map((timestamp, index) => {
           const month = timestamp.timestamp.getMonth() + 1
           const day = timestamp.timestamp.getDate()
@@ -137,12 +138,23 @@ const GroupCard = ({
               key={index}
               title={`${timestamp.name + ': ' + month}/${day}`}
               placement="bottom-start"
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    bgcolor: 'essentials.main',
+                    color: 'white',
+                    fontWeight: 600,
+                    borderRadius: '10px',
+                  },
+                },
+              }}
             >
               <CircleIcon sx={{ fontSize: 10 }} color="primary" />
             </Tooltip>
           )
         })}
         <Box flexGrow={2} />
+
         <IconButton
           color="secondary"
           sx={{
@@ -185,137 +197,29 @@ const GroupCard = ({
           }}
         />
       </Box>
-
+      <Typography
+        variant="subtitle1"
+        mb={1}
+      >{`Group Id: ${groupId}`}</Typography>
       <Box
         sx={{
-          width: '380px',
-          height: '370px',
-          padding: '2rem',
-          border: 0.5,
-          borderColor: selected || isHovering ? 'purple.50' : 'purple.16',
-          boxShadow:
-            !selected && isHovering
-              ? '4px 4px 10px rgba(0, 0, 0, 0.3)'
-              : '0px 4px 10px rgba(0, 0, 0, 0.07)',
-          borderRadius: '20px',
-          margin: '0.25rem',
-          backgroundColor: selected ? 'rgba(129, 94, 212, 0.15);' : 'white',
-          opacity: isOver ? '0.6' : '1',
-          transition: 'box-shadow 0.1s',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(112px, max-content))',
+          gap: '16px',
         }}
       >
-        <Box display="flex" alignItems="center" sx={{ height: '42px' }}>
-          <Tooltip
-            title={
-              'Created on ' +
-              (createTime.getMonth() + 1) +
-              '/' +
-              createTime.getDate()
-            }
-          >
-            <StyledGroupText>{`Group ${groupNumber}`}</StyledGroupText>
-          </Tooltip>
-
-          {tooltipTimestamps.map((timestamp, index) => {
-            const month = timestamp.timestamp.getMonth() + 1
-            const day = timestamp.timestamp.getDate()
-            return (
-              <Tooltip
-                key={index}
-                title={`${timestamp.name + ': ' + month}/${day}`}
-                placement="bottom-start"
-                componentsProps={{
-                  tooltip: {
-                    sx: {
-                      bgcolor: 'essentials.main',
-                      color: 'white',
-                      fontWeight: 600,
-                      borderRadius: '10px',
-                    },
-                  },
-                }}
-              >
-                <CircleIcon sx={{ fontSize: 10 }} color="primary" />
-              </Tooltip>
-            )
-          })}
-          <Box flexGrow={2} />
-
-          <IconButton
-            color="secondary"
-            sx={{
-              display:
-                studentList.length === 0 && isHovering && !recentlyRemoved
-                  ? 'flex'
-                  : 'none',
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-            onClick={() => {
-              removeGroup(courseId, groupNumber)
-            }}
-          >
-            <Delete sx={{ color: 'purple' }}></Delete>
-          </IconButton>
-          <IconButton
-            color="secondary"
-            sx={{
-              display: recentlyRemoved ? 'flex' : 'none',
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-            onClick={() => {
-              undoRemoveGroup(courseId, groupNumber)
-            }}
-          >
-            <Undo sx={{ color: 'purple' }}></Undo>
-          </IconButton>
-
-          <Checkbox
-            color="secondary"
-            checked={selected}
-            onChange={handleChecked}
-            sx={{
-              display:
-                selected || (studentList.length !== 0 && isHovering)
-                  ? 'flex'
-                  : 'none',
-            }}
+        {studentList.map((student, index) => (
+          <StudentCard
+            key={index}
+            courseId={courseId}
+            groupNumber={groupNumber}
+            student={student}
+            templateMap={templateMap}
+            selected={selectedStudents.includes(student.email)}
+            handleAddStudent={handleAddStudent}
+            updateNotes={updateNotes}
           />
-        </Box>
-        <Typography
-          variant="subtitle1"
-          mb={1}
-        >{`Group Id: ${groupId}`}</Typography>
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(112px, max-content))',
-            gap: '16px',
-          }}
-        >
-          {studentList.map((student, index) => (
-            <StudentCard
-              key={index}
-              courseId={courseId}
-              groupNumber={groupNumber}
-              student={student}
-              templateMap={templateMap}
-              selected={selectedStudents.includes(student.email)}
-              handleAddStudent={handleAddStudent}
-              updateNotes={updateNotes}
-            />
-          ))}
-        </Box>
-        <Button
-          onClick={() => fullyRemoveGroup(courseId, groupNumber)}
-          sx={{
-            display: recentlyRemoved ? 'fixed' : 'none',
-            top: '175px',
-          }}
-        >
-          Confirm Delete
-        </Button>
+        ))}
       </Box>
       <Button
         onClick={() => fullyRemoveGroup(courseId, groupNumber)}
