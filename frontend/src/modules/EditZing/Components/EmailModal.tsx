@@ -188,7 +188,7 @@ export const EmailModal = ({
             const emailItems = {
               emailSubject,
               indivEmail: undefined,
-              emailBody: template,
+              emailBody: studentNamesHtml(groupNumber),
               courseId,
               groupNum: groupNumber.toString(),
               selectedTemplate: selectedTemplate?.id,
@@ -265,7 +265,7 @@ export const EmailModal = ({
           variant="text"
           sx={{ alignSelf: 'end' }}
         >
-          <EditIcon style={{ marginRight: '5px' }} />
+          <EditIcon sx={{ marginRight: '5px' }} />
           Edit Template
         </Button>
       )
@@ -357,7 +357,14 @@ export const EmailModal = ({
                 Group {groupNumber}
               </Box>
 
-              <EmailPreview template={template} replacedHtml={template.html} />
+              <EmailPreview
+                template={
+                  allGroupTemplates.find(
+                    (template) => template.groupNumber === groupNumber
+                  )?.template || selectedTemplate
+                }
+                replacedHtml={studentNamesHtml(groupNumber)}
+              />
             </Box>
           </Box>
         ))
