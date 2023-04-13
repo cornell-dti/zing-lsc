@@ -40,6 +40,7 @@ export const getAllCourses = async (): Promise<Course[]> => {
           .map((groupDoc) => groupDoc.data() as FirestoreGroup)
           .map((groupData) => ({
             ...groupData,
+            groupId: groupData.groupId,
             createTime: groupData.createTime.toDate(),
             updateTime: groupData.updateTime.toDate(),
             templateTimestamps: mapDate(groupData.templateTimestamps),
