@@ -10,9 +10,6 @@ import {
 import { CourseCard } from 'Dashboard/Components/CourseCard'
 import { Box } from '@mui/material'
 import { Course } from '@core/Types'
-import { API_ROOT, COURSE_API } from '@core/Constants'
-import axios from 'axios'
-import { id } from 'date-fns/locale'
 import { useCourseValue } from '@context/CourseContext'
 
 export const CourseGrid = ({ courses }: CourseGridProps) => {
@@ -54,18 +51,6 @@ export const CourseGrid = ({ courses }: CourseGridProps) => {
           }}
         >
           {courses.map((c) => {
-            const [flag, setFlag] = useState(c.flagged)
-            const handleSetFlag = (id: string, flagged: boolean) => {
-              axios
-                .post(`${API_ROOT}${COURSE_API}/flagged`, {
-                  flagged: !flag,
-                  courseId: id,
-                })
-                .then(() => {
-                  updateFlagged(id, !flag)
-                  setFlag(!flag)
-                })
-            }
             return (
               <CourseCard
                 key={c.courseId}
@@ -75,7 +60,6 @@ export const CourseGrid = ({ courses }: CourseGridProps) => {
                 groupsFormed={c.lastGroupNumber}
                 flagged={c.flagged == null ? false : c.flagged} // null to guard for current courses without a flag field
                 updateFlagged={updateFlagged}
-                handleFlaggedChange={handleSetFlag}
               />
             )
           })}
@@ -87,5 +71,4 @@ export const CourseGrid = ({ courses }: CourseGridProps) => {
 
 interface CourseGridProps {
   courses: Course[]
-  // handleSetFlag: (id: string, flagged: boolean) => void
 }

@@ -18,7 +18,6 @@ export const CourseCard = ({
   groupsFormed,
   flagged,
   updateFlagged,
-  handleFlaggedChange,
 }: CourseCardProps) => {
   const history = useHistory()
   const handleClickView = () => {
@@ -140,5 +139,4 @@ interface CourseCardProps {
   groupsFormed: number
   flagged: boolean
   updateFlagged: (id: string, flagged: boolean) => void
-  handleFlaggedChange: (id: string, flagged: boolean) => void
 }
