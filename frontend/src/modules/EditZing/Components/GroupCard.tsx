@@ -11,6 +11,7 @@ import {
   IconButton,
   Button,
   Typography,
+  Paper,
 } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import { Delete, Undo } from '@mui/icons-material'
@@ -100,11 +101,92 @@ const GroupCard = ({
   }
 
   return (
-    <Box>
+    <Paper
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
+      ref={drop}
+      sx={{
+        width: '380px',
+        height: '350px',
+        padding: '2rem',
+        border: 0.5,
+        borderColor: selected || isHovering ? 'purple.50' : 'purple.16',
+        borderRadius: '20px',
+        margin: '0.25rem',
+        backgroundColor: selected ? 'rgba(129, 94, 212, 0.15);' : 'white',
+        opacity: isOver ? '0.6' : '1',
+      }}
+      elevation={isHovering && !selected ? 4 : 2}
+    >
+      <Box display="flex" alignItems="center" sx={{ mb: 2, height: '42px' }}>
+        <Tooltip
+          title={
+            'Created on ' +
+            (createTime.getMonth() + 1) +
+            '/' +
+            createTime.getDate()
+          }
+        >
+          <StyledGroupText>{`Group ${groupNumber}`}</StyledGroupText>
+        </Tooltip>
+        {tooltipTimestamps.map((timestamp, index) => {
+          const month = timestamp.timestamp.getMonth() + 1
+          const day = timestamp.timestamp.getDate()
+          return (
+            <Tooltip
+              key={index}
+              title={`${timestamp.name + ': ' + month}/${day}`}
+              placement="bottom-start"
+            >
+              <CircleIcon sx={{ fontSize: 10 }} color="primary" />
+            </Tooltip>
+          )
+        })}
+        <Box flexGrow={2} />
+        <IconButton
+          color="secondary"
+          sx={{
+            display:
+              studentList.length === 0 && isHovering && !recentlyRemoved
+                ? 'flex'
+                : 'none',
+            backgroundColor: 'transparent',
+            border: 'none',
+          }}
+          onClick={() => {
+            removeGroup(courseId, groupNumber)
+          }}
+        >
+          <Delete sx={{ color: 'purple' }}></Delete>
+        </IconButton>
+        <IconButton
+          color="secondary"
+          sx={{
+            display: recentlyRemoved ? 'flex' : 'none',
+            backgroundColor: 'transparent',
+            border: 'none',
+          }}
+          onClick={() => {
+            undoRemoveGroup(courseId, groupNumber)
+          }}
+        >
+          <Undo sx={{ color: 'purple' }}></Undo>
+        </IconButton>
+
+        <Checkbox
+          color="secondary"
+          checked={selected}
+          onChange={handleChecked}
+          sx={{
+            display:
+              selected || (studentList.length !== 0 && isHovering)
+                ? 'flex'
+                : 'none',
+          }}
+        />
+      </Box>
+
       <Box
-        onMouseOver={handleMouseOver}
-        onMouseOut={handleMouseOut}
-        ref={drop}
         sx={{
           width: '380px',
           height: '370px',
@@ -235,7 +317,16 @@ const GroupCard = ({
           Confirm Delete
         </Button>
       </Box>
-    </Box>
+      <Button
+        onClick={() => fullyRemoveGroup(courseId, groupNumber)}
+        sx={{
+          display: recentlyRemoved ? 'fixed' : 'none',
+          top: '175px',
+        }}
+      >
+        Confirm Delete
+      </Button>
+    </Paper>
   )
 }
 
