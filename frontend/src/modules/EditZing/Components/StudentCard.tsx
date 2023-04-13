@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Paper from '@mui/material/Paper'
 import { STUDENT_TYPE } from 'EditZing/Types/Student'
 import { StudentGridProps } from 'EditZing/Types/ComponentProps'
 import { useDrag } from 'react-dnd'
@@ -10,7 +11,6 @@ import {
   Snackbar,
   IconButton,
   SvgIcon,
-  Paper,
 } from '@mui/material'
 import NotesModal from './NotesModal'
 import { ReactComponent as FilledEditIcon } from '@assets/img/FilledEditIcon.svg'
@@ -141,10 +141,14 @@ const StudentCard = ({
             fontFamily: 'Montserrat',
             fontWeight: '700',
             fontSize: '14',
+            boxShadow:
+              isHovering && !selected
+                ? '4px 4px 8px rgba(0, 0, 0, 0.3)'
+                : '0px 2px 5px rgba(205, 156, 242, 0.2)',
             borderRadius: '10px',
             width: '100%',
+            transition: 'box-shadow 0.1s',
           }}
-          elevation={isHovering && !selected ? 3 : 1}
         >
           <Box
             sx={{
@@ -187,6 +191,16 @@ const StudentCard = ({
                     key={index}
                     title={`${timestamp.name + ': ' + month}/${day}`}
                     placement="bottom-start"
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          bgcolor: 'essentials.main',
+                          color: 'white',
+                          fontWeight: 600,
+                          borderRadius: '10px',
+                        },
+                      },
+                    }}
                   >
                     <CircleIcon sx={{ fontSize: 10 }} color="primary" />
                   </Tooltip>

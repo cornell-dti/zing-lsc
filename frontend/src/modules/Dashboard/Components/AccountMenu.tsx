@@ -89,11 +89,6 @@ export const AccountMenu = ({
     setRosterAnchorEl(null)
   }
 
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = today.getMonth() + 1
-  const date = today.getDate()
-
   return (
     <Box>
       <Button
@@ -127,13 +122,13 @@ export const AccountMenu = ({
       >
         <CSVLink
           data={csvCourses.filter((e) => e.semester === selectedRoster)}
-          filename={`lsc-exported-courses-${year}-${month}-${date}.csv`}
+          filename={`export-courses-${Date.now()}`}
         >
           <MenuItem>Export CSV (Courses)</MenuItem>
         </CSVLink>
         <CSVLink
           data={csvStudents.filter((e) => e.semester === selectedRoster)}
-          filename={`lsc-exported-students-${year}-${month}-${date}.csv`}
+          filename={`export-students-${Date.now()}`}
         >
           <MenuItem>Export CSV (Students)</MenuItem>
         </CSVLink>

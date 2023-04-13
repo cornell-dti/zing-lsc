@@ -15,11 +15,7 @@ import { Course } from '@core/Types'
 import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 import ClearIcon from '@mui/icons-material/Clear'
-type SortOrder =
-  | 'newest-requests-first'
-  | 'oldest-requests-first'
-  | 'classes-a-z'
-  | 'classes-z-a'
+type SortOrder = 'newest-requests-first' | 'classes-a-z' | 'classes-z-a'
 
 type FilterOption =
   | 'no-filter'
@@ -44,7 +40,6 @@ const filterOptionDisplay = [
 ]
 const sortOrderDisplay = [
   ['newest-requests-first', 'Newest Requests First'],
-  ['oldest-requests-first', 'Oldest Requests First'],
   ['classes-a-z', 'Classes A-Z'],
   ['classes-z-a', 'Classes Z-A'],
 ]
@@ -104,7 +99,7 @@ export const Dashboard = () => {
       case 'matchable':
         return [...courseInfo].filter(
           (course, _) =>
-            (course.lastGroupNumber > 0 && course.unmatched.length > 1) ||
+            (course.lastGroupNumber > 0 && course.unmatched.length > 0) ||
             (course.lastGroupNumber === 0 && course.unmatched.length > 1)
         )
       case 'can-add-to-existing-group':
@@ -127,11 +122,6 @@ export const Dashboard = () => {
         return [...courseInfo].sort(
           (a, b) =>
             b.latestSubmissionTime.valueOf() - a.latestSubmissionTime.valueOf()
-        )
-      case 'oldest-requests-first':
-        return [...courseInfo].sort(
-          (a, b) =>
-            a.latestSubmissionTime.valueOf() - b.latestSubmissionTime.valueOf()
         )
       case 'classes-a-z':
         return [...courseInfo].sort((a, b) => {
