@@ -104,7 +104,7 @@ export const Dashboard = () => {
       case 'matchable':
         return [...courseInfo].filter(
           (course, _) =>
-            (course.lastGroupNumber > 0 && course.unmatched.length > 0) ||
+            (course.lastGroupNumber > 0 && course.unmatched.length > 1) ||
             (course.lastGroupNumber === 0 && course.unmatched.length > 1)
         )
       case 'can-add-to-existing-group':
