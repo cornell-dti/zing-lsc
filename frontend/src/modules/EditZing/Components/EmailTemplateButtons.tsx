@@ -6,6 +6,8 @@ export const EmailTemplateButtons = ({
   templates,
   selectedTemplate,
   setSelectedTemplate,
+  setGroupTemplates,
+  selectedGroupNumbers,
 }: TemplateRadioButtonsProps) => {
   // labels and values fot the radio button
   const templateNames = templates.map((template) => template.name)
@@ -16,6 +18,12 @@ export const EmailTemplateButtons = ({
     const newSelection = event.target.value
     setSelectedTemplate(
       templates.find((template) => template.id === newSelection)!
+    )
+    setGroupTemplates(
+      selectedGroupNumbers.map((groupNumber) => ({
+        groupNumber,
+        template: templates.find((template) => template.id === newSelection)!,
+      }))
     )
   }
 

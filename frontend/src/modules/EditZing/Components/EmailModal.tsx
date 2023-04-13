@@ -1,22 +1,31 @@
 // external imports
 import { useState } from 'react'
-import { Box, Button, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  MenuItem,
+  SelectChangeEvent,
+  Typography,
+} from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useParams } from 'react-router-dom'
+
 // zing imports
-import { ZingModal } from '@core/Components'
+import { DropdownSelect, ZingModal } from '@core/Components'
 import { EmailModalProps } from '../Types/ComponentProps'
 import { EmailTemplateButtons } from 'EditZing/Components/EmailTemplateButtons'
 import { EmailPreview } from 'EditZing/Components/EmailPreview'
 import { sendEmail } from 'Emailing/Components/Emailing'
 import { adminSignIn } from '@fire/firebase'
 import EditIcon from '@mui/icons-material/Edit'
+
 // template editor
-import { EmailTemplate } from '@core/Types'
+import { Course, EmailTemplate, Group } from '@core/Types'
 import { useStudentValue } from '@context/StudentContext'
 import { useCourseValue } from '@context/CourseContext'
 import { useTemplateValue } from '@context/TemplateContext'
-import { EmailEdit } from 'EditZing/Components/EmailEdit'
+import { EmailEdit } from './EmailEdit'
+
 export const EmailModal = ({
   selectedGroupNumbers,
   selectedStudentEmails,
@@ -28,8 +37,8 @@ export const EmailModal = ({
   setEmailSentError,
 }: EmailModalProps) => {
   const { courseId } = useParams<{ courseId: string }>()
-  const { addGroupEmailTimestamps } = useCourseValue()
-  const { addStudentEmailTimestamps } = useStudentValue()
+  const { addGroupEmailTimestamps, courses } = useCourseValue()
+  const { addStudentEmailTimestamps, students } = useStudentValue()
   const { templates } = useTemplateValue()
 
   // check if emailing students or groups
@@ -40,20 +49,100 @@ export const EmailModal = ({
   )
 
   // template editor logic
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    EmailTemplate | undefined
-  >(undefined)
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>(
+    filteredTemplates[0]
+  )
 
   // Special value substitution in template HTML
   const replaceMap = {
     '{{COURSE_NAME}}': courseNames.join('/'),
   }
+
   const replacedHtml = Object.entries(replaceMap).reduce(
     (prev, [key, value]) => prev.replaceAll(key, value),
     selectedTemplate?.html || ''
   )
 
+  /** Replaces {{NEW_STUDENT_NAME}} and {{OTHER_STUDENTS_NAMES}} with their proper values
+   * in the email template. {replacedHtml} is a general replacement common to all groups, so
+   * for this function, we must pass in the specific groupNumber and find the array of
+   * group members' names using that, since this information is not available from {EmailModalProps}
+   *
+   * @param groupNumber
+   */
+  const studentNamesHtml = (groupNumber: number) => {
+    const group = courses
+      .find((course: Course) => course.courseId === courseId)
+      ?.groups.find((group: Group) => group.groupNumber === groupNumber)
+
+    if (!group) {
+      return replacedHtml
+    }
+
+    const groupSize = group.members.length
+
+    const members = group.members.map(
+      (member) =>
+        students.find((student) => student.email === member)?.name || ''
+    )
+
+    let newStudent = members[groupSize - 1]
+    let otherStudents = members.slice(0, groupSize - 1)
+
+    const replaceNamesMap = {
+      '{{NEW_STUDENT_NAME}}': newStudent,
+      '{{OTHER_STUDENTS_NAMES}}': otherStudents.join(', '),
+    }
+
+    const groupTemplate =
+      allGroupTemplates.find((template) => template.groupNumber === groupNumber)
+        ?.template.html || replacedHtml
+
+    return Object.entries(replaceNamesMap).reduce(
+      (prev, [key, value]) => prev.replaceAll(key, value),
+      allGroupTemplates.find(
+        (groupTemplate) => groupTemplate.groupNumber === groupNumber
+      )?.template.html || selectedTemplate.html
+    )
+  }
+
+  interface GroupTemplate {
+    groupNumber: number
+    template: EmailTemplate
+  }
+
   const [step, setStep] = useState<number>(0)
+
+  // state containing initial custom email templates for each group
+  const [allGroupTemplates, setAllGroupTemplates] = useState<GroupTemplate[]>(
+    selectedGroupNumbers.map((groupNumber) => ({
+      groupNumber,
+      template: selectedTemplate,
+    }))
+  )
+
+  const setSingleGroupTemplate = (
+    copied: EmailTemplate,
+    groupNumber: number
+  ) => {
+    setAllGroupTemplates(
+      allGroupTemplates.map((groupTemplate) =>
+        groupTemplate.groupNumber === groupNumber
+          ? { groupNumber, template: copied }
+          : groupTemplate
+      )
+    )
+  }
+
+  const replaceSelectedTemplate = (copied: EmailTemplate) => {
+    setAllGroupTemplates(
+      allGroupTemplates.map((groupTemplate) => ({
+        groupNumber: groupTemplate.groupNumber,
+        template: copied,
+      }))
+    )
+  }
+
   const titles = [
     'Select email template',
     'Send emails',
@@ -93,18 +182,31 @@ export const EmailModal = ({
    */
   const sendGroupEmails = async () => {
     await Promise.all(
-      selectedGroupNumbers.map((groupNumber) => {
-        const emailSubject = selectedTemplate?.subject
-        const emailItems = {
-          emailSubject,
-          indivEmail: undefined,
-          emailBody: replacedHtml,
-          courseId,
-          groupNum: groupNumber.toString(),
-          selectedTemplate: selectedTemplate?.id,
-        }
-        return sendEmail(emailItems)
-      })
+      selectedTemplate.name === 'Introducing student to established group'
+        ? allGroupTemplates.map(({ groupNumber, template }) => {
+            const emailSubject = selectedTemplate?.subject
+            const emailItems = {
+              emailSubject,
+              indivEmail: undefined,
+              emailBody: studentNamesHtml(groupNumber),
+              courseId,
+              groupNum: groupNumber.toString(),
+              selectedTemplate: selectedTemplate?.id,
+            }
+            return sendEmail(emailItems)
+          })
+        : selectedGroupNumbers.map((groupNumber) => {
+            const emailSubject = selectedTemplate?.subject
+            const emailItems = {
+              emailSubject,
+              indivEmail: undefined,
+              emailBody: studentNamesHtml(groupNumber),
+              courseId,
+              groupNum: groupNumber.toString(),
+              selectedTemplate: selectedTemplate?.id,
+            }
+            return sendEmail(emailItems)
+          })
     )
   }
 
@@ -172,14 +274,36 @@ export const EmailModal = ({
     }
   }
 
-  const EditEmail = () => {
-    return (
+  const EditEmail = ({ groupNumber }: { groupNumber: number }) => {
+    let selectedSingleTemplate = allGroupTemplates.find(
+      (groupTemplate) => groupTemplate.groupNumber === groupNumber
+    )?.template
+
+    return selectedTemplate.name ===
+      'Introducing student to established group' ? (
+      <Box>
+        <TemplateSelectedComponent />
+        <EmailEdit
+          template={
+            selectedSingleTemplate ? selectedSingleTemplate : selectedTemplate
+          }
+          replacedHtml={studentNamesHtml(groupNumber)}
+          setSelectedTemplate={setSelectedTemplate}
+          replaceSelectedTemplate={replaceSelectedTemplate}
+          setSingleGroupTemplate={setSingleGroupTemplate}
+          setEmailSaved={setEmailSaved}
+          groupNumber={groupNumber}
+        />
+      </Box>
+    ) : (
       <Box>
         <TemplateSelectedComponent />
         <EmailEdit
           template={selectedTemplate!}
-          replacedHtml={replacedHtml}
+          replacedHtml={studentNamesHtml(groupNumber)}
           setSelectedTemplate={setSelectedTemplate}
+          replaceSelectedTemplate={replaceSelectedTemplate}
+          setSingleGroupTemplate={setSingleGroupTemplate}
           setEmailSaved={setEmailSaved}
         />
       </Box>
@@ -192,27 +316,84 @@ export const EmailModal = ({
           templates={filteredTemplates}
           selectedTemplate={selectedTemplate!}
           setSelectedTemplate={setSelectedTemplate}
+          setGroupTemplates={setAllGroupTemplates}
+          selectedGroupNumbers={selectedGroupNumbers}
         />
       </Box>
     )
   }
 
-  const Step1 = () => {
-    return (
-      <Box>
-        <TemplateSelectedComponent />
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-          }}
-        >
-          <EmailPreview
-            template={selectedTemplate!}
-            replacedHtml={replacedHtml}
-          />
+  const Step1 = ({
+    groupNumbers,
+    selectedGroupNumber,
+  }: {
+    groupNumbers: number[]
+    selectedGroupNumber: number
+  }) => {
+    // Goes through all selected groups and generates individual templates.
+    // TODO (richardgu): Make studentNamesHtml include regular replacedHtml function
+    // for cases that aren't group-specific
+    const groupTemplates =
+      // If we want to display all groups and there are multiple groups
+      selectedGroupNumber === 0 && selectedGroupNumbers.length > 0 ? (
+        allGroupTemplates.map(({ groupNumber, template }) => (
+          <Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                marginBottom: '1rem',
+              }}
+            >
+              <Box
+                component="div"
+                sx={{
+                  fontSize: 24,
+                  fontWeight: 900,
+                  maxWidth: '90%',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Group {groupNumber}
+              </Box>
+
+              <EmailPreview
+                template={
+                  allGroupTemplates.find(
+                    (template) => template.groupNumber === groupNumber
+                  )?.template || selectedTemplate
+                }
+                replacedHtml={studentNamesHtml(groupNumber)}
+              />
+            </Box>
+          </Box>
+        ))
+      ) : (
+        // If we don't want all groups or there's only one group
+        <Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+            }}
+          >
+            <EmailPreview
+              template={
+                allGroupTemplates.find(
+                  (template) => template.groupNumber === selectedGroupNumber
+                )?.template || selectedTemplate
+              }
+              replacedHtml={studentNamesHtml(selectedGroupNumber)}
+            />
+          </Box>
         </Box>
-      </Box>
+      )
+
+    return (
+      <div>
+        <TemplateSelectedComponent />
+        {groupTemplates}
+      </div>
     )
   }
 
@@ -355,6 +536,37 @@ export const EmailModal = ({
     }
   }
 
+  const [currGroup, setCurrGroup] = useState<number>(0)
+
+  const changeCurrGroup = (event: SelectChangeEvent) => {
+    setCurrGroup(Number(event.target.value))
+  }
+
+  const GroupTabs = ({ groupNumbers }: { groupNumbers: number[] }) => {
+    const allGroups = [0, ...groupNumbers]
+
+    return (
+      <DropdownSelect
+        value={currGroup}
+        onChange={changeCurrGroup}
+        sx={{
+          padding: 0,
+          margin: 0,
+          fontWeight: 'bold',
+          maxWidth: '250px',
+        }}
+      >
+        {allGroups.map((groupNum: number) =>
+          groupNum === 0 ? (
+            <MenuItem value={groupNum}>All Groups</MenuItem>
+          ) : (
+            <MenuItem value={groupNum}>Group {groupNum}</MenuItem>
+          )
+        )}
+      </DropdownSelect>
+    )
+  }
+
   const SelectTemplates = () => {
     return (
       <>
@@ -384,7 +596,19 @@ export const EmailModal = ({
           {step === 1 && <EditButton />}
         </Box>
         {step === 0 && <Step0 />}
-        {step === 1 && <Step1 />}
+        {step === 1 &&
+          selectedTemplate.name ===
+            'Introducing student to established group' &&
+          selectedGroupNumbers.length > 1 && (
+            <GroupTabs groupNumbers={selectedGroupNumbers} />
+          )}
+
+        {step === 1 && (
+          <Step1
+            groupNumbers={selectedGroupNumbers}
+            selectedGroupNumber={currGroup}
+          />
+        )}
       </>
     )
   }
@@ -409,12 +633,12 @@ export const EmailModal = ({
         </Box>
       </ZingModal.Title>
       <ZingModal.Body>
-        {filteredTemplates.length !== 0 ? (
+        {selectedTemplate ? (
           <Box sx={{ padding: '1rem 3.5rem 0 3.5rem' }}>
             {step <= 1 && <SelectTemplates />}
             {step === 2 && <StepFailure />}
             {step === 3 && <StepFinalFailure />}
-            {step === 4 && <EditEmail />}
+            {step === 4 && <EditEmail groupNumber={currGroup} />}
           </Box>
         ) : (
           <Box
