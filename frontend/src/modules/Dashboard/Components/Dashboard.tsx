@@ -104,7 +104,7 @@ export const Dashboard = () => {
       case 'matchable':
         return [...courseInfo].filter(
           (course, _) =>
-            (course.lastGroupNumber > 0 && course.unmatched.length > 0) ||
+            (course.lastGroupNumber > 0 && course.unmatched.length > 1) ||
             (course.lastGroupNumber === 0 && course.unmatched.length > 1)
         )
       case 'can-add-to-existing-group':
@@ -129,12 +129,10 @@ export const Dashboard = () => {
             b.latestSubmissionTime.valueOf() - a.latestSubmissionTime.valueOf()
         )
       case 'oldest-requests-first':
-        return [...courseInfo]
-          .sort(
-            (a, b) =>
-              a.latestSubmissionTime.valueOf() -
-              b.latestSubmissionTime.valueOf()
-          )
+        return [...courseInfo].sort(
+          (a, b) =>
+            a.latestSubmissionTime.valueOf() - b.latestSubmissionTime.valueOf()
+        )
       case 'classes-a-z':
         return [...courseInfo].sort((a, b) => {
           return a.names[0].localeCompare(b.names[0], undefined, {
