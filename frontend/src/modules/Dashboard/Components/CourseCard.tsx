@@ -17,6 +17,8 @@ export const CourseCard = ({
   newStudents,
   groupsFormed,
   flagged,
+  updateFlagged,
+  handleFlaggedChange,
 }: CourseCardProps) => {
   const history = useHistory()
   const handleClickView = () => {
@@ -32,16 +34,6 @@ export const CourseCard = ({
           : defaultFilterOption,
       },
     })
-  }
-
-  const [flag, setFlag] = useState(flagged)
-
-  const handleSetFlag = () => {
-    axios.post(`${API_ROOT}${COURSE_API}/flagged`, {
-      flagged: !flagged,
-      courseId: id,
-    })
-    setFlag(!flag)
   }
 
   // returns color of background, button, and if newly matchable
@@ -62,6 +54,16 @@ export const CourseCard = ({
     else return { color: colors.yellow, new_match: 'no' }
   }
   const styleMap = getColor(newStudents, groupsFormed)
+
+  const [flag, setFlag] = useState(flagged)
+  const handleSetFlag = (id: string, flagged: boolean) => {
+    axios.post(`${API_ROOT}${COURSE_API}/flagged`, {
+      flagged: !flag,
+      courseId: id,
+    })
+    updateFlagged(id, !flag)
+    setFlag(!flag)
+  }
 
   return (
     <Box
@@ -124,7 +126,7 @@ export const CourseCard = ({
           checked={flag}
           icon={<BookmarkBorderIcon />}
           checkedIcon={<BookmarkIcon />}
-          onClick={() => handleSetFlag()}
+          onClick={() => handleSetFlag(id, flagged)}
         />
       </Box>
     </Box>
@@ -137,4 +139,6 @@ interface CourseCardProps {
   newStudents: number
   groupsFormed: number
   flagged: boolean
+  updateFlagged: (id: string, flagged: boolean) => void
+  handleFlaggedChange: (id: string, flagged: boolean) => void
 }

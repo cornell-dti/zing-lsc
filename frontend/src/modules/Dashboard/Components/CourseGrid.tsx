@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   StyledTextBox,
@@ -10,8 +10,13 @@ import {
 import { CourseCard } from 'Dashboard/Components/CourseCard'
 import { Box } from '@mui/material'
 import { Course } from '@core/Types'
+import { API_ROOT, COURSE_API } from '@core/Constants'
+import axios from 'axios'
+import { id } from 'date-fns/locale'
+import { useCourseValue } from '@context/CourseContext'
 
 export const CourseGrid = ({ courses }: CourseGridProps) => {
+  const { updateFlagged } = useCourseValue()
   return (
     <Box
       sx={{
@@ -48,16 +53,41 @@ export const CourseGrid = ({ courses }: CourseGridProps) => {
             py: 4,
           }}
         >
-          {courses.map((c) => (
-            <CourseCard
-              key={c.courseId}
-              id={c.courseId}
-              name={c.names[0]}
-              newStudents={c.unmatched.length}
-              groupsFormed={c.lastGroupNumber}
-              flagged={c.flagged}
-            />
-          ))}
+          {courses.map((c) => {
+            const [flag, setFlag] = useState(c.flagged)
+            // const handleSetFlag = (id: string, flagged: boolean) => {
+            //   axios.post(`${API_ROOT}${COURSE_API}/flagged`, {
+            //     flagged: !flag,
+            //     courseId: id,
+            //   })
+            //   setFlag(!flag)
+            //   updateFlagged(id, !flag)
+            // };
+            const handleSetFlag = (id: string, flagged: boolean) => {
+              axios
+                .post(`${API_ROOT}${COURSE_API}/flagged`, {
+                  flagged: !flag,
+                  courseId: id,
+                })
+                .then(() => {
+                  updateFlagged(id, !flag)
+                  setFlag(!flag)
+                })
+                .catch((error) => {})
+            }
+            return (
+              <CourseCard
+                key={c.courseId}
+                id={c.courseId}
+                name={c.names[0]}
+                newStudents={c.unmatched.length}
+                groupsFormed={c.lastGroupNumber}
+                flagged={c.flagged == null ? false : c.flagged} // null to guard for current courses without a flag field
+                updateFlagged={updateFlagged}
+                handleFlaggedChange={handleSetFlag}
+              />
+            )
+          })}
         </Box>
       )}
     </Box>
@@ -66,4 +96,5 @@ export const CourseGrid = ({ courses }: CourseGridProps) => {
 
 interface CourseGridProps {
   courses: Course[]
+  // handleSetFlag: (id: string, flagged: boolean) => void
 }

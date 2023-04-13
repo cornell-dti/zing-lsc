@@ -168,6 +168,7 @@ export const addStudentSurveyResponse = async (
     notesModifyTime: surveyTimestamp, // Can't use serverTimestamp in arrays...
     submissionTime: surveyTimestamp,
     templateTimestamps: {},
+    flagged: false,
   }))
 
   // First, update the [student] collection to include the data for the new student
