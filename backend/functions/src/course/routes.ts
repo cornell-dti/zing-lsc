@@ -48,8 +48,9 @@ router.get('/semester/current', (_, res) => {
   getCurrentSemester()
     .then((data) => res.status(200).send(data))
     .catch((err) => {
-      logger.error(`Unexpected error getting semester: ${err.message}`)
-      res.status(500).send({ message: err.message })
+      const err_msg = `Unexpected error getting semester: ${err.msg}`
+      logger.error(err_msg)
+      res.status(500).send({ message: err_msg })
     })
 })
 
@@ -58,8 +59,9 @@ router.post('/semester/current', (req, res) => {
   setCurrentSemester(semester)
     .then(() => res.status(200).send({ success: true }))
     .catch((err) => {
-      console.log(err)
-      res.status(400).send({ success: false, err: err.message })
+      const err_msg = `Unexpected error change current semester to ${semester}: ${err.msg}`
+      logger.error(err_msg)
+      res.status(500).send({ message: err_msg })
     })
 })
 
@@ -67,8 +69,9 @@ router.get('/semester/all', (_, res) => {
   getAllSemesters()
     .then((data) => res.status(200).send(data))
     .catch((err) => {
-      logger.error(`Unexpected error getting all semesters: ${err.message}`)
-      res.status(500).send({ message: err.message })
+      const err_msg = `Unexpected error getting all semesters: ${err.message}`
+      logger.error(err_msg)
+      res.status(500).send({ message: err_msg })
     })
 })
 
