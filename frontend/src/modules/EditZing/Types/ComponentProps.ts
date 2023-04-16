@@ -26,6 +26,7 @@ export interface UnmatchedGridProps {
 }
 
 export interface GroupGridProps {
+  groupId: string
   courseId: string
   studentList: Student[]
   groupNumber: number
@@ -99,6 +100,13 @@ export interface TemplateRadioButtonsProps {
   selectedTemplate: EmailTemplate
   setSelectedTemplate: (value: EmailTemplate) => void
   templates: EmailTemplate[]
+  setGroupTemplates: (
+    templates: {
+      groupNumber: number
+      template: EmailTemplate
+    }[]
+  ) => void
+  selectedGroupNumbers: number[]
 }
 
 export interface EmailModalContentProps {
@@ -116,7 +124,10 @@ export interface EmailEditProps {
   template: EmailTemplate
   replacedHtml: string
   setSelectedTemplate: (value: EmailTemplate) => void
+  replaceSelectedTemplate: (value: EmailTemplate) => void
+  setSingleGroupTemplate: any // temporary
   setEmailSaved: (arg: boolean) => void
+  groupNumber?: number
 }
 
 export interface DeleteGroupProps {

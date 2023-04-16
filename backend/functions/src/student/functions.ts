@@ -53,15 +53,15 @@ export const getStudentsData = (emails: string[]) =>
   Promise.all(emails.map((email) => getStudentData(email)))
 
 async function removeStudentFromCourse(
-  email: any,
+  email: string,
   courseId: string,
-  groupNumber: any
+  groupNumber: number
 ) {
   const ref = courseRef
     .doc(courseId)
     .collection('groups')
     .doc(groupNumber.toString())
-  const data: any = (await ref.get()).data()
+  const data: FirebaseFirestore.DocumentData = (await ref.get()).data() || {}
   if (data.members.length === 1 && data.members.includes(email)) {
     //second condition is a sanity check
     return ref.delete() // Fix this if we ever use this function, I don't think they want groups to ever be deleted fully
@@ -267,6 +267,10 @@ export const addStudentSurveyResponse = async (
 
   return { added, failed, roster }
 }
+interface group {
+  courseId: string
+  groupNumber: number
+}
 
 // This has not been used in a very long long time
 export async function removeStudent(email: string) {
@@ -274,7 +278,7 @@ export async function removeStudent(email: string) {
   const data = (await studentDocRef.get()).data()
   if (!data) throw new Error(`Cannot find student ${email}`)
   const groups = data.groups
-  const courseUpdates = groups.map(({ courseId, groupNumber }: any) =>
+  const courseUpdates = groups.map(({ courseId, groupNumber }: group) =>
     groupNumber !== -1
       ? removeStudentFromCourse(email, courseId, groupNumber)
       : undefined

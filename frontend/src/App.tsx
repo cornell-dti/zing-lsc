@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   Alert,
@@ -53,7 +54,6 @@ import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
 import { Settings } from 'Settings'
-import React from 'react'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -642,8 +642,7 @@ const App = () => {
                 >
                   <Snackbar
                     open={needsRefresh}
-                    message="The information in your app is out of date. 
-                      Please reload to see the latest updates."
+                    message="The information in your app is out of date. Please reload to see the latest updates."
                     action={reloadButton}
                   />
                   <Switch>
