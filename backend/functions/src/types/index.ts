@@ -9,6 +9,7 @@ type Timestamp = admin.firestore.Timestamp
 export type Semester = {
   currentSemester: string
   allSemesters: string[]
+  surveyOpen: boolean
 }
 
 /** Course */
