@@ -118,6 +118,8 @@ export const Dashboard = () => {
         return courseInfo.filter(hasUnsentCheckIns)
       case 'no-no-match-email':
         return courseInfo.filter(hasUnsentNoMatch)
+      case 'flagged':
+        return courseInfo
       default:
         return courseInfo
     }
