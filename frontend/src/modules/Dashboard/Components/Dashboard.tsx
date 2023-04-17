@@ -29,6 +29,7 @@ type FilterOption =
   | 'can-add-to-existing-group'
   | 'no-check-in-email'
   | 'no-no-match-email'
+  | 'flagged'
 
 export const defaultSortingOrder = 'newest-requests-first'
 export const defaultFilterOption = 'no-filter'
@@ -41,6 +42,7 @@ const filterOptionDisplay = [
   ['can-add-to-existing-group', 'Can Add to Existing group'],
   ['no-check-in-email', 'No Check In Email'],
   ['no-no-match-email', 'No No Match Email'],
+  ['flagged', 'Flagged'],
 ]
 const sortOrderDisplay = [
   ['newest-requests-first', 'Newest Requests First'],

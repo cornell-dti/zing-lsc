@@ -14,6 +14,7 @@ import { StepFinal } from 'Survey/Components/StepFinal'
 import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
 import survey from '@core/Questions/Questions.json'
+import { useCourseValue } from '@context/CourseContext'
 
 export const Survey = () => {
   const [currStep, setCurrStep] = useState(1)
@@ -76,6 +77,10 @@ export const Survey = () => {
         console.log(response)
         setSurveySubmissionResponse(response.data.data)
         setCurrStep(currStep + 1)
+        // for each course in surveyData, set the flagged status of that course to false.
+        console.log(courseList)
+        // const { updateFlagged } = useCourseValue()
+        // updateFlagged(id, false)
       },
       (error: any) => {
         setIsSubmittingSurvey(false)
