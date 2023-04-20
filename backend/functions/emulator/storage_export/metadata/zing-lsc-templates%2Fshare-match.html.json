@@ -4,14 +4,20 @@
   "contentType": "text/html",
   "metageneration": 1,
 <<<<<<< HEAD
+<<<<<<< HEAD
   "generation": 1681405819463,
 =======
   "generation": 1674179733927,
 >>>>>>> main
+=======
+  "generation": 1661907030079,
+>>>>>>> parent of 12b5995 (moved emulator folder)
   "storageClass": "STANDARD",
+  "etag": "mWic45y0SlLP93a0YjanZZ1Wrj4",
   "contentDisposition": "inline",
   "cacheControl": "public, max-age=3600",
   "contentEncoding": "identity",
+<<<<<<< HEAD
 <<<<<<< HEAD
   "downloadTokens": [],
   "etag": "JRB4/qAY008YFczgcXI3Cm/fzOg",
@@ -25,6 +31,13 @@
   "timeCreated": "2023-01-20T01:55:33.926Z",
   "updated": "2023-01-20T01:55:33.926Z",
 >>>>>>> main
+=======
+  "downloadTokens": [
+    "a6072d27-877d-4eb0-9810-8bfcdfc24834"
+  ],
+  "timeCreated": "2022-08-31T00:50:30.078Z",
+  "updated": "2022-08-31T00:50:30.078Z",
+>>>>>>> parent of 12b5995 (moved emulator folder)
   "size": 2068,
   "md5Hash": "AmXTSkO1UiDKboRZUEc6kQ==",
   "crc32c": "995119762"

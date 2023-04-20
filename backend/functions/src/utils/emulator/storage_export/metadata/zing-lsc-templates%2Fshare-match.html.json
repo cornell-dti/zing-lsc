@@ -3,15 +3,25 @@
   "bucket": "zing-lsc-templates",
   "contentType": "text/html",
   "metageneration": 1,
+<<<<<<< HEAD
   "generation": 1670631086390,
+=======
+  "generation": 1681405819463,
+>>>>>>> parent of 12b5995 (moved emulator folder)
   "storageClass": "STANDARD",
   "contentDisposition": "inline",
   "cacheControl": "public, max-age=3600",
   "contentEncoding": "identity",
   "downloadTokens": [],
+<<<<<<< HEAD
   "etag": "3KPC++z7RkaMMO40E6S4zi29qus",
   "timeCreated": "2022-12-10T00:11:26.389Z",
   "updated": "2022-12-10T00:11:26.389Z",
+=======
+  "etag": "JRB4/qAY008YFczgcXI3Cm/fzOg",
+  "timeCreated": "2023-04-13T17:10:19.462Z",
+  "updated": "2023-04-13T17:10:19.463Z",
+>>>>>>> parent of 12b5995 (moved emulator folder)
   "size": 2068,
   "md5Hash": "AmXTSkO1UiDKboRZUEc6kQ==",
   "crc32c": "995119762"

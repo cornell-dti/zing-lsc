@@ -1,12 +1,22 @@
 {
+<<<<<<< HEAD
   "version": "11.0.1",
   "firestore": {
     "version": "1.14.3",
+=======
+  "version": "10.6.0",
+  "firestore": {
+    "version": "1.14.1",
+>>>>>>> parent of 12b5995 (moved emulator folder)
     "path": "firestore_export",
     "metadata_file": "firestore_export/firestore_export.overall_export_metadata"
   },
   "storage": {
+<<<<<<< HEAD
     "version": "11.0.1",
+=======
+    "version": "10.6.0",
+>>>>>>> parent of 12b5995 (moved emulator folder)
     "path": "storage_export"
   }
 }
