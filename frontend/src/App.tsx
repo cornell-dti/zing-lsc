@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import {
   Alert,
   Button,
@@ -640,68 +640,62 @@ const App = () => {
                       Please reload to see the latest updates."
                     action={reloadButton}
                   />
-                  <Switch>
-                    <Route exact path={HOME_PATH}>
+                  <Routes>
+                    <Route path={HOME_PATH}>
                       <Home />
                     </Route>
                     <Route
-                      exact
                       path={ADMIN_PATH}
-                      render={() => (
+                      children={() => (
                         <PublicRoute>
                           <AdminHome />
                         </PublicRoute>
                       )}
                     />
-                    <Route exact path={SURVEY_PATH}>
+                    <Route path={SURVEY_PATH}>
                       <Survey />
                     </Route>
                     <Route
-                      exact
                       path={DASHBOARD_PATH}
-                      render={() => (
+                      children={() => (
                         <PrivateRoute>
                           <Dashboard />
                         </PrivateRoute>
                       )}
                     />
                     <Route
-                      exact
                       path={METRICS_PATH}
-                      render={() => (
+                      children={() => (
                         <PrivateRoute>
                           <Metrics />
                         </PrivateRoute>
                       )}
                     />
                     <Route
-                      exact
                       path={EMAIL_PATH}
-                      render={() => (
+                      children={() => (
                         <PrivateRoute>
                           <Emailing />
                         </PrivateRoute>
                       )}
                     />
                     <Route
-                      exact
                       path={`${EDIT_ZING_PATH}/:courseId`}
-                      render={() => (
+                      children={() => (
                         <PrivateRoute>
                           <EditZing />
                         </PrivateRoute>
                       )}
                     />
                     <Route
-                      exact
                       path={TEMPLATE_EDITOR_PATH}
-                      render={() => (
+                      children={() => (
                         <PrivateRoute>
                           <TemplateEditor />
                         </PrivateRoute>
                       )}
                     />
-                  </Switch>
+                  </Routes>
                 </TemplateProvider>
               </StudentProvider>
             </CourseProvider>
