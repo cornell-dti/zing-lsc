@@ -5,18 +5,18 @@
     "version": "1.14.1",
 =======
   "version": "11.0.1",
-  "firestore": {
-    "version": "1.14.3",
+    "firestore": {
+      "version": "1.14.3",
 >>>>>>> main
     "path": "firestore_export",
-    "metadata_file": "firestore_export/firestore_export.overall_export_metadata"
-  },
-  "storage": {
+      "metadata_file": "firestore_export/firestore_export.overall_export_metadata"
+    },
+    "storage": {
 <<<<<<< HEAD
     "version": "10.6.0",
 =======
     "version": "11.0.1",
 >>>>>>> main
     "path": "storage_export"
+    }
   }
-}
