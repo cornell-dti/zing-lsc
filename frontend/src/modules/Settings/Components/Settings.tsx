@@ -1,7 +1,7 @@
 import { DropdownSelect } from '@core/index'
 import { Box, IconButton, SelectChangeEvent, Switch } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { DASHBOARD_PATH } from '@core/index'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
@@ -18,13 +18,18 @@ export const Settings = () => {
     setCurrRoster(event.target.value)
   }
 
+  useEffect(() => {
+    getAllSemesters()
+    changeSurveyAvailability()
+    getAdministrators()
+  }, [])
+
   const [semesters, setSemesters] = useState<string[]>([])
   function getAllSemesters() {
     axios
       .get(`${API_ROOT}${COURSE_API}/semester/all`)
       .then((res) => setSemesters(res.data))
   }
-  getAllSemesters()
 
   const [surveyState, setSurveyState] = useState<boolean>()
 
@@ -65,14 +70,6 @@ export const Settings = () => {
 
   // TODO: allow to edit admin information
   const editAdmin = () => {}
-
-  // grabs the state of the backend once when you refresh code
-  const [start, setStart] = useState<boolean>(true)
-  if (start) {
-    setStart(false)
-    getCurrSurveyState()
-    getAdministrators()
-  }
 
   return (
     <Box
@@ -138,7 +135,9 @@ export const Settings = () => {
               }}
             >
               {semesters.map((sem) => (
-                <MenuItem value={sem}>{sem}</MenuItem>
+                <MenuItem key={sem} value={sem}>
+                  {sem}
+                </MenuItem>
               ))}
             </DropdownSelect>
           </Box>
