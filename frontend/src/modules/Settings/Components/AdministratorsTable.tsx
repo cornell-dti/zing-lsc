@@ -7,9 +7,9 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import { DeleteOutline, Edit } from '@mui/icons-material'
+import { DeleteOutline, Edit, Undo } from '@mui/icons-material'
 import { colors } from '@core'
-import { Box } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { API_ROOT } from '@core'
 import axios from 'axios'
 import { AllowedUsers, Admin } from './types'
@@ -52,6 +52,11 @@ export const AdministratorsTable = ({
     }
   }
 
+  const undoDelete = async (row: Admin) => {
+    setIsDeleting(false)
+    setIsDeletingRow(undefined)
+  }
+
   return (
     <Box
       sx={{
@@ -84,33 +89,48 @@ export const AdministratorsTable = ({
                 <StyledTableCell component="th" scope="row">
                   {row.email}
                 </StyledTableCell>
-                <StyledTableCell
-                  sx={{
-                    width: 150,
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <DeleteOutline
-                    color={
-                      isDeleting && row === isDeletingRow ? 'warning' : 'action'
-                    }
-                    onClick={() => {
-                      confirmDelete(row)
-                    }}
+                {isDeleting && row === isDeletingRow ? (
+                  <StyledTableCell>
+                    <Button
+                      onClick={() => confirmDelete(row)}
+                      sx={{ right: 20 }}
+                    >
+                      Delete
+                    </Button>
+                    <Undo
+                      onClick={() => undoDelete(row)}
+                      sx={{
+                        '&:hover': { scale: '1.2', cursor: 'pointer' },
+                      }}
+                    ></Undo>
+                  </StyledTableCell>
+                ) : (
+                  <StyledTableCell
                     sx={{
-                      '&:hover': { scale: '1.2', cursor: 'pointer' },
+                      width: 150,
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
                     }}
-                  ></DeleteOutline>
-                  <Edit
-                    color="action"
-                    onClick={editAdmin}
-                    sx={{
-                      '&:hover': { scale: '1.2', cursor: 'pointer' },
-                    }}
-                  ></Edit>
-                </StyledTableCell>
+                  >
+                    <DeleteOutline
+                      color={'action'}
+                      onClick={() => {
+                        confirmDelete(row)
+                      }}
+                      sx={{
+                        '&:hover': { scale: '1.2', cursor: 'pointer' },
+                      }}
+                    ></DeleteOutline>
+                    <Edit
+                      color="action"
+                      onClick={editAdmin}
+                      sx={{
+                        '&:hover': { scale: '1.2', cursor: 'pointer' },
+                      }}
+                    ></Edit>
+                  </StyledTableCell>
+                )}
               </StyledTableRow>
             ))}
           </TableBody>
