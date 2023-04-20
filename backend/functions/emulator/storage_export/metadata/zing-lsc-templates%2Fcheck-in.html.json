@@ -3,15 +3,28 @@
   "bucket": "zing-lsc-templates",
   "contentType": "text/html",
   "metageneration": 1,
+<<<<<<< HEAD
   "generation": 1681405819472,
+=======
+  "generation": 1674179733939,
+>>>>>>> main
   "storageClass": "STANDARD",
   "contentDisposition": "inline",
   "cacheControl": "public, max-age=3600",
   "contentEncoding": "identity",
+<<<<<<< HEAD
   "downloadTokens": [],
   "etag": "kNzI0cENrtHjL937cFHzk5HxoWA",
   "timeCreated": "2023-04-13T17:10:19.471Z",
   "updated": "2023-04-13T17:10:19.471Z",
+=======
+  "downloadTokens": [
+    "d6991434-94fc-421f-9ee6-5f8e0d2e8587"
+  ],
+  "etag": "O7y3VBWoQeWMcpzme1ywfuEYTqU",
+  "timeCreated": "2023-01-20T01:55:33.938Z",
+  "updated": "2023-01-20T01:55:33.938Z",
+>>>>>>> main
   "size": 716,
   "md5Hash": "gdDZGCC4Ckz8nJ49S7Jw7w==",
   "crc32c": "1407986870"

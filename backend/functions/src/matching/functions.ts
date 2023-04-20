@@ -3,7 +3,6 @@ import admin from 'firebase-admin'
 import { FirestoreGroup, Group } from '../types'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
-
 // =====================  HELPER FUNCTIONS ======================
 /** Avoid using this assertion check, it's usually not necessary.
  *  Just get the course doc and throw an error if the data is undefined. */
@@ -91,7 +90,9 @@ async function makeMatches(courseId: string) {
   for (let i = 0; i < groupTriples.length; i += 3) {
     groupCounter += 1
     const newGroup = groupTriples.slice(i, i + 3)
+
     newGroups.push({
+      groupId: courseId + groupCounter + lastGroupNumber,
       groupNumber: groupCounter + lastGroupNumber,
       members: newGroup,
       createTime: nowDate,
@@ -104,6 +105,7 @@ async function makeMatches(courseId: string) {
     groupCounter += 1
     const newGroup = groupDoubles.slice(i, i + 2)
     newGroups.push({
+      groupId: courseId + groupCounter + lastGroupNumber,
       groupNumber: groupCounter + lastGroupNumber,
       members: newGroup,
       createTime: nowDate,
@@ -121,7 +123,6 @@ async function makeMatches(courseId: string) {
     templateTimestamps: {}, // Groups have this typed differently though it's just empty object
     hidden: false,
   }))
-
   // lastly, update the collections to reflect this matching
   await Promise.all(
     [

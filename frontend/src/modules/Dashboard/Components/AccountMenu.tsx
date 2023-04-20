@@ -17,6 +17,7 @@ export const AccountMenu = ({
   setSelectedRoster,
   showMetricsLink,
   showDashboardLink,
+  showSettingsLink,
 }: AccountMenuProps) => {
   const { user } = useAuthValue()
   const { courses } = useCourseValue()
@@ -70,6 +71,7 @@ export const AccountMenu = ({
                 membership.groupNumber !== -1
                   ? `${course.names.join('/')}_${membership.groupNumber}`
                   : undefined,
+              groupId: group?.groupId,
               ...localeMap(group?.templateTimestamps),
               ...localeMap(membership.templateTimestamps),
               notes: membership.notes.replace(/(\n)/gm, '  ').trim(),
@@ -86,6 +88,11 @@ export const AccountMenu = ({
   const handleRosterClose = () => {
     setRosterAnchorEl(null)
   }
+
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = today.getMonth() + 1
+  const date = today.getDate()
 
   return (
     <Box>
@@ -120,13 +127,13 @@ export const AccountMenu = ({
       >
         <CSVLink
           data={csvCourses.filter((e) => e.semester === selectedRoster)}
-          filename={`export-courses-${Date.now()}`}
+          filename={`lsc-exported-courses-${year}-${month}-${date}.csv`}
         >
           <MenuItem>Export CSV (Courses)</MenuItem>
         </CSVLink>
         <CSVLink
           data={csvStudents.filter((e) => e.semester === selectedRoster)}
-          filename={`export-students-${Date.now()}`}
+          filename={`lsc-exported-students-${year}-${month}-${date}.csv`}
         >
           <MenuItem>Export CSV (Students)</MenuItem>
         </CSVLink>
@@ -192,4 +199,5 @@ interface AccountMenuProps {
   setSelectedRoster: Dispatch<SetStateAction<string>>
   showMetricsLink: boolean
   showDashboardLink: boolean
+  showSettingsLink: boolean
 }

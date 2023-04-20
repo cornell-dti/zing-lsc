@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   Alert,
@@ -21,6 +22,7 @@ import {
   COURSE_API,
   STUDENT_API,
   MATCHING_API,
+  SETTINGS_PATH,
 } from '@core/Constants'
 import {
   Course,
@@ -51,7 +53,7 @@ import { getDownloadURL, ref } from 'firebase/storage'
 import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
-import React from 'react'
+import { Settings } from 'Settings'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -640,8 +642,7 @@ const App = () => {
                 >
                   <Snackbar
                     open={needsRefresh}
-                    message="The information in your app is out of date. 
-                      Please reload to see the latest updates."
+                    message="The information in your app is out of date. Please reload to see the latest updates."
                     action={reloadButton}
                   />
                   <Switch>
@@ -676,6 +677,11 @@ const App = () => {
                       exact
                       path={TEMPLATE_EDITOR_PATH}
                       component={TemplateEditor}
+                    />
+                    <PrivateRoute
+                      exact
+                      path={SETTINGS_PATH}
+                      component={Settings}
                     />
                   </Switch>
                 </TemplateProvider>
