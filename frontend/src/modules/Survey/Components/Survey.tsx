@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { Question } from '@core/Types'
-import { API_ROOT, STUDENT_API, SETTINGS_API } from '@core/Constants'
+import { API_ROOT, STUDENT_API, COURSE_API } from '@core/Constants'
 import {
   StyledContainer1 as SplashBackground,
   StyledContainer2 as QuestionBackground,
@@ -21,7 +21,7 @@ export const Survey = () => {
   const [currSurveyState, setCurrSurveyState] = useState<boolean>(true)
 
   function getCurrSurveyState() {
-    axios.get(`${API_ROOT}${SETTINGS_API}/semester/survey`).then((req) => {
+    axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
       setCurrSurveyState(req.data)
       console.log(req.data)
     })
