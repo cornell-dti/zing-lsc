@@ -18,12 +18,6 @@ export const Settings = () => {
     setCurrRoster(event.target.value)
   }
 
-  useEffect(() => {
-    getAllSemesters()
-    changeSurveyAvailability()
-    getAdministrators()
-  }, [])
-
   const [semesters, setSemesters] = useState<string[]>([])
   function getAllSemesters() {
     axios
@@ -45,6 +39,13 @@ export const Settings = () => {
       setSurveyState(req.data)
     })
   }
+
+  useEffect(() => {
+    getAllSemesters()
+    changeSurveyAvailability()
+    getAdministrators()
+    getCurrSurveyState()
+  }, [])
 
   const [administrators, setAdministrators] = useState<Admin[]>([])
 
