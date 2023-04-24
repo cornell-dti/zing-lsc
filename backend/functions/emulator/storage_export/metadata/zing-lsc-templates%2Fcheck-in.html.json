@@ -3,41 +3,17 @@
   "bucket": "zing-lsc-templates",
   "contentType": "text/html",
   "metageneration": 1,
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "generation": 1681405819472,
-=======
-  "generation": 1674179733939,
->>>>>>> main
-=======
   "generation": 1661907030081,
->>>>>>> parent of 12b5995 (moved emulator folder)
   "storageClass": "STANDARD",
   "etag": "8ib5zDaWy++5a/2T+LNu0oQtmWk",
   "contentDisposition": "inline",
   "cacheControl": "public, max-age=3600",
   "contentEncoding": "identity",
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "downloadTokens": [],
-  "etag": "kNzI0cENrtHjL937cFHzk5HxoWA",
-  "timeCreated": "2023-04-13T17:10:19.471Z",
-  "updated": "2023-04-13T17:10:19.471Z",
-=======
-  "downloadTokens": [
-    "d6991434-94fc-421f-9ee6-5f8e0d2e8587""d6991434-94fc-421f-9ee6-5f8e0d2e8587"
-  ],
-  "etag": "O7y3VBWoQeWMcpzme1ywfuEYTqU",
-  "timeCreated": "2023-01-20T01:55:33.938Z",
-  "updated": "2023-01-20T01:55:33.938Z",
->>>>>>> main
-=======
   "downloadTokens": [
     "e63e8702-41c7-45ff-bd32-2249c44b2c79"
   ],
   "timeCreated": "2022-08-31T00:50:30.080Z",
   "updated": "2022-08-31T00:50:30.081Z",
->>>>>>> parent of 12b5995 (moved emulator folder)
   "size": 716,
   "md5Hash": "gdDZGCC4Ckz8nJ49S7Jw7w==",
   "crc32c": "1407986870"

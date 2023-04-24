@@ -4,7 +4,11 @@
   "contentType": "text/html",
   "metageneration": 1,
 <<<<<<< HEAD
+<<<<<<< HEAD
   "generation": 1670631086395,
+=======
+  "generation": 1681405819472,
+>>>>>>> parent of 12b5995 (moved emulator folder)
 =======
   "generation": 1681405819472,
 >>>>>>> parent of 12b5995 (moved emulator folder)
@@ -14,9 +18,15 @@
   "contentEncoding": "identity",
   "downloadTokens": [],
 <<<<<<< HEAD
+<<<<<<< HEAD
   "etag": "UdwwhdjdakN60jgd65k+3P/QBZY",
   "timeCreated": "2022-12-10T00:11:26.394Z",
   "updated": "2022-12-10T00:11:26.394Z",
+=======
+  "etag": "kNzI0cENrtHjL937cFHzk5HxoWA",
+  "timeCreated": "2023-04-13T17:10:19.471Z",
+  "updated": "2023-04-13T17:10:19.471Z",
+>>>>>>> parent of 12b5995 (moved emulator folder)
 =======
   "etag": "kNzI0cENrtHjL937cFHzk5HxoWA",
   "timeCreated": "2023-04-13T17:10:19.471Z",

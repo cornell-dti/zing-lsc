@@ -3,42 +3,18 @@
   "bucket": "zing-lsc-templates",
   "contentType": "text/html",
   "metageneration": 1,
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "generation": 1681405819471,
-=======
-  "generation": 1674179733935,
->>>>>>> main
-=======
-  "generation": 1661907030073,
->>>>>>> parent of 12b5995 (moved emulator folder)
+  "generation": 1661907030079,
   "storageClass": "STANDARD",
-  "etag": "fPZdnc/eOhJsDC0jyvpHPZ3j58A",
+  "etag": "mWic45y0SlLP93a0YjanZZ1Wrj4",
   "contentDisposition": "inline",
   "cacheControl": "public, max-age=3600",
   "contentEncoding": "identity",
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "downloadTokens": [],
-  "etag": "oUezt8kYNLOg8HOSzVtVW33iKZw",
-  "timeCreated": "2023-04-13T17:10:19.470Z",
-  "updated": "2023-04-13T17:10:19.470Z",
-=======
   "downloadTokens": [
-    "b07e08cb-1580-4a86-9467-bf1906cb167e""b07e08cb-1580-4a86-9467-bf1906cb167e"
+    "a6072d27-877d-4eb0-9810-8bfcdfc24834"
   ],
-  "etag": "I3ZGLX0zPwU+eX/E0Af6+f7GItk",
-  "timeCreated": "2023-01-20T01:55:33.934Z",
-  "updated": "2023-01-20T01:55:33.934Z",
->>>>>>> main
-=======
-  "downloadTokens": [
-    "bceaf140-016d-4c5c-87c8-8ad290066ea1"
-  ],
-  "timeCreated": "2022-08-31T00:50:30.072Z",
-  "updated": "2022-08-31T00:50:30.072Z",
->>>>>>> parent of 12b5995 (moved emulator folder)
-  "size": 451,
-  "md5Hash": "rFdN1nVhxS07nTFm6TcT6A==",
-  "crc32c": "1050927594"
+  "timeCreated": "2022-08-31T00:50:30.078Z",
+  "updated": "2022-08-31T00:50:30.078Z",
+  "size": 2068,
+  "md5Hash": "AmXTSkO1UiDKboRZUEc6kQ==",
+  "crc32c": "995119762"
 }
