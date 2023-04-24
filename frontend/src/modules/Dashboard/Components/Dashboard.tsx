@@ -207,7 +207,16 @@ export const Dashboard = () => {
       <StyledHeaderMenu>
         <LogoImg />
 
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'row wrap',
+            gap: '10px',
+            justifyContent: 'center',
+            alignContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
             <Box
               sx={{
@@ -293,14 +302,14 @@ export const Dashboard = () => {
               }}
             />
           </Box>
+          <AccountMenu
+            selectedRoster={selectedRoster}
+            setSelectedRoster={setSelectedRoster}
+            showMetricsLink={true}
+            showDashboardLink={false}
+            showSettingsLink={true}
+          />
         </Box>
-        <AccountMenu
-          selectedRoster={selectedRoster}
-          setSelectedRoster={setSelectedRoster}
-          showMetricsLink={true}
-          showDashboardLink={false}
-          showSettingsLink={true}
-        />
       </StyledHeaderMenu>
       <CourseGrid courses={filteredSortedCourses} />
     </StyledContainer>
