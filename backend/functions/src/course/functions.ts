@@ -15,7 +15,6 @@ export const setCurrentSemester = async (sem: String) => {
   return semesterRef.set({
     ...semData,
     currentSemester: sem,
-    surveyOpen: false,
   })
 }
 
