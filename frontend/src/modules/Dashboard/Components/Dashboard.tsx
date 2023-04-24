@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
@@ -15,6 +15,10 @@ import { Course } from '@core/Types'
 import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 import ClearIcon from '@mui/icons-material/Clear'
+
+import axios from 'axios'
+import { API_ROOT, COURSE_API } from '@core/Constants'
+
 type SortOrder =
   | 'newest-requests-first'
   | 'oldest-requests-first'
@@ -172,6 +176,15 @@ export const Dashboard = () => {
   }
 
   const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
+
+  const initSelectedRoster = async () => {
+    await axios.get(`${API_ROOT}${COURSE_API}/semester/current`).then((req) => {
+      setSelectedRoster(req.data)
+    })
+  }
+  useEffect(() => {
+    initSelectedRoster()
+  }, [])
 
   const [query, setQuery] = useState('')
 
