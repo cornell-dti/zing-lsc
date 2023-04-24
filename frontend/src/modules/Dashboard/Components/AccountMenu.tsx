@@ -138,13 +138,12 @@ export const AccountMenu = ({
           <MenuItem>Export CSV (Students)</MenuItem>
         </CSVLink>
         <MenuItem component={Link} to="/settings">
-          <ChevronLeftIcon sx={{ color: 'essentials.75', ml: -1 }} />
           Settings
         </MenuItem>
-        {/* <MenuItem onClick={handleRosterClick}>
+        <MenuItem onClick={handleRosterClick}>
           <ChevronLeftIcon sx={{ color: 'essentials.75', ml: -1 }} />
-          Switch Semester
-        </MenuItem> */}
+          Switch Viewing Semester
+        </MenuItem>
         {showMetricsLink && (
           <MenuItem component={Link} to="/metrics">
             Metrics
