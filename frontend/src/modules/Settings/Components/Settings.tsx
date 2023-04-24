@@ -12,39 +12,46 @@ import { Admin } from './types'
 import axios from 'axios'
 
 export const Settings = () => {
-  const [currRoster, setCurrRoster] = useState<string>('SP23')
-  const changeCurrRoster = (event: SelectChangeEvent) => {
+  const [currRoster, setCurrRoster] = useState<string>('')
+  const changeCurrRoster = async (event: SelectChangeEvent) => {
     // function to only open the survey of the semester
     setCurrRoster(event.target.value)
+    await axios.post(`${API_ROOT}${COURSE_API}/semester/current`, {
+      semester: event.target.value,
+    })
   }
 
   const [semesters, setSemesters] = useState<string[]>([])
-  function getAllSemesters() {
+  const [surveyState, setSurveyState] = useState<boolean>()
+  const getAllSemesters = async () => {
     axios
       .get(`${API_ROOT}${COURSE_API}/semester/all`)
       .then((res) => setSemesters(res.data))
   }
+  const getCurrSurveyState = async () => {
+    await axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
+      setSurveyState(req.data)
+    })
+  }
+  const getCurrSemester = async () => {
+    await axios.get(`${API_ROOT}${COURSE_API}/semester/current`).then((req) => {
+      setCurrRoster(req.data)
+    })
+  }
 
-  const [surveyState, setSurveyState] = useState<boolean>()
-
-  const changeSurveyAvailability = () => {
+  const changeSurveyAvailability = async () => {
     axios.post(`${API_ROOT}${COURSE_API}/semester/survey`, {
       surveyOpen: !surveyState,
     })
     setSurveyState(!surveyState)
   }
 
-  const getCurrSurveyState = async () => {
-    await axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
-      setSurveyState(req.data)
-    })
-  }
-
   useEffect(() => {
     getAllSemesters()
     changeSurveyAvailability()
-    getAdministrators()
     getCurrSurveyState()
+    getCurrSemester()
+    getAdministrators()
   }, [])
 
   const [administrators, setAdministrators] = useState<Admin[]>([])
