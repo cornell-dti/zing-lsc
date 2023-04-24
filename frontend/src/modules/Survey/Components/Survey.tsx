@@ -21,7 +21,7 @@ export const Survey = () => {
   const [currSurveyState, setCurrSurveyState] = useState<boolean>(true)
 
   function getCurrSurveyState() {
-    axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
+    axios.get(`${API_ROOT}/global/semester/survey`).then((req) => {
       setCurrSurveyState(req.data)
       console.log(req.data)
     })
