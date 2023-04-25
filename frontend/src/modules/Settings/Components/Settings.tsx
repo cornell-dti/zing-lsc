@@ -256,7 +256,7 @@ export const Settings = () => {
                 Survey Status
               </Box>
               <Typography sx={{ width: '100%', maxWidth: '625px', mb: '8px' }}>
-                This settings turns off and on the survey that students can fill
+                This setting turns off and on the survey that students can fill
                 out to request new study partners.
               </Typography>
               <Box
