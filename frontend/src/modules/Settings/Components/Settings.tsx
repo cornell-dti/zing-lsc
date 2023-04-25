@@ -2,13 +2,15 @@ import { DropdownSelect } from '@core/index'
 import {
   Box,
   Button,
-  FormControl,
   IconButton,
   SelectChangeEvent,
   Switch,
   TextField,
+  Typography,
 } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
+import AddIcon from '@mui/icons-material/Add'
+
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { DASHBOARD_PATH } from '@core/index'
@@ -110,19 +112,18 @@ export const Settings = () => {
   return (
     <Box
       sx={{
-        pl: '5rem',
-        pr: '5rem',
+        p: '0 5%',
         display: 'flex',
-        flexDirection: 'column',
+        flexFlow: 'column nowrap',
       }}
     >
       <Box
         sx={{
           width: '100%',
           height: 'fit-content',
-          padding: '2.5rem',
+          padding: '2.5rem 0',
           display: 'flex',
-          flexDirection: 'row',
+          flexFlow: 'row wrap',
           alignItems: 'center',
           justifyContent: 'space-between',
         }}
@@ -152,85 +153,132 @@ export const Settings = () => {
       </Box>
       <Box
         sx={{
-          pl: '5rem',
-          pr: '5rem',
           display: 'grid',
           alignItems: 'center',
         }}
       >
+        <Box sx={{ typography: 'h2', fontWeight: 'bold', p: '24px 0' }}>
+          Settings
+        </Box>
         <Box sx={{ display: 'flex' }}>
-          <Box sx={{ width: '70%', display: 'grid' }}>
-            <Box sx={{ typography: 'h4', fontWeight: 'bold' }}>Semester</Box>
-            <Box sx={{ typography: 'h5' }}>Current Semester:</Box>
-            <DropdownSelect
-              value={currRoster}
-              onChange={changeCurrRoster}
-              sx={{
-                alignContent: 'right',
-                right: '1px',
-              }}
-            >
-              {semesters.map((sem) => (
-                <MenuItem key={sem} value={sem}>
-                  {sem}
-                </MenuItem>
-              ))}
-            </DropdownSelect>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flexFlow: 'row wrap',
+              justifyContent: 'left',
+              gap: '12px',
+              alignItems: 'center',
+              alignContent: 'center',
+            }}
+          >
+            <Box sx={{ width: '100%' }}>
+              <Box sx={{ typography: 'h6', fontWeight: '700', width: '100%' }}>
+                Current Semester
+              </Box>
+              <Typography sx={{ width: '100%', maxWidth: '625px' }}>
+                Changing the current semester here will change the semester that
+                the survey students submit to and the default viewing semester
+                for all users.
+              </Typography>
               <DropdownSelect
-                value={selectedSeason}
-                onChange={(event: SelectChangeEvent) => {
-                  setSelectedSeason(event.target.value)
+                value={currRoster}
+                onChange={changeCurrRoster}
+                sx={{
+                  width: '100%',
+                  maxWidth: '600px',
                 }}
               >
-                {semesterKeys.map((semester) => (
-                  <MenuItem key={semester} value={semester}>
-                    {semester}
+                {semesters.map((sem) => (
+                  <MenuItem key={sem} value={sem}>
+                    {sem}
                   </MenuItem>
                 ))}
               </DropdownSelect>
-              <TextField
-                label="Year"
-                variant="outlined"
-                type={'number'}
-                value={year}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setYear(event.target.value)
-                }}
-              />
-              <Button onClick={addSemester}>Add semester</Button>
             </Box>
-          </Box>
-          <Box
-            sx={{
-              height: 'fit-content',
-              padding: '2.5rem',
-              display: 'grid',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
+            <Box sx={{ width: '100%' }}>
+              <Box sx={{ typography: 'h6', fontWeight: '700', width: '100%' }}>
+                New Semester
+              </Box>
+              <Typography sx={{ width: '100%', maxWidth: '625px' }}>
+                This will add a new semester from the list of semesters you can
+                change to.
+              </Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexFlow: 'row wrap',
+                  gap: '20px',
+                  alignItems: 'center',
+                }}
+              >
+                <DropdownSelect
+                  sx={{ mb: '8px' }}
+                  value={selectedSeason}
+                  onChange={(event: SelectChangeEvent) => {
+                    setSelectedSeason(event.target.value)
+                  }}
+                >
+                  {semesterKeys.map((semester) => (
+                    <MenuItem key={semester} value={semester}>
+                      {semester}
+                    </MenuItem>
+                  ))}
+                </DropdownSelect>
+                <TextField
+                  label="Year"
+                  variant="outlined"
+                  type={'number'}
+                  value={year}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setYear(event.target.value)
+                  }}
+                />
+                <IconButton onClick={addSemester}>
+                  <AddIcon />
+                </IconButton>
+              </Box>
+            </Box>
             <Box
               sx={{
-                pl: '2.5rem',
-                pr: '2.5rem',
-                display: 'grid',
-                alignItems: 'center',
+                height: 'fit-content',
+                display: 'flex',
+                flexFlow: 'column nowrap',
               }}
             >
-              <Box sx={{ typography: 'h5', pr: '2rem' }}>Open Survey</Box>
+              <Box
+                sx={{
+                  typography: 'h6',
+                  fontWeight: '700',
+                  width: '100%',
+                }}
+              >
+                Survey Status
+              </Box>
+              <Typography sx={{ width: '100%', maxWidth: '625px', mb: '8px' }}>
+                This settings turns off and on the survey that students can fill
+                out to request new study partners.
+              </Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexFlow: 'row nowrap',
+                  gap: '32px',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography> Off </Typography>
+                <Switch
+                  checked={surveyState}
+                  onChange={changeSurveyAvailability}
+                  sx={{
+                    size: 'lg',
+                    scale: '1.8',
+                  }}
+                />
+                <Typography> On </Typography>
+              </Box>
             </Box>
-            <Switch
-              checked={surveyState}
-              onChange={changeSurveyAvailability}
-              sx={{
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                size: 'lg',
-                top: '1.9rem',
-                scale: '1.8',
-              }}
-            />
           </Box>
         </Box>
       </Box>
@@ -239,17 +287,14 @@ export const Settings = () => {
           width: '100%',
           height: 'fit-content',
           display: 'flex',
-          flexDirection: 'column',
+          flexFlow: 'column nowrap',
           justifyContent: 'space-between',
-          padding: '1rem',
-          pl: '5rem',
         }}
       >
         <Box
           sx={{
             typography: 'h4',
             fontWeight: 'bold',
-            left: '90rem',
             pt: '3rem',
           }}
         >
