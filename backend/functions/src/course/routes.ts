@@ -52,6 +52,9 @@ router.post('/flagged', (req, res) => {
     .catch((err) => {
       logger.error(`Unexpected error updating flagged status: ${err.message}`)
       res.status(500).send({ message: err.message })
+    })
+})
+
 router.get('/semester/current', (_, res) => {
   getCurrentSemester()
     .then((data) => res.status(200).send(data))
