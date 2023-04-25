@@ -1,9 +1,9 @@
 {
   "name": "add-student.html",
   "bucket": "zing-lsc-templates",
+  "contentType": "text/html",
   "metageneration": 1,
   "generation": 1674179733937,
-  "contentType": "text/html",
   "storageClass": "STANDARD",
   "contentDisposition": "inline",
   "cacheControl": "public, max-age=3600",

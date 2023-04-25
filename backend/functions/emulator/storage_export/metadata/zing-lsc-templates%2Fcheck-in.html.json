@@ -1,9 +1,9 @@
 {
   "name": "check-in.html",
   "bucket": "zing-lsc-templates",
+  "contentType": "text/html",
   "metageneration": 1,
   "generation": 1674179733939,
-  "contentType": "text/html",
   "storageClass": "STANDARD",
   "contentDisposition": "inline",
   "cacheControl": "public, max-age=3600",
