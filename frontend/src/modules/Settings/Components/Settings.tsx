@@ -1,5 +1,13 @@
 import { DropdownSelect } from '@core/index'
-import { Box, IconButton, SelectChangeEvent, Switch } from '@mui/material'
+import {
+  Box,
+  Button,
+  FormControl,
+  IconButton,
+  SelectChangeEvent,
+  Switch,
+  TextField,
+} from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -11,6 +19,8 @@ import { AdministratorsTable } from './AdministratorsTable'
 import { Admin } from './types'
 import axios from 'axios'
 
+const semesterKeys: string[] = ['WI', 'SP', 'SU', 'FA']
+
 export const Settings = () => {
   const [currRoster, setCurrRoster] = useState<string>('')
   const changeCurrRoster = async (event: SelectChangeEvent) => {
@@ -21,22 +31,40 @@ export const Settings = () => {
     })
   }
 
+  const [selectedSeason, setSelectedSeason] = useState<string>('WI')
+  const [year, setYear] = useState<string>(
+    String(new Date().getFullYear()).substring(2, 4)
+  )
+
   const [semesters, setSemesters] = useState<string[]>([])
-  const [surveyState, setSurveyState] = useState<boolean>()
+  const [surveyState, setSurveyState] = useState<boolean>(false)
   const getAllSemesters = async () => {
     axios
       .get(`${API_ROOT}${COURSE_API}/semester/all`)
       .then((res) => setSemesters(res.data))
   }
+
   const getCurrSurveyState = async () => {
     await axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
       setSurveyState(req.data)
     })
   }
+
   const getCurrSemester = async () => {
     await axios.get(`${API_ROOT}${COURSE_API}/semester/current`).then((req) => {
       setCurrRoster(req.data)
     })
+  }
+
+  const addSemester = () => {
+    axios
+      .post(`${API_ROOT}/global/semester`, {
+        semester: selectedSeason + year,
+      })
+      .then(() => {
+        setSemesters(semesters.concat(selectedSeason + year))
+      })
+      .catch((err) => console.log(err))
   }
 
   const changeSurveyAvailability = async () => {
@@ -148,6 +176,30 @@ export const Settings = () => {
                 </MenuItem>
               ))}
             </DropdownSelect>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              <DropdownSelect
+                value={selectedSeason}
+                onChange={(event: SelectChangeEvent) => {
+                  setSelectedSeason(event.target.value)
+                }}
+              >
+                {semesterKeys.map((semester) => (
+                  <MenuItem key={semester} value={semester}>
+                    {semester}
+                  </MenuItem>
+                ))}
+              </DropdownSelect>
+              <TextField
+                label="Year"
+                variant="outlined"
+                type={'number'}
+                value={year}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setYear(event.target.value)
+                }}
+              />
+              <Button onClick={addSemester}>Add semester</Button>
+            </Box>
           </Box>
           <Box
             sx={{
@@ -178,7 +230,7 @@ export const Settings = () => {
                 top: '1.9rem',
                 scale: '1.8',
               }}
-            ></Switch>
+            />
           </Box>
         </Box>
       </Box>
@@ -207,7 +259,7 @@ export const Settings = () => {
           data={administrators}
           removeAdmin={removeAdmin}
           editAdmin={editAdmin}
-        ></AdministratorsTable>
+        />
       </Box>
     </Box>
   )

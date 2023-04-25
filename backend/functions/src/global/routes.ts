@@ -5,6 +5,7 @@ import {
   getCurrentSemester,
   getAllSemesters,
   getSurveyStatus,
+  addNewSemester,
 } from './functions'
 
 const router = Router()
@@ -15,6 +16,17 @@ router.get('/semester/current', (_, res) => {
     .then((data) => res.status(200).send(data))
     .catch((err) => {
       const err_msg = `Unexpected error getting semester: ${err.msg}`
+      logger.error(err_msg)
+      res.status(500).send({ message: err_msg })
+    })
+})
+
+router.post('/semester', (req, res) => {
+  const { semester } = req.body
+  addNewSemester(semester)
+    .then((data) => res.status(200).send(data))
+    .catch((err) => {
+      const err_msg = `Unexpected error adding semester: ${err.msg}`
       logger.error(err_msg)
       res.status(500).send({ message: err_msg })
     })
