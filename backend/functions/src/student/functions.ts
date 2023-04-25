@@ -66,7 +66,7 @@ async function removeStudentFromCourse(
         unmatched: admin.firestore.FieldValue.arrayRemove(email),
       })
       .catch((err) => {
-        console.log(err)
+        logger.error(` error in removing ${email} from unmatched: ${err} `)
         throw new Error(`error in removing ${email} from unmatched.`)
       })
   }
