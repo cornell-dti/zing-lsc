@@ -104,7 +104,7 @@ export const Settings = () => {
       <AddAdminModal
         open={openAddAdmin}
         handleClose={handleCloseAdmin}
-        modalNotes={addAdmin}
+        addAdmin={addAdmin}
       ></AddAdminModal>
       <Box
         sx={{

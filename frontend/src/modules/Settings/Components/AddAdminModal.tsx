@@ -3,9 +3,10 @@ import { AddAdminProp } from './types'
 import { ZingModal } from '@core/index'
 import { useState } from 'react'
 
-const AddAdminModal = ({ open, handleClose, modalNotes }: AddAdminProp) => {
+const AddAdminModal = ({ open, handleClose, addAdmin }: AddAdminProp) => {
   const [newName, setNewName] = useState('')
   const [newEmail, setNewEmail] = useState('')
+  const [requiredField, setRequiredField] = useState(false)
 
   return (
     <ZingModal open={open} onClose={handleClose}>
@@ -34,7 +35,11 @@ const AddAdminModal = ({ open, handleClose, modalNotes }: AddAdminProp) => {
         <OutlinedInput
           multiline
           rows={1}
-          onChange={(e) => setNewEmail(e.target.value)}
+          onChange={(e) => {
+            setNewEmail(e.target.value)
+            setRequiredField(false)
+          }}
+          error={requiredField}
           sx={{
             width: '100%',
             borderRadius: '15px',
@@ -48,7 +53,14 @@ const AddAdminModal = ({ open, handleClose, modalNotes }: AddAdminProp) => {
         <Button
           variant="outlined"
           color="primary"
-          onClick={() => modalNotes({ name: newName, email: newEmail })}
+          onClick={() => {
+            if (newEmail.includes('@') && newEmail.includes('.')) {
+              addAdmin({ name: newName, email: newEmail })
+              handleClose()
+            } else {
+              setRequiredField(true)
+            }
+          }}
         >
           Confirm
         </Button>

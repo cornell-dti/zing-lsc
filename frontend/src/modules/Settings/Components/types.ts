@@ -10,5 +10,5 @@ export interface AllowedUsers {
 export interface AddAdminProp {
   open: boolean
   handleClose: () => void
-  modalNotes: (arg: Admin) => void
+  addAdmin: (arg: Admin) => void
 }

@@ -11,7 +11,6 @@ import { DeleteOutline, Edit, Undo } from '@mui/icons-material'
 import { colors } from '@core'
 import { Box, Button } from '@mui/material'
 import { AllowedUsers, Admin } from './types'
-import AddAdminModal from './AddAdminModal'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -84,7 +83,7 @@ export const AdministratorsTable = ({
           <TableBody>
             {data.map((row) => (
               <StyledTableRow key={row.email}>
-                <StyledTableCell>Administrator Name</StyledTableCell>
+                <StyledTableCell>{row.name}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   {row.email}
                 </StyledTableCell>
