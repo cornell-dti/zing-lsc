@@ -1,5 +1,11 @@
 import { DropdownSelect } from '@core/index'
-import { Box, IconButton, SelectChangeEvent, Switch } from '@mui/material'
+import {
+  Box,
+  IconButton,
+  SelectChangeEvent,
+  Switch,
+  Button,
+} from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -10,6 +16,7 @@ import { API_ROOT, COURSE_API } from '@core/Constants'
 import { AdministratorsTable } from './AdministratorsTable'
 import { Admin } from './types'
 import axios from 'axios'
+import AddAdminModal from './AddAdminModal'
 
 export const Settings = () => {
   const [currRoster, setCurrRoster] = useState<string>('SP23')
@@ -22,6 +29,7 @@ export const Settings = () => {
     getAllSemesters()
     changeSurveyAvailability()
     getAdministrators()
+    getCurrSurveyState()
   }, [])
 
   const [semesters, setSemesters] = useState<string[]>([])
@@ -71,6 +79,19 @@ export const Settings = () => {
   // TODO: allow to edit admin information
   const editAdmin = () => {}
 
+  const [openAddAdmin, setOpenAddAdmin] = useState(false)
+  const handleAddAdmin = () => {
+    setOpenAddAdmin(true)
+  }
+  const handleCloseAdmin = () => setOpenAddAdmin(false)
+
+  const addAdmin = (admin: Admin) => {
+    axios.post(`${API_ROOT}/admin`, admin).then(() => {
+      administrators.push(admin)
+      getAdministrators()
+    })
+  }
+
   return (
     <Box
       sx={{
@@ -80,6 +101,11 @@ export const Settings = () => {
         flexDirection: 'column',
       }}
     >
+      <AddAdminModal
+        open={openAddAdmin}
+        handleClose={handleCloseAdmin}
+        modalNotes={addAdmin}
+      ></AddAdminModal>
       <Box
         sx={{
           width: '100%',
@@ -200,6 +226,19 @@ export const Settings = () => {
           removeAdmin={removeAdmin}
           editAdmin={editAdmin}
         ></AdministratorsTable>
+
+        <Box
+          sx={{
+            padding: 4,
+          }}
+        >
+          <Button
+            onClick={() => handleAddAdmin()}
+            sx={{ marginRight: 'auto', right: '-90%' }}
+          >
+            Add Admin
+          </Button>
+        </Box>
       </Box>
     </Box>
   )

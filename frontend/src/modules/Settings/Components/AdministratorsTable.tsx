@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from 'react'
+import { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -10,9 +10,8 @@ import Paper from '@mui/material/Paper'
 import { DeleteOutline, Edit, Undo } from '@mui/icons-material'
 import { colors } from '@core'
 import { Box, Button } from '@mui/material'
-import { API_ROOT } from '@core'
-import axios from 'axios'
 import { AllowedUsers, Admin } from './types'
+import AddAdminModal from './AddAdminModal'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {

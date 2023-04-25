@@ -7,3 +7,8 @@ export interface AllowedUsers {
   removeAdmin: (admin: Admin) => void
   editAdmin: () => void
 }
+export interface AddAdminProp {
+  open: boolean
+  handleClose: () => void
+  modalNotes: (arg: Admin) => void
+}
