@@ -4,6 +4,7 @@ import {
   Grid,
   IconButton,
   SelectChangeEvent,
+  Snackbar,
   Switch,
   TextField,
   Typography,
@@ -11,7 +12,7 @@ import {
 import MenuItem from '@mui/material/MenuItem'
 import AddIcon from '@mui/icons-material/Add'
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { DASHBOARD_PATH } from '@core'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
@@ -22,6 +23,8 @@ import { Admin } from './types'
 import axios from 'axios'
 
 const semesterKeys: string[] = ['WI', 'SP', 'SU', 'FA']
+
+// TODO: deduplicat this
 const semValueMap = new Map([
   ['WI', 0],
   ['SP', 1],
@@ -75,6 +78,7 @@ export const Settings = () => {
     })
   }
 
+  const [semesterAdded, setSemesterAdded] = useState<boolean>(false)
   const addSemester = () => {
     axios
       .post(`${API_ROOT}/global/semester`, {
@@ -87,6 +91,7 @@ export const Settings = () => {
             ? semesters.concat(selectedSeason + year).sort(sortSemesters)
             : semesters
         )
+        setSemesterAdded(true)
       })
       .catch((err) => console.log(err))
   }
@@ -323,6 +328,12 @@ export const Settings = () => {
           editAdmin={editAdmin}
         />
       </Box>
+      <Snackbar
+        open={semesterAdded}
+        autoHideDuration={6000}
+        onClose={() => setSemesterAdded(false)}
+        message="Successfully added semester!"
+      />
     </Box>
   )
 }

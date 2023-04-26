@@ -4,6 +4,7 @@ import { Course } from '@core/Types'
 interface CourseContextType {
   hasLoadedCourses: boolean
   courses: Course[]
+  semesters: string[]
   moveStudent: (
     studentEmail: string,
     courseId: string,
@@ -23,6 +24,7 @@ interface CourseContextType {
 const CourseContext = React.createContext<CourseContextType>({
   hasLoadedCourses: false,
   courses: [],
+  semesters: [],
   moveStudent: () => {},
   matchStudents: async () => {},
   addGroupEmailTimestamps: () => {},
