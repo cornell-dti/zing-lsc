@@ -3,7 +3,6 @@ import admin from 'firebase-admin'
 import { FirestoreGroup, Group } from '../types'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
-
 // =====================  HELPER FUNCTIONS ======================
 /** Avoid using this assertion check, it's usually not necessary.
  *  Just get the course doc and throw an error if the data is undefined. */
@@ -33,7 +32,7 @@ async function updateStudentGroup(
     .doc(studentEmail)
     .get()
     .then((snapshot) => {
-      const data: any = snapshot.data()
+      const data: FirebaseFirestore.DocumentData = snapshot.data() || {}
       const groups = data.groups
       for (const obj of groups) {
         if (obj.courseId === courseId) {
@@ -56,7 +55,8 @@ async function makeMatches(courseId: string) {
   await assertIsExistingCourse(courseId)
 
   // get all unmatched students for course.
-  const data: any = (await courseRef.doc(courseId).get()).data()
+  const data: FirebaseFirestore.DocumentData =
+    (await courseRef.doc(courseId).get()).data() || {}
   const unmatchedEmails: string[] = data.unmatched
   const lastGroupNumber: number = data.lastGroupNumber
 
@@ -91,7 +91,9 @@ async function makeMatches(courseId: string) {
   for (let i = 0; i < groupTriples.length; i += 3) {
     groupCounter += 1
     const newGroup = groupTriples.slice(i, i + 3)
+
     newGroups.push({
+      groupId: courseId + groupCounter + lastGroupNumber,
       groupNumber: groupCounter + lastGroupNumber,
       members: newGroup,
       createTime: nowDate,
@@ -104,6 +106,7 @@ async function makeMatches(courseId: string) {
     groupCounter += 1
     const newGroup = groupDoubles.slice(i, i + 2)
     newGroups.push({
+      groupId: courseId + groupCounter + lastGroupNumber,
       groupNumber: groupCounter + lastGroupNumber,
       members: newGroup,
       createTime: nowDate,
@@ -121,7 +124,6 @@ async function makeMatches(courseId: string) {
     templateTimestamps: {}, // Groups have this typed differently though it's just empty object
     hidden: false,
   }))
-
   // lastly, update the collections to reflect this matching
   await Promise.all(
     [
@@ -167,7 +169,8 @@ async function addUnmatchedStudentToGroup(
 ) {
   await assertIsExistingCourse(courseId)
 
-  const courseData: any = (await courseRef.doc(courseId).get()).data()
+  const courseData: FirebaseFirestore.DocumentData =
+    (await courseRef.doc(courseId).get()).data() || {}
   let unmatched = courseData.unmatched
 
   if (!unmatched.includes(studentEmail))
@@ -210,13 +213,14 @@ async function transferStudentBetweenGroups(
   await assertIsExistingCourse(courseId)
 
   // make sure student 1 is indeed in group1
-  const group1Data: any = (
-    await courseRef
-      .doc(courseId)
-      .collection('groups')
-      .doc(group1.toString())
-      .get()
-  ).data()
+  const group1Data: FirebaseFirestore.DocumentData =
+    (
+      await courseRef
+        .doc(courseId)
+        .collection('groups')
+        .doc(group1.toString())
+        .get()
+    ).data() || {}
 
   if (!group1Data.members.includes(studentEmail))
     throw new Error(
@@ -292,7 +296,8 @@ async function unmatchStudent(
 
 async function createEmptyGroup(courseId: string) {
   await assertIsExistingCourse(courseId)
-  const data: any = (await courseRef.doc(courseId).get()).data()
+  const data: FirebaseFirestore.DocumentData =
+    (await courseRef.doc(courseId).get()).data() || {}
   const lastGroupNumber = data.lastGroupNumber
 
   const groupCreationUpdate = courseRef

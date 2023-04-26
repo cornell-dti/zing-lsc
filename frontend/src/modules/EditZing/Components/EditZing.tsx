@@ -284,6 +284,7 @@ export const EditZing = () => {
                 <GroupCard
                   key={studentGroup.groupNumber}
                   courseId={courseId}
+                  groupId={studentGroup.groupId}
                   studentList={getStudentsFromEmails(studentGroup.members)}
                   groupNumber={studentGroup.groupNumber}
                   templateMap={templateNameMap}
