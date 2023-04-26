@@ -1,9 +1,9 @@
 {
   "name": "no-match-yet.html",
   "bucket": "zing-lsc-templates",
+  "contentType": "text/html",
   "metageneration": 2,
   "generation": 1682365703234,
-  "contentType": "text/html",
   "storageClass": "STANDARD",
   "contentDisposition": "inline",
   "cacheControl": "public, max-age=3600",
