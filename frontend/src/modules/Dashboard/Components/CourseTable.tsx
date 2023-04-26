@@ -6,9 +6,7 @@ import {
   StyledClassesContainer,
   StyledNoClasses,
 } from 'Dashboard/Styles/Groups.style'
-
 import {
-  Box,
   Paper,
   TableBody,
   TableCell,
@@ -19,11 +17,33 @@ import {
 import { Course } from '@core/Types'
 import { useHistory } from 'react-router-dom'
 import Link from '@mui/material/Link'
-import { EDIT_ZING_PATH } from '@core/Constants'
+import { colors, EDIT_ZING_PATH } from '@core'
 import { defaultSortingOrder, defaultFilterOption } from './Dashboard'
+import { Box, Typography } from '@mui/material'
+import { ReactComponent as NewlyMatchableIcon } from '@assets/img/newlymatchable.svg'
+import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
+import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
+import { ReactComponent as WarningIcon } from '@assets/img/warning.svg'
 
 export const CourseTable = ({ courses }: CourseGridProps) => {
   const history = useHistory()
+  // returns color of background, button, and if newly matchable
+  function getColor(students: number, groups: number) {
+    //all students are matched
+    if (students === 0 && groups > 0) {
+      return { color: colors.white, new_match: 'no' }
+    }
+    //students are ready to be matched
+    else if (students > 0 && groups > 0) {
+      return { color: colors.lightgreen, new_match: 'no' }
+    }
+    //NEWLY MATCHABLE
+    else if (students > 1 && groups === 0) {
+      return { color: colors.lightgreen, new_match: 'yes' }
+    }
+    //only 1 student & 0 groups formed
+    else return { color: colors.yellow, new_match: 'no' }
+  }
 
   return (
     <Box
@@ -62,45 +82,104 @@ export const CourseTable = ({ courses }: CourseGridProps) => {
         >
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
+              <TableHead sx={{ background: '#EDEDEE' }}>
                 <TableRow>
                   <TableCell>Course </TableCell>
-                  <TableCell align="right">New Students</TableCell>
-                  <TableCell align="right">Groups</TableCell>
-                  <TableCell align="right">Date In Question</TableCell>
+                  <TableCell align="left">Students</TableCell>
+                  <TableCell align="left">Groups</TableCell>
+                  <TableCell align="left">Recent Date</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {courses.map((c) => (
                   <TableRow key={c.courseId}>
                     <TableCell>
-                      <Link
-                        component="button"
-                        variant="body2"
-                        onClick={() => {
-                          const state = history.location.state as any
-                          history.push({
-                            pathname: `${EDIT_ZING_PATH}/${c.courseId}`,
-                            state: {
-                              sortedOrder: state?.sortedOrder
-                                ? state.sortedOrder
-                                : defaultSortingOrder,
-                              filterOption: state?.filterOption
-                                ? state.filterOption
-                                : defaultFilterOption,
-                            },
-                          })
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 2,
                         }}
                       >
-                        {c.names[0]}
-                      </Link>
+                        <Link
+                          sx={{
+                            color: 'black',
+                            fontWeight: 'bold',
+                            textDecorationColor: 'black',
+                          }}
+                          component="button"
+                          variant="body1"
+                          onClick={() => {
+                            const state = history.location.state as any
+                            history.push({
+                              pathname: `${EDIT_ZING_PATH}/${c.courseId}`,
+                              state: {
+                                sortedOrder: state?.sortedOrder
+                                  ? state.sortedOrder
+                                  : defaultSortingOrder,
+                                filterOption: state?.filterOption
+                                  ? state.filterOption
+                                  : defaultFilterOption,
+                              },
+                            })
+                          }}
+                        >
+                          {c.names[0]}
+                        </Link>
+                        {getColor(c.unmatched.length, c.lastGroupNumber)
+                          .new_match === 'yes' && <NewlyMatchableIcon />}
+                      </Box>
                     </TableCell>
-                    <TableCell align="right">{c.unmatched.length}</TableCell>
                     <TableCell align="right">
-                      {c.lastGroupNumber} Groups Formed
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 2,
+                          background: getColor(
+                            c.unmatched.length,
+                            c.lastGroupNumber
+                          ).color,
+                        }}
+                      >
+                        {c.unmatched.length === 1 ? (
+                          <WarningIcon />
+                        ) : (
+                          <PlusIcon />
+                        )}
+                        <Typography>
+                          {c.unmatched.length}{' '}
+                          {c.unmatched.length === 1
+                            ? 'New Student'
+                            : 'New Students'}
+                        </Typography>
+                      </Box>
                     </TableCell>
                     <TableCell align="right">
-                      {c.latestSubmissionTime.toDateString()}
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 2,
+                        }}
+                      >
+                        <GroupsIcon />
+                        <Typography>
+                          {c.lastGroupNumber}{' '}
+                          {c.lastGroupNumber === 1
+                            ? 'Group Formed'
+                            : 'Groups Formed'}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>
+                        {c.latestSubmissionTime.getMonth() + 1}
+                        {'/'}
+                        {c.latestSubmissionTime.getDay()}
+                        {'/'}
+                        {c.latestSubmissionTime.getFullYear()}
+                      </Typography>
                     </TableCell>
                   </TableRow>
                 ))}

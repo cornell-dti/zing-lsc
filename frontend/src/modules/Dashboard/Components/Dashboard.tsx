@@ -7,7 +7,7 @@ import {
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
 import { CourseGrid } from 'Dashboard/Components/CourseGrid'
-import { Box, Button, IconButton, SelectChangeEvent } from '@mui/material'
+import { Box, IconButton, SelectChangeEvent, Typography } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
@@ -16,6 +16,8 @@ import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 import ClearIcon from '@mui/icons-material/Clear'
 import { CourseTable } from './CourseTable'
+import ViewWeekOutlinedIcon from '@mui/icons-material/ViewWeekOutlined'
+import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline'
 type SortOrder =
   | 'newest-requests-first'
   | 'oldest-requests-first'
@@ -111,7 +113,7 @@ export const Dashboard = () => {
       case 'matchable':
         return [...courseInfo].filter(
           (course, _) =>
-            (course.lastGroupNumber > 0 && course.unmatched.length > 0) ||
+            (course.lastGroupNumber > 0 && course.unmatched.length > 1) ||
             (course.lastGroupNumber === 0 && course.unmatched.length > 1)
         )
       case 'can-add-to-existing-group':
@@ -295,16 +297,7 @@ export const Dashboard = () => {
             padding: 1,
             margin: 1,
           }}
-        >
-          <Button
-            onClick={handleClickTable}
-            sx={{ boxShadow: 2 }}
-            color="secondary"
-            variant="outlined"
-          >
-            View
-          </Button>
-        </Box>
+        ></Box>
         <AccountMenu
           selectedRoster={selectedRoster}
           setSelectedRoster={setSelectedRoster}
@@ -313,6 +306,69 @@ export const Dashboard = () => {
           showSettingsLink={true}
         />
       </StyledHeaderMenu>
+
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'right',
+          flexDirection: 'row',
+          gap: 1,
+          paddingRight: '80px',
+        }}
+      >
+        <Typography sx={{ paddingRight: '5px' }}>
+          {filteredSortedCourses.length}
+          {' classes'}
+        </Typography>
+        <IconButton
+          onClick={handleClickTable}
+          disabled={tableView}
+          color="default"
+          sx={{
+            '&.Mui-disabled': {
+              background: '#939393',
+              color: 'white',
+            },
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'row',
+            padding: '8px',
+            gap: '10px',
+            width: '40px',
+            height: '40px',
+            background: '#F3F3F3',
+            border: '1px solid #939393',
+            borderRadius: '6px',
+          }}
+        >
+          <ViewWeekOutlinedIcon />
+        </IconButton>{' '}
+        <IconButton
+          onClick={handleClickTable}
+          disabled={!tableView}
+          color="default"
+          sx={{
+            '&.Mui-disabled': {
+              background: '#939393',
+              color: 'white',
+            },
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'row',
+            padding: '8px',
+            gap: '10px',
+            width: '40px',
+            height: '40px',
+            background: '#F3F3F3',
+            border: '1px solid #939393',
+            borderRadius: '6px',
+          }}
+        >
+          <ViewHeadlineIcon />
+        </IconButton>
+      </Box>
+
       {tableView ? (
         <CourseGrid courses={filteredSortedCourses} />
       ) : (
