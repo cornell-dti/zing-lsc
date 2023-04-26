@@ -5,13 +5,23 @@ import { Course, FirestoreCourse, FirestoreGroup, Semester } from '../types'
 const courseRef = db.collection('courses')
 const semesterRef = db.collection('utils').doc('semester')
 
-export const getCurrentSemester = async (): Promise<String> => {
+export const getCurrentSemester = async (): Promise<string> => {
   const semData = (await semesterRef.get()).data() as Semester
   return semData.currentSemester
 }
 
-export const setCurrentSemester = async (sem: String) => {
-  return semesterRef.set({ currentSemester: sem })
+export const setCurrentSemester = async (sem: string) => {
+  const oldCurrSem = await getCurrentSemester()
+
+  //Remove the current semester from the list of other semesters
+  const newSemList = await (
+    await getAllSemesters()
+  ).filter((semester) => semester != sem)
+
+  return semesterRef.set({
+    currentSemester: sem,
+    allSemesters: [oldCurrSem, ...newSemList],
+  })
 }
 
 export const getAllSemesters = async () => {

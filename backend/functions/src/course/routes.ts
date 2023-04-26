@@ -57,7 +57,7 @@ router.post('/semester/current', (req, res) => {
   setCurrentSemester(semester)
     .then(() => res.status(200).send({ success: true }))
     .catch((err) => {
-      const err_msg = `Unexpected error change current semester to ${semester}: ${err.msg}`
+      const err_msg = `Unexpected error changing current semester to ${semester}: ${err.msg}`
       logger.error(err_msg)
       res.status(500).send({ message: err_msg })
     })
