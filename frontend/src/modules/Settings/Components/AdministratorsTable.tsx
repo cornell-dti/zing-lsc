@@ -77,11 +77,13 @@ export const AdministratorsTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
-              <StyledTableRow key={row.email}>
-                <StyledTableCell>Administrator Name</StyledTableCell>
+            {data.map((admin) => (
+              <StyledTableRow key={admin.email}>
+                <StyledTableCell>
+                  {admin.name ? admin.name : 'Administrator Name'}
+                </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
-                  {row.email}
+                  {admin.email}
                 </StyledTableCell>
                 <StyledTableCell
                   sx={{
@@ -93,10 +95,12 @@ export const AdministratorsTable = ({
                 >
                   <DeleteOutline
                     color={
-                      isDeleting && row === isDeletingRow ? 'warning' : 'action'
+                      isDeleting && admin === isDeletingRow
+                        ? 'warning'
+                        : 'action'
                     }
                     onClick={() => {
-                      confirmDelete(row)
+                      confirmDelete(admin)
                     }}
                     sx={{
                       '&:hover': { scale: '1.2', cursor: 'pointer' },
