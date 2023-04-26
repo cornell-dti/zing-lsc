@@ -171,7 +171,11 @@ export const addStudentSurveyResponse = async (
   //studentCrses becomes courseIds of existingData.groups if available, otherwise []
   const existingCourses = existingData
     ? existingData.groups.filter(
-        (course: { archived: string }) => !course.archived
+        (course: { courseId: string; archived: string }) =>
+          !course.archived ||
+          !courseIdsWithNames
+            .map((course) => course.courseId)
+            .includes(course.courseId)
       )
     : [] //gets the existing courses
   const existingCourseIds: string[] = existingCourses.map(
