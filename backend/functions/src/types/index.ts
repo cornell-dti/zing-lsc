@@ -9,6 +9,7 @@ type Timestamp = admin.firestore.Timestamp
 export type Semester = {
   currentSemester: string
   allSemesters: string[]
+  surveyOpen: boolean
 }
 
 /** Course */
@@ -25,6 +26,7 @@ export type Course = {
 
 /** Group of students in a class */
 export type Group = {
+  groupId: string
   groupNumber: number
   members: string[]
   createTime: Date
@@ -106,6 +108,7 @@ export type FirestoreEmailTemplate = {
 
 /** How group data is stored in the database */
 export type FirestoreGroup = {
+  groupId: string
   groupNumber: number
   members: string[]
   createTime: Timestamp

@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-
 import axios from 'axios'
 import { Question } from '@core/Types'
-import { API_ROOT, STUDENT_API } from '@core/Constants'
+import { API_ROOT, STUDENT_API, COURSE_API } from '@core/Constants'
 import {
   StyledContainer1 as SplashBackground,
   StyledContainer2 as QuestionBackground,
@@ -12,11 +11,22 @@ import { StepBegin } from 'Survey/Components/StepBegin'
 import { StepCourse } from 'Survey/Components/StepCourse'
 import { StepRadio } from 'Survey/Components/StepRadio'
 import { StepFinal } from 'Survey/Components/StepFinal'
+import { StepFail } from 'Survey/Components/StepFail'
 import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
+import survey from '@core/Questions/Questions.json'
 
 export const Survey = () => {
   const [currStep, setCurrStep] = useState(1)
+  const [currSurveyState, setCurrSurveyState] = useState<boolean>(true)
+
+  function getCurrSurveyState() {
+    axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
+      setCurrSurveyState(req.data)
+      console.log(req.data)
+    })
+  }
+  getCurrSurveyState()
 
   // Final step data
   const [surveySubmissionResponse, setSurveySubmissionResponse] = useState<
@@ -28,8 +38,20 @@ export const Survey = () => {
   const [isSubmittingSurvey, setIsSubmittingSurvey] = useState(false)
 
   // If there are custom questions the below will be a network call perhaps
-  const questions: Question[] = require('@core/Questions/Questions.json')
-  // import questions from '@core/Questions/Questions.json'
+  const questions: Question[] = survey.map((question) => {
+    var obj: { [key: string]: string } = {}
+    Object.entries(question.answers).forEach((answer) => {
+      if (answer[0] && answer[1]) {
+        obj[answer[0]] = answer[1]
+      }
+    })
+    return {
+      question: question.question,
+      questionId: question.questionId,
+      answers: obj,
+    }
+  })
+
   const numSpecialQuestions = 1 // Course list
   const totalSteps = questions.length + numSpecialQuestions + 1
 
@@ -55,6 +77,7 @@ export const Survey = () => {
       courseCatalogNames: courseList,
       name: nameAnswer,
       email: emailAnswer,
+      surveySubmittable: currSurveyState,
       ...mcData,
     }
     console.log('Finished survey', surveyData)
@@ -81,55 +104,61 @@ export const Survey = () => {
       ? courseList.length > 0 && courseList.every((c) => validCourseRe.test(c))
       : answers[multipleChoiceIndex] !== ''
 
-  return currStep === 1 ? ( // Form landing
-    <SplashBackground>
-      <StepBegin
-        name={nameAnswer}
-        email={emailAnswer}
-        setName={(arg: string) => setNameAnswer(arg)}
-        setEmail={(arg: string) => setEmailAnswer(arg)}
-        gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
-      />
-    </SplashBackground>
-  ) : currStep === totalSteps + 1 ? (
-    // Form confirmation
-    <QuestionBackground>
-      <StepFinal
-        success={surveyError === null}
-        submissionResponse={surveySubmissionResponse!}
-        errorMsg={surveyError != null ? surveyError : ''}
-      />
-    </QuestionBackground>
+  return currSurveyState ? (
+    currStep === 1 ? ( // Form landing
+      <SplashBackground>
+        <StepBegin
+          name={nameAnswer}
+          email={emailAnswer}
+          setName={(arg: string) => setNameAnswer(arg)}
+          setEmail={(arg: string) => setEmailAnswer(arg)}
+          gotoNextStep={() => setCurrStep((currStep) => currStep + 1)}
+        />
+      </SplashBackground>
+    ) : currStep === totalSteps + 1 ? (
+      // Form confirmation
+      <QuestionBackground>
+        <StepFinal
+          success={surveyError === null}
+          submissionResponse={surveySubmissionResponse!}
+          errorMsg={surveyError != null ? surveyError : ''}
+        />
+      </QuestionBackground>
+    ) : (
+      <QuestionBackground>
+        <StepTemplate
+          isStepValid={isStepValid}
+          isSubmittingSurvey={isSubmittingSurvey}
+          stepNumber={currStep}
+          totalSteps={totalSteps}
+          gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
+          gotoNextStep={
+            currStep === totalSteps && currSurveyState
+              ? finalNext
+              : () => setCurrStep((currStep) => currStep + 1)
+          }
+        >
+          {currStep === 2 ? ( // Course selection
+            <StepCourse
+              validCourseRe={validCourseRe}
+              courses={courseList}
+              setCourses={setCourseList}
+            />
+          ) : (
+            // General multiple-choice
+            <StepRadio
+              currentAnswer={answers[multipleChoiceIndex]}
+              question={questions[multipleChoiceIndex]}
+              setAnswer={(arg) => changeAnswer(multipleChoiceIndex, arg)}
+              key={String(currStep)}
+            />
+          )}
+        </StepTemplate>
+      </QuestionBackground>
+    )
   ) : (
     <QuestionBackground>
-      <StepTemplate
-        isStepValid={isStepValid}
-        isSubmittingSurvey={isSubmittingSurvey}
-        stepNumber={currStep}
-        totalSteps={totalSteps}
-        gotoPrevStep={() => setCurrStep((currStep) => currStep - 1)}
-        gotoNextStep={
-          currStep === totalSteps
-            ? finalNext
-            : () => setCurrStep((currStep) => currStep + 1)
-        }
-      >
-        {currStep === 2 ? ( // Course selection
-          <StepCourse
-            validCourseRe={validCourseRe}
-            courses={courseList}
-            setCourses={setCourseList}
-          />
-        ) : (
-          // General multiple-choice
-          <StepRadio
-            currentAnswer={answers[multipleChoiceIndex]}
-            question={questions[multipleChoiceIndex]}
-            setAnswer={(arg) => changeAnswer(multipleChoiceIndex, arg)}
-            key={String(currStep)}
-          />
-        )}
-      </StepTemplate>
+      <StepFail></StepFail>
     </QuestionBackground>
   )
 }

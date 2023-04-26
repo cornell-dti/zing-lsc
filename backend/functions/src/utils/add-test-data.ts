@@ -13,6 +13,7 @@ const selectCollege = () => {
     'ILR',
     'SCE',
     'Grad School',
+    'Brooks',
   ]
   return colleges[Math.floor(Math.random() * colleges.length)]
 }
@@ -70,7 +71,8 @@ const addTestStudents = async () => {
         email,
         selectCollege(),
         selectYear(),
-        selectClasses()
+        selectClasses(),
+        true
       )
         .then(() => {
           console.log('added successfully!')
