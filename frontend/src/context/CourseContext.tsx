@@ -4,6 +4,7 @@ import { Course } from '@core/Types'
 interface CourseContextType {
   hasLoadedCourses: boolean
   courses: Course[]
+  semesters: string[]
   moveStudent: (
     studentEmail: string,
     courseId: string,
@@ -18,15 +19,18 @@ interface CourseContextType {
     timestamp: Date
   ) => void
   removeGroups: (courseId: string, groupNumber: number, toHide: boolean) => void
+  updateFlagged: (courseId: string, flagged: boolean) => void
 }
 
 const CourseContext = React.createContext<CourseContextType>({
   hasLoadedCourses: false,
   courses: [],
+  semesters: [],
   moveStudent: () => {},
   matchStudents: async () => {},
   addGroupEmailTimestamps: () => {},
   removeGroups: () => {},
+  updateFlagged: () => {},
 } as CourseContextType)
 
 export function CourseProvider({

@@ -17,12 +17,12 @@ export const StyledContainer = styled.main`
 export const StyledHeaderMenu = styled.div`
   height: fit-content;
 
-  padding: 2.5rem;
-  padding-left: 10rem;
-  padding-right: 10rem;
+  padding: 3% 5%;
   display: flex;
+  flex-flow: row wrap;
+  gap: 10px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
 `
 
 export const StyledName = styled.div`

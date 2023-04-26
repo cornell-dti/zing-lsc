@@ -11,18 +11,32 @@ export const getCurrentSemester = async (): Promise<String> => {
 }
 
 export const setCurrentSemester = async (sem: String) => {
-  return semesterRef.set({ currentSemester: sem })
+  const semData = (await semesterRef.get()).data() as Semester
+  return semesterRef.set({
+    ...semData,
+    currentSemester: sem,
+  })
 }
 
 export const getAllSemesters = async () => {
   const semData = (await semesterRef.get()).data() as Semester
-  return [semData.currentSemester, ...semData.allSemesters]
+  return semData.allSemesters
+}
+
+export const getSurveyStatus = async () => {
+  const semData = (await semesterRef.get()).data() as Semester
+  return semData.surveyOpen
+}
+
+export const setSurveyStatus = async (status: Boolean) => {
+  const semData = (await semesterRef.get()).data() as Semester
+  return semesterRef.set({ ...semData, surveyOpen: status })
 }
 
 async function getCourseInfo(courseId: string) {
   const snapshot = await courseRef.doc(courseId).get()
   if (!snapshot.exists) throw new Error("This course doesn't exist")
-  const result: any = snapshot.data()
+  const result: FirebaseFirestore.DocumentData = snapshot.data() || {}
   result.latestSubmissionTime = result.latestSubmissionTime.toDate()
   return result
 }
@@ -66,7 +80,7 @@ async function getStudentsForCourse(courseId: string) {
   const courseSnapshot = await courseRef.doc(courseId).get()
   if (!courseSnapshot.exists)
     throw new Error(`Course ${courseId} does not exist`)
-  const courseData: any = courseSnapshot.data()
+  const courseData: FirebaseFirestore.DocumentData = courseSnapshot.data() || {}
   const unmatched = courseData.unmatched
 
   const groupsQueryDocSnapshots = (
@@ -91,6 +105,11 @@ async function getStudentsForCourse(courseId: string) {
     unmatched: unmatchedStudentData,
     groups: groupStudentData,
   }
+}
+
+export const setFlagged = async (courseId: string, status: boolean) => {
+  const courseDocRef = courseRef.doc(courseId)
+  return courseDocRef.update({ flagged: status })
 }
 
 export { getCourseInfo, getStudentsForCourse }
