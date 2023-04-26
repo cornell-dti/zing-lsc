@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
@@ -15,6 +15,10 @@ import { Course } from '@core/Types'
 import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 import ClearIcon from '@mui/icons-material/Clear'
+
+import axios from 'axios'
+import { API_ROOT, COURSE_API } from '@core/Constants'
+
 type SortOrder =
   | 'newest-requests-first'
   | 'oldest-requests-first'
@@ -104,7 +108,7 @@ export const Dashboard = () => {
       case 'matchable':
         return [...courseInfo].filter(
           (course, _) =>
-            (course.lastGroupNumber > 0 && course.unmatched.length > 0) ||
+            (course.lastGroupNumber > 0 && course.unmatched.length > 1) ||
             (course.lastGroupNumber === 0 && course.unmatched.length > 1)
         )
       case 'can-add-to-existing-group':
@@ -173,6 +177,15 @@ export const Dashboard = () => {
 
   const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
 
+  const initSelectedRoster = async () => {
+    await axios.get(`${API_ROOT}${COURSE_API}/semester/current`).then((req) => {
+      setSelectedRoster(req.data)
+    })
+  }
+  useEffect(() => {
+    initSelectedRoster()
+  }, [])
+
   const [query, setQuery] = useState('')
 
   const handleSearch = (event: {
@@ -194,7 +207,16 @@ export const Dashboard = () => {
       <StyledHeaderMenu>
         <LogoImg />
 
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'row wrap',
+            gap: '10px',
+            justifyContent: 'center',
+            alignContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
             <Box
               sx={{
@@ -280,14 +302,14 @@ export const Dashboard = () => {
               }}
             />
           </Box>
+          <AccountMenu
+            selectedRoster={selectedRoster}
+            setSelectedRoster={setSelectedRoster}
+            showMetricsLink={true}
+            showDashboardLink={false}
+            showSettingsLink={true}
+          />
         </Box>
-        <AccountMenu
-          selectedRoster={selectedRoster}
-          setSelectedRoster={setSelectedRoster}
-          showMetricsLink={true}
-          showDashboardLink={false}
-          showSettingsLink={true}
-        />
       </StyledHeaderMenu>
       <CourseGrid courses={filteredSortedCourses} />
     </StyledContainer>

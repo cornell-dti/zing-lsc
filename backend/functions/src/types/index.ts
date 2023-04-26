@@ -5,6 +5,13 @@ type Timestamp = admin.firestore.Timestamp
 // For now this exists in the backend folder only
 // Future: become a cool monorepo and have shared types backend/frontend
 
+/** Semester */
+export type Semester = {
+  currentSemester: string
+  allSemesters: string[]
+  surveyOpen: boolean
+}
+
 /** Course */
 export type Course = {
   names: string[]
@@ -14,11 +21,13 @@ export type Course = {
   unmatched: string[]
   groups: Group[]
   lastGroupNumber: number
+  flagged: boolean
   latestSubmissionTime: Date
 }
 
 /** Group of students in a class */
 export type Group = {
+  groupId: string
   groupNumber: number
   members: string[]
   createTime: Date
@@ -65,6 +74,7 @@ export type FirestoreCourse = {
   unmatched: string[]
   lastGroupNumber: number
   latestSubmissionTime: Timestamp
+  flagged: boolean
 }
 
 /** How student data is stored in the database */
@@ -100,6 +110,7 @@ export type FirestoreEmailTemplate = {
 
 /** How group data is stored in the database */
 export type FirestoreGroup = {
+  groupId: string
   groupNumber: number
   members: string[]
   createTime: Timestamp

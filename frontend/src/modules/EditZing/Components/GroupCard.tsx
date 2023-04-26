@@ -10,6 +10,7 @@ import {
   Checkbox,
   IconButton,
   Button,
+  Typography,
   Paper,
 } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
@@ -21,6 +22,7 @@ import { API_ROOT, MATCHING_API } from '@core'
 const GroupCard = ({
   courseId,
   studentList,
+  groupId,
   groupNumber,
   moveStudent,
   createTime,
@@ -105,7 +107,7 @@ const GroupCard = ({
       ref={drop}
       sx={{
         width: '380px',
-        height: '350px',
+        height: '370px',
         padding: '2rem',
         border: 0.5,
         borderColor: selected || isHovering ? 'purple.50' : 'purple.16',
@@ -116,7 +118,7 @@ const GroupCard = ({
       }}
       elevation={isHovering && !selected ? 4 : 2}
     >
-      <Box display="flex" alignItems="center" sx={{ mb: 2, height: '42px' }}>
+      <Box display="flex" alignItems="center" sx={{ height: '42px' }}>
         <Tooltip
           title={
             'Created on ' +
@@ -127,6 +129,7 @@ const GroupCard = ({
         >
           <StyledGroupText>{`Group ${groupNumber}`}</StyledGroupText>
         </Tooltip>
+
         {tooltipTimestamps.map((timestamp, index) => {
           const month = timestamp.timestamp.getMonth() + 1
           const day = timestamp.timestamp.getDate()
@@ -135,12 +138,23 @@ const GroupCard = ({
               key={index}
               title={`${timestamp.name + ': ' + month}/${day}`}
               placement="bottom-start"
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    bgcolor: 'essentials.main',
+                    color: 'white',
+                    fontWeight: 600,
+                    borderRadius: '10px',
+                  },
+                },
+              }}
             >
               <CircleIcon sx={{ fontSize: 10 }} color="primary" />
             </Tooltip>
           )
         })}
         <Box flexGrow={2} />
+
         <IconButton
           color="secondary"
           sx={{
@@ -183,7 +197,10 @@ const GroupCard = ({
           }}
         />
       </Box>
-
+      <Typography
+        variant="subtitle1"
+        mb={1}
+      >{`Group Id: ${groupId}`}</Typography>
       <Box
         sx={{
           display: 'grid',
