@@ -370,7 +370,7 @@ export const Dashboard = () => {
       </Box>
 
       {tableView ? (
-        <CourseTable courses={filteredSortedCourses}></CourseTable>
+        <CourseTable courses={filteredSortedCourses} />
       ) : (
         <CourseGrid courses={filteredSortedCourses} />
       )}
