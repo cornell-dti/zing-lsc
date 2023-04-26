@@ -323,7 +323,7 @@ export const Dashboard = () => {
         </Typography>
         <IconButton
           onClick={handleClickTable}
-          disabled={tableView}
+          disabled={!tableView}
           color="default"
           sx={{
             '&.Mui-disabled': {
@@ -346,7 +346,7 @@ export const Dashboard = () => {
         </IconButton>{' '}
         <IconButton
           onClick={handleClickTable}
-          disabled={!tableView}
+          disabled={tableView}
           color="default"
           sx={{
             '&.Mui-disabled': {
@@ -370,9 +370,9 @@ export const Dashboard = () => {
       </Box>
 
       {tableView ? (
-        <CourseGrid courses={filteredSortedCourses} />
-      ) : (
         <CourseTable courses={filteredSortedCourses}></CourseTable>
+      ) : (
+        <CourseGrid courses={filteredSortedCourses} />
       )}
     </StyledContainer>
   )

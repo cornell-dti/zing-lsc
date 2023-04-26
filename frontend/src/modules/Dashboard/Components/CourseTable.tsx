@@ -74,8 +74,6 @@ export const CourseTable = ({ courses }: CourseGridProps) => {
           sx={{
             width: '100%',
             justifyContent: 'center',
-            gap: 4,
-            gridTemplateColumns: 'repeat(auto-fill, 300px)',
             px: 10,
             py: 4,
           }}
@@ -176,7 +174,7 @@ export const CourseTable = ({ courses }: CourseGridProps) => {
                       <Typography>
                         {c.latestSubmissionTime.getMonth() + 1}
                         {'/'}
-                        {c.latestSubmissionTime.getDay()}
+                        {c.latestSubmissionTime.getDate()}
                         {'/'}
                         {c.latestSubmissionTime.getFullYear()}
                       </Typography>
