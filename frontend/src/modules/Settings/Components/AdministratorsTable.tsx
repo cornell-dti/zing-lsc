@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from 'react'
+import { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -10,11 +10,9 @@ import Paper from '@mui/material/Paper'
 import { DeleteOutline, Edit } from '@mui/icons-material'
 import { colors } from '@core'
 import { Box } from '@mui/material'
-import { API_ROOT } from '@core'
-import axios from 'axios'
 import { AllowedUsers, Admin } from './types'
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: colors.paleviolet,
     color: 'black',
@@ -56,6 +54,7 @@ export const AdministratorsTable = ({
     <Box
       sx={{
         m: 'auto',
+        mb: 6,
         pt: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -102,14 +101,14 @@ export const AdministratorsTable = ({
                     sx={{
                       '&:hover': { scale: '1.2', cursor: 'pointer' },
                     }}
-                  ></DeleteOutline>
+                  />
                   <Edit
                     color="action"
                     onClick={editAdmin}
                     sx={{
                       '&:hover': { scale: '1.2', cursor: 'pointer' },
                     }}
-                  ></Edit>
+                  />
                 </StyledTableCell>
               </StyledTableRow>
             ))}

@@ -18,6 +18,9 @@ import matchingRouter from './matching/routes'
 import courseRouter from './course/routes'
 import emailRouter from './emailing/routes'
 
+// global routers - no auth
+import globalRouter from './global/routes'
+
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
@@ -34,6 +37,9 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 app.use(logReqBody)
+
+// global routers - no auth
+app.use('/global', globalRouter)
 
 // auth middleware before router
 app.use(
