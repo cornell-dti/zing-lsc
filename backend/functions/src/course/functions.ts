@@ -14,9 +14,9 @@ export const setCurrentSemester = async (sem: string) => {
   const oldCurrSem = await getCurrentSemester()
 
   //Remove the current semester from the list of other semesters
-  const newSemList = await (
-    await getAllSemesters()
-  ).filter((semester) => semester != sem)
+  const newSemList = (await getAllSemesters()).filter(
+    (semester) => semester != sem
+  )
 
   return semesterRef.set({
     currentSemester: sem,
