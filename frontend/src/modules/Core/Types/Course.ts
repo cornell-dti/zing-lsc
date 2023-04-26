@@ -9,6 +9,7 @@ export interface Course {
   groups: Group[]
   lastGroupNumber: number
   latestSubmissionTime: Date
+  flagged: boolean
 }
 
 export interface Group {
@@ -30,6 +31,7 @@ export interface ResponseCourse {
   groups: ResponseGroup[]
   lastGroupNumber: number
   latestSubmissionTime: string
+  flagged: boolean
 }
 
 export interface ResponseGroup {

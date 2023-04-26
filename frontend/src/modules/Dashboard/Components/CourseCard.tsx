@@ -1,18 +1,23 @@
-import React from 'react'
-import { colors, EDIT_ZING_PATH } from '@core'
-import { Box, Button, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { API_ROOT, colors, COURSE_API, EDIT_ZING_PATH } from '@core'
+import { Box, Button, Checkbox, Typography } from '@mui/material'
 import { ReactComponent as NewlyMatchableIcon } from '@assets/img/newlymatchable.svg'
 import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
 import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
 import { ReactComponent as WarningIcon } from '@assets/img/warning.svg'
 import { useHistory } from 'react-router'
 import { defaultSortingOrder, defaultFilterOption } from './Dashboard'
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
+import BookmarkIcon from '@mui/icons-material/Bookmark'
+import axios from 'axios'
 
 export const CourseCard = ({
   id,
   name,
   newStudents,
   groupsFormed,
+  flagged,
+  updateFlagged,
 }: CourseCardProps) => {
   const history = useHistory()
   const handleClickView = () => {
@@ -48,6 +53,16 @@ export const CourseCard = ({
     else return { color: colors.yellow, new_match: 'no' }
   }
   const styleMap = getColor(newStudents, groupsFormed)
+
+  const [flag, setFlag] = useState(flagged)
+  const handleSetFlag = (id: string, flagged: boolean) => {
+    axios.post(`${API_ROOT}${COURSE_API}/flagged`, {
+      flagged: !flag,
+      courseId: id,
+    })
+    updateFlagged(id, !flag)
+    setFlag(!flag)
+  }
 
   return (
     <Box
@@ -106,7 +121,12 @@ export const CourseCard = ({
         >
           View
         </Button>
-        {/* {newStudents > 1 && <Button>Match</Button>} hidden for summer launch */}
+        <Checkbox
+          checked={flag}
+          icon={<BookmarkBorderIcon />}
+          checkedIcon={<BookmarkIcon />}
+          onClick={() => handleSetFlag(id, flagged)}
+        />
       </Box>
     </Box>
   )
@@ -117,4 +137,6 @@ interface CourseCardProps {
   name: string
   newStudents: number
   groupsFormed: number
+  flagged: boolean
+  updateFlagged: (id: string, flagged: boolean) => void
 }

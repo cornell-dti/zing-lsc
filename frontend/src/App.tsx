@@ -602,6 +602,15 @@ const App = () => {
     )
   }
 
+  /** Update flagged status on the frontend */
+  const updateFlagged = (courseId: string, flag: boolean) => {
+    setCourses(
+      courses.map((course) =>
+        course.courseId === courseId ? { ...course, flagged: flag } : course
+      )
+    )
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -622,6 +631,7 @@ const App = () => {
                 matchStudents,
                 addGroupEmailTimestamps,
                 removeGroups,
+                updateFlagged,
               }}
             >
               <StudentProvider

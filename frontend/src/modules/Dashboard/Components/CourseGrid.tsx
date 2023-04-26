@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   StyledTextBox,
@@ -10,8 +10,10 @@ import {
 import { CourseCard } from 'Dashboard/Components/CourseCard'
 import { Box } from '@mui/material'
 import { Course } from '@core/Types'
+import { useCourseValue } from '@context/CourseContext'
 
 export const CourseGrid = ({ courses }: CourseGridProps) => {
+  const { updateFlagged } = useCourseValue()
   return (
     <Box
       sx={{
@@ -48,15 +50,19 @@ export const CourseGrid = ({ courses }: CourseGridProps) => {
             py: 4,
           }}
         >
-          {courses.map((c) => (
-            <CourseCard
-              key={c.courseId}
-              id={c.courseId}
-              name={c.names[0]}
-              newStudents={c.unmatched.length}
-              groupsFormed={c.lastGroupNumber}
-            />
-          ))}
+          {courses.map((c) => {
+            return (
+              <CourseCard
+                key={c.courseId}
+                id={c.courseId}
+                name={c.names[0]}
+                newStudents={c.unmatched.length}
+                groupsFormed={c.lastGroupNumber}
+                flagged={c.flagged == null ? false : c.flagged} // null to guard for current courses without a flag field
+                updateFlagged={updateFlagged}
+              />
+            )
+          })}
         </Box>
       )}
     </Box>

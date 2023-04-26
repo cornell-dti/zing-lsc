@@ -102,4 +102,9 @@ async function getStudentsForCourse(courseId: string) {
   }
 }
 
+export const setFlagged = async (courseId: string, status: boolean) => {
+  const courseDocRef = courseRef.doc(courseId)
+  return courseDocRef.update({ flagged: status })
+}
+
 export { getCourseInfo, getStudentsForCourse }
