@@ -79,7 +79,9 @@ export const AdministratorsTable = ({
           <TableBody>
             {data.map((row) => (
               <StyledTableRow key={row.email}>
-                <StyledTableCell>Administrator Name</StyledTableCell>
+                <StyledTableCell>
+                  {row.name ? row.name : 'Administrator Name'}
+                </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   {row.email}
                 </StyledTableCell>
