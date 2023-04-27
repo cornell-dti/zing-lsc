@@ -5,12 +5,12 @@ import { Course, FirestoreCourse, FirestoreGroup, Semester } from '../types'
 const courseRef = db.collection('courses')
 const semesterRef = db.collection('utils').doc('semester')
 
-export const getCurrentSemester = async (): Promise<String> => {
+export const getCurrentSemester = async (): Promise<string> => {
   const semData = (await semesterRef.get()).data() as Semester
   return semData.currentSemester
 }
 
-export const setCurrentSemester = async (sem: String) => {
+export const setCurrentSemester = async (sem: string) => {
   const semData = (await semesterRef.get()).data() as Semester
   return semesterRef.set({
     ...semData,
@@ -28,7 +28,7 @@ export const getSurveyStatus = async () => {
   return semData.surveyOpen
 }
 
-export const setSurveyStatus = async (status: Boolean) => {
+export const setSurveyStatus = async (status: boolean) => {
   const semData = (await semesterRef.get()).data() as Semester
   return semesterRef.set({ ...semData, surveyOpen: status })
 }

@@ -23,6 +23,7 @@ import {
   STUDENT_API,
   MATCHING_API,
   SETTINGS_PATH,
+  SETTINGS_API,
 } from '@core/Constants'
 import {
   Course,
@@ -151,7 +152,7 @@ const App = () => {
       (res) => {
         setCourses(res.data.map(responseCourseToCourse))
         // TODO: MOVE THIS TO ITS OWN CONTEXT
-        axios.get(`${API_ROOT}${COURSE_API}/semester/all`).then((res) => {
+        axios.get(`${API_ROOT}${SETTINGS_API}/semester/all`).then((res) => {
           setHasLoadedCourses(true)
           setSemesters(res.data.sort(sortSemesters))
         })

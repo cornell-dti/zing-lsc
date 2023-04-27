@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Question } from '@core/Types'
-import { API_ROOT, STUDENT_API, COURSE_API } from '@core/Constants'
+import { API_ROOT, STUDENT_API, SETTINGS_API } from '@core/Constants'
 import {
   StyledContainer1 as SplashBackground,
   StyledContainer2 as QuestionBackground,

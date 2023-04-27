@@ -23,7 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
-    "firebase-admin": "^9.9.0",
+    "firebase-admin": "^11.7.0",
     "firebase-functions": "^3.21.2",
     "husky": "^7.0.4"
   },
