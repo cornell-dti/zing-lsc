@@ -9,12 +9,16 @@ export const getCurrentSemester = async (): Promise<string> => {
 }
 
 export const setCurrentSemester = async (sem: string) => {
-  return semesterRef.set({ currentSemester: sem, surveyOpen: false })
+  const semData = (await semesterRef.get()).data() as Semester
+  return semesterRef.set({
+    ...semData,
+    currentSemester: sem,
+  })
 }
 
 export const getAllSemesters = async () => {
   const semData = (await semesterRef.get()).data() as Semester
-  return [semData.currentSemester, ...semData.allSemesters]
+  return semData.allSemesters
 }
 
 export const getSurveyStatus = async () => {
@@ -23,5 +27,6 @@ export const getSurveyStatus = async () => {
 }
 
 export const setSurveyStatus = async (status: boolean) => {
-  return semesterRef.update({ surveyOpen: status })
+  const semData = (await semesterRef.get()).data() as Semester
+  return semesterRef.set({ ...semData, surveyOpen: status })
 }

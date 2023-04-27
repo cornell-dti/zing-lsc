@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom'
 import { DASHBOARD_PATH } from '@core'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
-import { API_ROOT, COURSE_API } from '@core/Constants'
+import { API_ROOT, COURSE_API, SETTINGS_API } from '@core/Constants'
 import { AdministratorsTable } from './AdministratorsTable'
 import { Admin } from './types'
 import axios from 'axios'
@@ -48,7 +48,7 @@ export const Settings = () => {
   const changeCurrRoster = async (event: SelectChangeEvent) => {
     // function to only open the survey of the semester
     setCurrRoster(event.target.value)
-    await axios.post(`${API_ROOT}${COURSE_API}/semester/current`, {
+    await axios.post(`${API_ROOT}${SETTINGS_API}/semester/current`, {
       semester: event.target.value,
     })
   }
@@ -61,21 +61,25 @@ export const Settings = () => {
   const [semesters, setSemesters] = useState<string[]>([])
   const [surveyState, setSurveyState] = useState<boolean>(false)
   const getAllSemesters = async () => {
-    axios.get(`${API_ROOT}${COURSE_API}/semester/all`).then((res) => {
+    axios.get(`${API_ROOT}${SETTINGS_API}/semester/all`).then((res) => {
       setSemesters(res.data.sort(sortSemesters))
     })
   }
 
   const getCurrSurveyState = async () => {
-    await axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
-      setSurveyState(req.data)
-    })
+    await axios
+      .get(`${API_ROOT}${SETTINGS_API}/semester/survey`)
+      .then((req) => {
+        setSurveyState(req.data)
+      })
   }
 
   const getCurrSemester = async () => {
-    await axios.get(`${API_ROOT}${COURSE_API}/semester/current`).then((req) => {
-      setCurrRoster(req.data)
-    })
+    await axios
+      .get(`${API_ROOT}${SETTINGS_API}/semester/current`)
+      .then((req) => {
+        setCurrRoster(req.data)
+      })
   }
 
   const [semesterAdded, setSemesterAdded] = useState<boolean>(false)
@@ -97,7 +101,7 @@ export const Settings = () => {
   }
 
   const changeSurveyAvailability = async () => {
-    axios.post(`${API_ROOT}${COURSE_API}/semester/survey`, {
+    axios.post(`${API_ROOT}${SETTINGS_API}/semester/survey`, {
       surveyOpen: !surveyState,
     })
     setSurveyState(!surveyState)

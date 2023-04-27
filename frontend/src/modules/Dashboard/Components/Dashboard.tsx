@@ -17,7 +17,7 @@ import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 import ClearIcon from '@mui/icons-material/Clear'
 
 import axios from 'axios'
-import { API_ROOT, COURSE_API } from '@core/Constants'
+import { API_ROOT, COURSE_API, SETTINGS_API } from '@core/Constants'
 
 type SortOrder =
   | 'newest-requests-first'
@@ -178,9 +178,11 @@ export const Dashboard = () => {
   const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
 
   const initSelectedRoster = async () => {
-    await axios.get(`${API_ROOT}${COURSE_API}/semester/current`).then((req) => {
-      setSelectedRoster(req.data)
-    })
+    await axios
+      .get(`${API_ROOT}${SETTINGS_API}/semester/current`)
+      .then((req) => {
+        setSelectedRoster(req.data)
+      })
   }
   useEffect(() => {
     initSelectedRoster()
