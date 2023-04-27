@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Question } from '@core/Types'
 import { API_ROOT, STUDENT_API, SETTINGS_API } from '@core/Constants'
@@ -21,12 +21,16 @@ export const Survey = () => {
   const [currSurveyState, setCurrSurveyState] = useState<boolean>(true)
 
   function getCurrSurveyState() {
-    axios.get(`${API_ROOT}${SETTINGS_API}/semester/survey`).then((req) => {
+    axios.get(`${API_ROOT}/global/semester/survey`).then((req) => {
       setCurrSurveyState(req.data)
       console.log(req.data)
     })
   }
-  getCurrSurveyState()
+
+  useEffect(() => {
+    getCurrSurveyState()
+    console.log(`Survey Status is currently ${currSurveyState}`)
+  }, [])
 
   // Final step data
   const [surveySubmissionResponse, setSurveySubmissionResponse] = useState<

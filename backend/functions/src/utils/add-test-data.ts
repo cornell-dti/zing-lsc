@@ -13,6 +13,7 @@ const selectCollege = () => {
     'ILR',
     'SCE',
     'Grad School',
+    'Brooks',
   ]
   return colleges[Math.floor(Math.random() * colleges.length)]
 }

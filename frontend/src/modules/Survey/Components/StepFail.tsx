@@ -13,29 +13,63 @@ export const StepFail = () => {
     fontSize: { sm: 14, md: 22 },
     mt: '1.25em',
     p: '0.24em 1em',
-    boxShadow: 1,
   }
 
   const Error = () => {
     return (
       <>
-        <Typography
+        <Box
           sx={{
-            fontSize: { xs: '2rem', md: '2.25rem' },
-            fontWeight: '700',
-            color: '#fff',
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            gap: '60px',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
-          The survey is closed
-        </Typography>
+          <Typography
+            sx={{
+              fontSize: { xs: '6rem', md: '8.5rem' },
+              fontWeight: '700',
+              color: '#fff',
+            }}
+          >
+            ):
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: { xs: '3rem', md: '4.25rem' },
+              fontWeight: '700',
+              color: '#fff',
+            }}
+          >
+            The Survey Is Currently Closed
+          </Typography>
+        </Box>
         <Typography
           sx={{
             color: '#fff',
             fontSize: '1.15rem',
+            fontWeight: '500',
           }}
         >
-          {' '}
-          Lookout for when the survey is open next semester!
+          We apologize for any inconvenience, but the survey for finding study
+          partners is currently closed for this semester. The survey should open
+          up again next semester! Please check back then. Thank you for your
+          interest!
+        </Typography>
+        <Typography
+          sx={{
+            fontWeight: '500',
+            color: '#fff',
+            fontSize: '1.15rem',
+          }}
+        >
+          Please Contact{' '}
+          <a href="mailto:lscstudypartners@cornell.edu">
+            lscstudypartners@cornell.edu
+          </a>{' '}
+          with any questions or any special one-off circumstances.
         </Typography>
       </>
     )
@@ -69,46 +103,26 @@ export const StepFail = () => {
           width: '100%',
           justifyContent: 'center',
           alignItems: 'center',
+          p: '0 15%',
         }}
       >
         <Box
           sx={{
-            maxWidth: '698px',
+            maxWidth: '1098px',
             display: 'flex',
             flexFlow: 'column wrap',
             gap: '48px',
             justifyContent: 'center',
-            alignItems: 'center',
+            alignItems: 'left',
           }}
         >
           {<Error />}
         </Box>
       </Box>
 
-      <Button
-        color="primary"
-        variant="outlined"
-        href="https://lsc.cornell.edu/"
-        sx={buttonStyle}
-      >
+      <Button color="inherit" href="https://lsc.cornell.edu/" sx={buttonStyle}>
         Back to Learning Strategies Center
       </Button>
-
-      <Typography
-        sx={{
-          fontWeight: '400',
-          color: '#fff',
-          fontSize: { xs: '1.15rem', xl: '1.75rem' },
-          margin: '4% 0',
-          maxWidth: '699px',
-        }}
-      >
-        Contact{' '}
-        <a href="mailto:lscstudypartners@cornell.edu">
-          lscstudypartners@cornell.edu
-        </a>{' '}
-        with any questions.
-      </Typography>
     </Box>
   )
 }

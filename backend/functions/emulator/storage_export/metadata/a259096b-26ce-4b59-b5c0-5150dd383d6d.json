@@ -3,17 +3,17 @@
   "bucket": "zing-lsc-templates",
   "contentType": "text/html",
   "metageneration": 2,
-  "generation": 1669937949467,
+  "generation": 1682365703237,
   "storageClass": "STANDARD",
   "contentDisposition": "inline",
   "cacheControl": "public, max-age=3600",
   "contentEncoding": "identity",
   "downloadTokens": [
-    "32f54096-b607-4231-b176-2fd0c3efb949"
+    "c7ea2fc3-f0d2-4531-b1df-6fe79532ba08"
   ],
-  "etag": "XCECO9/WcYWk5zhO7W7S1Qu53iA",
-  "timeCreated": "2022-12-01T23:39:09.467Z",
-  "updated": "2022-12-01T23:39:19.810Z",
+  "etag": "jpuNdqAYI1kiPv43Z5dWqeid8Ls",
+  "timeCreated": "2023-04-24T19:48:23.236Z",
+  "updated": "2023-04-25T04:01:59.521Z",
   "size": 1729,
   "md5Hash": "MxjICQYCfBJApFt7aaqx1A==",
   "crc32c": "262773466"
