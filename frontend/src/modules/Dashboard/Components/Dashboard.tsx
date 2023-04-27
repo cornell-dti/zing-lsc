@@ -33,7 +33,7 @@ type FilterOption =
   | 'can-add-to-existing-group'
   | 'no-check-in-email'
   | 'no-no-match-email'
-  | 'flagged'
+  | 'not-flagged'
 
 export const defaultSortingOrder = 'newest-requests-first'
 export const defaultFilterOption = 'no-filter'
@@ -46,7 +46,7 @@ const filterOptionDisplay = [
   ['can-add-to-existing-group', 'Can Add to Existing group'],
   ['no-check-in-email', 'No Check In Email'],
   ['no-no-match-email', 'No No Match Email'],
-  ['flagged', 'Flagged'],
+  ['not-flagged', 'Not Flagged'],
 ]
 const sortOrderDisplay = [
   ['newest-requests-first', 'Newest Requests First'],
@@ -92,6 +92,7 @@ export const Dashboard = () => {
       studentHasUnsentNoMatch(email, c.courseId)
     )
   }
+
   // (a,b) = -1 if a before b, 1 if a after b, 0 if equal
   function filtered(courseInfo: Course[], menuValue: FilterOption) {
     switch (menuValue) {
@@ -122,8 +123,10 @@ export const Dashboard = () => {
         return courseInfo.filter(hasUnsentCheckIns)
       case 'no-no-match-email':
         return courseInfo.filter(hasUnsentNoMatch)
-      case 'flagged':
-        return courseInfo
+      case 'not-flagged':
+        return [...courseInfo].filter((course, _) =>
+          course.flagged == null ? true : !course.flagged
+        )
       default:
         return courseInfo
     }
