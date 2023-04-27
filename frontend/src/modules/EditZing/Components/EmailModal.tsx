@@ -96,13 +96,13 @@ export const EmailModal = ({
 
     const groupTemplate =
       allGroupTemplates.find((template) => template.groupNumber === groupNumber)
-        ?.template.html || replacedHtml
+        ?.template.html + group.groupId || replacedHtml + group.groupId
 
     return Object.entries(replaceNamesMap).reduce(
       (prev, [key, value]) => prev.replaceAll(key, value),
       allGroupTemplates.find(
         (groupTemplate) => groupTemplate.groupNumber === groupNumber
-      )?.template.html || selectedTemplate.html
+      )?.template.html + group.groupId || selectedTemplate.html + group.groupId
     )
   }
 

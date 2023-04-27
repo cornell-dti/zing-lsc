@@ -12,7 +12,7 @@ import { colors } from '@core'
 import { Box, Button } from '@mui/material'
 import { AllowedUsers, Admin } from './types'
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: colors.paleviolet,
     color: 'black',
@@ -59,6 +59,7 @@ export const AdministratorsTable = ({
     <Box
       sx={{
         m: 'auto',
+        mb: 6,
         pt: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -83,7 +84,9 @@ export const AdministratorsTable = ({
           <TableBody>
             {data.map((row) => (
               <StyledTableRow key={row.email}>
-                <StyledTableCell>{row.name}</StyledTableCell>
+                <StyledTableCell>
+                  {row.name ? row.name : 'Administrator Name'}
+                </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   {row.email}
                 </StyledTableCell>

@@ -21,6 +21,7 @@ export type Course = {
   unmatched: string[]
   groups: Group[]
   lastGroupNumber: number
+  flagged: boolean
   latestSubmissionTime: Date
 }
 
@@ -73,6 +74,7 @@ export type FirestoreCourse = {
   unmatched: string[]
   lastGroupNumber: number
   latestSubmissionTime: Timestamp
+  flagged: boolean
 }
 
 /** How student data is stored in the database */
