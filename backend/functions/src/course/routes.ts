@@ -5,6 +5,7 @@ import {
   getCourseInfo,
   getAllCourses,
   getStudentsForCourse,
+  setFlagged,
   getCurrentSemester,
   setCurrentSemester,
   getAllSemesters,
@@ -41,6 +42,18 @@ router.get('/students/:courseId', (req, res) => {
     .catch((err) => {
       console.log(err)
       res.status(400).send({ success: false, err: err.message })
+    })
+})
+
+// Updates the flagged status in the database
+router.post('/flagged', (req, res) => {
+  const courseId = req.body.courseId
+  const flag = req.body.flagged
+  setFlagged(courseId, flag)
+    .then((data) => res.status(200).send({ flagged: flag }))
+    .catch((err) => {
+      logger.error(`Unexpected error updating flagged status: ${err.message}`)
+      res.status(500).send({ message: err.message })
     })
 })
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
@@ -18,6 +18,10 @@ import ClearIcon from '@mui/icons-material/Clear'
 import { CourseTable } from './CourseTable'
 import ViewWeekOutlinedIcon from '@mui/icons-material/ViewWeekOutlined'
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline'
+
+import axios from 'axios'
+import { API_ROOT, COURSE_API } from '@core/Constants'
+
 type SortOrder =
   | 'newest-requests-first'
   | 'oldest-requests-first'
@@ -182,6 +186,15 @@ export const Dashboard = () => {
 
   const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
 
+  const initSelectedRoster = async () => {
+    await axios.get(`${API_ROOT}${COURSE_API}/semester/current`).then((req) => {
+      setSelectedRoster(req.data)
+    })
+  }
+  useEffect(() => {
+    initSelectedRoster()
+  }, [])
+
   const [query, setQuery] = useState('')
 
   const handleSearch = (event: {
@@ -203,7 +216,16 @@ export const Dashboard = () => {
       <StyledHeaderMenu>
         <LogoImg />
 
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'row wrap',
+            gap: '10px',
+            justifyContent: 'center',
+            alignContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
             <Box
               sx={{
@@ -289,22 +311,14 @@ export const Dashboard = () => {
               }}
             />
           </Box>
+          <AccountMenu
+            selectedRoster={selectedRoster}
+            setSelectedRoster={setSelectedRoster}
+            showMetricsLink={true}
+            showDashboardLink={false}
+            showSettingsLink={true}
+          />
         </Box>
-        <Box
-          sx={{
-            fontWeight: 'bold',
-            color: 'essentials.75',
-            padding: 1,
-            margin: 1,
-          }}
-        ></Box>
-        <AccountMenu
-          selectedRoster={selectedRoster}
-          setSelectedRoster={setSelectedRoster}
-          showMetricsLink={true}
-          showDashboardLink={false}
-          showSettingsLink={true}
-        />
       </StyledHeaderMenu>
 
       <Box
