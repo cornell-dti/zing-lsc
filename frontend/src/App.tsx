@@ -750,17 +750,19 @@ const App = () => {
               hasLoadedCurrRoster,
               hasLoadedSurveyState,
               hasLoadedAdministrators,
-
+              
               currRoster,
               surveyState,
               administrators,
               semesterAdded,
-
+              
+              setCurrRoster,
               changeCurrRoster,
               changeSurveyAvailability,
               removeAdmin,
               editAdmin,
-              addSemester
+              addSemester,
+              setSemesterAdded
             }}>
             <CourseProvider
               value={{

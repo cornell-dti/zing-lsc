@@ -21,8 +21,32 @@ import { API_ROOT, COURSE_API, SETTINGS_API } from '@core/Constants'
 import { AdministratorsTable } from './AdministratorsTable'
 import { Admin } from './types'
 import axios from 'axios'
+import { useSettingsValue } from '@context/SettingsContext'
+import { useCourseValue } from '@context/CourseContext'
 
 export const Settings = () => {
+  const {
+    hasLoadedCurrRoster,
+    hasLoadedSurveyState,
+    hasLoadedAdministrators,
+
+    currRoster,
+    surveyState,
+    administrators,
+    semesterAdded,
+
+    setCurrRoster,
+    changeCurrRoster,
+    changeSurveyAvailability,
+    removeAdmin,
+    editAdmin,
+    addSemester,
+    setSemesterAdded,
+  } = useSettingsValue()
+
+  const semesterKeys: string[] = ['WI', 'SP', 'SU', 'FA']
+
+  const { semesters } = useCourseValue()
 
   const [selectedSeason, setSelectedSeason] = useState<string>('WI')
   const [year, setYear] = useState<string>(
@@ -147,7 +171,7 @@ export const Settings = () => {
                   setYear(event.target.value)
                 }}
               />
-              <IconButton onClick={addSemester}>
+              <IconButton onClick={() => addSemester(selectedSeason, year)}>
                 <AddIcon />
               </IconButton>
             </Box>

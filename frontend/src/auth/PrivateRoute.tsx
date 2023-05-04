@@ -8,6 +8,7 @@ import { logOut } from '@fire'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
 import { useTemplateValue } from '@context/TemplateContext'
+import { useSettingsValue } from '@context/SettingsContext'
 
 export const PrivateRoute = ({
   component: Component,
@@ -17,6 +18,11 @@ export const PrivateRoute = ({
   const { hasLoadedCourses } = useCourseValue()
   const { hasLoadedStudents } = useStudentValue()
   const { hasLoadedTemplates } = useTemplateValue()
+  const {
+    hasLoadedAdministrators,
+    hasLoadedCurrRoster,
+    hasLoadedSurveyState,
+  } = useSettingsValue()
 
   switch (authState) {
     case 'loading':
@@ -46,7 +52,12 @@ export const PrivateRoute = ({
       )
     // authorized, hooray, you can see the content!
     case 'authorized':
-      return hasLoadedCourses && hasLoadedStudents && hasLoadedTemplates ? (
+      return hasLoadedCourses &&
+        hasLoadedStudents &&
+        hasLoadedTemplates &&
+        hasLoadedAdministrators &&
+        hasLoadedCurrRoster &&
+        hasLoadedSurveyState ? (
         <Route
           {...routeProps}
           render={(props) => {
@@ -59,6 +70,9 @@ export const PrivateRoute = ({
           hasLoadedCourses={hasLoadedCourses}
           hasLoadedStudents={hasLoadedStudents}
           hasLoadedTemplates={hasLoadedTemplates}
+          hasLoadedCurrRoster={hasLoadedCurrRoster}
+          hasLoadedAdministrators={hasLoadedAdministrators}
+          hasLoadedSurveyState={hasLoadedSurveyState}
         />
       )
   }
