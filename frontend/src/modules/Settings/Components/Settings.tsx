@@ -44,14 +44,6 @@ const sortSemesters = (a: string, b: string) => {
 }
 
 export const Settings = () => {
-  const [currRoster, setCurrRoster] = useState<string>('')
-  const changeCurrRoster = async (event: SelectChangeEvent) => {
-    // function to only open the survey of the semester
-    setCurrRoster(event.target.value)
-    await axios.post(`${API_ROOT}${SETTINGS_API}/semester/current`, {
-      semester: event.target.value,
-    })
-  }
 
   const [selectedSeason, setSelectedSeason] = useState<string>('WI')
   const [year, setYear] = useState<string>(
@@ -59,27 +51,10 @@ export const Settings = () => {
   )
 
   const [semesters, setSemesters] = useState<string[]>([])
-  const [surveyState, setSurveyState] = useState<boolean>(false)
   const getAllSemesters = async () => {
     axios.get(`${API_ROOT}${SETTINGS_API}/semester/all`).then((res) => {
       setSemesters(res.data.sort(sortSemesters))
     })
-  }
-
-  const getCurrSurveyState = async () => {
-    await axios
-      .get(`${API_ROOT}${SETTINGS_API}/semester/survey`)
-      .then((req) => {
-        setSurveyState(req.data)
-      })
-  }
-
-  const getCurrSemester = async () => {
-    await axios
-      .get(`${API_ROOT}${SETTINGS_API}/semester/current`)
-      .then((req) => {
-        setCurrRoster(req.data)
-      })
   }
 
   const [semesterAdded, setSemesterAdded] = useState<boolean>(false)
@@ -99,46 +74,6 @@ export const Settings = () => {
       })
       .catch((err) => console.log(err))
   }
-
-  const changeSurveyAvailability = async () => {
-    axios.post(`${API_ROOT}${SETTINGS_API}/semester/survey`, {
-      surveyOpen: !surveyState,
-    })
-    setSurveyState(!surveyState)
-  }
-
-  useEffect(() => {
-    getAllSemesters()
-    changeSurveyAvailability()
-    getCurrSurveyState()
-    getCurrSemester()
-    getAdministrators()
-  }, [])
-
-  const [administrators, setAdministrators] = useState<Admin[]>([])
-
-  const getAdministrators = async () => {
-    await axios.get(`${API_ROOT}/admin`).then((req) => {
-      setAdministrators(req.data)
-    })
-  }
-
-  const removeAdmin = (admin: Admin) => {
-    axios
-      .delete(`${API_ROOT}/admin`, { data: admin })
-      .then(() => {
-        administrators.forEach((email, index) => {
-          if ((email.email = admin.email)) {
-            administrators.splice(index, 1)
-            getAdministrators()
-          }
-        })
-      })
-      .catch((err) => console.log(err))
-  }
-
-  // TODO: allow to edit admin information
-  const editAdmin = () => {}
 
   return (
     <Box
