@@ -1,30 +1,39 @@
 import React, { useContext } from 'react'
-import { EmailTemplate } from '@core/Types'
+import { Admin } from '@core/Types'
+import { SelectChangeEvent } from '@mui/material'
 
 interface SettingsContextType {
-  hasLoadedSettings: boolean
-  templates: EmailTemplate[]
-  keepForm: (
-    selectedTemplateId: string,
-    templateName: string,
-    templateType: 'group' | 'student',
-    templateSubject: string,
-    templateHtml: string
-  ) => void
-  appendForm: (
-    id: string,
-    templateName: string,
-    templateType: 'group' | 'student',
-    templateSubject: string,
-    templateHtml: string
-  ) => void
+  hasLoadedCurrRoster: boolean
+  hasLoadedSurveyState: boolean
+  hasLoadedAdministrators: boolean
+
+  currRoster: string
+  surveyState: boolean
+  administrators: Admin[]
+  semesterAdded: boolean
+
+  changeCurrRoster: (event: SelectChangeEvent) => Promise<void>
+  changeSurveyAvailability: () => Promise<void>
+  removeAdmin: (admin:Admin) => void
+  editAdmin: () => void
+  addSemester: (selectedSeason: string, year: string) => void
 }
 
 const SettingsContext = React.createContext<SettingsContextType>({
-  hasLoadedSettings: false,
-  templates: [],
-  keepForm: () => {},
-  appendForm: () => {},
+  hasLoadedCurrRoster: false,
+  hasLoadedSurveyState: false,
+  hasLoadedAdministrators: false,
+
+  currRoster: '',
+  surveyState: false,
+  administrators: [],
+  semesterAdded: false,
+
+  changeCurrRoster: async () => {},
+  changeSurveyAvailability: async () => {},
+  removeAdmin:() => {},
+  editAdmin: () => {},
+  addSemester: () => {}
 })
 
 export function SettingsProvider({

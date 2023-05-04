@@ -22,58 +22,12 @@ import { AdministratorsTable } from './AdministratorsTable'
 import { Admin } from './types'
 import axios from 'axios'
 
-const semesterKeys: string[] = ['WI', 'SP', 'SU', 'FA']
-
-// TODO: deduplicat this
-const semValueMap = new Map([
-  ['WI', 0],
-  ['SP', 1],
-  ['SU', 2],
-  ['FA', 3],
-])
-
-const sortSemesters = (a: string, b: string) => {
-  const aSemPrefix = a.substring(0, 2)
-  const bSemPrefix = b.substring(0, 2)
-  const aSemYear = Number(a.substring(2))
-  const bSemYear = Number(b.substring(2))
-  return (
-    aSemYear - bSemYear ||
-    semValueMap.get(aSemPrefix)! - semValueMap.get(bSemPrefix)!
-  )
-}
-
 export const Settings = () => {
 
   const [selectedSeason, setSelectedSeason] = useState<string>('WI')
   const [year, setYear] = useState<string>(
     String(new Date().getFullYear()).substring(2, 4)
   )
-
-  const [semesters, setSemesters] = useState<string[]>([])
-  const getAllSemesters = async () => {
-    axios.get(`${API_ROOT}${SETTINGS_API}/semester/all`).then((res) => {
-      setSemesters(res.data.sort(sortSemesters))
-    })
-  }
-
-  const [semesterAdded, setSemesterAdded] = useState<boolean>(false)
-  const addSemester = () => {
-    axios
-      .post(`${API_ROOT}/global/semester`, {
-        semester: selectedSeason + year,
-      })
-      .then(() => {
-        const sem = selectedSeason + year
-        setSemesters(
-          semesters.indexOf(sem) === -1
-            ? semesters.concat(selectedSeason + year).sort(sortSemesters)
-            : semesters
-        )
-        setSemesterAdded(true)
-      })
-      .catch((err) => console.log(err))
-  }
 
   return (
     <Box

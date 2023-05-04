@@ -7,7 +7,7 @@ import {
   Snackbar,
   StyledEngineProvider,
   ThemeProvider,
-  SelectChangeEvent
+  SelectChangeEvent,
 } from '@mui/material'
 import { CssBaseline } from '@mui/material'
 import {
@@ -57,6 +57,7 @@ import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
 import { Settings } from 'Settings'
+import { SettingsProvider } from '@context/SettingsContext'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -68,9 +69,11 @@ const App = () => {
   const checkRefreshDuration = 600000 // (10 min)
 
   const [currRoster, setCurrRoster] = useState<string>('')
+  const [hasLoadedCurrRoster, setHasLoadedCurrRoster] = useState<boolean>(false)
 
-  const loadCurrRoster = async () => {
-    await axios.get(`${API_ROOT}${SETTINGS_API}/semester/current`).then(
+
+  const loadCurrRoster = () => {
+    axios.get(`${API_ROOT}${SETTINGS_API}/semester/current`).then(
       (req) => {
         setCurrRoster(req.data)
       },
@@ -90,6 +93,7 @@ const App = () => {
   }
 
   const [surveyState, setSurveyState] = useState<boolean>(false)
+  const [hasLoadedSurveyState, setHasLoadedSurveyState] = useState<boolean>(false)
 
   const loadSurveyState = () => {
     axios.get(`${API_ROOT}${SETTINGS_API}/semester/survey`).then(
@@ -111,6 +115,7 @@ const App = () => {
   }
 
   const [administrators, setAdministrators] = useState<Admin[]>([])
+  const [hasLoadedAdministrators, setHasLoadedAdministrators] = useState<boolean>(false)
 
   const loadAdministrators = () => {
     axios.get(`${API_ROOT}/admin`).then(
@@ -141,6 +146,23 @@ const App = () => {
   // TODO: allow to edit admin information
   const editAdmin = () => {}
 
+  const [semesterAdded, setSemesterAdded] = useState<boolean>(false)
+  const addSemester = (selectedSeason: string, year: string) => {
+    axios
+      .post(`${API_ROOT}/global/semester`, {
+        semester: selectedSeason + year,
+      })
+      .then(() => {
+        const sem = selectedSeason + year
+        setSemesters(
+          semesters.indexOf(sem) === -1
+            ? semesters.concat(selectedSeason + year).sort(sortSemesters)
+            : semesters
+        )
+        setSemesterAdded(true)
+      })
+      .catch((err) => console.log(err))
+  }
 
   const reloadButton = (
     <Button
@@ -724,6 +746,22 @@ const App = () => {
               displayNetworkError: setNetworkError,
             }}
           >
+            <SettingsProvider value={{
+              hasLoadedCurrRoster,
+              hasLoadedSurveyState,
+              hasLoadedAdministrators,
+
+              currRoster,
+              surveyState,
+              administrators,
+              semesterAdded,
+
+              changeCurrRoster,
+              changeSurveyAvailability,
+              removeAdmin,
+              editAdmin,
+              addSemester
+            }}>
             <CourseProvider
               value={{
                 hasLoadedCourses,
@@ -799,6 +837,7 @@ const App = () => {
                 </TemplateProvider>
               </StudentProvider>
             </CourseProvider>
+            </SettingsProvider>
           </AuthProvider>
         </Router>
         <Snackbar open={networkError !== null}>
