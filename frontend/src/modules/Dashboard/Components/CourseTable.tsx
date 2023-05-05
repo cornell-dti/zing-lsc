@@ -18,7 +18,11 @@ import { Course } from '@core/Types'
 import { useHistory } from 'react-router-dom'
 import Link from '@mui/material/Link'
 import { colors, EDIT_ZING_PATH } from '@core'
-import { defaultSortingOrder, defaultFilterOption } from './Dashboard'
+import {
+  defaultSortingOrder,
+  defaultFilterOption,
+  defaultView,
+} from './Dashboard'
 import { Box, Typography } from '@mui/material'
 import { ReactComponent as NewlyMatchableIcon } from '@assets/img/newlymatchable.svg'
 import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
@@ -118,6 +122,7 @@ export const CourseTable = ({ courses }: CourseGridProps) => {
                                 filterOption: state?.filterOption
                                   ? state.filterOption
                                   : defaultFilterOption,
+                                tableView: !defaultView,
                               },
                             })
                           }}

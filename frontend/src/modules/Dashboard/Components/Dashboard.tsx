@@ -39,7 +39,7 @@ type FilterOption =
 
 export const defaultSortingOrder = 'newest-requests-first'
 export const defaultFilterOption = 'no-filter'
-
+export const defaultView = false
 const filterOptionDisplay = [
   ['no-filter', 'All Classes'],
   ['unmatchable', 'Unmatchable'],
@@ -62,6 +62,7 @@ export const Dashboard = () => {
   const state = history.location.state as {
     sortedOrder: SortOrder
     filterOption: FilterOption
+    tableView: boolean
   }
   const [sortedOrder, setSortedOrder] = useState<SortOrder>(() =>
     state?.sortedOrder ? state.sortedOrder : defaultSortingOrder
@@ -69,11 +70,9 @@ export const Dashboard = () => {
   const [filteredOption, setFilteredOption] = useState<FilterOption>(() =>
     state?.filterOption ? state.filterOption : defaultFilterOption
   )
-  const [tableView, setTableView] = useState(false)
-  //helper function to change view
-  const handleClickTable = () => {
-    setTableView(!state.tableView)
-  }
+  const [tableView, setTableView] = useState(() =>
+    state?.tableView === undefined || state?.tableView ? true : defaultView
+  )
 
   //Helper function to check if a given course has any groups without check-in emails
   function hasUnsentCheckIns(c: Course) {
@@ -169,6 +168,7 @@ export const Dashboard = () => {
       state: {
         sortedOrder: event.target.value as SortOrder,
         filterOption: state?.filterOption ? state.filterOption : 'no-filter',
+        tableView: state?.tableView ? state.tableView : defaultView,
       },
     })
   }
@@ -180,6 +180,28 @@ export const Dashboard = () => {
           ? state.sortedOrder
           : 'newest-requests-first',
         filterOption: event.target.value as FilterOption,
+        tableView: state?.tableView ? state.tableView : defaultView,
+      },
+    })
+  }
+
+  //helper function to change view
+  const handleClickTable = () => {
+    setTableView(
+      state?.tableView === undefined || state?.tableView ? false : !defaultView
+    )
+    history.replace({
+      state: {
+        sortedOrder: state?.sortedOrder
+          ? state.sortedOrder
+          : defaultSortingOrder,
+        filterOption: state?.filterOption
+          ? state.filterOption
+          : defaultFilterOption,
+        tableView:
+          state?.tableView === undefined || state?.tableView
+            ? false
+            : !defaultView,
       },
     })
   }
@@ -337,7 +359,9 @@ export const Dashboard = () => {
         </Typography>
         <IconButton
           onClick={handleClickTable}
-          disabled={!tableView}
+          disabled={
+            state?.tableView || state?.tableView === undefined ? false : true
+          }
           color="default"
           sx={{
             '&.Mui-disabled': {
@@ -360,7 +384,9 @@ export const Dashboard = () => {
         </IconButton>{' '}
         <IconButton
           onClick={handleClickTable}
-          disabled={tableView}
+          disabled={
+            state?.tableView || state?.tableView === undefined ? true : false
+          }
           color="default"
           sx={{
             '&.Mui-disabled': {
@@ -383,7 +409,7 @@ export const Dashboard = () => {
         </IconButton>
       </Box>
 
-      {tableView ? (
+      {(state?.tableView ? state.tableView : defaultView) ? (
         <CourseTable courses={filteredSortedCourses} />
       ) : (
         <CourseGrid courses={filteredSortedCourses} />
