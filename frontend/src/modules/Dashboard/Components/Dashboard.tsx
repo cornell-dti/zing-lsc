@@ -72,7 +72,7 @@ export const Dashboard = () => {
   const [tableView, setTableView] = useState(false)
   //helper function to change view
   const handleClickTable = () => {
-    setTableView((current) => !current)
+    setTableView(!state.tableView)
   }
 
   //Helper function to check if a given course has any groups without check-in emails

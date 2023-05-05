@@ -173,9 +173,9 @@ export const CourseTable = ({ courses }: CourseGridProps) => {
                     <TableCell>
                       <Typography>
                         {c.latestSubmissionTime.getMonth() + 1}
-                        {'/'}
+                        {'-'}
                         {c.latestSubmissionTime.getDate()}
-                        {'/'}
+                        {'-'}
                         {c.latestSubmissionTime.getFullYear()}
                       </Typography>
                     </TableCell>
