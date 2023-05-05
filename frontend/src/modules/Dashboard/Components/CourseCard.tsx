@@ -6,7 +6,11 @@ import { ReactComponent as GroupsIcon } from '@assets/img/groupsicon.svg'
 import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
 import { ReactComponent as WarningIcon } from '@assets/img/warning.svg'
 import { useHistory } from 'react-router'
-import { defaultSortingOrder, defaultFilterOption } from './Dashboard'
+import {
+  defaultSortingOrder,
+  defaultFilterOption,
+  defaultView,
+} from './Dashboard'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 import axios from 'axios'
@@ -31,6 +35,7 @@ export const CourseCard = ({
         filterOption: state?.filterOption
           ? state.filterOption
           : defaultFilterOption,
+        tableView: defaultView,
       },
     })
   }

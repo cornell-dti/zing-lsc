@@ -7,7 +7,7 @@ import {
   StyledHeaderMenu,
 } from 'Dashboard/Styles/Dashboard.style'
 import { CourseGrid } from 'Dashboard/Components/CourseGrid'
-import { Box, IconButton, SelectChangeEvent } from '@mui/material'
+import { Box, IconButton, SelectChangeEvent, Typography } from '@mui/material'
 import { DropdownSelect } from '@core/Components'
 import { useCourseValue } from '@context/CourseContext'
 import { useStudentValue } from '@context/StudentContext'
@@ -15,6 +15,9 @@ import { Course } from '@core/Types'
 import { useHistory } from 'react-router-dom'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
 import ClearIcon from '@mui/icons-material/Clear'
+import { CourseTable } from './CourseTable'
+import ViewWeekOutlinedIcon from '@mui/icons-material/ViewWeekOutlined'
+import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline'
 
 import axios from 'axios'
 import { API_ROOT, COURSE_API, SETTINGS_API } from '@core/Constants'
@@ -36,7 +39,7 @@ type FilterOption =
 
 export const defaultSortingOrder = 'newest-requests-first'
 export const defaultFilterOption = 'no-filter'
-
+export const defaultView = false
 const filterOptionDisplay = [
   ['no-filter', 'All Classes'],
   ['unmatchable', 'Unmatchable'],
@@ -59,6 +62,7 @@ export const Dashboard = () => {
   const state = history.location.state as {
     sortedOrder: SortOrder
     filterOption: FilterOption
+    tableView: boolean
   }
   const [sortedOrder, setSortedOrder] = useState<SortOrder>(() =>
     state?.sortedOrder ? state.sortedOrder : defaultSortingOrder
@@ -66,6 +70,10 @@ export const Dashboard = () => {
   const [filteredOption, setFilteredOption] = useState<FilterOption>(() =>
     state?.filterOption ? state.filterOption : defaultFilterOption
   )
+  const [tableView, setTableView] = useState(() =>
+    state?.tableView === undefined || state?.tableView ? true : defaultView
+  )
+
   //Helper function to check if a given course has any groups without check-in emails
   function hasUnsentCheckIns(c: Course) {
     return c.groups.some((group) => !group.templateTimestamps['check-in'])
@@ -160,6 +168,7 @@ export const Dashboard = () => {
       state: {
         sortedOrder: event.target.value as SortOrder,
         filterOption: state?.filterOption ? state.filterOption : 'no-filter',
+        tableView: state?.tableView ? state.tableView : defaultView,
       },
     })
   }
@@ -171,6 +180,28 @@ export const Dashboard = () => {
           ? state.sortedOrder
           : 'newest-requests-first',
         filterOption: event.target.value as FilterOption,
+        tableView: state?.tableView ? state.tableView : defaultView,
+      },
+    })
+  }
+
+  //helper function to change view
+  const handleClickTable = () => {
+    setTableView(
+      state?.tableView === undefined || state?.tableView ? false : !defaultView
+    )
+    history.replace({
+      state: {
+        sortedOrder: state?.sortedOrder
+          ? state.sortedOrder
+          : defaultSortingOrder,
+        filterOption: state?.filterOption
+          ? state.filterOption
+          : defaultFilterOption,
+        tableView:
+          state?.tableView === undefined || state?.tableView
+            ? false
+            : !defaultView,
       },
     })
   }
@@ -313,7 +344,78 @@ export const Dashboard = () => {
           />
         </Box>
       </StyledHeaderMenu>
-      <CourseGrid courses={filteredSortedCourses} />
+
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'right',
+          flexDirection: 'row',
+          gap: 1,
+          paddingRight: '80px',
+        }}
+      >
+        <Typography sx={{ paddingRight: '5px' }}>
+          {filteredSortedCourses.length}
+          {' classes'}
+        </Typography>
+        <IconButton
+          onClick={handleClickTable}
+          disabled={
+            state?.tableView || state?.tableView === undefined ? false : true
+          }
+          color="default"
+          sx={{
+            '&.Mui-disabled': {
+              background: '#939393',
+              color: 'white',
+            },
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'row',
+            padding: '8px',
+            gap: '10px',
+            width: '40px',
+            height: '40px',
+            background: '#F3F3F3',
+            border: '1px solid #939393',
+            borderRadius: '6px',
+          }}
+        >
+          <ViewWeekOutlinedIcon />
+        </IconButton>{' '}
+        <IconButton
+          onClick={handleClickTable}
+          disabled={
+            state?.tableView || state?.tableView === undefined ? true : false
+          }
+          color="default"
+          sx={{
+            '&.Mui-disabled': {
+              background: '#939393',
+              color: 'white',
+            },
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'row',
+            padding: '8px',
+            gap: '10px',
+            width: '40px',
+            height: '40px',
+            background: '#F3F3F3',
+            border: '1px solid #939393',
+            borderRadius: '6px',
+          }}
+        >
+          <ViewHeadlineIcon />
+        </IconButton>
+      </Box>
+
+      {(state?.tableView ? state.tableView : defaultView) ? (
+        <CourseTable courses={filteredSortedCourses} />
+      ) : (
+        <CourseGrid courses={filteredSortedCourses} />
+      )}
     </StyledContainer>
   )
 }

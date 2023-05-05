@@ -199,6 +199,7 @@ export const EditZing = () => {
               filterOption: state?.filterOption
                 ? state.filterOption
                 : 'no-filter',
+              tableView: state?.tableView ? state.tableView : false,
             },
           }}
           sx={{
