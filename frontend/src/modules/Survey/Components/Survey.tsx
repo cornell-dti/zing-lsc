@@ -92,10 +92,6 @@ export const Survey = () => {
         console.log(response)
         setSurveySubmissionResponse(response.data.data)
         setCurrStep(currStep + 1)
-        // for each course in surveyData, set the flagged status of that course to false.
-        console.log(courseList)
-        // const { updateFlagged } = useCourseValue()
-        // updateFlagged(id, false)
       },
       (error: any) => {
         setIsSubmittingSurvey(false)
