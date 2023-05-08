@@ -81,7 +81,10 @@ export const Dashboard = () => {
     if (!group) {
       throw Error(`Student with email ${smail} not found in course ${courseId}`)
     }
-    return !group.templateTimestamps['no-match-yet']
+    return (
+      !group.templateTimestamps['no-match-yet'] &&
+      !group.templateTimestamps['no-match-session-closed']
+    )
   }
 
   //Helper function that returns true if an unmatched student in a course doesn't have a no match email
