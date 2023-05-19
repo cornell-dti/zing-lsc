@@ -17,10 +17,9 @@ export const AccountMenu = ({
   setSelectedRoster,
   showMetricsLink,
   showDashboardLink,
-  showSettingsLink,
 }: AccountMenuProps) => {
   const { user } = useAuthValue()
-  const { courses } = useCourseValue()
+  const { courses, semesters } = useCourseValue()
   const { students } = useStudentValue()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -71,6 +70,7 @@ export const AccountMenu = ({
                 membership.groupNumber !== -1
                   ? `${course.names.join('/')}_${membership.groupNumber}`
                   : undefined,
+              groupId: group?.groupId,
               ...localeMap(group?.templateTimestamps),
               ...localeMap(membership.templateTimestamps),
               notes: membership.notes.replace(/(\n)/gm, '  ').trim(),
@@ -136,9 +136,12 @@ export const AccountMenu = ({
         >
           <MenuItem>Export CSV (Students)</MenuItem>
         </CSVLink>
+        <MenuItem component={Link} to="/settings">
+          Settings
+        </MenuItem>
         <MenuItem onClick={handleRosterClick}>
           <ChevronLeftIcon sx={{ color: 'essentials.75', ml: -1 }} />
-          Switch Semester
+          Switch Viewing Semester
         </MenuItem>
         {showMetricsLink && (
           <MenuItem component={Link} to="/metrics">
@@ -175,19 +178,9 @@ export const AccountMenu = ({
           mt: -1.5,
         }}
       >
-        <MenuItem onClick={() => setSelectedRoster('SU22')}>
-          Summer 2022
-        </MenuItem>
-        <MenuItem onClick={() => setSelectedRoster('FA22')}>Fall 2022</MenuItem>
-        <MenuItem onClick={() => setSelectedRoster('WI23')}>
-          Winter 2023
-        </MenuItem>
-        <MenuItem onClick={() => setSelectedRoster('SP23')}>
-          Spring 2023
-        </MenuItem>
-        <MenuItem onClick={() => setSelectedRoster('SU23')}>
-          Summer 2023
-        </MenuItem>
+        {semesters.map((sem) => (
+          <MenuItem onClick={() => setSelectedRoster(sem)}>{sem}</MenuItem>
+        ))}
       </Menu>
     </Box>
   )

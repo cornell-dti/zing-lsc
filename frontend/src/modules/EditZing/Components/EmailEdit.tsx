@@ -1,12 +1,16 @@
 import { EmailEditProps } from 'EditZing/Types/ComponentProps'
 import { Button, Box, TextField } from '@mui/material'
 import { SxProps } from '@mui/material'
+import { EmailTemplate } from '@core/index'
 
 export const EmailEdit = ({
   template,
   replacedHtml,
   setSelectedTemplate,
+  replaceSelectedTemplate,
+  setSingleGroupTemplate,
   setEmailSaved,
+  groupNumber,
 }: EmailEditProps) => {
   const TitleSx: SxProps = {
     color: 'essentials.6',
@@ -30,7 +34,12 @@ export const EmailEdit = ({
   const copyEmailTemplate = () => {
     let copied = Object.assign({}, template)
     copied.html = replacedHtml
-    setSelectedTemplate(copied)
+    if (groupNumber) {
+      setSingleGroupTemplate(copied, groupNumber)
+    } else {
+      setSelectedTemplate(copied)
+      replaceSelectedTemplate(copied)
+    }
   }
 
   const handleClick = () => {

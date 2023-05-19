@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import {
   Alert,
@@ -22,6 +23,7 @@ import {
   STUDENT_API,
   MATCHING_API,
   SETTINGS_PATH,
+  SETTINGS_API,
 } from '@core/Constants'
 import {
   Course,
@@ -53,7 +55,6 @@ import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
 import { Settings } from 'Settings'
-import React from 'react'
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -74,6 +75,24 @@ const App = () => {
       Reload
     </Button>
   )
+
+  const semValueMap = new Map([
+    ['WI', 0],
+    ['SP', 1],
+    ['SU', 2],
+    ['FA', 3],
+  ])
+
+  const sortSemesters = (a: string, b: string) => {
+    const aSemPrefix = a.substring(0, 2)
+    const bSemPrefix = b.substring(0, 2)
+    const aSemYear = Number(a.substring(2))
+    const bSemYear = Number(b.substring(2))
+    return (
+      aSemYear - bSemYear ||
+      semValueMap.get(aSemPrefix)! - semValueMap.get(bSemPrefix)!
+    )
+  }
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -126,12 +145,17 @@ const App = () => {
   // Application-wide courses are only loaded when user is authorized
   const [hasLoadedCourses, setHasLoadedCourses] = useState(false)
   const [courses, setCourses] = useState<Course[]>([])
+  const [semesters, setSemesters] = useState<string[]>([])
 
   const loadCourses = () => {
     axios.get(`${API_ROOT}${COURSE_API}`).then(
       (res) => {
         setCourses(res.data.map(responseCourseToCourse))
-        setHasLoadedCourses(true)
+        // TODO: MOVE THIS TO ITS OWN CONTEXT
+        axios.get(`${API_ROOT}${SETTINGS_API}/semester/all`).then((res) => {
+          setHasLoadedCourses(true)
+          setSemesters(res.data.sort(sortSemesters))
+        })
       },
       (error) => {
         console.log(error)
@@ -602,6 +626,15 @@ const App = () => {
     )
   }
 
+  /** Update flagged status on the frontend */
+  const updateFlagged = (courseId: string, flag: boolean) => {
+    setCourses(
+      courses.map((course) =>
+        course.courseId === courseId ? { ...course, flagged: flag } : course
+      )
+    )
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -617,11 +650,13 @@ const App = () => {
             <CourseProvider
               value={{
                 hasLoadedCourses,
+                semesters,
                 courses,
                 moveStudent,
                 matchStudents,
                 addGroupEmailTimestamps,
                 removeGroups,
+                updateFlagged,
               }}
             >
               <StudentProvider
@@ -642,8 +677,7 @@ const App = () => {
                 >
                   <Snackbar
                     open={needsRefresh}
-                    message="The information in your app is out of date. 
-                      Please reload to see the latest updates."
+                    message="The information in your app is out of date. Please reload to see the latest updates."
                     action={reloadButton}
                   />
                   <Switch>

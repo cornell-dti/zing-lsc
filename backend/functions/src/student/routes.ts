@@ -22,13 +22,21 @@ router.get('/', (_, res) => {
 })
 
 router.post('/survey', (req, res) => {
-  const { name, email, college, year, courseCatalogNames } = req.body
+  const { name, email, college, year, courseCatalogNames, surveySubmittable } =
+    req.body
   const userAgent = req.get('user-agent')
   logger.info(
     `Student [${name}] submitted survey using ${email} on agent ${userAgent}`
   )
 
-  addStudentSurveyResponse(name, email, college, year, courseCatalogNames)
+  addStudentSurveyResponse(
+    name,
+    email,
+    college,
+    year,
+    courseCatalogNames,
+    surveySubmittable
+  )
     .then((data) => res.status(200).json({ success: true, data }))
     .catch((err) => {
       logger.error(
