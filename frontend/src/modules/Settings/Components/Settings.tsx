@@ -26,10 +26,6 @@ import { useCourseValue } from '@context/CourseContext'
 
 export const Settings = () => {
   const {
-    hasLoadedCurrRoster,
-    hasLoadedSurveyState,
-    hasLoadedAdministrators,
-
     currRoster,
     surveyState,
     administrators,

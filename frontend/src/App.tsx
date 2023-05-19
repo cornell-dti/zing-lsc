@@ -71,11 +71,11 @@ const App = () => {
   const [currRoster, setCurrRoster] = useState<string>('')
   const [hasLoadedCurrRoster, setHasLoadedCurrRoster] = useState<boolean>(false)
 
-
   const loadCurrRoster = () => {
     axios.get(`${API_ROOT}${SETTINGS_API}/semester/current`).then(
       (req) => {
         setCurrRoster(req.data)
+        setHasLoadedCurrRoster(true)
       },
       (error) => {
         console.log(error)
@@ -93,12 +93,15 @@ const App = () => {
   }
 
   const [surveyState, setSurveyState] = useState<boolean>(false)
-  const [hasLoadedSurveyState, setHasLoadedSurveyState] = useState<boolean>(false)
+  const [hasLoadedSurveyState, setHasLoadedSurveyState] = useState<boolean>(
+    false
+  )
 
   const loadSurveyState = () => {
     axios.get(`${API_ROOT}${SETTINGS_API}/semester/survey`).then(
       (req) => {
         setSurveyState(req.data)
+        setHasLoadedSurveyState(true)
       },
       (error) => {
         console.log(error)
@@ -115,12 +118,16 @@ const App = () => {
   }
 
   const [administrators, setAdministrators] = useState<Admin[]>([])
-  const [hasLoadedAdministrators, setHasLoadedAdministrators] = useState<boolean>(false)
+  const [
+    hasLoadedAdministrators,
+    setHasLoadedAdministrators,
+  ] = useState<boolean>(false)
 
   const loadAdministrators = () => {
     axios.get(`${API_ROOT}/admin`).then(
       (req) => {
         setAdministrators(req.data)
+        setHasLoadedAdministrators(true)
       },
       (error) => {
         console.log(error)
@@ -205,6 +212,9 @@ const App = () => {
                   loadCourses()
                   loadStudents()
                   loadTemplates()
+                  loadCurrRoster()
+                  loadSurveyState()
+                  loadAdministrators()
                 }
               },
               (error) => setNetworkError(error.message)
@@ -746,99 +756,101 @@ const App = () => {
               displayNetworkError: setNetworkError,
             }}
           >
-            <SettingsProvider value={{
-              hasLoadedCurrRoster,
-              hasLoadedSurveyState,
-              hasLoadedAdministrators,
-              
-              currRoster,
-              surveyState,
-              administrators,
-              semesterAdded,
-              
-              setCurrRoster,
-              changeCurrRoster,
-              changeSurveyAvailability,
-              removeAdmin,
-              editAdmin,
-              addSemester,
-              setSemesterAdded
-            }}>
-            <CourseProvider
+            <SettingsProvider
               value={{
-                hasLoadedCourses,
-                semesters,
-                courses,
-                moveStudent,
-                matchStudents,
-                addGroupEmailTimestamps,
-                removeGroups,
-                updateFlagged,
+                hasLoadedCurrRoster,
+                hasLoadedSurveyState,
+                hasLoadedAdministrators,
+
+                currRoster,
+                surveyState,
+                administrators,
+                semesterAdded,
+
+                setCurrRoster,
+                changeCurrRoster,
+                changeSurveyAvailability,
+                removeAdmin,
+                editAdmin,
+                addSemester,
+                setSemesterAdded,
               }}
             >
-              <StudentProvider
+              <CourseProvider
                 value={{
-                  hasLoadedStudents,
-                  students,
-                  updateNotes,
-                  addStudentEmailTimestamps,
+                  hasLoadedCourses,
+                  semesters,
+                  courses,
+                  moveStudent,
+                  matchStudents,
+                  addGroupEmailTimestamps,
+                  removeGroups,
+                  updateFlagged,
                 }}
               >
-                <TemplateProvider
+                <StudentProvider
                   value={{
-                    hasLoadedTemplates,
-                    templates,
-                    keepForm,
-                    appendForm,
+                    hasLoadedStudents,
+                    students,
+                    updateNotes,
+                    addStudentEmailTimestamps,
                   }}
                 >
-                  <Snackbar
-                    open={needsRefresh}
-                    message="The information in your app is out of date. Please reload to see the latest updates."
-                    action={reloadButton}
-                  />
-                  <Switch>
-                    <PublicRoute exact path={HOME_PATH} component={Home} />
-                    <PublicRoute
-                      exact
-                      path={ADMIN_PATH}
-                      component={AdminHome}
+                  <TemplateProvider
+                    value={{
+                      hasLoadedTemplates,
+                      templates,
+                      keepForm,
+                      appendForm,
+                    }}
+                  >
+                    <Snackbar
+                      open={needsRefresh}
+                      message="The information in your app is out of date. Please reload to see the latest updates."
+                      action={reloadButton}
                     />
-                    <Route exact path={SURVEY_PATH} component={Survey} />
-                    <PrivateRoute
-                      exact
-                      path={DASHBOARD_PATH}
-                      component={Dashboard}
-                    />
-                    <PrivateRoute
-                      exact
-                      path={METRICS_PATH}
-                      component={Metrics}
-                    />
-                    <PrivateRoute
-                      exact
-                      path={EMAIL_PATH}
-                      component={Emailing}
-                    />
-                    <PrivateRoute
-                      exact
-                      path={`${EDIT_ZING_PATH}/:courseId`}
-                      component={EditZing}
-                    />
-                    <PrivateRoute
-                      exact
-                      path={TEMPLATE_EDITOR_PATH}
-                      component={TemplateEditor}
-                    />
-                    <PrivateRoute
-                      exact
-                      path={SETTINGS_PATH}
-                      component={Settings}
-                    />
-                  </Switch>
-                </TemplateProvider>
-              </StudentProvider>
-            </CourseProvider>
+                    <Switch>
+                      <PublicRoute exact path={HOME_PATH} component={Home} />
+                      <PublicRoute
+                        exact
+                        path={ADMIN_PATH}
+                        component={AdminHome}
+                      />
+                      <Route exact path={SURVEY_PATH} component={Survey} />
+                      <PrivateRoute
+                        exact
+                        path={DASHBOARD_PATH}
+                        component={Dashboard}
+                      />
+                      <PrivateRoute
+                        exact
+                        path={METRICS_PATH}
+                        component={Metrics}
+                      />
+                      <PrivateRoute
+                        exact
+                        path={EMAIL_PATH}
+                        component={Emailing}
+                      />
+                      <PrivateRoute
+                        exact
+                        path={`${EDIT_ZING_PATH}/:courseId`}
+                        component={EditZing}
+                      />
+                      <PrivateRoute
+                        exact
+                        path={TEMPLATE_EDITOR_PATH}
+                        component={TemplateEditor}
+                      />
+                      <PrivateRoute
+                        exact
+                        path={SETTINGS_PATH}
+                        component={Settings}
+                      />
+                    </Switch>
+                  </TemplateProvider>
+                </StudentProvider>
+              </CourseProvider>
             </SettingsProvider>
           </AuthProvider>
         </Router>
