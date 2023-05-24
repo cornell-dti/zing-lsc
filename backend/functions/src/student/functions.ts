@@ -207,6 +207,7 @@ export const addStudentSurveyResponse = async (
               unmatched: [],
               names: course.catalogNames,
               lastGroupNumber: 0,
+              flagged: false,
             })
             .then(() => snapshot.ref)
             .catch((err) => {
@@ -218,8 +219,10 @@ export const addStudentSurveyResponse = async (
               throw e
             })
         } else {
+          // update record for this course, if it exists
           snapshot.ref
             .update({
+              flagged: false,
               names: admin.firestore.FieldValue.arrayUnion(
                 ...course.catalogNames
               ),
@@ -240,6 +243,7 @@ export const addStudentSurveyResponse = async (
           .update({
             unmatched: admin.firestore.FieldValue.arrayUnion(email),
             latestSubmissionTime: surveyTimestamp,
+            flagged: false,
           })
           .catch((err) => {
             console.log(err)

@@ -15,6 +15,7 @@ import { StepFail } from 'Survey/Components/StepFail'
 import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
 import survey from '@core/Questions/Questions.json'
+import { useCourseValue } from '@context/CourseContext'
 
 export const Survey = () => {
   const [currStep, setCurrStep] = useState(1)
