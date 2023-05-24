@@ -141,9 +141,6 @@ export const Settings = () => {
       .catch((err) => console.log(err))
   }
 
-  // TODO: allow to edit admin information
-  const editAdmin = () => {}
-
   const [openAddAdmin, setOpenAddAdmin] = useState(false)
   const handleAddAdmin = () => {
     setOpenAddAdmin(true)
@@ -351,7 +348,6 @@ export const Settings = () => {
         <AdministratorsTable
           data={administrators}
           removeAdmin={removeAdmin}
-          editAdmin={editAdmin}
         ></AdministratorsTable>
 
         <Box

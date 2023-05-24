@@ -32,11 +32,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }))
 
-export const AdministratorsTable = ({
-  data,
-  removeAdmin,
-  editAdmin,
-}: AllowedUsers) => {
+export const AdministratorsTable = ({ data, removeAdmin }: AllowedUsers) => {
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [isDeletingRow, setIsDeletingRow] = useState<Admin>()
 
@@ -50,7 +46,7 @@ export const AdministratorsTable = ({
     }
   }
 
-  const undoDelete = async (row: Admin) => {
+  const undoDelete = () => {
     setIsDeleting(false)
     setIsDeletingRow(undefined)
   }
@@ -99,7 +95,7 @@ export const AdministratorsTable = ({
                       Delete
                     </Button>
                     <Undo
-                      onClick={() => undoDelete(row)}
+                      onClick={() => undoDelete()}
                       sx={{
                         '&:hover': { scale: '1.2', cursor: 'pointer' },
                       }}
@@ -123,13 +119,6 @@ export const AdministratorsTable = ({
                         '&:hover': { scale: '1.2', cursor: 'pointer' },
                       }}
                     ></DeleteOutline>
-                    <Edit
-                      color="action"
-                      onClick={editAdmin}
-                      sx={{
-                        '&:hover': { scale: '1.2', cursor: 'pointer' },
-                      }}
-                    ></Edit>
                   </StyledTableCell>
                 )}
               </StyledTableRow>

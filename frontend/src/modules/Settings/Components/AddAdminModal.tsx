@@ -1,4 +1,4 @@
-import { Typography, OutlinedInput, Button } from '@mui/material'
+import { Typography, TextField, Button } from '@mui/material'
 import { AddAdminProp } from './types'
 import { ZingModal } from '@core/index'
 import { useState } from 'react'
@@ -15,14 +15,11 @@ const AddAdminModal = ({ open, handleClose, addAdmin }: AddAdminProp) => {
           Add New Adminstrator
         </Typography>
       </ZingModal.Title>
-
       <ZingModal.Body>
         <Typography variant="h6" sx={{ fontWeight: '300', padding: 1 }}>
           Name:
         </Typography>
-        <OutlinedInput
-          multiline
-          rows={1}
+        <TextField
           onChange={(e) => setNewName(e.target.value)}
           sx={{
             width: '100%',
@@ -32,9 +29,7 @@ const AddAdminModal = ({ open, handleClose, addAdmin }: AddAdminProp) => {
         <Typography variant="h6" sx={{ fontWeight: '300', padding: 1 }}>
           Email:
         </Typography>
-        <OutlinedInput
-          multiline
-          rows={1}
+        <TextField
           onChange={(e) => {
             setNewEmail(e.target.value)
             setRequiredField(false)
