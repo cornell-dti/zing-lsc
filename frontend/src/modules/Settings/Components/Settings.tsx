@@ -35,7 +35,7 @@ export const Settings = () => {
     changeCurrRoster,
     changeSurveyAvailability,
     removeAdmin,
-    editAdmin,
+    addAdmin,
     addSemester,
     setSemesterAdded,
   } = useSettingsValue()
@@ -238,7 +238,7 @@ export const Settings = () => {
         <AdministratorsTable
           data={administrators}
           removeAdmin={removeAdmin}
-          editAdmin={editAdmin}
+          addAdmin={addAdmin}
         />
       </Box>
       <Snackbar

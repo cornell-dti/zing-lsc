@@ -16,9 +16,9 @@ export const RouteLoading = ({
   hasLoadedCourses?: boolean
   hasLoadedStudents?: boolean
   hasLoadedTemplates?: boolean
-  hasLoadedAdministrators?: boolean,
-  hasLoadedCurrRoster?: boolean,
-  hasLoadedSurveyState?: boolean,
+  hasLoadedAdministrators?: boolean
+  hasLoadedCurrRoster?: boolean
+  hasLoadedSurveyState?: boolean
 }) => {
   return (
     <Fade
@@ -57,9 +57,9 @@ export const RouteLoading = ({
           <Typography>Loading administrators ⏳</Typography>
         )}
         {hasLoadedCurrRoster !== undefined && hasLoadedCurrRoster ? (
-          <Typography>Loaded Current Semester ✅</Typography>
+          <Typography>Loaded current semester ✅</Typography>
         ) : (
-          <Typography>Loading Current Semester ⏳</Typography>
+          <Typography>Loading current semester ⏳</Typography>
         )}
         {hasLoadedSurveyState !== undefined && hasLoadedSurveyState ? (
           <Typography>Loaded survey status ✅</Typography>

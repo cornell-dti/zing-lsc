@@ -151,7 +151,7 @@ const App = () => {
   }
 
   // TODO: allow to edit admin information
-  const editAdmin = () => {}
+  const addAdmin = () => {}
 
   const [semesterAdded, setSemesterAdded] = useState<boolean>(false)
   const addSemester = (selectedSeason: string, year: string) => {
@@ -771,7 +771,7 @@ const App = () => {
                 changeCurrRoster,
                 changeSurveyAvailability,
                 removeAdmin,
-                editAdmin,
+                addAdmin,
                 addSemester,
                 setSemesterAdded,
               }}

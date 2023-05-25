@@ -15,8 +15,8 @@ interface SettingsContextType {
   setCurrRoster: (value: React.SetStateAction<string>) => void
   changeCurrRoster: (event: SelectChangeEvent) => Promise<void>
   changeSurveyAvailability: () => Promise<void>
-  removeAdmin: (admin:Admin) => void
-  editAdmin: () => void
+  removeAdmin: (admin: Admin) => void
+  addAdmin: () => void
   addSemester: (selectedSeason: string, year: string) => void
   setSemesterAdded: (value: React.SetStateAction<boolean>) => void
 }
@@ -34,10 +34,10 @@ const SettingsContext = React.createContext<SettingsContextType>({
   setCurrRoster: () => {},
   changeCurrRoster: async () => {},
   changeSurveyAvailability: async () => {},
-  removeAdmin:() => {},
-  editAdmin: () => {},
+  removeAdmin: () => {},
+  addAdmin: () => {},
   addSemester: () => {},
-  setSemesterAdded: () => {}
+  setSemesterAdded: () => {},
 })
 
 export function SettingsProvider({
