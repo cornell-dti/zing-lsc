@@ -57,6 +57,21 @@ async function removeStudentFromCourse(
   courseId: string,
   groupNumber: number
 ) {
+  //remove unmatched student
+  if (groupNumber === -1) {
+    const ref = courseRef.doc(courseId)
+
+    return ref
+      .update({
+        unmatched: admin.firestore.FieldValue.arrayRemove(email),
+      })
+      .catch((err) => {
+        logger.error(` error in removing ${email} from unmatched: ${err} `)
+        throw new Error(`error in removing ${email} from unmatched.`)
+      })
+  }
+
+  //remove matched student
   const ref = courseRef
     .doc(courseId)
     .collection('groups')
@@ -66,9 +81,15 @@ async function removeStudentFromCourse(
     //second condition is a sanity check
     return ref.delete() // Fix this if we ever use this function, I don't think they want groups to ever be deleted fully
   } else {
-    return ref.update({
-      members: admin.firestore.FieldValue.arrayRemove(email),
-    })
+    return ref
+      .update({
+        members: admin.firestore.FieldValue.arrayRemove(email),
+        updateTime: admin.firestore.FieldValue.serverTimestamp(),
+      })
+      .catch((err) => {
+        console.log(err)
+        throw new Error(`error in removing ${email} from group ${groupNumber}.`)
+      })
   }
 }
 
@@ -152,7 +173,15 @@ export const addStudentSurveyResponse = async (
   // Find the existing courses this student is already in by checking group membership
   const existingData = (await studentRef.doc(email).get()).data() //gets all the existing data
   //studentCrses becomes courseIds of existingData.groups if available, otherwise []
-  const existingCourses = existingData ? existingData.groups : [] //gets the existing courses
+  const existingCourses = existingData
+    ? existingData.groups.filter(
+        (course: { courseId: string; archived: string }) =>
+          !course.archived ||
+          !courseIdsWithNames
+            .map((course) => course.courseId)
+            .includes(course.courseId)
+      )
+    : [] //gets the existing courses
   const existingCourseIds: string[] = existingCourses.map(
     (course: { courseId: string }) => course.courseId
   )
@@ -173,6 +202,7 @@ export const addStudentSurveyResponse = async (
     notesModifyTime: surveyTimestamp, // Can't use serverTimestamp in arrays...
     submissionTime: surveyTimestamp,
     templateTimestamps: {},
+    archived: false,
     flagged: false,
   }))
 
@@ -317,4 +347,28 @@ export const updateStudentNotes = async (
   logger.info(
     `Updated notes for [${courseId}] in student [${email}] to [${notes}]`
   )
+}
+
+async function archiveStudentInStudent(email: string, courseId: string) {
+  const studentDocRef = studentRef.doc(email)
+  const studentDoc = await studentDocRef.get()
+  if (!studentDoc.exists) {
+    throw new Error(`Student document for ${email} does not exist`)
+  }
+  const studentData = studentDoc.data() as FirestoreStudent
+  const groups = studentData.groups
+  const groupMembership = groups.find((group) => group.courseId === courseId)
+  if (!groupMembership) {
+    throw new Error(`Student ${email} does not have membership in ${courseId}`)
+  }
+
+  groupMembership.archived = true
+  await studentDocRef.update({ groups })
+  logger.info(`Archived [${courseId}] in student [${email}]]`)
+  return groupMembership.groupNumber
+}
+
+export async function archiveStudent(email: string, courseId: string) {
+  const groupNum = await archiveStudentInStudent(email, courseId)
+  await removeStudentFromCourse(email, courseId, groupNum)
 }
