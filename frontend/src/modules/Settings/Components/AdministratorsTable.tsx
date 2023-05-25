@@ -35,7 +35,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export const AdministratorsTable = ({
   data,
   removeAdmin,
-  editAdmin,
+  addAdmin,
 }: AllowedUsers) => {
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [isDeletingRow, setIsDeletingRow] = useState<Admin>()
@@ -108,7 +108,7 @@ export const AdministratorsTable = ({
                   />
                   <Edit
                     color="action"
-                    onClick={editAdmin}
+                    onClick={addAdmin}
                     sx={{
                       '&:hover': { scale: '1.2', cursor: 'pointer' },
                     }}
