@@ -5,5 +5,5 @@ export interface Admin {
 export interface AllowedUsers {
   data: Admin[]
   removeAdmin: (admin: Admin) => void
-  editAdmin: () => void
+  addAdmin: () => void
 }

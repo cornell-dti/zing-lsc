@@ -9,6 +9,7 @@ import {
   getAllStudents,
   removeStudent,
   updateStudentNotes,
+  archiveStudent,
 } from './functions'
 
 router.get('/', (_, res) => {
@@ -65,6 +66,16 @@ router.delete('/', checkAuth, (req, res) => {
   const email = req.body.studentEmail
   logger.info(`Student [${email}] deleted.`)
   removeStudent(email)
+    .then((data) => res.status(200).send({ success: true, data }))
+    .catch((err) => {
+      console.log(err)
+      res.status(400).send({ success: false, err: err.message })
+    })
+})
+
+router.post('/archive', (req, res) => {
+  const { email, courseId } = req.body
+  archiveStudent(email, courseId)
     .then((data) => res.status(200).send({ success: true, data }))
     .catch((err) => {
       console.log(err)

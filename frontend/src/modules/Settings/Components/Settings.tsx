@@ -17,124 +17,37 @@ import { Link } from 'react-router-dom'
 import { DASHBOARD_PATH } from '@core'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
-import { API_ROOT, COURSE_API } from '@core/Constants'
+import { API_ROOT, COURSE_API, SETTINGS_API } from '@core/Constants'
 import { AdministratorsTable } from './AdministratorsTable'
 import { Admin } from './types'
 import axios from 'axios'
-
-const semesterKeys: string[] = ['WI', 'SP', 'SU', 'FA']
-
-// TODO: deduplicat this
-const semValueMap = new Map([
-  ['WI', 0],
-  ['SP', 1],
-  ['SU', 2],
-  ['FA', 3],
-])
-
-const sortSemesters = (a: string, b: string) => {
-  const aSemPrefix = a.substring(0, 2)
-  const bSemPrefix = b.substring(0, 2)
-  const aSemYear = Number(a.substring(2))
-  const bSemYear = Number(b.substring(2))
-  return (
-    aSemYear - bSemYear ||
-    semValueMap.get(aSemPrefix)! - semValueMap.get(bSemPrefix)!
-  )
-}
+import { useSettingsValue } from '@context/SettingsContext'
+import { useCourseValue } from '@context/CourseContext'
 
 export const Settings = () => {
-  const [currRoster, setCurrRoster] = useState<string>('')
-  const changeCurrRoster = async (event: SelectChangeEvent) => {
-    // function to only open the survey of the semester
-    setCurrRoster(event.target.value)
-    await axios.post(`${API_ROOT}${COURSE_API}/semester/current`, {
-      semester: event.target.value,
-    })
-  }
+  const {
+    currRoster,
+    surveyState,
+    administrators,
+    semesterAdded,
+
+    setCurrRoster,
+    changeCurrRoster,
+    changeSurveyAvailability,
+    removeAdmin,
+    addAdmin,
+    addSemester,
+    setSemesterAdded,
+  } = useSettingsValue()
+
+  const semesterKeys: string[] = ['WI', 'SP', 'SU', 'FA']
+
+  const { semesters } = useCourseValue()
 
   const [selectedSeason, setSelectedSeason] = useState<string>('WI')
   const [year, setYear] = useState<string>(
     String(new Date().getFullYear()).substring(2, 4)
   )
-
-  const [semesters, setSemesters] = useState<string[]>([])
-  const [surveyState, setSurveyState] = useState<boolean>(false)
-  const getAllSemesters = async () => {
-    axios.get(`${API_ROOT}${COURSE_API}/semester/all`).then((res) => {
-      setSemesters(res.data.sort(sortSemesters))
-    })
-  }
-
-  const getCurrSurveyState = async () => {
-    await axios.get(`${API_ROOT}${COURSE_API}/semester/survey`).then((req) => {
-      setSurveyState(req.data)
-    })
-  }
-
-  const getCurrSemester = async () => {
-    await axios.get(`${API_ROOT}${COURSE_API}/semester/current`).then((req) => {
-      setCurrRoster(req.data)
-    })
-  }
-
-  const [semesterAdded, setSemesterAdded] = useState<boolean>(false)
-  const addSemester = () => {
-    axios
-      .post(`${API_ROOT}/global/semester`, {
-        semester: selectedSeason + year,
-      })
-      .then(() => {
-        const sem = selectedSeason + year
-        setSemesters(
-          semesters.indexOf(sem) === -1
-            ? semesters.concat(selectedSeason + year).sort(sortSemesters)
-            : semesters
-        )
-        setSemesterAdded(true)
-      })
-      .catch((err) => console.log(err))
-  }
-
-  const changeSurveyAvailability = async () => {
-    axios.post(`${API_ROOT}${COURSE_API}/semester/survey`, {
-      surveyOpen: !surveyState,
-    })
-    setSurveyState(!surveyState)
-  }
-
-  useEffect(() => {
-    getAllSemesters()
-    changeSurveyAvailability()
-    getCurrSurveyState()
-    getCurrSemester()
-    getAdministrators()
-  }, [])
-
-  const [administrators, setAdministrators] = useState<Admin[]>([])
-
-  const getAdministrators = async () => {
-    await axios.get(`${API_ROOT}/admin`).then((req) => {
-      setAdministrators(req.data)
-    })
-  }
-
-  const removeAdmin = (admin: Admin) => {
-    axios
-      .delete(`${API_ROOT}/admin`, { data: admin })
-      .then(() => {
-        administrators.forEach((email, index) => {
-          if ((email.email = admin.email)) {
-            administrators.splice(index, 1)
-            getAdministrators()
-          }
-        })
-      })
-      .catch((err) => console.log(err))
-  }
-
-  // TODO: allow to edit admin information
-  const editAdmin = () => {}
 
   return (
     <Box
@@ -254,7 +167,7 @@ export const Settings = () => {
                   setYear(event.target.value)
                 }}
               />
-              <IconButton onClick={addSemester}>
+              <IconButton onClick={() => addSemester(selectedSeason, year)}>
                 <AddIcon />
               </IconButton>
             </Box>
@@ -325,7 +238,7 @@ export const Settings = () => {
         <AdministratorsTable
           data={administrators}
           removeAdmin={removeAdmin}
-          editAdmin={editAdmin}
+          addAdmin={addAdmin}
         />
       </Box>
       <Snackbar

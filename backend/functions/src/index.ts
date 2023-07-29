@@ -17,6 +17,7 @@ import studentsRouter from './student/routes'
 import matchingRouter from './matching/routes'
 import courseRouter from './course/routes'
 import emailRouter from './emailing/routes'
+import settingsRouter from './settings/routes'
 import { appCheckVerification } from './middleware/appcheck-middleware'
 
 // global routers - no auth
@@ -66,6 +67,11 @@ app.use(
   '/email',
   [appCheckVerification, checkAuth, checkIsAuthorized],
   emailRouter
+)
+app.use(
+  '/settings',
+  [appCheckVerification, checkAuth, checkIsAuthorized],
+  settingsRouter
 )
 
 app.get('/getauth', checkAuth, (req, res) => {
