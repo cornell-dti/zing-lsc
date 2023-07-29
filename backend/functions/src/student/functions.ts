@@ -7,6 +7,7 @@ import {
 } from '../course/get_course_id'
 import { mapDate } from '../course/functions'
 import { FirestoreStudent, Student } from '../types'
+import { getCurrentSemester } from '../settings/functions'
 const courseRef = db.collection('courses')
 const studentRef = db.collection('students')
 
@@ -104,7 +105,7 @@ export const addStudentSurveyResponse = async (
   courseCatalogNames: string[],
   surveySubmittable: boolean
 ) => {
-  const roster = 'SP23' // Spring 2023
+  const roster = await getCurrentSemester()
 
   if (!surveySubmittable) {
     throw new Error('Survey is Closed')
