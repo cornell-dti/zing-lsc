@@ -7,8 +7,8 @@ import { ReactComponent as PlusIcon } from '@assets/img/plusicon.svg'
 import { ReactComponent as WarningIcon } from '@assets/img/warning.svg'
 import { useHistory } from 'react-router'
 import { defaultSortingOrder, defaultFilterOption } from './Dashboard'
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
-import BookmarkIcon from '@mui/icons-material/Bookmark'
+import FlagOutlined from '@mui/icons-material/FlagOutlined'
+import Flag from '@mui/icons-material/Flag'
 import axios from 'axios'
 
 export const CourseCard = ({
@@ -123,8 +123,8 @@ export const CourseCard = ({
         </Button>
         <Checkbox
           checked={flag}
-          icon={<BookmarkBorderIcon />}
-          checkedIcon={<BookmarkIcon />}
+          icon={<FlagOutlined />}
+          checkedIcon={<Flag />}
           onClick={() => handleSetFlag(id, flagged)}
         />
       </Box>

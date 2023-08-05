@@ -18,6 +18,7 @@ import studentsRouter from './student/routes'
 import matchingRouter from './matching/routes'
 import courseRouter from './course/routes'
 import emailRouter from './emailing/routes'
+import settingsRouter from './settings/routes'
 
 // global routers - no auth
 import globalRouter from './global/routes'
@@ -51,6 +52,7 @@ app.use(
 app.use('/matching', [checkAuth, checkIsAuthorized], matchingRouter)
 app.use('/course', [checkAuth, checkIsAuthorized], courseRouter)
 app.use('/email', [checkAuth, checkIsAuthorized], emailRouter)
+app.use('/settings', [checkAuth, checkIsAuthorized], settingsRouter)
 
 app.get('/getauth', checkAuth, (req, res) => {
   if (req.headers?.authorization?.startsWith('Bearer ')) {

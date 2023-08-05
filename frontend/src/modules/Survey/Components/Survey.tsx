@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Question } from '@core/Types'
-import { API_ROOT, STUDENT_API, COURSE_API } from '@core/Constants'
+import { API_ROOT, STUDENT_API, SETTINGS_API } from '@core/Constants'
 import {
   StyledContainer1 as SplashBackground,
   StyledContainer2 as QuestionBackground,
@@ -15,6 +15,7 @@ import { StepFail } from 'Survey/Components/StepFail'
 import { SurveyData } from 'Survey/Components/FuncsAndConsts/SurveyFunctions'
 import { SurveySubmissionResponse } from 'Survey/Types'
 import survey from '@core/Questions/Questions.json'
+import { useCourseValue } from '@context/CourseContext'
 
 export const Survey = () => {
   const [currStep, setCurrStep] = useState(1)
