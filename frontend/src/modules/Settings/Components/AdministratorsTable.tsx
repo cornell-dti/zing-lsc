@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import { DeleteOutline, Edit, Undo } from '@mui/icons-material'
+import { DeleteOutline, Undo } from '@mui/icons-material'
 import { colors } from '@core'
 import { Box, Button } from '@mui/material'
 import { AllowedUsers, Admin } from './types'
@@ -55,7 +55,6 @@ export const AdministratorsTable = ({ data, removeAdmin }: AllowedUsers) => {
     <Box
       sx={{
         m: 'auto',
-        mb: 6,
         pt: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -99,7 +98,7 @@ export const AdministratorsTable = ({ data, removeAdmin }: AllowedUsers) => {
                       sx={{
                         '&:hover': { scale: '1.2', cursor: 'pointer' },
                       }}
-                    ></Undo>
+                    />
                   </StyledTableCell>
                 ) : (
                   <StyledTableCell
@@ -118,7 +117,7 @@ export const AdministratorsTable = ({ data, removeAdmin }: AllowedUsers) => {
                       sx={{
                         '&:hover': { scale: '1.2', cursor: 'pointer' },
                       }}
-                    ></DeleteOutline>
+                    />
                   </StyledTableCell>
                 )}
               </StyledTableRow>

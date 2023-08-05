@@ -164,7 +164,7 @@ export const Settings = () => {
         open={openAddAdmin}
         handleClose={handleCloseAdmin}
         addAdmin={addAdmin}
-      ></AddAdminModal>
+      />
       <Box
         sx={{
           width: '100%',
@@ -345,22 +345,9 @@ export const Settings = () => {
         >
           Administrators
         </Box>
-        <AdministratorsTable
-          data={administrators}
-          removeAdmin={removeAdmin}
-        ></AdministratorsTable>
-
-        <Box
-          sx={{
-            padding: 4,
-          }}
-        >
-          <Button
-            onClick={() => handleAddAdmin()}
-            sx={{ marginRight: 'auto', right: '-90%' }}
-          >
-            Add Admin
-          </Button>
+        <AdministratorsTable data={administrators} removeAdmin={removeAdmin} />
+        <Box my={5} px={5} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button onClick={() => handleAddAdmin()}>Add Admin</Button>
         </Box>
       </Box>
       <Snackbar
