@@ -16,7 +16,7 @@ interface SettingsContextType {
   changeCurrRoster: (event: SelectChangeEvent) => Promise<void>
   changeSurveyAvailability: () => Promise<void>
   removeAdmin: (admin: Admin) => void
-  addAdmin: () => void
+  addAdmin: (admin: Admin) => void
   addSemester: (selectedSeason: string, year: string) => void
   setSemesterAdded: (value: React.SetStateAction<boolean>) => void
 }

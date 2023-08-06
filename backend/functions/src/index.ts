@@ -7,6 +7,7 @@ import {
   checkIsAuthorized,
   checkIsAuthorizedFromToken,
   logReqBody,
+  getAllAllowedUsers,
 } from './middleware/auth-middleware'
 import { unless } from './middleware/unless'
 import { db } from './config'
@@ -97,14 +98,6 @@ export const removeAllowedUser = async (email: string) => {
       e.name = 'processing_err'
       throw e
     })
-}
-
-/** Get all administrative users */
-export const getAllAllowedUsers = async () => {
-  const adminCollection = await adminRef.get()
-  return adminCollection.docs.map((adminDoc) => {
-    return adminDoc.data()
-  })
 }
 
 app.post('/admin', (req, res) => {

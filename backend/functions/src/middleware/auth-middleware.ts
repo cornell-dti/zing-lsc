@@ -1,25 +1,22 @@
+import QueryDocumentSnapshot = firestore.QueryDocumentSnapshot
+
 const { db } = require('../config')
 import * as admin from 'firebase-admin'
 import { Request, Response, NextFunction } from 'express'
 import { logger } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
-import QuerySnapshot = firestore.QuerySnapshot
+import DocumentData = firestore.DocumentData
 
 // get data in global scope so this is shared across all function invocations:
 // retrieves the allowed users in the database
-function getAllowedUsers() {
-  const users: string[] = []
-  db.collection('allowed_users')
-    .get()
-    .then((querySnapshot: QuerySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        users.push(doc.id)
-      })
-    })
-  return users
+export async function getAllAllowedUsers() {
+  const adminCollection = await db.collection('allowed_users').get()
+  return adminCollection.docs.map(
+    (adminDoc: QueryDocumentSnapshot<DocumentData>) => {
+      return adminDoc.data()
+    }
+  )
 }
-
-const allowedUsers = getAllowedUsers()
 
 // function courtesy of https://itnext.io/how-to-use-firebase-auth-with-a-custom-node-backend-99a106376c8a
 // checks if valid based on the auth token in firebase admin
@@ -64,7 +61,10 @@ export async function checkIsAuthorizedFromToken(
   logger.info(
     `${req.method} request on endpoint ${req.originalUrl} called by user ${user.displayName} with uid ${user.uid}`
   )
-  return !!(user.email && allowedUsers.includes(user.email))
+  const allowedUsersEmails = (await getAllAllowedUsers()).map(
+    (user: DocumentData) => user.email
+  )
+  return user.email && allowedUsersEmails.includes(user.email)
 }
 
 export function checkIsAuthorized(

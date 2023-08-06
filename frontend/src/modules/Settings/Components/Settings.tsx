@@ -1,6 +1,7 @@
 import { DropdownSelect } from '@core'
 import {
   Box,
+  Button,
   Grid,
   IconButton,
   SelectChangeEvent,
@@ -12,15 +13,13 @@ import {
 import MenuItem from '@mui/material/MenuItem'
 import AddIcon from '@mui/icons-material/Add'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { DASHBOARD_PATH } from '@core'
 import { ReactComponent as LogoImg } from '@assets/img/lscicon.svg'
 import { AccountMenu } from 'Dashboard/Components/AccountMenu'
-import { API_ROOT, COURSE_API, SETTINGS_API } from '@core/Constants'
 import { AdministratorsTable } from './AdministratorsTable'
-import { Admin } from './types'
-import axios from 'axios'
+import AddAdminModal from './AddAdminModal'
 import { useSettingsValue } from '@context/SettingsContext'
 import { useCourseValue } from '@context/CourseContext'
 
@@ -30,7 +29,6 @@ export const Settings = () => {
     surveyState,
     administrators,
     semesterAdded,
-
     setCurrRoster,
     changeCurrRoster,
     changeSurveyAvailability,
@@ -49,12 +47,23 @@ export const Settings = () => {
     String(new Date().getFullYear()).substring(2, 4)
   )
 
+  const [openAddAdmin, setOpenAddAdmin] = useState(false)
+  const handleAddAdmin = () => {
+    setOpenAddAdmin(true)
+  }
+  const handleCloseAdmin = () => setOpenAddAdmin(false)
+
   return (
     <Box
       sx={{
         p: '0 5%',
       }}
     >
+      <AddAdminModal
+        open={openAddAdmin}
+        handleClose={handleCloseAdmin}
+        addAdmin={addAdmin}
+      />
       <Box
         sx={{
           width: '100%',
@@ -235,11 +244,10 @@ export const Settings = () => {
         >
           Administrators
         </Box>
-        <AdministratorsTable
-          data={administrators}
-          removeAdmin={removeAdmin}
-          addAdmin={addAdmin}
-        />
+        <AdministratorsTable data={administrators} removeAdmin={removeAdmin} />
+        <Box my={5} px={5} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button onClick={() => handleAddAdmin()}>Add Admin</Button>
+        </Box>
       </Box>
       <Snackbar
         open={semesterAdded}

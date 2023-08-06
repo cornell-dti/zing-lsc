@@ -7,9 +7,9 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import { DeleteOutline, Edit } from '@mui/icons-material'
+import { DeleteOutline, Undo } from '@mui/icons-material'
 import { colors } from '@core'
-import { Box } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { AllowedUsers, Admin } from './types'
 
 const StyledTableCell = styled(TableCell)(() => ({
@@ -32,11 +32,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }))
 
-export const AdministratorsTable = ({
-  data,
-  removeAdmin,
-  addAdmin,
-}: AllowedUsers) => {
+export const AdministratorsTable = ({ data, removeAdmin }: AllowedUsers) => {
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [isDeletingRow, setIsDeletingRow] = useState<Admin>()
 
@@ -50,11 +46,15 @@ export const AdministratorsTable = ({
     }
   }
 
+  const undoDelete = () => {
+    setIsDeleting(false)
+    setIsDeletingRow(undefined)
+  }
+
   return (
     <Box
       sx={{
         m: 'auto',
-        mb: 6,
         pt: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -77,43 +77,49 @@ export const AdministratorsTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((admin) => (
-              <StyledTableRow key={admin.email}>
+            {data.map((row) => (
+              <StyledTableRow key={row.email}>
                 <StyledTableCell>
-                  {admin.name ? admin.name : 'Administrator Name'}
+                  {row.name ? row.name : 'Administrator Name'}
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
-                  {admin.email}
+                  {row.email}
                 </StyledTableCell>
-                <StyledTableCell
-                  sx={{
-                    width: 150,
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <DeleteOutline
-                    color={
-                      isDeleting && admin === isDeletingRow
-                        ? 'warning'
-                        : 'action'
-                    }
-                    onClick={() => {
-                      confirmDelete(admin)
-                    }}
+                {isDeleting && row === isDeletingRow ? (
+                  <StyledTableCell>
+                    <Button
+                      onClick={() => confirmDelete(row)}
+                      sx={{ right: 20 }}
+                    >
+                      Delete
+                    </Button>
+                    <Undo
+                      onClick={() => undoDelete()}
+                      sx={{
+                        '&:hover': { scale: '1.2', cursor: 'pointer' },
+                      }}
+                    />
+                  </StyledTableCell>
+                ) : (
+                  <StyledTableCell
                     sx={{
-                      '&:hover': { scale: '1.2', cursor: 'pointer' },
+                      width: 150,
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
                     }}
-                  />
-                  <Edit
-                    color="action"
-                    onClick={addAdmin}
-                    sx={{
-                      '&:hover': { scale: '1.2', cursor: 'pointer' },
-                    }}
-                  />
-                </StyledTableCell>
+                  >
+                    <DeleteOutline
+                      color={'action'}
+                      onClick={() => {
+                        confirmDelete(row)
+                      }}
+                      sx={{
+                        '&:hover': { scale: '1.2', cursor: 'pointer' },
+                      }}
+                    />
+                  </StyledTableCell>
+                )}
               </StyledTableRow>
             ))}
           </TableBody>
