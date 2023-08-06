@@ -150,8 +150,15 @@ const App = () => {
       .catch((err) => console.log(err))
   }
 
-  // TODO: allow to edit admin information
-  const addAdmin = () => {}
+  const addAdmin = (admin: Admin) => {
+    axios
+      .post(`${API_ROOT}/admin`, admin)
+      .then(() => {
+        administrators.push(admin)
+        loadAdministrators()
+      })
+      .catch((err) => console.log(err))
+  }
 
   const [semesterAdded, setSemesterAdded] = useState<boolean>(false)
   const addSemester = (selectedSeason: string, year: string) => {
