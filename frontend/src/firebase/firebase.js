@@ -40,9 +40,13 @@ export async function signInWithMicrosoft() {
 }
 
 export async function adminSignIn() {
-  await signInWithMicrosoft().then((res) => {
-    window.localStorage.setItem('authToken', res)
-  })
+  await signInWithMicrosoft()
+    .then((res) => {
+      window.localStorage.setItem('authToken', res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
 
 export function logOut() {

@@ -5,5 +5,10 @@ export interface Admin {
 export interface AllowedUsers {
   data: Admin[]
   removeAdmin: (admin: Admin) => void
-  addAdmin: () => void
+}
+
+export interface AddAdminProp {
+  open: boolean
+  handleClose: () => void
+  addAdmin: (arg: Admin) => void
 }
