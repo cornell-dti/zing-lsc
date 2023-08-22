@@ -13,8 +13,8 @@ export const SETTINGS_PATH = '/settings'
 // See https://create-react-app.dev/docs/adding-custom-environment-variables/
 export const API_ROOT =
   process.env.NODE_ENV === 'production'
-    ? 'https://us-central1-zing-lsc.cloudfunctions.net/api'
-    : 'http://localhost:5001/zing-lsc/us-central1/api'
+    ? 'https://us-central1-zing-lsc-prod.cloudfunctions.net/api'
+    : 'http://localhost:5001/zing-lsc-prod/us-central1/api'
 
 export const INSTRUCTOR_API = '/instructor'
 export const COURSE_API = '/course'
@@ -22,4 +22,4 @@ export const MATCHING_API = '/matching'
 export const STUDENT_API = '/student'
 export const SETTINGS_API = '/settings'
 
-export const TEMPLATES_BUCKET = 'gs://zing-lsc-templates'
+export const TEMPLATES_BUCKET = 'gs://zing-lsc-prod-templates'

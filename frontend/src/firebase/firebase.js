@@ -7,12 +7,19 @@ import {
   signInWithPopup,
 } from 'firebase/auth'
 import { getStorage, connectStorageEmulator } from 'firebase/storage'
+import { getAnalytics } from 'firebase/analytics'
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check'
 import { initializeApp } from 'firebase/app'
 import { TEMPLATES_BUCKET } from '@core/Constants'
 
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth()
 export const templatesBucket = getStorage(app, TEMPLATES_BUCKET)
+export const analytics = getAnalytics()
+export const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider('6LfNRkUgAAAAALo7-SlTkcXBZhbfPZhN44_pAkYv'),
+  isTokenAutoRefreshEnabled: true,
+})
 
 // function attempting to sign in with Google
 export async function signInWithGoogle() {
