@@ -11,7 +11,7 @@ const modifyTime = Timestamp.fromDate(new Date('2022-08-08T19:20:56Z'))
 // In production the TEST part of the subject will be manually removed
 const templates: FirestoreEmailTemplate[] = [
   {
-    id: 'share-match',
+    id: '0share-match',
     name: 'Matching',
     type: 'group',
     subject: 'TEST Study Partners!',
@@ -35,7 +35,7 @@ const templates: FirestoreEmailTemplate[] = [
     modifyTime,
   },
   {
-    id: 'check-in',
+    id: '1check-in',
     name: 'Check-in with group',
     type: 'group',
     subject: 'TEST Checking in about your study group',
