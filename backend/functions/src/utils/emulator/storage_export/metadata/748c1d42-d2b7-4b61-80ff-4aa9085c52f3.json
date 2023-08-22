@@ -1,0 +1,20 @@
+{
+  "name": "introduce-new-student.html",
+  "bucket": "zing-lsc-templates",
+  "metageneration": 2,
+  "generation": 1682365703237,
+  "contentType": "text/html",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "cacheControl": "public, max-age=3600",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "c7ea2fc3-f0d2-4531-b1df-6fe79532ba08"
+  ],
+  "etag": "jpuNdqAYI1kiPv43Z5dWqeid8Ls",
+  "timeCreated": "2023-04-24T19:48:23.236Z",
+  "updated": "2023-04-25T04:01:59.521Z",
+  "size": 1729,
+  "md5Hash": "MxjICQYCfBJApFt7aaqx1A==",
+  "crc32c": "262773466"
+}

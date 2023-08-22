@@ -1,7 +1,7 @@
 # Secrets
 .env
 service-account.json
-
+backend/functions/service-account-prod.json
 # extra packages
 node_modules
 
