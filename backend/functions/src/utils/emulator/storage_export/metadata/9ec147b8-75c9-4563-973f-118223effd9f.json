@@ -1,0 +1,20 @@
+{
+  "name": "check-in.html",
+  "bucket": "zing-lsc-templates",
+  "metageneration": 2,
+  "generation": 1682365703240,
+  "contentType": "text/html",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "cacheControl": "public, max-age=3600",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "27070818-367d-4562-9a33-e9186b65ea60"
+  ],
+  "etag": "j0EVQQJDQfGqqFzbYsijOLL3aqQ",
+  "timeCreated": "2023-04-24T19:48:23.239Z",
+  "updated": "2023-04-25T04:01:59.540Z",
+  "size": 716,
+  "md5Hash": "gdDZGCC4Ckz8nJ49S7Jw7w==",
+  "crc32c": "1407986870"
+}
