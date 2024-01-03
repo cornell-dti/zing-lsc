@@ -185,7 +185,7 @@ export const Dashboard = () => {
     })
   }
 
-  const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
+  const [selectedRoster, setSelectedRoster] = useState<string>('')
 
   const initSelectedRoster = async () => {
     await axios
