@@ -32,7 +32,7 @@ export const StepBegin = ({
   }
 
   const [isValidEmail, setIsValidEmail] = React.useState(true)
-  const validEmail = /^\w+@cornell.edu$/
+  const validEmail = /^\w+@cornell\.edu$/
 
   return (
     <Box
