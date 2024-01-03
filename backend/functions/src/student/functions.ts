@@ -112,7 +112,7 @@ export const addStudentSurveyResponse = async (
   }
 
   // 0. Check if email is valid cornell.edu email.
-  const emailRegex = /^\w+@cornell.edu$/
+  const emailRegex = /^\w+@cornell\.edu$/
   // if true => valid email. if false => invalid email.
   const validEmail = emailRegex.test(email)
   if (!validEmail) {
