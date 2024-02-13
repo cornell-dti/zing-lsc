@@ -297,7 +297,9 @@ export const Metrics = () => {
           <MenuItem value="WI23">Winter 2023</MenuItem>
           <MenuItem value="SP23">Spring 2023</MenuItem>
           <MenuItem value="SU23">Summer 2023</MenuItem>
-          <MenuItem value="WI24:">Winter 2024</MenuItem>
+          <MenuItem value="FA23">Fall 2023</MenuItem>
+          <MenuItem value="WI24">Winter 2024</MenuItem>
+          <MenuItem value="SP24">Spring 2024</MenuItem>
         </DropdownSelect>
       </Box>
       <MetricsTable
