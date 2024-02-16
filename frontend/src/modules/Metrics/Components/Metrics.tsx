@@ -12,9 +12,11 @@ import { DASHBOARD_PATH } from '@core/Constants'
 import { Link } from 'react-router-dom'
 import { GroupMembership } from '@core'
 import survey from '@core/Questions/Questions.json'
+import { useSettingsValue } from '@context/SettingsContext'
 
 export const Metrics = () => {
-  const { courses } = useCourseValue()
+  const { currRoster } = useSettingsValue()
+  const { courses, semesters } = useCourseValue()
   const { students } = useStudentValue()
 
   //checks if date is within the week (beginning of the day Sunday to end of day Saturday)
@@ -46,7 +48,7 @@ export const Metrics = () => {
     )
   }
 
-  const [selectedRoster, setSelectedRoster] = useState<string>('SP23')
+  const [selectedRoster, setSelectedRoster] = useState<string>(currRoster)
   const studentsInSemester = new Map<
     string,
     { semester: string; groups: GroupMembership[]; college: string }
@@ -292,13 +294,11 @@ export const Metrics = () => {
             alignSelf: 'flex-end',
           }}
         >
-          <MenuItem value="SU22">Summer 2022</MenuItem>
-          <MenuItem value="FA22">Fall 2022</MenuItem>
-          <MenuItem value="WI23">Winter 2023</MenuItem>
-          <MenuItem value="SP23">Spring 2023</MenuItem>
-          <MenuItem value="SU23">Summer 2023</MenuItem>
-          <MenuItem value="FA23">Fall 2023</MenuItem>
-          <MenuItem value="WI24:">Winter 2024</MenuItem>
+          {semesters.map((sem) => (
+            <MenuItem key={sem} value={sem}>
+              {sem}
+            </MenuItem>
+          ))}
         </DropdownSelect>
       </Box>
       <MetricsTable
