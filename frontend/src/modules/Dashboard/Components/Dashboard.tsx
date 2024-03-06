@@ -70,7 +70,7 @@ export const Dashboard = () => {
   )
   //Helper function to check if a given course has any groups without check-in emails
   function hasUnsentCheckIns(c: Course) {
-    return c.groups.some((group) => !group.templateTimestamps['check-in'])
+    return c.groups.some((group) => !group.templateTimestamps['1check-in'])
   }
 
   //Helper function that returns true if the student doesn't have a no match email
