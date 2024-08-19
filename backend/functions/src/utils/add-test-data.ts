@@ -6,14 +6,14 @@ const selectCollege = () => {
     'CALS',
     'AAP',
     'A&S',
-    'Engineering',
-    'HumEc',
-    'Dyson',
-    'Nolan',
+    'BUAG',
+    'SHA',
+    'ENG',
+    'CIS',
+    'CHE',
     'ILR',
     'SCE',
-    'Grad School',
-    'Brooks',
+    'SPP',
   ]
   return colleges[Math.floor(Math.random() * colleges.length)]
 }
