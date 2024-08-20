@@ -4,16 +4,16 @@
     "questionId": "college",
     "answers": {
       "CALS": "College of Agriculture and Life Sciences",
-      "AAP": "College of Architecture, Art, and Planning",
-      "A&S": "College of Arts and Sciences",
-      "Engineering": "College of Engineering",
-      "HumEc": "College of Human Ecology",
-      "Dyson": "Dyson School of Applied Economics and Management (SC Johnson College of Business)",
-      "Nolan": "Nolan School of Hotel Administration (SC Johnson College of Business)",
-      "ILR": "School of Industrial and Labor Relations",
+      "AAP": "College of Architecture Art and Planning",
+      "A&S": "College of Arts and Science",
+      "BUAG": "SC Johnson School of Business-Dyson AEM",
+      "SHA": "SC Johnson School of Business-Nolan Hotel",
+      "CIS": "Bowers School of Computing and Information Science",
+      "ENG": "College of Engineering",
+      "CHE": "College of Human Ecology",
+      "ILR": "School of Industrial Labor Relations",
       "SCE": "School of Continuing Education & Summer Sessions",
-      "Grad School": "Graduate/Professional School",
-      "Brooks": "Brooks School of Public Policy"
+      "SPP": "Brooks School of Public Policy"
     }
   },
   {
