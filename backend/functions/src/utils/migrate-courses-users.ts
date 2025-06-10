@@ -1,6 +1,6 @@
 import admin from 'firebase-admin'
-import * as fs from 'fs' // Import the 'fs' module
-import * as path from 'path' // Import the 'path' module
+import * as fs from 'fs'
+import * as path from 'path'
 
 const BATCH_SIZE = 500 // https://firebase.google.com/docs/firestore/quotas#writes_and_transactions
 
@@ -8,7 +8,7 @@ const copyCollection = async (
   db: admin.firestore.Firestore,
   sourceName: string,
   targetName: string,
-  recursive = false // Added recursive parameter
+  recursive = false
 ) => {
   const sourceCollection = db.collection(sourceName)
   const targetCollection = db.collection(targetName)
@@ -122,11 +122,11 @@ const main = async () => {
 
   const db = admin.firestore()
 
-  await copyCollection(db, 'courses', 'archivedCourses', true) // Enabled recursive copy
+  await copyCollection(db, 'courses', 'archivedCourses', true)
   console.log('[INFO] Starting to clear courses...')
   await clearCollection(db, 'courses', true)
   console.log('[INFO] Copying users collection...')
-  await copyCollection(db, 'students', 'archivedStudents', true) // Enabled recursive copy
+  await copyCollection(db, 'students', 'archivedStudents', true)
   console.log('[INFO] Starting to clear students...')
   await clearCollection(db, 'students', true)
 }
