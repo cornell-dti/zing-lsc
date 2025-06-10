@@ -123,10 +123,10 @@ const main = async () => {
   const db = admin.firestore()
 
   await copyCollection(db, 'courses', 'archivedCourses', true)
-  console.log('[INFO] Starting to clear courses...')
-  await clearCollection(db, 'courses', true)
   console.log('[INFO] Copying users collection...')
   await copyCollection(db, 'students', 'archivedStudents', true)
+  console.log('[INFO] Starting to clear courses...')
+  await clearCollection(db, 'courses', true)
   console.log('[INFO] Starting to clear students...')
   await clearCollection(db, 'students', true)
 }
