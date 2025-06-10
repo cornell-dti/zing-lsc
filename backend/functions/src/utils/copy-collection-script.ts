@@ -2,21 +2,21 @@ import admin from 'firebase-admin'
 import * as fs from 'fs'
 import * as path from 'path'
 import { copyCollection } from './copyCollection'
-import { clearCollection } from './clearCollection'
 
 const main = async () => {
   const args = process.argv.slice(2)
 
-  const [serviceAccountPathArg] = args
+  const [serviceAccountPathArg, sourceName, targetName, recursiveArg] = args
 
-  if (!serviceAccountPathArg) {
+  if (!serviceAccountPathArg || !sourceName || !targetName) {
     console.error(
-      'Usage: node migrate-courses-users.js <path_to_service_account_json>'
+      'Usage: node copy-collection-script.js <path_to_service_account_json> <source_collection_name> <target_collection_name> [recursive]'
     )
     process.exit(1) // Exit if arguments are missing
   }
 
   const serviceAccountPath = path.resolve(process.cwd(), serviceAccountPathArg)
+  const recursive = recursiveArg === 'true'
 
   const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'))
 
@@ -26,13 +26,7 @@ const main = async () => {
 
   const db = admin.firestore()
 
-  await copyCollection(db, 'courses', 'archivedCourses', true)
-  console.log('[INFO] Copying users collection...')
-  await copyCollection(db, 'students', 'archivedStudents', true)
-  console.log('[INFO] Starting to clear courses...')
-  await clearCollection(db, 'courses', true)
-  console.log('[INFO] Starting to clear students...')
-  await clearCollection(db, 'students', true)
+  await copyCollection(db, sourceName, targetName, recursive)
 }
 
 main()

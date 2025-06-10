@@ -17,7 +17,8 @@
     "prepare": "cd ../.. && husky install backend/functions/.husky",
     "populate": "export FIRESTORE_EMULATOR_HOST=\"localhost:8080\" && npx ts-node src/utils/add-test-data.ts",
     "migrate-dev": "export FIRESTORE_EMULATOR_HOST=\"localhost:8080\" && npx ts-node src/utils/migrate-courses-users.ts",
-    "migrate": "npx ts-node src/utils/migrate-courses-users.ts"
+    "copy-collection": "npx ts-node src/utils/copy-collection-script.ts",
+    "clear-collection": "npx ts-node src/utils/clear-collection-script.ts"
   },
   "dependencies": {
     "axios": "^0.21.1",
