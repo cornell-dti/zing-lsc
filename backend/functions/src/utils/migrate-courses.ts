@@ -1,7 +1,14 @@
-import { db } from '../config'
+import admin from 'firebase-admin'
+import * as fs from 'fs' // Import the 'fs' module
+import * as path from 'path' // Import the 'path' module
+
 const BATCH_SIZE = 500 // https://firebase.google.com/docs/firestore/quotas#writes_and_transactions
 
-const copyCollection = async (sourceName: string, targetName: string) => {
+const copyCollection = async (
+  db: admin.firestore.Firestore,
+  sourceName: string,
+  targetName: string
+) => {
   const sourceCollection = db.collection(sourceName)
   const targetCollection = db.collection(targetName)
 
@@ -40,7 +47,10 @@ const copyCollection = async (sourceName: string, targetName: string) => {
   )
 }
 
-const clearCollection = async (sourceName: string) => {
+const clearCollection = async (
+  db: admin.firestore.Firestore,
+  sourceName: string
+) => {
   const sourceCollection = db.collection(sourceName)
   const snapshot = await sourceCollection.get()
   let deleted = 0
@@ -65,16 +75,31 @@ const clearCollection = async (sourceName: string) => {
 
 const main = async () => {
   const args = process.argv.slice(2)
-  const [sourceName, targetName] = args
 
-  if (!sourceName || !targetName)
+  const [serviceAccountPathArg] = args
+  const sourceName = 'courses'
+  const targetName = 'archivedCourses'
+
+  if (!serviceAccountPathArg) {
     console.error(
-      'Usage: node migrate-courses.js <old_collection_name> <new_collection_name>'
+      'Usage: node migrate-courses.js <path_to_service_account_json>'
     )
+    process.exit(1) // Exit if arguments are missing
+  }
 
-  await copyCollection(sourceName, targetName)
+  const serviceAccountPath = path.resolve(process.cwd(), serviceAccountPathArg)
+
+  const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'))
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  })
+
+  const db = admin.firestore()
+
+  await copyCollection(db, sourceName, targetName)
   console.log('[INFO] Starting to clear collection...')
-  await clearCollection(sourceName)
+  await clearCollection(db, sourceName)
 }
 
 main()
