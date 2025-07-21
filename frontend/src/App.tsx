@@ -58,6 +58,30 @@ import { CourseProvider, StudentProvider } from '@context'
 import { TemplateProvider } from '@context/TemplateContext'
 import { Settings } from 'Settings'
 import { SettingsProvider } from '@context/SettingsContext'
+import { DBSchema, IDBPDatabase, openDB } from 'idb'
+
+interface ZingCache extends DBSchema {
+  meta: {
+    key: string // 'students', 'courses'; stores metadata like when db was last updated for each data type
+    value: {
+      lastUpdated: number
+    }
+  }
+
+  /**
+   * students and courses use auto-incremented keys
+   */
+
+  students: {
+    key: number
+    value: Student
+  }
+
+  courses: {
+    key: number
+    value: Course
+  }
+}
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -70,6 +94,34 @@ const App = () => {
 
   const [currRoster, setCurrRoster] = useState<string>('')
   const [hasLoadedCurrRoster, setHasLoadedCurrRoster] = useState<boolean>(false)
+
+  const [cache, setCache] = useState<IDBPDatabase<ZingCache> | null>(null)
+
+  /**
+   * initializes access to an indexedDB on user's browser
+   * @returns {true} if cache was just created (meaning that it is empty and not synced with latest data)
+   */
+  const setupCache = async (): Promise<[boolean, IDBPDatabase<ZingCache>]> => {
+    let upgraded = false
+    const db = await openDB<ZingCache>('zing-cache', 1, {
+      upgrade(db) {
+        // only runs if database has not been created on user's machine
+        db.createObjectStore('meta')
+
+        db.createObjectStore('students', {
+          autoIncrement: true,
+        })
+
+        db.createObjectStore('courses', {
+          autoIncrement: true,
+        })
+
+        upgraded = true
+        const now = Date.now()
+      },
+    })
+    return [upgraded, db]
+  }
 
   const loadCurrRoster = () => {
     axios.get(`${API_ROOT}${SETTINGS_API}/semester/current`).then(
@@ -263,22 +315,76 @@ const App = () => {
   const [courses, setCourses] = useState<Course[]>([])
   const [semesters, setSemesters] = useState<string[]>([])
 
-  const loadCourses = () => {
-    axios.get(`${API_ROOT}${COURSE_API}`).then(
-      (res) => {
-        setCourses(res.data.map(responseCourseToCourse))
-        // TODO: MOVE THIS TO ITS OWN CONTEXT
-        axios.get(`${API_ROOT}${SETTINGS_API}/semester/all`).then((res) => {
-          setHasLoadedCourses(true)
-          setSemesters(res.data.sort(sortSemesters))
-        })
-      },
-      (error) => {
-        console.log(error)
-        setNetworkError(error.message)
-      }
-    )
+  const getCache = async (): Promise<[boolean, IDBPDatabase<ZingCache>]> => {
+    if (cache) return [false, cache]
+    else {
+      const [newlyCreated, newCache] = await setupCache()
+      setCache(cache)
+      if (newlyCreated) console.log('created new cache')
+      else console.log('loaded existing cache')
+      return [newlyCreated, newCache]
+    }
   }
+
+  const loadCourses = () => {
+    const fetchCourses = () => {
+      console.log('fetching courses...')
+      axios.get(`${API_ROOT}${COURSE_API}`).then(
+        (res) => {
+          const loadedCourses = res.data.map(responseCourseToCourse) as Course[]
+          setCourses(loadedCourses)
+          console.log('course data loaded from API', loadedCourses)
+          axios.get(`${API_ROOT}${SETTINGS_API}/semester/all`).then((res) => {
+            setHasLoadedCourses(true)
+            setSemesters(res.data.sort(sortSemesters))
+          })
+        },
+        (error) => {
+          console.log(error)
+          setNetworkError(error.message)
+        }
+      )
+    }
+
+    getCache()
+      .then(([newlyLoaded, loadedCache]) => {
+        if (!newlyLoaded) {
+          loadedCache
+            .getAll('courses')
+            .then((cachedCourses) => {
+              setCourses(cachedCourses)
+              setHasLoadedCourses(true)
+              console.log('courses loaded from cache', cachedCourses)
+              fetchCourses()
+            })
+            .catch((e: unknown) => {
+              console.log('failed to get courses from cache', e)
+              fetchCourses()
+            })
+        } else {
+          console.log('cache newly loaded')
+          fetchCourses()
+        }
+      })
+      .catch((e: unknown) => {
+        console.log('failed to load cache', e)
+        fetchCourses()
+      })
+  }
+
+  useEffect(() => {
+    if (hasLoadedCourses) {
+      getCache().then(([, loadedCache]) => {
+        console.log('updating courses cache with', courses)
+        loadedCache.clear('courses')
+        for (const course of courses) {
+          loadedCache.add('courses', course)
+        }
+        loadedCache.put('meta', { lastUpdated: Date.now() }, 'courses')
+        console.log('cache updated')
+      })
+    }
+  }, [courses, hasLoadedCourses])
 
   // Application-wide students are only loaded when user is authorized
   const [hasLoadedStudents, setHasLoadedStudents] = useState(false)
@@ -287,7 +393,8 @@ const App = () => {
   const loadStudents = () => {
     axios.get(`${API_ROOT}${STUDENT_API}`).then(
       (res) => {
-        setStudents(res.data.map(responseStudentToStudent))
+        const students = res.data.map(responseStudentToStudent) as Student[]
+        setStudents(students)
         setHasLoadedStudents(true)
       },
       (error) => {

@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { addStudentSurveyResponse } from '../student/functions'
 require('dotenv').config({ path: '../.env' })
 
@@ -38,31 +39,77 @@ const getRandomSample = (arr: string[], n: number) => {
   return result
 }
 
-const selectClasses = (numClasses = 3) => {
-  const classes = [
+const generateRandomString = (length: number) => {
+  let result = ''
+  const characters = 'abcdefghijklmnopqrstuvwxyz'
+  const charactersLength = characters.length
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  }
+  return result
+}
+
+const generateRandomNumber = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+const getRandomClasses = async (count: number) => {
+  const subjects = [
+    'CS',
+    'INFO',
+    'ECON',
+    'MATH',
+    'PHYS',
+    'PHIL',
+    'MUSIC',
+    'LING',
+  ]
+
+  const possibleCourses = await Promise.all(
+    subjects.map(async (subject) => {
+      const res = await axios.get(
+        `https://classes.cornell.edu/api/2.0/search/classes.json?roster=SP23&subject=${subject}`
+      )
+      return res.data.data.classes.map(
+        (cls: { subject: string; catalogNbr: string }) => {
+          return `${cls.subject} ${cls.catalogNbr}`
+        }
+      )
+    })
+  )
+  const flattenedCourses = possibleCourses.flat()
+  console.log('course count:', flattenedCourses.length)
+  return getRandomSample(flattenedCourses, count)
+}
+
+const selectClasses = (numClasses = 3, classes: string[]) => {
+  return getRandomSample(classes, numClasses)
+}
+
+const generateRandomCUEmail = () => {
+  const randomString = generateRandomString(3)
+  const randomNumberCount = generateRandomNumber(1, 3)
+  let randomNumber = ''
+  for (let i = 0; i < randomNumberCount; i++) {
+    randomNumber += generateRandomNumber(0, 9).toString()
+  }
+  return `${randomString}${randomNumber}@cornell.edu`
+}
+
+// function takes all the allowed users
+const addTestStudents = async (numStudents: number, numCourses: number) => {
+  const users = Array.from({ length: numStudents }, () =>
+    generateRandomCUEmail()
+  )
+
+  const classes: string[] = [
     'CS 1110',
     'CS 2110',
     'INFO 1300',
     'ECON 1110',
     'MATH 1920',
     'PHYS 2213',
-  ]
-  return getRandomSample(classes, numClasses)
-}
-
-// function takes all the allowed users
-const addTestStudents = async () => {
-  const users = [
-    'mml267@cornell.edu',
-    'cl859@cornell.edu',
-    'bt283@cornell.edu',
-    'cww72@cornell.edu',
-    'jjw255@cornell.edu',
-    'pak226@cornell.edu',
-    'ml953@cornell.edu',
-    'jk2338@cornell.edu',
-    'rg779@cornell.edu',
-  ]
+  ].concat(...(await getRandomClasses(numCourses)))
 
   await Promise.all(
     users.map((email) =>
@@ -71,7 +118,7 @@ const addTestStudents = async () => {
         email,
         selectCollege(),
         selectYear(),
-        selectClasses(),
+        selectClasses(3, classes),
         true
       )
         .then(() => {
@@ -84,6 +131,6 @@ const addTestStudents = async () => {
   )
 }
 
-addTestStudents()
+addTestStudents(1000, 100)
 
 module.exports = addTestStudents
