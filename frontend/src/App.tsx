@@ -61,25 +61,9 @@ import { SettingsProvider } from '@context/SettingsContext'
 import { DBSchema, IDBPDatabase, openDB } from 'idb'
 
 interface ZingCache extends DBSchema {
-  meta: {
-    key: string // 'students', 'courses'; stores metadata like when db was last updated for each data type
-    value: {
-      lastUpdated: number
-    }
-  }
-
-  /**
-   * students and courses use auto-incremented keys
-   */
-
-  students: {
+  snapshot: {
     key: number
-    value: Student
-  }
-
-  courses: {
-    key: number
-    value: Course
+    value: { students: Student[]; courses: Course[]; lastUpdated: number }
   }
 }
 
@@ -106,18 +90,8 @@ const App = () => {
     const db = await openDB<ZingCache>('zing-cache', 1, {
       upgrade(db) {
         // only runs if database has not been created on user's machine
-        db.createObjectStore('meta')
-
-        db.createObjectStore('students', {
-          autoIncrement: true,
-        })
-
-        db.createObjectStore('courses', {
-          autoIncrement: true,
-        })
-
+        db.createObjectStore('snapshot', { autoIncrement: true })
         upgraded = true
-        const now = Date.now()
       },
     })
     return [upgraded, db]
@@ -346,23 +320,24 @@ const App = () => {
       )
     }
 
-    getCache()
+    getCache() // load cache first when loading courses; after cache obtained, query api
       .then(([newlyLoaded, loadedCache]) => {
         if (!newlyLoaded) {
           loadedCache
-            .getAll('courses')
-            .then((cachedCourses) => {
-              setCourses(cachedCourses)
-              setHasLoadedCourses(true)
-              console.log('courses loaded from cache', cachedCourses)
+            .getAll('snapshot')
+            .then((snapshots) => {
+              const firstSnapshot = snapshots.at(0)
+              if (firstSnapshot) {
+                const cachedCourses = firstSnapshot.courses
+                setCourses(cachedCourses)
+              }
               fetchCourses()
             })
-            .catch((e: unknown) => {
-              console.log('failed to get courses from cache', e)
-              fetchCourses()
-            })
+            .catch((e: unknown) =>
+              console.error('error while loading cache', e)
+            )
         } else {
-          console.log('cache newly loaded')
+          console.log('created new IndexedDB cache')
           fetchCourses()
         }
       })
@@ -372,37 +347,65 @@ const App = () => {
       })
   }
 
-  useEffect(() => {
-    if (hasLoadedCourses) {
-      getCache().then(([, loadedCache]) => {
-        console.log('updating courses cache with', courses)
-        loadedCache.clear('courses')
-        for (const course of courses) {
-          loadedCache.add('courses', course)
-        }
-        loadedCache.put('meta', { lastUpdated: Date.now() }, 'courses')
-        console.log('cache updated')
-      })
-    }
-  }, [courses, hasLoadedCourses])
-
   // Application-wide students are only loaded when user is authorized
   const [hasLoadedStudents, setHasLoadedStudents] = useState(false)
   const [students, setStudents] = useState<Student[]>([])
 
   const loadStudents = () => {
-    axios.get(`${API_ROOT}${STUDENT_API}`).then(
-      (res) => {
-        const students = res.data.map(responseStudentToStudent) as Student[]
-        setStudents(students)
-        setHasLoadedStudents(true)
-      },
-      (error) => {
-        console.log(error)
-        setNetworkError(error.message)
-      }
-    )
+    const fetchStudents = () => {
+      axios.get(`${API_ROOT}${STUDENT_API}`).then(
+        (res) => {
+          const students = res.data.map(responseStudentToStudent) as Student[]
+          setStudents(students)
+          setHasLoadedStudents(true)
+        },
+        (error) => {
+          console.log(error)
+          setNetworkError(error.message)
+        }
+      )
+    }
+
+    getCache() // load cache first when loading courses; after cache obtained, query api
+      .then(([newlyLoaded, loadedCache]) => {
+        if (!newlyLoaded) {
+          loadedCache
+            .getAll('snapshot')
+            .then((snapshots) => {
+              const firstSnapshot = snapshots.at(0)
+              if (firstSnapshot) {
+                const cachedStudents = firstSnapshot.students
+                setStudents(cachedStudents)
+              }
+              fetchStudents()
+            })
+            .catch((e: unknown) =>
+              console.error('error while loading cache', e)
+            )
+        } else {
+          console.log('cache newly loaded')
+          fetchStudents()
+        }
+      })
+      .catch((e: unknown) => {
+        console.log('failed to load cache', e)
+        fetchStudents()
+      })
   }
+
+  useEffect(() => {
+    if (hasLoadedCourses && hasLoadedStudents) {
+      getCache().then(([, loadedCache]) => {
+        loadedCache.clear('snapshot').then(() => {
+          loadedCache.add('snapshot', {
+            students: students,
+            courses: courses,
+            lastUpdated: Date.now(),
+          })
+        })
+      })
+    }
+  }, [courses, hasLoadedCourses, students, hasLoadedStudents])
 
   useEffect(() => {
     if (hasLoadedCourses && hasLoadedStudents) {

@@ -251,8 +251,11 @@ export const Dashboard = () => {
                 maxWidth: '250px',
               }}
             >
-              {sortOrderDisplay.map(([object, name]) => (
-                <MenuItem value={object}> {name}</MenuItem>
+              {sortOrderDisplay.map(([object, name], idx) => (
+                <MenuItem value={object} key={idx}>
+                  {' '}
+                  {name}
+                </MenuItem>
               ))}
             </DropdownSelect>
           </Box>
@@ -277,8 +280,11 @@ export const Dashboard = () => {
                 maxWidth: '250px',
               }}
             >
-              {filterOptionDisplay.map(([object, name]) => (
-                <MenuItem value={object}> {name}</MenuItem>
+              {filterOptionDisplay.map(([object, name], idx) => (
+                <MenuItem value={object} key={idx}>
+                  {' '}
+                  {name}
+                </MenuItem>
               ))}
             </DropdownSelect>
           </Box>

@@ -178,8 +178,10 @@ export const AccountMenu = ({
           mt: -1.5,
         }}
       >
-        {semesters.map((sem) => (
-          <MenuItem onClick={() => setSelectedRoster(sem)}>{sem}</MenuItem>
+        {semesters.map((sem, idx) => (
+          <MenuItem onClick={() => setSelectedRoster(sem)} key={idx}>
+            {sem}
+          </MenuItem>
         ))}
       </Menu>
     </Box>

@@ -110,24 +110,22 @@ const addTestStudents = async (numStudents: number, numCourses: number) => {
     'PHYS 2213',
   ]
 
-  await Promise.all(
-    users.map((email) =>
-      addStudentSurveyResponse(
-        email.substring(0, email.indexOf('@')),
-        email,
-        selectCollege(),
-        selectYear(),
-        selectClasses(3, classes),
-        true
-      )
-        .then(() => {
-          console.log('added successfully!')
-        })
-        .catch((err) => {
-          console.log('error adding student', err)
-        })
+  for (const email of users) {
+    await addStudentSurveyResponse(
+      email.substring(0, email.indexOf('@')),
+      email,
+      selectCollege(),
+      selectYear(),
+      selectClasses(3, classes),
+      true
     )
-  )
+      .then(() => {
+        console.log('added successfully!')
+      })
+      .catch((err) => {
+        console.log('error adding student', err)
+      })
+  }
 }
 
 addTestStudents(1000, 100)
