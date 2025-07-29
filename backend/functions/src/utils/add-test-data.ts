@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { addStudentSurveyResponse } from '../student/functions'
 require('dotenv').config({ path: '../.env' })
 
@@ -53,34 +52,34 @@ const generateRandomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-const getRandomClasses = async (count: number) => {
-  const subjects = [
-    'CS',
-    'INFO',
-    'ECON',
-    'MATH',
-    'PHYS',
-    'PHIL',
-    'MUSIC',
-    'LING',
-  ]
+// const getRandomClasses = async (count: number) => {
+//   const subjects = [
+//     'CS',
+//     'INFO',
+//     'ECON',
+//     'MATH',
+//     'PHYS',
+//     'PHIL',
+//     'MUSIC',
+//     'LING',
+//   ]
 
-  const possibleCourses = await Promise.all(
-    subjects.map(async (subject) => {
-      const res = await axios.get(
-        `https://classes.cornell.edu/api/2.0/search/classes.json?roster=SP23&subject=${subject}`
-      )
-      return res.data.data.classes.map(
-        (cls: { subject: string; catalogNbr: string }) => {
-          return `${cls.subject} ${cls.catalogNbr}`
-        }
-      )
-    })
-  )
-  const flattenedCourses = possibleCourses.flat()
-  console.log('course count:', flattenedCourses.length)
-  return getRandomSample(flattenedCourses, count)
-}
+//   const possibleCourses = await Promise.all(
+//     subjects.map(async (subject) => {
+//       const res = await axios.get(
+//         `https://classes.cornell.edu/api/2.0/search/classes.json?roster=SP23&subject=${subject}`
+//       )
+//       return res.data.data.classes.map(
+//         (cls: { subject: string; catalogNbr: string }) => {
+//           return `${cls.subject} ${cls.catalogNbr}`
+//         }
+//       )
+//     })
+//   )
+//   const flattenedCourses = possibleCourses.flat()
+//   console.log('course count:', flattenedCourses.length)
+//   return getRandomSample(flattenedCourses, count)
+// }
 
 const selectClasses = (numClasses = 3, classes: string[]) => {
   return getRandomSample(classes, numClasses)
@@ -109,7 +108,7 @@ const addTestStudents = async (numStudents: number, numCourses: number) => {
     'ECON 1110',
     'MATH 1920',
     'PHYS 2213',
-  ].concat(...(await getRandomClasses(numCourses)))
+  ]
 
   await Promise.all(
     users.map((email) =>
