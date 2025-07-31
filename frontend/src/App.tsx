@@ -286,6 +286,7 @@ const App = () => {
 
   // Application-wide courses are only loaded when user is authorized
   const [hasLoadedCourses, setHasLoadedCourses] = useState(false)
+  const [hasLoadedCachedCourses, setHasLoadedCachedCourses] = useState(false)
   const [courses, setCourses] = useState<Course[]>([])
   const [semesters, setSemesters] = useState<string[]>([])
 
@@ -295,7 +296,7 @@ const App = () => {
       const [newlyCreated, newCache] = await setupCache()
       setCache(cache)
       if (newlyCreated) console.log('created new cache')
-      else console.log('loaded existing cache')
+      else console.log('fetched existing cache')
       return [newlyCreated, newCache]
     }
   }
@@ -328,8 +329,14 @@ const App = () => {
             .then((snapshots) => {
               const firstSnapshot = snapshots.at(0)
               if (firstSnapshot) {
-                const cachedCourses = firstSnapshot.courses
-                setCourses(cachedCourses)
+                if (Date.now() - firstSnapshot.lastUpdated < 10000) {
+                  const cachedCourses = firstSnapshot.courses
+                  console.log('courses loaded from cache')
+                  setCourses(cachedCourses)
+                  setHasLoadedCachedCourses(true)
+                } else {
+                  console.log('cache outdated')
+                }
               }
               fetchCourses()
             })
@@ -350,12 +357,14 @@ const App = () => {
   // Application-wide students are only loaded when user is authorized
   const [hasLoadedStudents, setHasLoadedStudents] = useState(false)
   const [students, setStudents] = useState<Student[]>([])
+  const [hasLoadedCachedStudents, setHasLoadedCachedStudents] = useState(false)
 
   const loadStudents = () => {
     const fetchStudents = () => {
       axios.get(`${API_ROOT}${STUDENT_API}`).then(
         (res) => {
           const students = res.data.map(responseStudentToStudent) as Student[]
+          console.log('student data loaded from API', students)
           setStudents(students)
           setHasLoadedStudents(true)
         },
@@ -374,8 +383,14 @@ const App = () => {
             .then((snapshots) => {
               const firstSnapshot = snapshots.at(0)
               if (firstSnapshot) {
-                const cachedStudents = firstSnapshot.students
-                setStudents(cachedStudents)
+                if (Date.now() - firstSnapshot.lastUpdated < 10000) {
+                  const cachedStudents = firstSnapshot.students
+                  console.log('students loaded from cache')
+                  setStudents(cachedStudents)
+                  setHasLoadedCachedStudents(true)
+                } else {
+                  console.log('cache outdated')
+                }
               }
               fetchStudents()
             })
@@ -397,11 +412,15 @@ const App = () => {
     if (hasLoadedCourses && hasLoadedStudents) {
       getCache().then(([, loadedCache]) => {
         loadedCache.clear('snapshot').then(() => {
-          loadedCache.add('snapshot', {
-            students: students,
-            courses: courses,
-            lastUpdated: Date.now(),
-          })
+          loadedCache
+            .add('snapshot', {
+              students: students,
+              courses: courses,
+              lastUpdated: Date.now(),
+            })
+            .then(() => {
+              console.log('cache data updated')
+            })
         })
       })
     }
@@ -895,7 +914,7 @@ const App = () => {
             >
               <CourseProvider
                 value={{
-                  hasLoadedCourses,
+                  hasLoadedCourses: hasLoadedCourses || hasLoadedCachedCourses,
                   semesters,
                   courses,
                   moveStudent,
@@ -907,7 +926,8 @@ const App = () => {
               >
                 <StudentProvider
                   value={{
-                    hasLoadedStudents,
+                    hasLoadedStudents:
+                      hasLoadedStudents || hasLoadedCachedStudents,
                     students,
                     updateNotes,
                     addStudentEmailTimestamps,

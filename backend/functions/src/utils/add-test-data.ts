@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { addStudentSurveyResponse } from '../student/functions'
 require('dotenv').config({ path: '../.env' })
 
@@ -23,9 +24,9 @@ const selectYear = () => {
   return years[Math.floor(Math.random() * years.length)]
 }
 
-const getRandomSample = (arr: string[], n: number) => {
+const getRandomSample = <T>(arr: T[], n: number) => {
   // taken from https://stackoverflow.com/questions/19269545/how-to-get-a-number-of-random-elements-from-an-array
-  const result = new Array(n)
+  const result = new Array<T>(n)
   let len = arr.length
   const taken = new Array(len)
   if (n > len)
@@ -52,37 +53,37 @@ const generateRandomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-// const getRandomClasses = async (count: number) => {
-//   const subjects = [
-//     'CS',
-//     'INFO',
-//     'ECON',
-//     'MATH',
-//     'PHYS',
-//     'PHIL',
-//     'MUSIC',
-//     'LING',
-//   ]
+const getRandomClasses = async (count: number) => {
+  const subjects = [
+    'CS',
+    'INFO',
+    'ECON',
+    'MATH',
+    'PHYS',
+    'PHIL',
+    'MUSIC',
+    'LING',
+  ]
 
-//   const possibleCourses = await Promise.all(
-//     subjects.map(async (subject) => {
-//       const res = await axios.get(
-//         `https://classes.cornell.edu/api/2.0/search/classes.json?roster=SP23&subject=${subject}`
-//       )
-//       return res.data.data.classes.map(
-//         (cls: { subject: string; catalogNbr: string }) => {
-//           return `${cls.subject} ${cls.catalogNbr}`
-//         }
-//       )
-//     })
-//   )
-//   const flattenedCourses = possibleCourses.flat()
-//   console.log('course count:', flattenedCourses.length)
-//   return getRandomSample(flattenedCourses, count)
-// }
+  const possibleCourses = await Promise.all<string>(
+    subjects.map(async (subject) => {
+      const res = await axios.get(
+        `https://classes.cornell.edu/api/2.0/search/classes.json?roster=SP23&subject=${subject}`
+      )
+      return res.data.data.classes.map(
+        (cls: { subject: string; catalogNbr: string }): string => {
+          return `${cls.subject} ${cls.catalogNbr}`
+        }
+      )
+    })
+  )
+  const flattenedCourses = possibleCourses.flat()
+  console.log('course count:', flattenedCourses.length)
+  return getRandomSample<string>(flattenedCourses, count)
+}
 
 const selectClasses = (numClasses = 3, classes: string[]) => {
-  return getRandomSample(classes, numClasses)
+  return getRandomSample<string>(classes, numClasses)
 }
 
 const generateRandomCUEmail = () => {
@@ -101,6 +102,9 @@ const addTestStudents = async (numStudents: number, numCourses: number) => {
     generateRandomCUEmail()
   )
 
+  const uniqueClasses = new Set<string>()
+  let studentsAddedCount = 0
+
   const classes: string[] = [
     'CS 1110',
     'CS 2110',
@@ -108,24 +112,32 @@ const addTestStudents = async (numStudents: number, numCourses: number) => {
     'ECON 1110',
     'MATH 1920',
     'PHYS 2213',
-  ]
+  ].concat(await getRandomClasses(numCourses))
 
   for (const email of users) {
+    const selectedClasses = selectClasses(3, classes)
     await addStudentSurveyResponse(
       email.substring(0, email.indexOf('@')),
       email,
       selectCollege(),
       selectYear(),
-      selectClasses(3, classes),
+      selectedClasses,
       true
     )
       .then(() => {
         console.log('added successfully!')
+        for (const selectedClass of selectedClasses) {
+          uniqueClasses.add(selectedClass)
+        }
+        studentsAddedCount++
       })
       .catch((err) => {
         console.log('error adding student', err)
       })
   }
+
+  console.log(`[INFO] Students added: ${studentsAddedCount}`)
+  console.log(`[INFO] Classes added: ${uniqueClasses.size}`)
 }
 
 addTestStudents(1000, 100)
