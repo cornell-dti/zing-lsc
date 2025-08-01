@@ -9,10 +9,13 @@ import {
 import { getStorage, connectStorageEmulator } from 'firebase/storage'
 import { initializeApp } from 'firebase/app'
 import { TEMPLATES_BUCKET } from '@core/Constants'
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth()
 export const templatesBucket = getStorage(app, TEMPLATES_BUCKET)
+
+export const db = getFirestore(app)
 
 // function attempting to sign in with Google
 export async function signInWithGoogle() {
@@ -49,4 +52,5 @@ export function logOut() {
 // Comment this out if you want to use connect to the real storage during development
 if (process.env.NODE_ENV === 'development') {
   connectStorageEmulator(templatesBucket, 'localhost', 9199)
+  connectFirestoreEmulator(db, 'localhost', 8080)
 }

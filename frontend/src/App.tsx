@@ -51,7 +51,7 @@ import theme from '@core/Constants/Theme'
 import { User, onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider, AuthState, PrivateRoute, PublicRoute } from '@auth'
 import { auth } from '@fire'
-import { templatesBucket } from '@fire/firebase'
+import { db, templatesBucket } from '@fire/firebase'
 import { getDownloadURL, ref } from 'firebase/storage'
 import axios, { AxiosResponse } from 'axios'
 import { CourseProvider, StudentProvider } from '@context'
@@ -59,12 +59,89 @@ import { TemplateProvider } from '@context/TemplateContext'
 import { Settings } from 'Settings'
 import { SettingsProvider } from '@context/SettingsContext'
 import { DBSchema, IDBPDatabase, openDB } from 'idb'
+import { collection, getDocs, onSnapshot, Timestamp } from 'firebase/firestore'
 
 interface ZingCache extends DBSchema {
   snapshot: {
     key: number
     value: { students: Student[]; courses: Course[]; lastUpdated: number }
   }
+}
+
+/** Student's membership in a course */
+export type GroupMembership = {
+  courseId: string
+  groupNumber: number
+  notes: string
+  notesModifyTime: Date
+  submissionTime: Date
+  templateTimestamps: { [key: string]: Date }
+  archived: boolean
+}
+
+/** How courses are stored in the database */
+export type FirestoreCourse = {
+  names: string[]
+  roster: string
+  courseNumber: string
+  unmatched: string[]
+  lastGroupNumber: number
+  latestSubmissionTime: Timestamp
+  flagged: boolean
+}
+
+/** How student data is stored in the database */
+export type FirestoreStudent = {
+  name: string
+  college: string
+  year: string
+  groups: FirestoreGroupMembership[]
+}
+
+/* Timestamps for different email templates */
+type EmailTimestamps = { [key: string]: Timestamp }
+
+/** How group membership for students is stored in the database */
+export type FirestoreGroupMembership = {
+  courseId: string
+  groupNumber: number
+  notes: string
+  notesModifyTime: Timestamp
+  submissionTime: Timestamp
+  templateTimestamps: EmailTimestamps
+  archived: boolean
+}
+
+/** How email template data is stored in the database */
+export type FirestoreEmailTemplate = {
+  id: string
+  name: string
+  type: 'group' | 'student'
+  subject: string
+  body: string
+  modifyTime: Timestamp
+}
+
+/** How group data is stored in the database */
+export type FirestoreGroup = {
+  groupId: string
+  groupNumber: number
+  members: string[]
+  createTime: Timestamp
+  updateTime: Timestamp
+  templateTimestamps: EmailTimestamps
+  hidden: boolean
+}
+
+/**
+ * Helper function to convert all timestamps in a templateTimestamps object into Dates
+ * @param obj the templateTimestamps object containing templateId : timestamp pairs
+ * @returns obj with all timestamps converted into Date objects
+ */
+export function mapDate(obj: { [key: string]: Timestamp }) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([k, v]) => [k, v.toDate()])
+  )
 }
 
 const App = () => {
@@ -407,6 +484,72 @@ const App = () => {
         fetchStudents()
       })
   }
+
+  // live firebase listener changes submitted while admin is using app
+
+  useEffect(() => {
+    if (authState === 'authorized') {
+      const unsubscribeCourses = onSnapshot(
+        collection(db, 'courses'),
+        async (snapshot) => {
+          const coursePromises = snapshot.docs.map<Promise<Course>>(
+            async (courseDoc) => {
+              const courseData = courseDoc.data() as FirestoreCourse
+
+              // Correct way to get a subcollection reference
+              const groupsRef = collection(courseDoc.ref, 'groups')
+              const groupsSnapshot = await getDocs(groupsRef)
+
+              const groups = groupsSnapshot.docs
+                .map((groupDoc) => groupDoc.data() as FirestoreGroup)
+                .map((groupData) => ({
+                  ...groupData,
+                  groupId: groupData.groupId,
+                  createTime: groupData.createTime.toDate(),
+                  updateTime: groupData.updateTime.toDate(),
+                  templateTimestamps: mapDate(groupData.templateTimestamps),
+                  hidden: groupData.hidden,
+                }))
+
+              return {
+                ...courseData,
+                courseId: courseDoc.id,
+                latestSubmissionTime: courseData.latestSubmissionTime.toDate(),
+                groups,
+              }
+            }
+          )
+
+          setCourses(await Promise.all(coursePromises))
+        }
+      )
+
+      const unsubscribeStudents = onSnapshot(
+        collection(db, 'students'),
+        (snapshot) => {
+          const students = snapshot.docs.map<Student>((studentDoc) => {
+            const email = studentDoc.id
+            const studentData = studentDoc.data() as FirestoreStudent
+            return {
+              ...studentData,
+              email,
+              groups: studentData.groups.map((group) => ({
+                ...group,
+                notesModifyTime: group.notesModifyTime.toDate(),
+                submissionTime: group.submissionTime.toDate(),
+                templateTimestamps: mapDate(group.templateTimestamps),
+              })),
+            }
+          })
+          setStudents(students)
+        }
+      )
+      return () => {
+        unsubscribeCourses()
+        unsubscribeStudents()
+      }
+    }
+  }, [authState])
 
   useEffect(() => {
     if (hasLoadedCourses && hasLoadedStudents) {
