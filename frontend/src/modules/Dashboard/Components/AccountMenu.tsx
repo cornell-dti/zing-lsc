@@ -50,31 +50,37 @@ export const AccountMenu = ({
   const csvStudents =
     courses.length && students.length // Just making sure this isn't calculated until the data is available
       ? students.flatMap((student) =>
-          student.groups.map((membership) => {
+          student.groups.flatMap((membership) => {
             const course = courses.find(
               (c) => c.courseId === membership.courseId
-            )!
+            )
+            if (!course) {
+              return []
+            }
+
             const group = course.groups.find(
               // undefined if student is unmatched
               (g) => g.groupNumber === membership.groupNumber
             )
-            return {
-              semester: course.roster,
-              dateRequested: membership.submissionTime.toLocaleString(),
-              cornellEmail: student.email,
-              name: student.name,
-              college: student.college,
-              year: student.year,
-              course: course.names.join('/'),
-              groupNumber:
-                membership.groupNumber !== -1
-                  ? `${course.names.join('/')}_${membership.groupNumber}`
-                  : undefined,
-              groupId: group?.groupId,
-              ...localeMap(group?.templateTimestamps),
-              ...localeMap(membership.templateTimestamps),
-              notes: membership.notes.replace(/(\n)/gm, '  ').trim(),
-            }
+            return [
+              {
+                semester: course.roster,
+                dateRequested: membership.submissionTime.toLocaleString(),
+                cornellEmail: student.email,
+                name: student.name,
+                college: student.college,
+                year: student.year,
+                course: course.names.join('/'),
+                groupNumber:
+                  membership.groupNumber !== -1
+                    ? `${course.names.join('/')}_${membership.groupNumber}`
+                    : undefined,
+                groupId: group?.groupId,
+                ...localeMap(group?.templateTimestamps),
+                ...localeMap(membership.templateTimestamps),
+                notes: membership.notes.replace(/(\n)/gm, '  ').trim(),
+              },
+            ]
           })
         )
       : []

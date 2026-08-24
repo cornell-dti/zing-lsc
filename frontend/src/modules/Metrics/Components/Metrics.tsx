@@ -56,10 +56,14 @@ export const Metrics = () => {
   const allStudents =
     courses.length && students.length // Just making sure this isn't calculated until the data is available
       ? students.flatMap((student) =>
-          student.groups.map((membership) => {
+          student.groups.flatMap((membership) => {
             const course = courses.find(
               (c) => c.courseId === membership.courseId
-            )!
+            )
+            if (!course) {
+              return []
+            }
+
             const group = course.groups.find(
               // undefined if student is unmatched
               (g) => g.groupNumber === membership.groupNumber
@@ -72,20 +76,22 @@ export const Metrics = () => {
               })
             }
 
-            return {
-              semester: course.roster,
-              cornellEmail: student.email,
-              name: student.name,
-              college: student.college,
-              year: student.year,
-              course: course.names.join('/'),
-              groupNumber:
-                membership.groupNumber !== -1
-                  ? `${course.names.join('/')}_${membership.groupNumber}`
-                  : undefined,
-              ...localeMap(group?.templateTimestamps),
-              ...localeMap(membership.templateTimestamps),
-            }
+            return [
+              {
+                semester: course.roster,
+                cornellEmail: student.email,
+                name: student.name,
+                college: student.college,
+                year: student.year,
+                course: course.names.join('/'),
+                groupNumber:
+                  membership.groupNumber !== -1
+                    ? `${course.names.join('/')}_${membership.groupNumber}`
+                    : undefined,
+                ...localeMap(group?.templateTimestamps),
+                ...localeMap(membership.templateTimestamps),
+              },
+            ]
           })
         )
       : []

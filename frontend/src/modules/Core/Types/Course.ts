@@ -28,7 +28,7 @@ export interface ResponseCourse {
   courseNumber: string
   courseId: string // Computed as {roster}-{courseNumber}
   unmatched: string[]
-  groups: ResponseGroup[]
+  groups?: ResponseGroup[]
   lastGroupNumber: number
   latestSubmissionTime: string
   flagged: boolean
@@ -55,5 +55,5 @@ export const responseGroupToGroup = (group: ResponseGroup): Group => ({
 export const responseCourseToCourse = (course: ResponseCourse): Course => ({
   ...course,
   latestSubmissionTime: new Date(course.latestSubmissionTime),
-  groups: course.groups.map(responseGroupToGroup),
+  groups: (course.groups ?? []).map(responseGroupToGroup),
 })
